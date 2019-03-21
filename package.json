@@ -32,7 +32,7 @@
     "leaflet-rotatedmarker": "^0.2.0",
     "material-design-icons": "^3.0.1",
     "ng-cli-pug-loader": "^0.1.7",
-    "rxjs": "~6.3.3",
+    "rxjs": "~6.4.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
