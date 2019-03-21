@@ -3,4 +3,4 @@ mat-sidenav-container.main-container(#sidenavContainer,[hasBackdrop]="false")
     mat-sidenav.main-nav(#sidenav,mode="over",opened)
         router-outlet
     mat-sidenav-content
-        map-root(flex,(vehicleClicked)="onVoted($event)")
+        map-root((vehicleClicked)="onVoted($event)")
