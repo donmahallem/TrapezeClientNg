@@ -25,10 +25,10 @@ export class MainToolbarComponent {
     @ViewChild(DrawableDirective) canvas;
     ngOnInit() {
         this.train();
-        //this.loadModel()
+        // this.loadModel()
     }
     onVoted(agreed: any) {
-        console.log("aa", agreed);
+        console.log('aa', agreed);
         this.tripId = agreed.tripId;
     }
 
@@ -61,10 +61,10 @@ export class MainToolbarComponent {
         this.linearModel.add(tf.layers.flatten());
         this.linearModel.add(tf.layers.dropout({ rate: 0.2 }))
         this.linearModel.add(tf.layers.dense({ units: 10, activation: "softmax" }));
- 
+
         // Prepare the model for training: Specify the loss and the optimizer.
         this.linearModel.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
- 
+
         const xs = tf.randomNormal([200, 28, 28, 1])
         const target = []
         for (let i = 0; i < 200; i++) {
@@ -79,7 +79,7 @@ export class MainToolbarComponent {
             .then((value: any) => {
                 console.log(value.history.loss)
             })
- 
+
         console.log('model trained!')*/
     }
 

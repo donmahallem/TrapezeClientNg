@@ -6,7 +6,7 @@ import {
 import { TripPassages } from './../../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject, merge } from "rxjs";
+import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject, merge } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../services';
@@ -19,7 +19,7 @@ import { StopLocation } from 'src/app/models/stop-location.model';
 })
 export class StopsInfoComponent implements AfterViewInit, OnDestroy {
     private mItems: StopLocation[] = [];
-    private mSearchTerm: BehaviorSubject<string> = new BehaviorSubject("s");
+    private mSearchTerm: BehaviorSubject<string> = new BehaviorSubject('s');
 
     constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
 
@@ -62,13 +62,13 @@ export class StopsInfoComponent implements AfterViewInit, OnDestroy {
 
     public onTripSelected(trip) {
         console.log(trip);
-        this.router.navigate(["passages", trip.tripId]);
+        this.router.navigate(['passages', trip.tripId]);
     }
     public convertTime(time, data) {
         if (time > 300) {
             return data.actualTime;
         } else {
-            return Math.ceil(time / 60) + "min";
+            return Math.ceil(time / 60) + 'min';
         }
     }
 

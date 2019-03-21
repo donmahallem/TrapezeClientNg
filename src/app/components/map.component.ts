@@ -16,19 +16,19 @@ import {
     Router
 } from '@angular/router';
 import { ApiService } from './../services';
-import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from "rxjs";
+import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, merge, mergeMap, filter } from 'rxjs/operators';
 import { thisTypeAnnotation } from 'babel-types';
 (function () {
     // save these original methods before they are overwritten
-    var proto_initIcon = (<any>L.Marker.prototype)._initIcon;
-    var proto_setPos = (<any>L.Marker.prototype)._setPos;
+    const proto_initIcon = (<any>L.Marker.prototype)._initIcon;
+    const proto_setPos = (<any>L.Marker.prototype)._setPos;
 
-    var oldIE = (L.DomUtil.TRANSFORM === 'msTransform');
+    const oldIE = (L.DomUtil.TRANSFORM === 'msTransform');
 
     L.Marker.addInitHook(function () {
-        var iconOptions = this.options.icon && this.options.icon.options;
-        var iconAnchor = iconOptions && this.options.icon.options.iconAnchor;
+        const iconOptions = this.options.icon && this.options.icon.options;
+        let iconAnchor = iconOptions && this.options.icon.options.iconAnchor;
         if (iconAnchor) {
             iconAnchor = (iconAnchor[0] + 'px ' + iconAnchor[1] + 'px');
         }
@@ -91,16 +91,17 @@ import { thisTypeAnnotation } from 'babel-types';
     styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit, DoCheck {
-    title = 'app';
-    @ViewChild("mapcontainer") mapContainer;
-    private map: L.Map;
-    private vehicleMarkerList: L.Marker[] = new Array();
-    @Output("vehicleClicked") vehicleClicked = new EventEmitter<any>();
-    private boundsObservable: BehaviorSubject<Bounds>;
     constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
         console.log(this.elRef.nativeElement);
         this.boundsObservable = new BehaviorSubject(null);
     }
+    title = 'app';
+    @ViewChild('mapcontainer') mapContainer;
+    private map: L.Map;
+    private vehicleMarkerList: L.Marker[] = new Array();
+    @Output('vehicleClicked') vehicleClicked = new EventEmitter<any>();
+    private boundsObservable: BehaviorSubject<Bounds>;
+    private updateObservable: Subscription;
     ngAfterViewInit() {
         console.log(this.mapContainer);
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 14);
@@ -109,7 +110,7 @@ export class MapComponent implements AfterViewInit, DoCheck {
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'your.mapbox.access.token',
-            subdomains: ["a", "b", "c"]
+            subdomains: ['a', 'b', 'c']
         }).addTo(this.map);
         this.addMarker();
         this.map.on('moveend', () => {
@@ -121,17 +122,17 @@ export class MapComponent implements AfterViewInit, DoCheck {
                 map((a) => a[1]),
                 filter(num => num !== null),
                 mergeMap(boundsa => {
-                    return this.loadTrip(boundsa)
+                    return this.loadTrip(boundsa);
                 }),
                 catchError((err: Error) => {
                     return of();
                 }))
             .subscribe((res) => {
-                //console.log("loaded", res);
-                for (let marker of this.vehicleMarkerList) {
+                // console.log("loaded", res);
+                for (const marker of this.vehicleMarkerList) {
                     marker.remove();
                 }
-                for (let veh of res.vehicles) {
+                for (const veh of res.vehicles) {
                     this.addVehicleMarker(veh);
                 }
             });
@@ -157,13 +158,13 @@ export class MapComponent implements AfterViewInit, DoCheck {
                 });*/
         const greenIcon = L.divIcon({
             className: 'vehiclemarker',
-            html: "<span>" + vehicle.name.split(" ")[0] + "</span>",
+            html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
             iconSize: [32, 32], // size of the icon
             shadowSize: [24, 24], // size of the shadow
             iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
             shadowAnchor: [32, 32],  // the same for the shadow
             popupAnchor: [12, 12] // point from which the popup should open relative to the iconAnchor
-        })
+        });
         const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000],
             {
                 icon: greenIcon,
@@ -171,36 +172,36 @@ export class MapComponent implements AfterViewInit, DoCheck {
                 rotationAngle: vehicle.heading - 90,
                 zIndexOffset: 100
             });
-        //markerT.setKey(entry.id);
+        // markerT.setKey(entry.id);
         markerT.addTo(this.map);
         markerT.data = vehicle;
-        markerT.on("click", this.markerOnClick.bind(this));
+        markerT.on('click', this.markerOnClick.bind(this));
         this.vehicleMarkerList.push(markerT);
         return markerT;
     }
 
     public updateBoundsObservable() {
-        let left: number = this.map.getBounds().getWest();
-        let right: number = this.map.getBounds().getEast();
-        let top: number = this.map.getBounds().getNorth();
-        let bottom: number = this.map.getBounds().getSouth();
+        const left: number = this.map.getBounds().getWest();
+        const right: number = this.map.getBounds().getEast();
+        const top: number = this.map.getBounds().getNorth();
+        const bottom: number = this.map.getBounds().getSouth();
         const bounds: Bounds = {
             left: left,
             right: right,
             bottom: bottom,
             top: top
         };
-        console.log("update loc", bounds);
+        console.log('update loc', bounds);
         this.boundsObservable.next(bounds);
     }
 
     public createStopIcon() {
         if (false) {
-            return L.divIcon({ className: 'my-div-icon', html: "JJ" })
+            return L.divIcon({ className: 'my-div-icon', html: 'JJ' });
         } else {
             return L.icon({
                 iconUrl: 'assets/iconmonstr-part-24.png',
-                //shadowUrl: 'leaf-shadow.png',
+                // shadowUrl: 'leaf-shadow.png',
                 iconSize: [16, 16], // size of the icon
                 shadowSize: [24, 24], // size of the shadow
                 iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
@@ -214,14 +215,14 @@ export class MapComponent implements AfterViewInit, DoCheck {
         this.apiService.getStations()
             .subscribe((data: any) => {
                 console.log(data);
-                for (let entry of data.stops) {
+                for (const entry of data.stops) {
                     if (entry == null) {
                         continue;
                     }
                     if (entry.isDeleted == true) {
-                        continue
+                        continue;
                     }
-                    //console.log(entry);
+                    // console.log(entry);
 
                     const greenIcon = this.createStopIcon();
                     const markerT = L.marker([entry.latitude / 3600000, entry.longitude / 3600000],
@@ -234,24 +235,24 @@ export class MapComponent implements AfterViewInit, DoCheck {
                             clickable: true
                         });
                     markerT.addTo(this.map);
-                    markerT.on("click", this.stopMarkerOnClick.bind(this, entry));
-                    //markerT.setRotationAngle(entry.heading)
-                    //markerT.getElement().style.transform += ' rotate(' + (entry.heading + 0) + 'deg)';
+                    markerT.on('click', this.stopMarkerOnClick.bind(this, entry));
+                    // markerT.setRotationAngle(entry.heading)
+                    // markerT.getElement().style.transform += ' rotate(' + (entry.heading + 0) + 'deg)';
                 }
             });
     }
 
     public stopMarkerOnClick(data, e) {
-        console.log("StopMarker Clicked", data);
-        this.router.navigate(["stop", data.shortName]);
+        console.log('StopMarker Clicked', data);
+        this.router.navigate(['stop', data.shortName]);
     }
     public markerOnClick(e) {
-        //console.log(e);
+        // console.log(e);
         this.vehicleClicked.emit(e.target.data);
-        this.router.navigate(["passages", e.target.data.tripId]);
+        this.router.navigate(['passages', e.target.data.tripId]);
     }
     private loadTrip(bounds: Bounds): Observable<any> {
-        return this.apiService.getVehicleLocations(bounds)
+        return this.apiService.getVehicleLocations(bounds);
     }
 
     private handleError<T>(operation = 'operation', result?: T) {
@@ -267,7 +268,6 @@ export class MapComponent implements AfterViewInit, DoCheck {
             return of(result as T);
         };
     }
-    private updateObservable: Subscription;
 
     public ngOnDestroy(): void {
         this.updateObservable.unsubscribe();

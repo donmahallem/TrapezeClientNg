@@ -13,16 +13,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {
     Router
 } from '@angular/router';
-import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from "rxjs";
+import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, merge, mergeMap, filter, distinctUntilChanged } from 'rxjs/operators';
 import { ApiService } from '../../services';
 import { resetFakeAsyncZone } from '@angular/core/testing';
 
 interface Loc {
-    longitude: number,
-    latitude: number,
-    heading: number,
-    tripId: string
+    longitude: number;
+    latitude: number;
+    heading: number;
+    tripId: string;
 }
 
 @Component({
@@ -31,16 +31,12 @@ interface Loc {
     styleUrls: ['./follow-bus-map.component.scss']
 })
 export class FollowBusMapComponent implements AfterViewInit {
-    @ViewChild("mapcontainer") mapContainer;
-    private map: L.Map;
-    private vehicleIdSubject: BehaviorSubject<Loc>;
-    private vehicleMarker: L.Marker;
     constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
         console.log(this.elRef.nativeElement);
         this.vehicleIdSubject = new BehaviorSubject(null);
     }
 
-    @Input("location")
+    @Input('location')
     set vehicleId(id: Loc) {
         this.vehicleIdSubject.next(id);
     }
@@ -48,15 +44,20 @@ export class FollowBusMapComponent implements AfterViewInit {
     get vehicleId(): Loc {
         return this.vehicleIdSubject.getValue();
     }
+    @ViewChild('mapcontainer') mapContainer;
+    private map: L.Map;
+    private vehicleIdSubject: BehaviorSubject<Loc>;
+    private vehicleMarker: L.Marker;
+    private updateObservable: Subscription;
 
     ngAfterViewInit() {
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: null,// 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            attribution: null, // 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'your.mapbox.access.token',
-            subdomains: ["a", "b", "c"],
+            subdomains: ['a', 'b', 'c'],
         }).addTo(this.map);
         this.map.dragging.disable();
         this.map.touchZoom.disable();
@@ -77,38 +78,38 @@ export class FollowBusMapComponent implements AfterViewInit {
                     return this.apiService.getRouteByTripId(boundsa.tripId);
                 }))
             .subscribe((res) => {
-                for (let key of Array.from(res.paths.keys())) {
+                for (const key of Array.from(res.paths.keys())) {
                     const pointList: any[] = [];
                     const pathsObj = res.paths[<string>key];
-                    //console.log(pathsObj);
-                    for (let p of pathsObj.wayPoints) {
+                    // console.log(pathsObj);
+                    for (const p of pathsObj.wayPoints) {
                         pointList.push(new L.LatLng(p.lat / 3600000, p.lon / 3600000));
                     }
-                    //console.log("points", pointList);
-                    var firstpolyline = L.polyline(pointList, {
+                    // console.log("points", pointList);
+                    const firstpolyline = L.polyline(pointList, {
                         color: pathsObj.color,
                         weight: 3,
                         opacity: 0.5,
                         smoothFactor: 1
                     });
                     firstpolyline.addTo(this.map);
-                    //console.log(res);
+                    // console.log(res);
                 }
 
-            })
+            });
 
     }
     public updateVehicleMarker(vehicle: Loc): void {
         this.vehicleMarker.setLatLng({ lat: vehicle.latitude / 3600000, lng: vehicle.longitude / 3600000 });
         this.vehicleMarker.setRotationAngle(vehicle.heading - 90);
-        this.map.panTo({ lat: vehicle.latitude / 3600000, lng: vehicle.longitude / 3600000, alt: 2000 }, { animate: true })
+        this.map.panTo({ lat: vehicle.latitude / 3600000, lng: vehicle.longitude / 3600000, alt: 2000 }, { animate: true });
     }
 
     public createVehicleMarker(): L.Marker {
 
         const greenIcon = L.icon({
             iconUrl: 'assets/iconmonstr-arrow-24.png',
-            //shadowUrl: 'leaf-shadow.png',
+            // shadowUrl: 'leaf-shadow.png',
             iconSize: [24, 24], // size of the icon
             shadowSize: [24, 24], // size of the shadow
             iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
@@ -118,10 +119,10 @@ export class FollowBusMapComponent implements AfterViewInit {
         const markerT: L.Marker = L.marker([0, 0],
             {
                 icon: greenIcon,
-                title: "vehicle.name",
+                title: 'vehicle.name',
                 zIndexOffset: 100
             });
-        //markerT.setKey(entry.id);
+        // markerT.setKey(entry.id);
         markerT.addTo(this.map);
         return markerT;
     }
@@ -144,7 +145,6 @@ export class FollowBusMapComponent implements AfterViewInit {
             return of(result as T);
         };
     }
-    private updateObservable: Subscription;
 
     public ngOnDestroy(): void {
         this.updateObservable.unsubscribe();

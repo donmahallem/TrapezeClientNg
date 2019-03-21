@@ -6,7 +6,7 @@ import {
 import { TripPassages } from './../../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest } from "rxjs";
+import { timer, Observable, Subscription, of, combineLatest } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../services';
@@ -21,14 +21,14 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     public tripData: any;
     private tripPassages: any[] = [];
     private updateObservable: Subscription;
-    private mEmptyList: boolean = false;
+    private mEmptyList = false;
     private mTimerObservable: Observable<number>;
-    private mTimeUntilRefresh: number = 0;
+    private mTimeUntilRefresh = 0;
 
     constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
         route.params.subscribe((params) => {
             this.tripId = params.tripId;
-        })
+        });
     }
 
     public get timeUntilRefresh(): number {
@@ -60,26 +60,26 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             this.tripData = data;
             this.tripPassages = data.actual;
             this.mEmptyList = data.actual.length == 0;
-            //console.log(this.tripPassages, data.actual);
+            // console.log(this.tripPassages, data.actual);
         }
     }
 
     public onTripSelected(trip) {
         console.log(trip);
-        this.router.navigate(["passages", trip.tripId]);
+        this.router.navigate(['passages', trip.tripId]);
     }
     public convertTime(time, data) {
         if (time > 300) {
             return data.actualTime;
         } else {
-            return Math.ceil(time / 60) + "min";
+            return Math.ceil(time / 60) + 'min';
         }
     }
 
     public ngAfterViewInit(): void {
         this.mTimerObservable = timer(0, 200);
         this.mTimerObservable.subscribe((val) => {
-            let diff = 10 - Math.round((val % 50) / 5);
+            const diff = 10 - Math.round((val % 50) / 5);
             if (diff != this.mTimeUntilRefresh) {
                 this.mTimeUntilRefresh = diff;
             }
@@ -92,7 +92,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
                 map((a) => a[1]),
                 filter(num => num !== null),
                 mergeMap((stopId: string) => {
-                    return this.apiService.getStopDepartures(stopId)
+                    return this.apiService.getStopDepartures(stopId);
                 }),
                 catchError(this.handleError('getHeroes', [])),
                 catchError((err, a) => of(null)))
