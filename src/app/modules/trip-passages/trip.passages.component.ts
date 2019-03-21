@@ -13,7 +13,7 @@ import {
     of,
     combineLatest,
     BehaviorSubject
-} from "rxjs";
+} from 'rxjs';
 import { catchError, map, tap, mergeMapTo, filter, mergeMap, retry } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../services';
@@ -39,10 +39,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
     constructor(private route: ActivatedRoute, private apiService: ApiService) {
-        console.log("trip passages loaded");
+        console.log('trip passages loaded');
         route.params.subscribe((params) => {
             this.tripId = params.tripId;
-        })
+        });
     }
 
     public get updateStatus(): UpdateStatus {
@@ -69,10 +69,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         console.log(data);
         this.routeName = data.routeName;
         this.updateStatusSubject.next(UpdateStatus.LOADED);
-        if (data.tripId == this.tripId) {
+        if (data.tripId === this.tripId) {
             this.tripData = data;
             this.tripPassages = data.actual;
-            //console.log(this.tripPassages, data.actual);
+            // console.log(this.tripPassages, data.actual);
         }
         console.log(this.updateStatus);
     }
@@ -85,8 +85,8 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 map((a) => a[1]),
                 filter(num => num !== null),
                 mergeMap(boundsa => {
-                    console.log("HHAHAH", boundsa);
-                    return this.apiService.getTripPassages(boundsa)
+                    console.log('HHAHAH', boundsa);
+                    return this.apiService.getTripPassages(boundsa);
                 }),
                 retry(3))
             .subscribe(this.updateData.bind(this), this.handleError.bind(this));

@@ -1,4 +1,4 @@
-import { StopLocation } from "./stop-location.model";
+import { StopLocation } from './stop-location.model';
 
 export interface StationsResponse {
     stops: StopLocation[];
