@@ -5,10 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:live": "ng build --watch",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node ./ng-add-pug-loader.js && node ./ng-add-pug-loader.js"
+    "postinstall": "node ./ng-add-pug-loader.js && node ./ng-add-pug-loader.js",
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage"
   },
   "private": true,
   "dependencies": {
