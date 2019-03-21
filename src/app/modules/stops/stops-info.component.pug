@@ -1,0 +1,11 @@
+mat-toolbar(color="primary")
+    div
+        span.title(i18n-title="@@stopName",title="Stop Name") tripData?.stopName
+    form(role="search")
+        mat-form-field
+            input( type="search",matInput,placeholder="Stopname",aria-multiline="false",aria-placeholder="Stopname to search",i18n-placeholder="Stopname to search@@stopnameToSearch",i18n-aria-placeholder="Stopname to search@@stopnameToSearch")
+            mat-hint(i18n="Search Field hint@@searchStopHint") Search for station
+mat-nav-list.stoplist(role="list")
+    a(*ngFor="let item of items",[routerLink]="['/stop', item.shortName]",role="listitem")
+        mat-list-item
+            span.pattern-text {{item?.name}}
