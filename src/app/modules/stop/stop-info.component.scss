@@ -1,0 +1,37 @@
+mat-card-content.llla {
+    overflow-y: scroll;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    height: 100%;
+    background: #F9F9F9;
+}
+
+mat-nav-list.stoplist {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+}
+
+follow-bus-map {
+    display: block;
+    height: 200px;
+    width: 100%;
+}
+
+mat-toolbar {
+    flex-grow: 0;
+}
+
+mat-toolbar span.title {
+    display: block;
+    margin-bottom: 0px;
+}
+
+mat-toolbar span.subtitle {
+    font-size: 12px;
+    margin-top: 0px;
+}

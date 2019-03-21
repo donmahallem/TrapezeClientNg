@@ -1,0 +1,12 @@
+mat-toolbar.main-toolbar(color="primary")
+    button(mat-icon-button,(click)="toggleSidebar()",i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")
+        mat-icon menu
+    span.mainnav(i18n="App Name@@appName",role="heading",aria-level="1")
+        a([routerLink]="['/']") Manni Spotter
+    span.example-fill-remaining-space
+    form(role="search")
+        mat-form-field
+            input( type="search",matInput,placeholder="Stopname",aria-multiline="false",aria-placeholder="Stopname to search",i18n-placeholder="Stopname to search@@stopnameToSearch",i18n-aria-placeholder="Stopname to search@@stopnameToSearch")
+            mat-hint(i18n="Search Field hint@@searchStopHint") Search for station
+    button(mat-icon-button,i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")
+        mat-icon search

@@ -1,0 +1,24 @@
+language: node_js
+addons:
+  chrome: stable
+node_js:
+- stable
+cache:
+  directories:
+  - node_modules
+after_install:
+- npm run postinstall
+script:
+- ng build --prod --aot --base-href /ngManniSpotter/
+- npm run test-headless
+after_success:
+- ng build --prod --aot --base-href /ngManniSpotter/
+- cp ./dist/ngManniSpotter/index.html ./dist/ngManniSpotter/404.html
+- npm install coveralls && cat ./coverage/lcov.info | coveralls
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: "$GITHUB_TOKEN"
+  local_dir: dist/fitclient
+  on:
+    branch: master
