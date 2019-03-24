@@ -12,6 +12,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
+import { StopPointService } from './services/stop-point.service';
 @NgModule({
     declarations: [
         AppComponent,
@@ -32,7 +33,9 @@ import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
         MainToolbarModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
-    providers: [],
+    providers: [
+        StopPointService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

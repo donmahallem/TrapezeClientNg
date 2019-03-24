@@ -10,6 +10,7 @@ import { DrawableDirective } from 'src/app/drawable.directive';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { ApiService } from 'src/app/services';
 import { Router } from '@angular/router';
+import { StopPointService } from 'src/app/services/stop-point.service';
 @Component({
     selector: 'app-toolbar-search',
     templateUrl: './search-box.component.pug',
@@ -17,14 +18,12 @@ import { Router } from '@angular/router';
 })
 export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
-    stopsObservable: Observable<StopLocation[]>;
     myControl = new FormControl();
     filteredOptions: Observable<StopLocation[]>;
 
     @ViewChild(MatAutocomplete)
     autoComplete: MatAutocomplete;
-    constructor(private sidebarService: SidebarService,
-        private apiService: ApiService,
+    constructor(private stopService: StopPointService,
         private router: Router) {
     }
 
@@ -37,17 +36,11 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
         return user ? user.name : undefined;
     }
     public ngOnInit(): void {
-        this.stopsObservable = this.apiService.getStations()
-            .pipe(single(),
-                map((value) => {
-                    return value.stops;
-                }),
-                shareReplay(1));
         this.filteredOptions = this.myControl.valueChanges
             .pipe(
                 startWith(''),
                 flatMap((value) => {
-                    return this.stopsObservable
+                    return this.stopService.stopLocationsObservable
                         .pipe(map((stops) => {
                             return stops.filter(option => option.name.toLowerCase().includes(value));
                         }));
