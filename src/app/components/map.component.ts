@@ -20,6 +20,8 @@ import { ApiService } from './../services';
 import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, merge, mergeMap, filter } from 'rxjs/operators';
 import { thisTypeAnnotation } from 'babel-types';
+import { StopPointService } from '../services/stop-point.service';
+import { StopLocation } from '../models/stop-location.model';
 (function () {
     // save these original methods before they are overwritten
     const proto_initIcon = (<any>L.Marker.prototype)._initIcon;
@@ -92,7 +94,10 @@ import { thisTypeAnnotation } from 'babel-types';
     styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
-    constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
+    constructor(private elRef: ElementRef,
+        private apiService: ApiService,
+        private router: Router,
+        private stopService: StopPointService) {
         console.log(this.elRef.nativeElement);
         this.boundsObservable = new BehaviorSubject(null);
     }
@@ -215,32 +220,25 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     }
 
     public addMarker() {
-        this.apiService.getStations()
-            .subscribe((data: any) => {
-                console.log(data);
-                for (const entry of data.stops) {
-                    if (entry === null) {
+        this.stopService.stopLocationsObservable
+            .subscribe((stops: StopLocation[]) => {
+                for (const stop of stops) {
+                    if (stop === null) {
                         continue;
                     }
-                    if (entry.isDeleted === true) {
-                        continue;
-                    }
-                    // console.log(entry);
 
                     const greenIcon = this.createStopIcon();
-                    const markerT = L.marker([entry.latitude / 3600000, entry.longitude / 3600000],
+                    const markerT = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
                         {
                             icon: greenIcon,
-                            title: entry.name,
+                            title: stop.name,
                             zIndexOffset: 10,
                             riseOnHover: true,
                             riseOffset: 10,
                             clickable: true
                         });
                     markerT.addTo(this.map);
-                    markerT.on('click', this.stopMarkerOnClick.bind(this, entry));
-                    // markerT.setRotationAngle(entry.heading)
-                    // markerT.getElement().style.transform += ' rotate(' + (entry.heading + 0) + 'deg)';
+                    markerT.on('click', this.stopMarkerOnClick.bind(this, stop));
                 }
             });
     }
