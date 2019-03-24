@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSidenavContainer, MatSidenav } from '@angular/material';
 import { SidebarService } from './services/sidebar.service';
 @Component({
-    selector: 'main-toolbar',
+    selector: 'app-main-toolbar',
     templateUrl: './main-toolbar.component.pug',
     styleUrls: ['./main-toolbar.component.scss']
 })

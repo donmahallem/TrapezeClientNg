@@ -2,7 +2,7 @@ mat-toolbar(color="primary")
     span(role="heading",aria-level="2") {{routeName}} - {{tripData?.directionText}}
 div(*ngIf="updateStatus==StatusOps.LOADING")
     mat-progress-spinner(mode="indeterminate",diameter="40")
-follow-bus-map(*ngIf="tripId==tripData?.tripId",[location]="tripData?.location",role="none")
+app-follow-bus-map(*ngIf="tripId==tripData?.tripId",[location]="tripData?.location",role="none")
 div.error-box(*ngIf="updateStatus==StatusOps.ERROR",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
     span.title(i18n="@@error") Error
     span.text(i18n="@@error") Error

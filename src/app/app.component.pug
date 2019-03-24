@@ -1,6 +1,6 @@
-main-toolbar.main-toolbar
+app-main-toolbar.main-toolbar
 mat-sidenav-container.main-container(#sidenavContainer,[hasBackdrop]="false")
     mat-sidenav.main-nav(#sidenav,mode="over",opened)
         router-outlet
     mat-sidenav-content
-        map-root((vehicleClicked)="onVoted($event)")
+        app-map-root((vehicleClicked)="onVoted($event)")
