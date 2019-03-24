@@ -9,7 +9,7 @@ import { SidebarService } from './services/sidebar.service';
     templateUrl: './app.component.pug',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = 'app';
     prediction: any;
 

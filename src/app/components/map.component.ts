@@ -6,7 +6,8 @@ import {
     Output,
     AfterViewInit,
     EventEmitter,
-    DoCheck
+    DoCheck,
+    OnDestroy
 } from '@angular/core';
 import * as L from 'leaflet';
 import * as L2 from 'leaflet-rotatedmarker';
@@ -90,7 +91,7 @@ import { thisTypeAnnotation } from 'babel-types';
     templateUrl: './map.component.pug',
     styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit, DoCheck {
+export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
         console.log(this.elRef.nativeElement);
         this.boundsObservable = new BehaviorSubject(null);
@@ -216,10 +217,10 @@ export class MapComponent implements AfterViewInit, DoCheck {
             .subscribe((data: any) => {
                 console.log(data);
                 for (const entry of data.stops) {
-                    if (entry == null) {
+                    if (entry === null) {
                         continue;
                     }
-                    if (entry.isDeleted == true) {
+                    if (entry.isDeleted === true) {
                         continue;
                     }
                     // console.log(entry);

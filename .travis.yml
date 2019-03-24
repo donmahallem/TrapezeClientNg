@@ -11,7 +11,7 @@ node_js:
 cache:
   directories:
   - node_modules
-after_install:
+before_script:
 - npm run postinstall
 - cp ./src/environments/environment.ts ./src/environments/environment.prod.ts
 - cp ./src/environments/environment.ts ./src/environments/environment.dev.ts

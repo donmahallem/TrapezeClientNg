@@ -6,7 +6,8 @@ import {
     Output,
     Input,
     AfterViewInit,
-    EventEmitter
+    EventEmitter,
+    OnDestroy
 } from '@angular/core';
 import * as L from 'leaflet';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -30,7 +31,7 @@ interface Loc {
     templateUrl: './follow-bus-map.component.pug',
     styleUrls: ['./follow-bus-map.component.scss']
 })
-export class FollowBusMapComponent implements AfterViewInit {
+export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
     constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
         console.log(this.elRef.nativeElement);
         this.vehicleIdSubject = new BehaviorSubject(null);
@@ -53,7 +54,7 @@ export class FollowBusMapComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: null, // 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            attribution: null,
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'your.mapbox.access.token',

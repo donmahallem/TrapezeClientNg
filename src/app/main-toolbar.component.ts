@@ -9,7 +9,7 @@ import { SidebarService } from './services/sidebar.service';
     templateUrl: './main-toolbar.component.pug',
     styleUrls: ['./main-toolbar.component.scss']
 })
-export class MainToolbarComponent {
+export class MainToolbarComponent implements OnInit {
     title = 'app';
     prediction: any;
 

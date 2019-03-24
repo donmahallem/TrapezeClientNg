@@ -5,7 +5,7 @@
 export interface IEnvironmentBase {
     production: boolean;
     apiBaseUrl: string;
-};
+}
 
 /*
  * In development mode, to ignore zone related error stack frames such as

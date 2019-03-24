@@ -1,4 +1,4 @@
-import { IEnvironmentBase } from "./environment.base";
+import { IEnvironmentBase } from './environment.base';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -6,7 +6,7 @@ import { IEnvironmentBase } from "./environment.base";
 
 export const environment: IEnvironmentBase = {
     production: false,
-    apiBaseUrl: "https://test.domain/"
+    apiBaseUrl: 'https://test.domain/'
 };
 
 /*
