@@ -6,7 +6,7 @@ import { IEnvironmentBase } from './environment.base';
 
 export const environment: IEnvironmentBase = {
     production: false,
-    apiBaseUrl: 'https://test.domain/'
+    apiBaseUrl: 'https://kvg.xants.de/'
 };
 
 /*
