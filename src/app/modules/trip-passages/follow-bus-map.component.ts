@@ -27,7 +27,7 @@ interface Loc {
 }
 
 @Component({
-    selector: 'follow-bus-map',
+    selector: 'app-follow-bus-map',
     templateUrl: './follow-bus-map.component.pug',
     styleUrls: ['./follow-bus-map.component.scss']
 })
