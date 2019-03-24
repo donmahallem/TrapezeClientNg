@@ -100,14 +100,16 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     @ViewChild('mapcontainer') mapContainer;
     private map: L.Map;
     private vehicleMarkerList: L.Marker[] = new Array();
-    @Output('vehicleClicked') vehicleClicked = new EventEmitter<any>();
+    @Output() vehicleClicked = new EventEmitter<any>();
     private boundsObservable: BehaviorSubject<Bounds>;
     private updateObservable: Subscription;
     ngAfterViewInit() {
         console.log(this.mapContainer);
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> '
+                + 'contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
+                + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'your.mapbox.access.token',
