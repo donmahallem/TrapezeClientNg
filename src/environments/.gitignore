@@ -1,4 +1,5 @@
-#*
-#!environment.base.ts
+*
+!environment.base.ts
+!environment.ts
 #!environment.example.ts
-#!.gitignore
+!.gitignore

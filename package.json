@@ -10,7 +10,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "node ./ng-add-pug-loader.js && node ./ng-add-pug-loader.js",
-    "test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage"
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "test:unit": "npm run test-headless",
+    "test:build": "ng build --prod --aot --base-href /ngManniSpotter/",
+    "test:lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +30,7 @@
     "@angular/pwa": "^0.13.6",
     "@angular/router": "^7.0.0",
     "@angular/service-worker": "^7.0.0",
+    "@donmahallem/trapeze-api-types": "^0.1.1",
     "core-js": "^3.0.0",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",
