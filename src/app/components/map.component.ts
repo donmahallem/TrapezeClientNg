@@ -87,7 +87,7 @@ import { thisTypeAnnotation } from 'babel-types';
 
 
 @Component({
-    selector: 'map-root',
+    selector: 'app-map-root',
     templateUrl: './map.component.pug',
     styleUrls: ['./map.component.scss']
 })
