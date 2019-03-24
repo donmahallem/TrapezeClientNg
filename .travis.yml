@@ -13,8 +13,8 @@ cache:
   - node_modules
 before_script:
 - npm run postinstall
-- cp ./src/environments/environment.ts ./src/environments/environment.prod.ts
-- cp ./src/environments/environment.ts ./src/environments/environment.dev.ts
+- cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+- cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
 script:
 - npm run test:$TEST_SUITE
 after_success:
