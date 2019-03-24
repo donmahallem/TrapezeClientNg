@@ -43,7 +43,7 @@ mat-sidenav-content{
     height:100%;
     position:fixed;
 }
-map-root{
+app-map-root{
     height:100%;
     width:100%;
     display:block;
@@ -61,6 +61,6 @@ mat-sidenav.main-nav {
     overflow: hidden;
 }
 
-main-toolbar.main-toolbar {
+app-main-toolbar.main-toolbar {
     flex-grow: 0;
 }

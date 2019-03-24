@@ -13,7 +13,7 @@ import { ApiService } from '../../services';
 import { StationsResponse } from 'src/app/models/stations-response.model';
 import { StopLocation } from 'src/app/models/stop-location.model';
 @Component({
-    selector: 'stops-info',
+    selector: 'app-stops-info',
     templateUrl: './stops-info.component.pug',
     styleUrls: ['./stops-info.component.scss']
 })
