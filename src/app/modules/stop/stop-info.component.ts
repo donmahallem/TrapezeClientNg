@@ -56,10 +56,10 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private updateData(data: TripPassages): void {
         console.log(data);
         this.routeName = data.routeName;
-        if (data.tripId == this.tripId) {
+        if (data.tripId === this.tripId) {
             this.tripData = data;
             this.tripPassages = data.actual;
-            this.mEmptyList = data.actual.length == 0;
+            this.mEmptyList = data.actual.length === 0;
             // console.log(this.tripPassages, data.actual);
         }
     }
@@ -80,13 +80,13 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         this.mTimerObservable = timer(0, 200);
         this.mTimerObservable.subscribe((val) => {
             const diff = 10 - Math.round((val % 50) / 5);
-            if (diff != this.mTimeUntilRefresh) {
+            if (diff !== this.mTimeUntilRefresh) {
                 this.mTimeUntilRefresh = diff;
             }
         });
         const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.stopId));
         this.updateObservable = combineLatest(this.mTimerObservable.pipe(filter((val: number) => {
-            return val % 50 == 0;
+            return val % 50 === 0;
         })), tripIdObvservable)
             .pipe(
                 map((a) => a[1]),
