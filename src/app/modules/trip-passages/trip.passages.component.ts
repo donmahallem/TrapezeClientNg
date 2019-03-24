@@ -12,7 +12,8 @@ import {
     Subscription,
     of,
     combineLatest,
-    BehaviorSubject
+    BehaviorSubject,
+    Subscriber
 } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, filter, mergeMap, retry } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -26,7 +27,7 @@ enum UpdateStatus {
     PAUSED = 4
 }
 @Component({
-    selector: 'trip-passages',
+    selector: 'app-trip-passages',
     templateUrl: './trip.passages.component.pug',
     styleUrls: ['./trip.passages.component.scss']
 })
@@ -78,6 +79,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     }
 
 
+
     public ngAfterViewInit(): void {
         const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.tripId));
         this.updateObservable = combineLatest(timer(0, 5000), tripIdObvservable)
@@ -89,7 +91,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                     return this.apiService.getTripPassages(boundsa);
                 }),
                 retry(3))
-            .subscribe(this.updateData.bind(this), this.handleError.bind(this));
+            .subscribe(new Subscriber(this.updateData.bind(this), this.handleError.bind(this)));
     }
     public refreshData(): void {
     }

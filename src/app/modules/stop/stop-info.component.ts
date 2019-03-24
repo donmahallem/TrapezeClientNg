@@ -11,7 +11,7 @@ import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rx
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../services';
 @Component({
-    selector: 'stop-info',
+    selector: 'app-stop-info',
     templateUrl: './stop-info.component.pug',
     styleUrls: ['./stop-info.component.scss']
 })

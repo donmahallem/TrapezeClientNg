@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-    selector: '[drawable]'
+    selector: '[app-drawable]'
 })
 export class DrawableDirective implements OnInit {
     pos = { x: 0, y: 0 };
