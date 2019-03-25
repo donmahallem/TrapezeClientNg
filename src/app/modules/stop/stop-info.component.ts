@@ -23,6 +23,13 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     public get timeUntilRefresh(): number {
         return this.mTimeUntilRefresh;
     }
+    public get stopId(): string {
+        return this.route.snapshot.params.stopId;
+    }
+
+    public get stopInfo(): IStopInfo {
+        return this.mStopInfo;
+    }
     public tripPassages: any[] = [];
     private updateSubscription: Subscription;
     private mTimerObservable: Observable<number>;
@@ -30,7 +37,12 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private subscription: Subscription;
     public routes: any[] = [];
     private mStopInfo: IStopInfo;
-    public errorOccured: boolean = false;
+    public errorOccured = false;
+    public readonly ticksToRefresh: number = 50;
+    /**
+     * Tick interval in miliseconds
+     */
+    public readonly tickInterval: number = 200;
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
@@ -45,13 +57,6 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             return of(result as T);
         };
     }
-    public get stopId(): string {
-        return this.route.snapshot.params.stopId;
-    }
-
-    public get stopInfo(): IStopInfo {
-        return this.mStopInfo;
-    }
     private updateData(data: IStopInfo): void {
         this.errorOccured = false;
         if (data.stopShortName === this.stopId) {
@@ -65,11 +70,6 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             return Math.ceil(time / 60) + 'min';
         }
     }
-    public readonly ticksToRefresh: number = 50;
-    /**
-     * Tick interval in miliseconds
-     */
-    public readonly tickInterval: number = 200;
     public ngAfterViewInit(): void {
         this.mTimerObservable = timer(this.tickInterval, this.tickInterval);
         this.mTimerObservable.subscribe((tick: number) => {
@@ -91,7 +91,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
                 }),
                 catchError((err, a) => {
                     this.errorOccured = true;
-                    return of(null)
+                    return of(null);
                 }),
                 filter((item: IStopInfo) => {
                     return item !== null;
