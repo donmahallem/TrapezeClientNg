@@ -1,7 +1,6 @@
-mat-nav-list(role="list")
-    mat-list-item(*ngFor="let passage of routes")
-        span.pattern-text {{passage?.shortName}}
-        h3(matLine) {{passage?.shortName}} {{passage?.routeType}}
-        p(matLine)
-            span {{convertTime(passage?.actualRelativeTime,passage)}}
-            span(class="demo-2") -- {{passage?.status}} -- {{passage?.plannedTime}}
+mat-list(role="list")
+    ng-container(*ngFor="let passage of routes")
+        h3(matSubheader) {{passage?.shortName}}
+        mat-divider
+        mat-list-item(*ngFor="let direction of passage.directions")
+            h4(matLine) {{direction}}

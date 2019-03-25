@@ -16,14 +16,6 @@ import { ApiService } from '../../services';
     styleUrls: ['./stop-info.component.scss']
 })
 export class StopInfoComponent implements AfterViewInit, OnDestroy {
-    public tripId: string;
-    public routeName: string;
-    public tripData: any;
-    private tripPassages: any[] = [];
-    private updateObservable: Subscription;
-    private mEmptyList = false;
-    private mTimerObservable: Observable<number>;
-    private mTimeUntilRefresh = 0;
 
     constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
         route.params.subscribe((params) => {
@@ -38,6 +30,16 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     public get isEmptyList(): boolean {
         return this.mEmptyList;
     }
+    public tripId: string;
+    public routeName: string;
+    public tripData: any;
+    private tripPassages: any[] = [];
+    private updateObservable: Subscription;
+    private mEmptyList = false;
+    private mTimerObservable: Observable<number>;
+    private mTimeUntilRefresh = 0;
+
+    public routes: any[] = [];
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
@@ -63,8 +65,6 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             this.routes = (<any>data).routes;
         }
     }
-
-    public routes: any[] = [];
     public onTripSelected(trip) {
         console.log(trip);
         this.router.navigate(['passages', trip.tripId]);
@@ -87,7 +87,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         });
         const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.stopId));
         this.updateObservable = combineLatest(this.mTimerObservable.pipe(filter((val: number) => {
-            return val % 50 === 0;
+            return val % 500 === 0;
         })), tripIdObvservable)
             .pipe(
                 map((a) => a[1]),

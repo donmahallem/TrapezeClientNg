@@ -1,10 +1,10 @@
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { Observable } from "rxjs";
-import { ApiService } from "../../services";
-import { Injectable } from "@angular/core";
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ApiService } from '../../services';
+import { Injectable } from '@angular/core';
 
 @Injectable()
-export class StopInfoResolver implements Resolve<any>{
+export class StopInfoResolver implements Resolve<any> {
 
     public constructor(private api: ApiService) { }
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
