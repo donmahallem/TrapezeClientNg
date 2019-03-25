@@ -30,6 +30,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private subscription: Subscription;
     public routes: any[] = [];
     private mStopInfo: IStopInfo;
+    public errorOccured: boolean = false;
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
@@ -52,6 +53,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         return this.mStopInfo;
     }
     private updateData(data: IStopInfo): void {
+        this.errorOccured = false;
         if (data.stopShortName === this.stopId) {
             this.mStopInfo = data;
         }
@@ -87,7 +89,10 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
                 flatMap((stopId: string): Observable<IStopInfo> => {
                     return this.apiService.getStopDepartures(stopId);
                 }),
-                catchError((err, a) => of(null)),
+                catchError((err, a) => {
+                    this.errorOccured = true;
+                    return of(null)
+                }),
                 filter((item: IStopInfo) => {
                     return item !== null;
                 }));

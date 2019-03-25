@@ -9,3 +9,6 @@ mat-tab-group.mat-evelation-z4(mat-stretch-tabs)
         app-departure-list([departures]="stopInfo?.actual")
     mat-tab(label="Routes")
         app-route-list([routes]="stopInfo?.routes")
+div.error-box(*ngIf="errorOccured")
+    h3 Error occured
+    p Will retry in a {{timeUntilRefresh}}s
