@@ -5,12 +5,14 @@ import {
     MatToolbarModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
 } from '@angular/material';
 import { MainToolbarComponent } from './main-toolbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ToolbarSearchBoxComponent } from './search-box.component';
+import { RouteLoadingIndicatorComponent } from './route-loading-indicator.component';
 
 
 @NgModule({
@@ -23,11 +25,13 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         FormsModule,
         MatInputModule,
         MatButtonModule,
-        RouterModule
+        RouterModule,
+        MatProgressBarModule
     ],
     declarations: [
         MainToolbarComponent,
-        ToolbarSearchBoxComponent
+        ToolbarSearchBoxComponent,
+        RouteLoadingIndicatorComponent
     ],
     exports: [
         MainToolbarComponent,
@@ -40,7 +44,9 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         MatInputModule,
         MatButtonModule,
         RouterModule,
-        ToolbarSearchBoxComponent
+        ToolbarSearchBoxComponent,
+        RouteLoadingIndicatorComponent,
+        MatProgressBarModule
     ],
     providers: [
     ]
