@@ -7,12 +7,15 @@ import {
     MatIconModule,
     MatListModule
 } from '@angular/material';
+import { StopInfoResolver } from './stop-info.resolver';
 @NgModule({
     imports: [
         StopRoutingModule
     ],
     declarations: [
         // TripPassagesComponent
+    ],
+    providers: [
     ]
 })
 export class StopModule { }

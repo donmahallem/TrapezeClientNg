@@ -11,10 +11,14 @@ import {
     MatProgressSpinnerModule,
     MatToolbarModule
 } from '@angular/material';
+import { StopInfoResolver } from './stop-info.resolver';
 const tripPassagesRoute: Routes = [
     {
         path: ':stopId',
-        component: StopInfoComponent
+        component: StopInfoComponent,
+        resolve: {
+            stopInfo: StopInfoResolver
+        }
     }
 ];
 
@@ -29,6 +33,9 @@ const tripPassagesRoute: Routes = [
     ],
     declarations: [
         StopInfoComponent
+    ],
+    providers: [
+        StopInfoResolver
     ],
     exports: [
         RouterModule
