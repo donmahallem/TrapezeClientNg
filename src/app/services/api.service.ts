@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { timer, Observable, Subscription, of, combineLatest } from 'rxjs';
 import { catchError, map, tap, mergeMapTo, filter, mergeMap } from 'rxjs/operators';
 import { StationsResponse } from '../models/stations-response.model';
+import { IStopInfo } from '@donmahallem/trapeze-api-types';
 @Injectable({
     providedIn: 'root',
 })
@@ -24,8 +25,8 @@ export class ApiService {
     public getStopInfo(vehicleId: string | number): Observable<any> {
         return this.http.get(environment.apiBaseUrl + 'api/stop/' + vehicleId + '/info');
     }
-    public getStopDepartures(vehicleId: string | number): Observable<any> {
-        return this.http.get(environment.apiBaseUrl + 'api/stop/' + vehicleId + '/departures');
+    public getStopDepartures(vehicleId: string | number): Observable<IStopInfo> {
+        return this.http.get<IStopInfo>(environment.apiBaseUrl + 'api/stop/' + vehicleId + '/departures');
     }
     public getVehicleLocations(bounds: Bounds): Observable<any> {
         return this.http.get(environment.apiBaseUrl + 'api/geo/vehicles', {

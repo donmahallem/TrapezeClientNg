@@ -1,11 +1,11 @@
 mat-toolbar(color="primary")
     div
-        span.title(i18n-title="@@stopName",title="Stop Name") {{tripData?.stopName}}
+        span.title(i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
         span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
 div(*ngIf="tripId!=tripData?.tripId")
     mat-progress-spinner(mode="indeterminate",diameter="40")
 mat-tab-group.mat-evelation-z4(mat-stretch-tabs)
     mat-tab(label="Departures")
-        app-departure-list([departures]="tripPassages")
+        app-departure-list([departures]="stopInfo?.actual")
     mat-tab(label="Routes")
-        app-route-list([routes]="routes")
+        app-route-list([routes]="stopInfo?.routes")
