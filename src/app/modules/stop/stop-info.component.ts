@@ -60,10 +60,11 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             this.tripData = data;
             this.tripPassages = data.actual;
             this.mEmptyList = data.actual.length === 0;
-            // console.log(this.tripPassages, data.actual);
+            this.routes = (<any>data).routes;
         }
     }
 
+    public routes: any[] = [];
     public onTripSelected(trip) {
         console.log(trip);
         this.router.navigate(['passages', trip.tripId]);

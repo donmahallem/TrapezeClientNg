@@ -24,18 +24,7 @@ const tripPassagesRoute: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule,
-        MatIconModule,
-        MatListModule,
-        MatToolbarModule,
-        MatProgressSpinnerModule,
         RouterModule.forChild(tripPassagesRoute)
-    ],
-    declarations: [
-        StopInfoComponent
-    ],
-    providers: [
-        StopInfoResolver
     ],
     exports: [
         RouterModule

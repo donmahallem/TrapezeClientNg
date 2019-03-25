@@ -5,17 +5,32 @@ import { BrowserModule } from '@angular/platform-browser';
 import { StopRoutingModule } from './stop-routing.module';
 import {
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatProgressSpinnerModule
 } from '@angular/material';
 import { StopInfoResolver } from './stop-info.resolver';
+import { StopInfoComponent } from './stop-info.component';
+import { DepartureListComponent } from './departure-list.component';
+import { RouteListComponent } from './route-list.component';
 @NgModule({
     imports: [
-        StopRoutingModule
+        CommonModule,
+        MatIconModule,
+        MatListModule,
+        MatToolbarModule,
+        MatProgressSpinnerModule,
+        StopRoutingModule,
+        MatTabsModule
     ],
     declarations: [
-        // TripPassagesComponent
+        StopInfoComponent,
+        DepartureListComponent,
+        RouteListComponent
     ],
     providers: [
+        StopInfoResolver
     ]
 })
 export class StopModule { }
