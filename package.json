@@ -30,7 +30,6 @@
     "@angular/pwa": "^0.13.7",
     "@angular/router": "^7.0.0",
     "@angular/service-worker": "^7.0.0",
-    "@donmahallem/trapeze-api-express-route": "^1.0.0",
     "@donmahallem/trapeze-api-types": "^0.2.0",
     "core-js": "^3.0.0",
     "leaflet": "^1.4.0",
