@@ -98,11 +98,9 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
         console.log(this.mapContainer);
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            accessToken: 'your.mapbox.access.token',
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> '
                 + 'contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
                 + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox.streets',
             maxZoom: 18,
             subdomains: ['a', 'b', 'c'],
         }).addTo(this.map);
@@ -159,7 +157,7 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
         });
-        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000],
+        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], <any>
             {
                 icon: greenIcon,
                 rotationAngle: vehicle.heading - 90,

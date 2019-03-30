@@ -31,6 +31,7 @@
     "@angular/router": "^7.0.0",
     "@angular/service-worker": "^7.0.0",
     "@donmahallem/trapeze-api-types": "^0.2.0",
+    "@types/leaflet": "^1.4.3",
     "core-js": "^3.0.0",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",

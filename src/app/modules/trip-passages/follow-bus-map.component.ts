@@ -1,54 +1,61 @@
 import {
     AfterViewInit,
     Component,
-    ElementRef,
     Input,
     OnDestroy,
     ViewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../../services';
 
-interface Loc {
+interface IVehicleLocation {
     longitude: number;
     latitude: number;
     heading: number;
     tripId: string;
 }
 
+export class RoutesSubscriber extends Subscriber<any> {
+    public constructor(private map: FollowBusMapComponent) {
+        super();
+    }
+    public next(routes) {
+        this.map.setRoutePaths(routes.paths);
+    }
+}
 @Component({
     selector: 'app-follow-bus-map',
     styleUrls: ['./follow-bus-map.component.scss'],
     templateUrl: './follow-bus-map.component.pug',
 })
 export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
-    constructor(private elRef: ElementRef, private apiService: ApiService) {
-        console.log(this.elRef.nativeElement);
+    constructor(private apiService: ApiService) {
         this.vehicleIdSubject = new BehaviorSubject(undefined);
     }
 
     @Input('location')
-    set vehicleId(id: Loc) {
+    public set vehicleId(id: IVehicleLocation) {
         this.vehicleIdSubject.next(id);
     }
 
-    get vehicleId(): Loc {
+    public get vehicleId(): IVehicleLocation {
         return this.vehicleIdSubject.getValue();
     }
+
     @ViewChild('mapcontainer') mapContainer;
     private map: L.Map;
-    private vehicleIdSubject: BehaviorSubject<Loc>;
+    private vehicleIdSubject: BehaviorSubject<IVehicleLocation>;
     private vehicleMarker: L.Marker;
     private updateObservable: Subscription;
 
-    ngAfterViewInit() {
-        this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 16);
+    private routePolyLines: L.Polyline[] = [];
+    public ngAfterViewInit(): void {
+        this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false })
+            .setView([54.3364478, 10.1510508], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            accessToken: 'your.mapbox.access.token',
             attribution: undefined,
-            id: 'mapbox.streets',
             maxZoom: 18,
             subdomains: ['a', 'b', 'c'],
         }).addTo(this.map);
@@ -70,32 +77,40 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
                 mergeMap(boundsa => {
                     return this.apiService.getRouteByTripId(boundsa.tripId);
                 }))
-            .subscribe((res) => {
-                for (const key of Array.from(res.paths.keys())) {
-                    const pointList: any[] = [];
-                    const pathsObj = res.paths[<string>key];
-                    // console.log(pathsObj);
-                    for (const p of pathsObj.wayPoints) {
-                        pointList.push(new L.LatLng(p.lat / 3600000, p.lon / 3600000));
-                    }
-                    // console.log("points", pointList);
-                    const firstpolyline = L.polyline(pointList, {
-                        color: pathsObj.color,
-                        opacity: 0.5,
-                        smoothFactor: 1,
-                        weight: 3,
-                    });
-                    firstpolyline.addTo(this.map);
-                    // console.log(res);
-                }
-
-            });
+            .subscribe(new RoutesSubscriber(this));
 
     }
-    public updateVehicleMarker(vehicle: Loc): void {
-        this.vehicleMarker.setLatLng({ lat: vehicle.latitude / 3600000, lng: vehicle.longitude / 3600000 });
-        this.vehicleMarker.setRotationAngle(vehicle.heading - 90);
-        this.map.panTo({ lat: vehicle.latitude / 3600000, lng: vehicle.longitude / 3600000, alt: 2000 }, { animate: true });
+
+    public setRoutePaths(paths: any[]): void {
+        for (const path of paths) {
+            const pointList: any[] = [];
+            for (const wayPoint of path.wayPoints) {
+                pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
+            }
+            const firstpolyline = L.polyline(pointList, {
+                color: path.color,
+                opacity: 0.5,
+                smoothFactor: 1,
+                weight: 3,
+            });
+            firstpolyline.setLatLngs();
+            firstpolyline.addTo(this.map);
+            this.routePolyLines.push(firstpolyline);
+        }
+    }
+
+    public updateVehicleMarker(vehicle: IVehicleLocation): void {
+        this.vehicleMarker.setLatLng({
+            lat: vehicle.latitude / 3600000,
+            lng: vehicle.longitude / 3600000,
+        });
+        (<any>this.vehicleMarker).setRotationAngle(vehicle.heading - 90);
+        this.map.panTo({
+            alt: 2000,
+            lat: vehicle.latitude / 3600000,
+            lng: vehicle.longitude / 3600000,
+        },
+            { animate: true });
     }
 
     public createVehicleMarker(): L.Marker {

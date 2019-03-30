@@ -29,6 +29,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         route.params.subscribe((params) => {
             this.tripId = params.tripId;
         });
+        console.log(this.tripPassages);
     }
 
     public get updateStatus(): UpdateStatus {
