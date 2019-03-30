@@ -14,7 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 const tripPassagesRoute: Routes = [
     {
         path: '',
-        component: StopsInfoComponent
+        component: StopsInfoComponent,
+        data: {
+            openSidebar: true
+        }
     }
 ];
 

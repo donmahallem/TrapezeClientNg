@@ -15,7 +15,10 @@ import {
 const tripPassagesRoute: Routes = [
     {
         path: ':tripId',
-        component: TripPassagesComponent
+        component: TripPassagesComponent,
+        data: {
+            openSidebar: true
+        }
     }
 ];
 

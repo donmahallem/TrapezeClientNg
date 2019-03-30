@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { of } from 'rxjs';
 
 const appRoutes: Routes = [
     {
@@ -13,10 +14,7 @@ const appRoutes: Routes = [
     {
         path: 'stops',
         loadChildren: './modules/stops/stops.module#StopsModule',
-    }/*,
-    { path: 'heroes', component: HeroListComponent },
-    { path: '', redirectTo: '/heroes', pathMatch: 'full' },
-    { path: '**', component: PageNotFoundComponent }*/
+    }
 ];
 
 @NgModule({

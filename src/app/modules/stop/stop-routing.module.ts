@@ -18,6 +18,9 @@ const tripPassagesRoute: Routes = [
         component: StopInfoComponent,
         resolve: {
             stopInfo: StopInfoResolver
+        },
+        data: {
+            openSidebar: true
         }
     }
 ];
