@@ -93,7 +93,6 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
                 smoothFactor: 1,
                 weight: 3,
             });
-            firstpolyline.setLatLngs();
             firstpolyline.addTo(this.map);
             this.routePolyLines.push(firstpolyline);
         }
