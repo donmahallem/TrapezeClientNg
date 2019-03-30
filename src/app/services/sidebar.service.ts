@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Bounds } from './../models';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap } from 'rxjs/operators';
-import { Router, ActivatedRoute, ActivationEnd } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root',
 })

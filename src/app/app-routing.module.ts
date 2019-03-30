@@ -1,31 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { of } from 'rxjs';
 
 const appRoutes: Routes = [
     {
-        path: 'passages',
         loadChildren: './modules/trip-passages/trip-passages.module#TripPassagesModule',
+        path: 'passages',
     },
     {
-        path: 'stop',
         loadChildren: './modules/stop/stop.module#StopModule',
+        path: 'stop',
     },
     {
-        path: 'stops',
         loadChildren: './modules/stops/stops.module#StopsModule',
-    }
+        path: 'stops',
+    },
 ];
 
 @NgModule({
+    exports: [
+        RouterModule,
+    ],
     imports: [
         RouterModule.forRoot(
             appRoutes,
-            { enableTracing: false } // <-- debugging purposes only
-        )
+            { enableTracing: false }, // <-- debugging purposes only
+        ),
     ],
-    exports: [
-        RouterModule
-    ]
 })
 export class AppRoutingModule { }

@@ -1,15 +1,7 @@
-import {
-    Directive,
-    HostListener,
-    HostBinding,
-    ElementRef,
-    Output,
-    EventEmitter,
-    OnInit
-} from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 
 @Directive({
-    selector: '[appDrawable]'
+    selector: '[appDrawable]',
 })
 export class DrawableDirective implements OnInit {
     pos = { x: 0, y: 0 };

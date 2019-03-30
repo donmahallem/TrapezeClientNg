@@ -1,35 +1,20 @@
-import {
-    Component,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
-import { TripPassages } from './../../models';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import {
-    timer,
-    Observable,
-    Subscription,
-    of,
-    combineLatest,
-    BehaviorSubject,
-    Subscriber
-} from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, retry } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { filter, map, mergeMap, retry } from 'rxjs/operators';
 import { ApiService } from '../../services';
-
+import { TripPassages } from './../../models';
 
 enum UpdateStatus {
     LOADING = 1,
     ERROR = 2,
     LOADED = 3,
-    PAUSED = 4
+    PAUSED = 4,
 }
 @Component({
     selector: 'app-trip-passages',
-    templateUrl: './trip.passages.component.pug',
-    styleUrls: ['./trip.passages.component.scss']
+    styleUrls: ['./trip-passages.component.scss'],
+    templateUrl: './trip-passages.component.pug',
 })
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public tripId: string;
@@ -49,7 +34,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public get updateStatus(): UpdateStatus {
         return this.updateStatusSubject.getValue();
     }
-
 
     private handleError<T>(operation = 'operation', result?: T) {
         this.updateStatusSubject.next(UpdateStatus.ERROR);
@@ -77,8 +61,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         }
         console.log(this.updateStatus);
     }
-
-
 
     public ngAfterViewInit(): void {
         const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.tripId));

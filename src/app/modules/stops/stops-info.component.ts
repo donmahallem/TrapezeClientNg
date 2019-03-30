@@ -1,21 +1,13 @@
-import {
-    Component,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
-import { TripPassages } from './../../models';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject, merge } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { ApiService } from '../../services';
-import { StationsResponse } from 'src/app/models/stations-response.model';
+import { combineLatest, of, BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StopLocation } from 'src/app/models/stop-location.model';
+import { ApiService } from '../../services';
 @Component({
     selector: 'app-stops-info',
+    styleUrls: ['./stops-info.component.scss'],
     templateUrl: './stops-info.component.pug',
-    styleUrls: ['./stops-info.component.scss']
 })
 export class StopsInfoComponent implements AfterViewInit, OnDestroy {
     private mItems: StopLocation[] = [];

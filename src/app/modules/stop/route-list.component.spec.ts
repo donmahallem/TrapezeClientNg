@@ -1,10 +1,9 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MatButtonModule, } from '@angular/material';
-import { Injectable, Component, Input } from '@angular/core';
-import { RouteListComponent } from './route-list.component';
+import { Component } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { RouteListComponent } from './route-list.component';
 
 /* tslint:disable */
 @Component({
@@ -38,25 +37,23 @@ export class TestParent {
 
 /* tslint:enable */
 
-
-
 describe('src/modules/stop/route-list.component.ts', () => {
     describe('RouteListComponent', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [
-                    RouterTestingModule,
-                    MatButtonModule
-                ],
                 declarations: [
                     RouteListComponent,
                     TestMatDivider,
                     TestMatListItem,
                     TestMatList,
-                    TestParent
+                    TestParent,
+                ],
+                imports: [
+                    RouterTestingModule,
+                    MatButtonModule,
                 ],
                 providers: [
-                ]
+                ],
             }).compileComponents();
         }));
 
@@ -79,19 +76,19 @@ describe('src/modules/stop/route-list.component.ts', () => {
             describe('test the "routes" input', () => {
                 const testItem: any[] = [
                     {
-                        shortName: '123',
                         directions: [
                             'test direction 1',
-                            'test direction 2'
-                        ]
+                            'test direction 2',
+                        ],
+                        shortName: '123',
                     },
                     {
-                        shortName: '421',
                         directions: [
                             'other test direction 1',
-                            'other test direction 2'
-                        ]
-                    }
+                            'other test direction 2',
+                        ],
+                        shortName: '421',
+                    },
                 ];
                 it('should set the testitem correctly as the input element', () => {
                     component.testData = testItem;

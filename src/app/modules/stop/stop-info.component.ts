@@ -1,18 +1,13 @@
-import {
-    Component,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { timer, Observable, Subscription, of, combineLatest, merge } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle, flatMap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { IStopInfo } from '@donmahallem/trapeze-api-types';
+import { combineLatest, merge, of, timer, Observable, Subscription } from 'rxjs';
+import { catchError, filter, flatMap, map } from 'rxjs/operators';
 import { ApiService } from '../../services';
 @Component({
     selector: 'app-stop-info',
+    styleUrls: ['./stop-info.component.scss'],
     templateUrl: './stop-info.component.pug',
-    styleUrls: ['./stop-info.component.scss']
 })
 export class StopInfoComponent implements AfterViewInit, OnDestroy {
 

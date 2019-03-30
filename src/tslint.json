@@ -1,6 +1,18 @@
 {
     "extends": "../tslint.json",
     "rules": {
+        "object-literal-sort-keys": true,
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ],
+        "no-consecutive-blank-lines": [
+            true,
+            1
+        ],
         "directive-selector": [
             true,
             "attribute",
@@ -12,6 +24,13 @@
             "element",
             "app",
             "kebab-case"
+        ],
+        "ordered-imports": [
+            true,
+            {
+                "import-sources-order": "lowercase-first",
+                "named-imports-order": "lowercase-first"
+            }
         ]
     }
 }

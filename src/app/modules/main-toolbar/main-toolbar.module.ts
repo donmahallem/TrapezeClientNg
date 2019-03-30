@@ -1,37 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    MatIconModule,
-    MatToolbarModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressBarModule
-} from '@angular/material';
-import { MainToolbarComponent } from './main-toolbar.component';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatToolbarModule,
+} from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { ToolbarSearchBoxComponent } from './search-box.component';
+import { MainToolbarComponent } from './main-toolbar.component';
 import { RouteLoadingIndicatorComponent } from './route-loading-indicator.component';
-
+import { ToolbarSearchBoxComponent } from './search-box.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatToolbarModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        FormsModule,
-        MatInputModule,
-        MatButtonModule,
-        RouterModule,
-        MatProgressBarModule
-    ],
     declarations: [
         MainToolbarComponent,
         ToolbarSearchBoxComponent,
-        RouteLoadingIndicatorComponent
+        RouteLoadingIndicatorComponent,
     ],
     exports: [
         MainToolbarComponent,
@@ -46,9 +33,21 @@ import { RouteLoadingIndicatorComponent } from './route-loading-indicator.compon
         RouterModule,
         ToolbarSearchBoxComponent,
         RouteLoadingIndicatorComponent,
-        MatProgressBarModule
+        MatProgressBarModule,
+    ],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatToolbarModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        FormsModule,
+        MatInputModule,
+        MatButtonModule,
+        RouterModule,
+        MatProgressBarModule,
     ],
     providers: [
-    ]
+    ],
 })
 export class MainToolbarModule { }

@@ -1,18 +1,16 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import * as L from 'leaflet';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatSidenavContainer, MatSidenav } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, from } from 'rxjs';
-import { startWith, map, single, shareReplay, flatMap } from 'rxjs/operators';
-import { StopLocation } from 'src/app/models/stop-location.model';
+import { MatSidenav, MatSidenavContainer } from '@angular/material';
+import { Observable } from 'rxjs';
+import { flatMap, map, shareReplay, single, startWith } from 'rxjs/operators';
 import { DrawableDirective } from 'src/app/drawable.directive';
-import { SidebarService } from 'src/app/services/sidebar.service';
+import { StopLocation } from 'src/app/models/stop-location.model';
 import { ApiService } from 'src/app/services';
+import { SidebarService } from 'src/app/services/sidebar.service';
 @Component({
     selector: 'app-main-toolbar',
+    styleUrls: ['./main-toolbar.component.scss'],
     templateUrl: './main-toolbar.component.pug',
-    styleUrls: ['./main-toolbar.component.scss']
 })
 export class MainToolbarComponent implements OnInit {
     constructor(private sidebarService: SidebarService, private apiService: ApiService) {
@@ -50,7 +48,7 @@ export class MainToolbarComponent implements OnInit {
                         .pipe(map((stops) => {
                             return stops.filter(option => option.name.toLowerCase().includes(value));
                         }));
-                })
+                }),
             );
     }
     onVoted(agreed: any) {
@@ -61,7 +59,6 @@ export class MainToolbarComponent implements OnInit {
     public toggleSidebar(): void {
         this.sidebarService.toggleSidebar();
     }
-
 
     private _filter(value: string): string[] {
         const filterValue = value.toLowerCase();

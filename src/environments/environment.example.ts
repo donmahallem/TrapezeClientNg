@@ -5,8 +5,8 @@ import { IEnvironmentBase } from './environment.base';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment: IEnvironmentBase = {
+    apiBaseUrl: 'https://test.domain/',
     production: false,
-    apiBaseUrl: 'https://test.domain/'
 };
 
 /*

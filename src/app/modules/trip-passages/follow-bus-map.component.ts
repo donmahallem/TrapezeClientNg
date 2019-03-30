@@ -1,23 +1,18 @@
 import {
-    Component,
-    ViewChild,
-    OnInit,
-    ElementRef,
-    Output,
-    Input,
     AfterViewInit,
-    EventEmitter,
-    OnDestroy
+    Component,
+    ElementRef,
+    Input,
+    OnDestroy,
+    ViewChild,
 } from '@angular/core';
-import * as L from 'leaflet';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-    Router
+    Router,
 } from '@angular/router';
-import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, merge, mergeMap, filter, distinctUntilChanged } from 'rxjs/operators';
+import * as L from 'leaflet';
+import { of, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../../services';
-import { resetFakeAsyncZone } from '@angular/core/testing';
 
 interface Loc {
     longitude: number;
@@ -28,8 +23,8 @@ interface Loc {
 
 @Component({
     selector: 'app-follow-bus-map',
+    styleUrls: ['./follow-bus-map.component.scss'],
     templateUrl: './follow-bus-map.component.pug',
-    styleUrls: ['./follow-bus-map.component.scss']
 })
 export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
     constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
@@ -54,10 +49,10 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: null,
-            maxZoom: 18,
-            id: 'mapbox.streets',
             accessToken: 'your.mapbox.access.token',
+            attribution: null,
+            id: 'mapbox.streets',
+            maxZoom: 18,
             subdomains: ['a', 'b', 'c'],
         }).addTo(this.map);
         this.map.dragging.disable();
@@ -89,9 +84,9 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
                     // console.log("points", pointList);
                     const firstpolyline = L.polyline(pointList, {
                         color: pathsObj.color,
-                        weight: 3,
                         opacity: 0.5,
-                        smoothFactor: 1
+                        smoothFactor: 1,
+                        weight: 3,
                     });
                     firstpolyline.addTo(this.map);
                     // console.log(res);
@@ -109,25 +104,24 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
     public createVehicleMarker(): L.Marker {
 
         const greenIcon = L.icon({
+            iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+            iconSize: [24, 24], // size of the icon
             iconUrl: 'assets/iconmonstr-arrow-24.png',
             // shadowUrl: 'leaf-shadow.png',
-            iconSize: [24, 24], // size of the icon
-            shadowSize: [24, 24], // size of the shadow
-            iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+            popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
-            popupAnchor: [12, 12] // point from which the popup should open relative to the iconAnchor
+            shadowSize: [24, 24], // size of the shadow
         });
         const markerT: L.Marker = L.marker([0, 0],
             {
                 icon: greenIcon,
                 title: 'vehicle.name',
-                zIndexOffset: 100
+                zIndexOffset: 100,
             });
         // markerT.setKey(entry.id);
         markerT.addTo(this.map);
         return markerT;
     }
-
 
     private loadTrip(id: string): Observable<any> {
         return this.apiService.getVehicleLocation(id);
