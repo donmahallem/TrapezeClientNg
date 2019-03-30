@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material';
 import { DrawableDirective } from './drawable.directive';
@@ -18,8 +17,7 @@ export class AppComponent implements OnInit {
     sidenav: MatSidenav;
     predictions: any;
     tripId: string;
-    constructor(private http: HttpClient,
-        private sidebarService: SidebarService) {
+    constructor(private sidebarService: SidebarService) {
 
     }
     @ViewChild(DrawableDirective) canvas;

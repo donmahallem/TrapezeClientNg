@@ -14,7 +14,7 @@ import { SidebarService } from 'src/app/services/sidebar.service';
 })
 export class MainToolbarComponent implements OnInit {
     constructor(private sidebarService: SidebarService, private apiService: ApiService) {
-        this.stopsObservable = apiService.getStations()
+        this.stopsObservable = this.apiService.getStations()
             .pipe(single(),
                 map((value) => {
                     return value.stops;
@@ -58,12 +58,6 @@ export class MainToolbarComponent implements OnInit {
 
     public toggleSidebar(): void {
         this.sidebarService.toggleSidebar();
-    }
-
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-
-        return this.options.filter(option => option.toLowerCase().includes(filterValue));
     }
 
 }

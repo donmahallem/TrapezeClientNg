@@ -47,7 +47,7 @@ import { ApiService } from './../services';
             proto_initIcon.call(this);
         },
 
-        _key: null,
+        _key: undefined,
 
         _setPos: function (pos) {
             proto_setPos.call(this, pos);
@@ -85,7 +85,7 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
         private router: Router,
         private stopService: StopPointService) {
         console.log(this.elRef.nativeElement);
-        this.boundsObservable = new BehaviorSubject(null);
+        this.boundsObservable = new BehaviorSubject(undefined);
     }
     title = 'app';
     @ViewChild('mapcontainer') mapContainer;
@@ -240,20 +240,6 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     }
     private loadTrip(bounds: Bounds): Observable<any> {
         return this.apiService.getVehicleLocations(bounds);
-    }
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
 
     public ngOnDestroy(): void {

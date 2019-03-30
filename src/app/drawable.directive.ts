@@ -68,7 +68,6 @@ export class DrawableDirective implements OnInit {
     }
 
     getImgData(): ImageData {
-        const scaled = this.ctx.drawImage(this.canvas, 0, 0, 300, 300);
         return this.ctx.getImageData(0, 0, 300, 300);
     }
 }

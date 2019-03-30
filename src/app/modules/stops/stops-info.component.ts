@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, of, BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StopLocation } from 'src/app/models/stop-location.model';
 import { ApiService } from '../../services';
@@ -13,21 +13,8 @@ export class StopsInfoComponent implements AfterViewInit, OnDestroy {
     private mItems: StopLocation[] = [];
     private mSearchTerm: BehaviorSubject<string> = new BehaviorSubject('s');
 
-    constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+    constructor(private apiService: ApiService, private router: Router) {
 
-    }
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
 
     public filteredList(): Observable<StopLocation[]> {

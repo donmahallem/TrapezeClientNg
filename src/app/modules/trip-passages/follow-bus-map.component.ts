@@ -6,11 +6,8 @@ import {
     OnDestroy,
     ViewChild,
 } from '@angular/core';
-import {
-    Router,
-} from '@angular/router';
 import * as L from 'leaflet';
-import { of, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../../services';
 
@@ -27,9 +24,9 @@ interface Loc {
     templateUrl: './follow-bus-map.component.pug',
 })
 export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
-    constructor(private elRef: ElementRef, private apiService: ApiService, private router: Router) {
+    constructor(private elRef: ElementRef, private apiService: ApiService) {
         console.log(this.elRef.nativeElement);
-        this.vehicleIdSubject = new BehaviorSubject(null);
+        this.vehicleIdSubject = new BehaviorSubject(undefined);
     }
 
     @Input('location')
@@ -50,7 +47,7 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
         this.map = L.map(this.mapContainer.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             accessToken: 'your.mapbox.access.token',
-            attribution: null,
+            attribution: undefined,
             id: 'mapbox.streets',
             maxZoom: 18,
             subdomains: ['a', 'b', 'c'],
@@ -121,24 +118,6 @@ export class FollowBusMapComponent implements AfterViewInit, OnDestroy {
         // markerT.setKey(entry.id);
         markerT.addTo(this.map);
         return markerT;
-    }
-
-    private loadTrip(id: string): Observable<any> {
-        return this.apiService.getVehicleLocation(id);
-    }
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
 
     public ngOnDestroy(): void {

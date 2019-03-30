@@ -69,7 +69,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 map((a) => a[1]),
                 filter(num => num !== null),
                 mergeMap(boundsa => {
-                    console.log('HHAHAH', boundsa);
                     return this.apiService.getTripPassages(boundsa);
                 }),
                 retry(3))

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IStopInfo } from '@donmahallem/trapeze-api-types';
 import { combineLatest, merge, of, timer, Observable, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { ApiService } from '../../services';
 })
 export class StopInfoComponent implements AfterViewInit, OnDestroy {
 
-    constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+    constructor(private route: ActivatedRoute, private apiService: ApiService) {
         this.mStopInfo = this.route.snapshot.data.stopInfo;
     }
 
@@ -29,7 +29,6 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private updateSubscription: Subscription;
     private mTimerObservable: Observable<number>;
     private mTimeUntilRefresh = 0;
-    private subscription: Subscription;
     public routes: any[] = [];
     private mStopInfo: IStopInfo;
     public errorOccured = false;
@@ -39,19 +38,6 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
      */
     public readonly tickInterval: number = 200;
 
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
     private updateData(data: IStopInfo): void {
         this.errorOccured = false;
         if (data.stopShortName === this.stopId) {
@@ -86,10 +72,10 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
                 }),
                 catchError((err, a) => {
                     this.errorOccured = true;
-                    return of(null);
+                    return of(undefined);
                 }),
                 filter((item: IStopInfo) => {
-                    return item !== null;
+                    return item !== undefined;
                 }));
         /**
          * combine observables

@@ -31,6 +31,14 @@
                 "import-sources-order": "lowercase-first",
                 "named-imports-order": "lowercase-first"
             }
-        ]
+        ],
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "no-null-keyword": true,
+        "no-string-throw": true,
+        "no-unused-variable": true,
+        "prefer-const": true
     }
 }
