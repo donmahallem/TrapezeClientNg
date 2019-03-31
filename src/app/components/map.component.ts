@@ -117,15 +117,17 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
                     return this.loadTrip(boundsa);
                 }),
                 catchError((err: Error) => {
-                    return of();
+                    return of({});
                 }))
             .subscribe((res) => {
                 // console.log("loaded", res);
                 for (const marker of this.vehicleMarkerList) {
                     marker.remove();
                 }
-                for (const veh of res.vehicles) {
-                    this.addVehicleMarker(veh);
+                if (res && Array.isArray(res.vehicles)) {
+                    for (const veh of res.vehicles) {
+                        this.addVehicleMarker(veh);
+                    }
                 }
             });
         this.updateBoundsObservable();
