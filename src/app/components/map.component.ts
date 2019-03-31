@@ -7,7 +7,7 @@ import { StopLocation } from '../models/stop-location.model';
 import { StopPointService } from '../services/stop-point.service';
 import { Bounds, VehicleLocation } from './../models';
 import { ApiService } from './../services';
-(function () {
+(() => {
     // save these original methods before they are overwritten
     const proto_initIcon = (<any>L.Marker.prototype)._initIcon;
     const proto_setPos = (<any>L.Marker.prototype)._setPos;
@@ -24,7 +24,7 @@ import { ApiService } from './../services';
         this.options.rotationAngle = this.options.rotationAngle || 0;
 
         // Ensure marker keeps rotated during dragging
-        this.on('drag', function (e) { e.target._applyRotation(); });
+        this.on('drag', (e) => { e.target._applyRotation(); });
     });
 
     L.Marker.include({
