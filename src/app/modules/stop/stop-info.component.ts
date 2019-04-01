@@ -1,72 +1,48 @@
-import {
-    Component,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
-import { TripPassages } from './../../models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IStopInfo } from '@donmahallem/trapeze-api-types';
+import { combineLatest, merge, of, timer, Observable, Subscription } from 'rxjs';
+import { catchError, filter, flatMap, map } from 'rxjs/operators';
 import { ApiService } from '../../services';
 @Component({
     selector: 'app-stop-info',
+    styleUrls: ['./stop-info.component.scss'],
     templateUrl: './stop-info.component.pug',
-    styleUrls: ['./stop-info.component.scss']
 })
 export class StopInfoComponent implements AfterViewInit, OnDestroy {
-    public tripId: string;
-    public routeName: string;
-    public tripData: any;
-    private tripPassages: any[] = [];
-    private updateObservable: Subscription;
-    private mEmptyList = false;
-    private mTimerObservable: Observable<number>;
-    private mTimeUntilRefresh = 0;
 
-    constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
-        route.params.subscribe((params) => {
-            this.tripId = params.tripId;
-        });
+    constructor(private route: ActivatedRoute, private apiService: ApiService) {
+        this.mStopInfo = this.route.snapshot.data.stopInfo;
     }
 
     public get timeUntilRefresh(): number {
         return this.mTimeUntilRefresh;
     }
-
-    public get isEmptyList(): boolean {
-        return this.mEmptyList;
+    public get stopId(): string {
+        return this.route.snapshot.params.stopId;
     }
 
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
+    public get stopInfo(): IStopInfo {
+        return this.mStopInfo;
     }
+    public tripPassages: any[] = [];
+    private updateSubscription: Subscription;
+    private mTimerObservable: Observable<number>;
+    private mTimeUntilRefresh = 0;
+    public routes: any[] = [];
+    private mStopInfo: IStopInfo;
+    public errorOccured = false;
+    public readonly ticksToRefresh: number = 50;
+    /**
+     * Tick interval in miliseconds
+     */
+    public readonly tickInterval: number = 200;
 
-    private updateData(data: TripPassages): void {
-        console.log(data);
-        this.routeName = data.routeName;
-        if (data.tripId === this.tripId) {
-            this.tripData = data;
-            this.tripPassages = data.actual;
-            this.mEmptyList = data.actual.length === 0;
-            // console.log(this.tripPassages, data.actual);
+    private updateData(data: IStopInfo): void {
+        this.errorOccured = false;
+        if (data.stopShortName === this.stopId) {
+            this.mStopInfo = data;
         }
-    }
-
-    public onTripSelected(trip) {
-        console.log(trip);
-        this.router.navigate(['passages', trip.tripId]);
     }
     public convertTime(time, data) {
         if (time > 300) {
@@ -75,32 +51,43 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             return Math.ceil(time / 60) + 'min';
         }
     }
-
     public ngAfterViewInit(): void {
-        this.mTimerObservable = timer(0, 200);
-        this.mTimerObservable.subscribe((val) => {
-            const diff = 10 - Math.round((val % 50) / 5);
+        this.mTimerObservable = timer(this.tickInterval, this.tickInterval);
+        this.mTimerObservable.subscribe((tick: number) => {
+            const ticksLeft: number = this.ticksToRefresh - (tick % this.ticksToRefresh);
+            const diff: number = Math.round((ticksLeft * this.tickInterval) / 1000);
             if (diff !== this.mTimeUntilRefresh) {
                 this.mTimeUntilRefresh = diff;
             }
         });
-        const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.stopId));
-        this.updateObservable = combineLatest(this.mTimerObservable.pipe(filter((val: number) => {
-            return val % 50 === 0;
-        })), tripIdObvservable)
+        const stopIdObvservable: Observable<string> = this.route.params
+            .pipe(map((a: { stopId: string }): string => a.stopId));
+        const refreshObservable = combineLatest(this.mTimerObservable.pipe(filter((val: number) => {
+            return val % this.ticksToRefresh === 0 && val > 0;
+        })), stopIdObvservable)
             .pipe(
-                map((a) => a[1]),
-                filter(num => num !== null),
-                mergeMap((stopId: string) => {
+                map((a): string => a[1]),
+                flatMap((stopId: string): Observable<IStopInfo> => {
                     return this.apiService.getStopDepartures(stopId);
                 }),
-                catchError(this.handleError('getHeroes', [])),
-                catchError((err, a) => of(null)))
+                catchError((err, a) => {
+                    this.errorOccured = true;
+                    return of(undefined);
+                }),
+                filter((item: IStopInfo) => {
+                    return item !== undefined;
+                }));
+        /**
+         * combine observables
+         */
+        this.updateSubscription = merge(refreshObservable, this.route.data.pipe(map((value) => {
+            return value.stopInfo;
+        })))
             .subscribe(this.updateData.bind(this));
     }
 
     public ngOnDestroy(): void {
-        this.updateObservable.unsubscribe();
+        this.updateSubscription.unsubscribe();
     }
 
 }

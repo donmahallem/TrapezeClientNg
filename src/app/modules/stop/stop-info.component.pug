@@ -1,16 +1,12 @@
 mat-toolbar(color="primary")
     div
-        span.title(i18n-title="@@stopName",title="Stop Name") {{tripData?.stopName}}
+        span.title(i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
         span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
-div(*ngIf="tripId!=tripData?.tripId")
-    mat-progress-spinner(mode="indeterminate",diameter="40")
-mat-nav-list.stoplist(*ngIf="tripId==tripData?.tripId",role="list")
-    a(*ngFor="let passage of tripPassages",[routerLink]="['/passages', passage.tripId]",role="listitem")
-        mat-list-item(clicka="onTripSelected(passage)")
-            span.pattern-text {{passage?.patternText}}
-            h3(matLine) {{passage?.patternText}} {{passage?.direction}}
-            p(matLine)
-                span {{convertTime(passage?.actualRelativeTime,passage)}}
-                span(class="demo-2") -- {{passage?.status}} -- {{passage?.plannedTime}}
-div(*ngIf="isEmptyList")
-    p(i18n="No stops scheduled@@noStopsScheduled") No Stops scheduled
+mat-tab-group.mat-evelation-z4(mat-stretch-tabs)
+    mat-tab(label="Departures")
+        app-departure-list([departures]="stopInfo?.actual")
+    mat-tab(label="Routes")
+        app-route-list([routes]="stopInfo?.routes")
+div.error-box(*ngIf="errorOccured")
+    h3 Error occured
+    p Will retry in a {{timeUntilRefresh}}s

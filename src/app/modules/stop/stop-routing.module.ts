@@ -1,37 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { StopInfoComponent } from './stop-info.component';
+import { StopInfoResolver } from './stop-info.resolver';
 
-import {
-    MatIconModule,
-    MatListModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule
-} from '@angular/material';
 const tripPassagesRoute: Routes = [
     {
+        component: StopInfoComponent,
+        data: {
+            openSidebar: true,
+        },
         path: ':stopId',
-        component: StopInfoComponent
-    }
+        resolve: {
+            stopInfo: StopInfoResolver,
+        },
+    },
 ];
 
 @NgModule({
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatListModule,
-        MatToolbarModule,
-        MatProgressSpinnerModule,
-        RouterModule.forChild(tripPassagesRoute)
-    ],
-    declarations: [
-        StopInfoComponent
-    ],
     exports: [
-        RouterModule
-    ]
+        RouterModule,
+    ],
+    imports: [
+        RouterModule.forChild(tripPassagesRoute),
+    ],
 })
 export class StopRoutingModule { }

@@ -14,6 +14,7 @@ cache:
 before_script:
 - npm run postinstall
 - cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+- cp ./src/environments/environment.example.ts ./src/environments/environment.ts
 - cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
 script:
 - npm run test:$TEST_SUITE

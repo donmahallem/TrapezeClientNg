@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Bounds } from './../models';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject, Subscriber } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, shareReplay } from 'rxjs/operators';
-import { ApiService } from './api.service';
+import { BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StopLocation } from '../models/stop-location.model';
+import { ApiService } from './api.service';
 
 export class StopPointLoadSubscriber extends Subscriber<StopLocation[]> {
 

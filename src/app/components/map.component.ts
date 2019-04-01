@@ -1,28 +1,13 @@
-import {
-    Component,
-    ViewChild,
-    OnInit,
-    ElementRef,
-    Output,
-    AfterViewInit,
-    EventEmitter,
-    DoCheck,
-    OnDestroy
-} from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import * as L from 'leaflet';
-import * as L2 from 'leaflet-rotatedmarker';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Bounds, VehicleLocation } from './../models';
-import {
-    Router
-} from '@angular/router';
-import { ApiService } from './../services';
-import { timer, Observable, Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, merge, mergeMap, filter } from 'rxjs/operators';
-import { thisTypeAnnotation } from 'babel-types';
-import { StopPointService } from '../services/stop-point.service';
+import { combineLatest, of, timer, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 import { StopLocation } from '../models/stop-location.model';
-(function () {
+import { StopPointService } from '../services/stop-point.service';
+import { Bounds, VehicleLocation } from './../models';
+import { ApiService } from './../services';
+(() => {
     // save these original methods before they are overwritten
     const proto_initIcon = (<any>L.Marker.prototype)._initIcon;
     const proto_setPos = (<any>L.Marker.prototype)._setPos;
@@ -39,18 +24,10 @@ import { StopLocation } from '../models/stop-location.model';
         this.options.rotationAngle = this.options.rotationAngle || 0;
 
         // Ensure marker keeps rotated during dragging
-        this.on('drag', function (e) { e.target._applyRotation(); });
+        this.on('drag', (e) => { e.target._applyRotation(); });
     });
 
     L.Marker.include({
-        _initIcon: function () {
-            proto_initIcon.call(this);
-        },
-
-        _setPos: function (pos) {
-            proto_setPos.call(this, pos);
-            this._applyRotation();
-        },
 
         _applyRotation: function () {
             if (this.options.rotationAngle) {
@@ -66,6 +43,23 @@ import { StopLocation } from '../models/stop-location.model';
             }
         },
 
+        _initIcon: function () {
+            proto_initIcon.call(this);
+        },
+
+        _key: undefined,
+
+        _setPos: function (pos) {
+            proto_setPos.call(this, pos);
+            this._applyRotation();
+        },
+
+        getKey: function () {
+            return this._key;
+        },
+        setKey: function (key) {
+            this._key = key;
+        },
         setRotationAngle: function (angle) {
             this.options.rotationAngle = angle;
             this.update();
@@ -77,21 +71,13 @@ import { StopLocation } from '../models/stop-location.model';
             this.update();
             return this;
         },
-        _key: null,
-        setKey: function (key) {
-            this._key = key;
-        },
-        getKey: function () {
-            return this._key;
-        }
     });
 })();
 
-
 @Component({
     selector: 'app-map-root',
+    styleUrls: ['./map.component.scss'],
     templateUrl: './map.component.pug',
-    styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     constructor(private elRef: ElementRef,
@@ -99,7 +85,7 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
         private router: Router,
         private stopService: StopPointService) {
         console.log(this.elRef.nativeElement);
-        this.boundsObservable = new BehaviorSubject(null);
+        this.boundsObservable = new BehaviorSubject(undefined);
     }
     title = 'app';
     @ViewChild('mapcontainer') mapContainer;
@@ -116,9 +102,7 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
                 + 'contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
                 + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
-            id: 'mapbox.streets',
-            accessToken: 'your.mapbox.access.token',
-            subdomains: ['a', 'b', 'c']
+            subdomains: ['a', 'b', 'c'],
         }).addTo(this.map);
         this.addMarker();
         this.map.on('moveend', () => {
@@ -133,15 +117,17 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
                     return this.loadTrip(boundsa);
                 }),
                 catchError((err: Error) => {
-                    return of();
+                    return of({});
                 }))
             .subscribe((res) => {
                 // console.log("loaded", res);
                 for (const marker of this.vehicleMarkerList) {
                     marker.remove();
                 }
-                for (const veh of res.vehicles) {
-                    this.addVehicleMarker(veh);
+                if (res && Array.isArray(res.vehicles)) {
+                    for (const veh of res.vehicles) {
+                        this.addVehicleMarker(veh);
+                    }
                 }
             });
         this.updateBoundsObservable();
@@ -167,18 +153,18 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
         const greenIcon = L.divIcon({
             className: 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconSize: [32, 32], // size of the icon
-            shadowSize: [24, 24], // size of the shadow
             iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
+            iconSize: [32, 32], // size of the icon
+            popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
-            popupAnchor: [12, 12] // point from which the popup should open relative to the iconAnchor
+            shadowSize: [24, 24], // size of the shadow
         });
-        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000],
+        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], <any>
             {
                 icon: greenIcon,
-                title: vehicle.name,
                 rotationAngle: vehicle.heading - 90,
-                zIndexOffset: 100
+                title: vehicle.name,
+                zIndexOffset: 100,
             });
         // markerT.setKey(entry.id);
         markerT.addTo(this.map);
@@ -194,10 +180,10 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
         const top: number = this.map.getBounds().getNorth();
         const bottom: number = this.map.getBounds().getSouth();
         const bounds: Bounds = {
+            bottom: bottom,
             left: left,
             right: right,
-            bottom: bottom,
-            top: top
+            top: top,
         };
         console.log('update loc', bounds);
         this.boundsObservable.next(bounds);
@@ -208,13 +194,13 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
             return L.divIcon({ className: 'my-div-icon', html: 'JJ' });
         } else {
             return L.icon({
-                iconUrl: 'assets/iconmonstr-part-24.png',
+                iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
                 // shadowUrl: 'leaf-shadow.png',
                 iconSize: [16, 16], // size of the icon
-                shadowSize: [24, 24], // size of the shadow
-                iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
+                iconUrl: 'assets/iconmonstr-part-24.png',
+                popupAnchor: [8, 8], // point from which the popup should open relative to the iconAnchor
                 shadowAnchor: [32, 32],  // the same for the shadow
-                popupAnchor: [8, 8] // point from which the popup should open relative to the iconAnchor
+                shadowSize: [24, 24], // size of the shadow
             });
         }
     }
@@ -230,12 +216,12 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
                     const greenIcon = this.createStopIcon();
                     const markerT = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
                         {
+                            clickable: true,
                             icon: greenIcon,
+                            riseOffset: 10,
+                            riseOnHover: true,
                             title: stop.name,
                             zIndexOffset: 10,
-                            riseOnHover: true,
-                            riseOffset: 10,
-                            clickable: true
                         });
                     markerT.addTo(this.map);
                     markerT.on('click', this.stopMarkerOnClick.bind(this, stop));
@@ -254,20 +240,6 @@ export class MapComponent implements AfterViewInit, DoCheck, OnDestroy {
     }
     private loadTrip(bounds: Bounds): Observable<any> {
         return this.apiService.getVehicleLocations(bounds);
-    }
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
 
     public ngOnDestroy(): void {

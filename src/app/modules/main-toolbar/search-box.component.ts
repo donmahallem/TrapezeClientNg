@@ -1,20 +1,15 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import * as L from 'leaflet';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatSidenavContainer, MatSidenav, MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, from, Subscriber } from 'rxjs';
-import { startWith, map, single, shareReplay, flatMap } from 'rxjs/operators';
-import { StopLocation } from 'src/app/models/stop-location.model';
-import { DrawableDirective } from 'src/app/drawable.directive';
-import { SidebarService } from 'src/app/services/sidebar.service';
-import { ApiService } from 'src/app/services';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { flatMap, map, startWith } from 'rxjs/operators';
+import { StopLocation } from 'src/app/models/stop-location.model';
 import { StopPointService } from 'src/app/services/stop-point.service';
 @Component({
     selector: 'app-toolbar-search',
+    styleUrls: ['./search-box.component.scss'],
     templateUrl: './search-box.component.pug',
-    styleUrls: ['./search-box.component.scss']
 })
 export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
@@ -44,7 +39,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
                         .pipe(map((stops) => {
                             return stops.filter(option => option.name.toLowerCase().includes(value));
                         }));
-                })
+                }),
             );
     }
 

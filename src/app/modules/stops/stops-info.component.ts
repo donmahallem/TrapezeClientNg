@@ -1,41 +1,20 @@
-import {
-    Component,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
-import { TripPassages } from './../../models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { timer, Observable, Subscription, of, combineLatest, BehaviorSubject, merge } from 'rxjs';
-import { catchError, map, tap, mergeMapTo, filter, mergeMap, throttle } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { ApiService } from '../../services';
-import { StationsResponse } from 'src/app/models/stations-response.model';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StopLocation } from 'src/app/models/stop-location.model';
+import { ApiService } from '../../services';
 @Component({
     selector: 'app-stops-info',
+    styleUrls: ['./stops-info.component.scss'],
     templateUrl: './stops-info.component.pug',
-    styleUrls: ['./stops-info.component.scss']
 })
 export class StopsInfoComponent implements AfterViewInit, OnDestroy {
     private mItems: StopLocation[] = [];
     private mSearchTerm: BehaviorSubject<string> = new BehaviorSubject('s');
 
-    constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+    constructor(private apiService: ApiService, private router: Router) {
 
-    }
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
 
     public filteredList(): Observable<StopLocation[]> {

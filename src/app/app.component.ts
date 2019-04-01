@@ -1,13 +1,11 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav, MatSidenavContainer } from '@angular/material';
 import { DrawableDirective } from './drawable.directive';
-import * as L from 'leaflet';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatSidenavContainer, MatSidenav } from '@angular/material';
 import { SidebarService } from './services/sidebar.service';
 @Component({
     selector: 'app-root',
+    styleUrls: ['./app.component.scss'],
     templateUrl: './app.component.pug',
-    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
     title = 'app';
@@ -19,8 +17,7 @@ export class AppComponent implements OnInit {
     sidenav: MatSidenav;
     predictions: any;
     tripId: string;
-    constructor(private http: HttpClient,
-        private sidebarService: SidebarService) {
+    constructor(private sidebarService: SidebarService) {
 
     }
     @ViewChild(DrawableDirective) canvas;

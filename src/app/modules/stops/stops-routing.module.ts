@@ -1,24 +1,30 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { StopsInfoComponent } from './stops-info.component';
-
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { RouterModule, Routes } from '@angular/router';
+import { StopsInfoComponent } from './stops-info.component';
 
 const tripPassagesRoute: Routes = [
     {
+        component: StopsInfoComponent,
+        data: {
+            openSidebar: true,
+        },
         path: '',
-        component: StopsInfoComponent
-    }
+    },
 ];
 
 @NgModule({
+    declarations: [
+        StopsInfoComponent,
+    ],
+    exports: [
+        RouterModule,
+    ],
     imports: [
         CommonModule,
         MatIconModule,
@@ -26,13 +32,7 @@ const tripPassagesRoute: Routes = [
         MatToolbarModule,
         MatProgressSpinnerModule,
         MatInputModule,
-        RouterModule.forChild(tripPassagesRoute)
+        RouterModule.forChild(tripPassagesRoute),
     ],
-    declarations: [
-        StopsInfoComponent
-    ],
-    exports: [
-        RouterModule
-    ]
 })
 export class StopsRoutingModule { }

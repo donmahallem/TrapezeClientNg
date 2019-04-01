@@ -6,6 +6,9 @@
 
 :host {
     box-shadow: 5px 10px #888888;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 span.mainnav {

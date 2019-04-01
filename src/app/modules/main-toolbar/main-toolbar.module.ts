@@ -1,33 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    MatIconModule,
-    MatToolbarModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatButtonModule
-} from '@angular/material';
-import { MainToolbarComponent } from './main-toolbar.component';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatToolbarModule,
+} from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { MainToolbarComponent } from './main-toolbar.component';
+import { RouteLoadingIndicatorComponent } from './route-loading-indicator.component';
 import { ToolbarSearchBoxComponent } from './search-box.component';
 
-
 @NgModule({
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatToolbarModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        FormsModule,
-        MatInputModule,
-        MatButtonModule,
-        RouterModule
-    ],
     declarations: [
         MainToolbarComponent,
-        ToolbarSearchBoxComponent
+        ToolbarSearchBoxComponent,
+        RouteLoadingIndicatorComponent,
     ],
     exports: [
         MainToolbarComponent,
@@ -40,9 +31,23 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         MatInputModule,
         MatButtonModule,
         RouterModule,
-        ToolbarSearchBoxComponent
+        ToolbarSearchBoxComponent,
+        RouteLoadingIndicatorComponent,
+        MatProgressBarModule,
+    ],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatToolbarModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        FormsModule,
+        MatInputModule,
+        MatButtonModule,
+        RouterModule,
+        MatProgressBarModule,
     ],
     providers: [
-    ]
+    ],
 })
 export class MainToolbarModule { }
