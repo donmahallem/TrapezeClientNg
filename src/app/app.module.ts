@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
-import { ConfigService } from './services/config.service';
 import { StopPointService } from './services/stop-point.service';
 @NgModule({
     bootstrap: [AppComponent],
@@ -36,7 +35,6 @@ import { StopPointService } from './services/stop-point.service';
     ],
     providers: [
         StopPointService,
-        ConfigService,
     ],
 })
 export class AppModule { }
