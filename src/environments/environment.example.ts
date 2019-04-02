@@ -1,9 +1,7 @@
 import { IEnvironmentBase } from './environment.base';
 
 export const environment: IEnvironmentBase = {
-    api: {
-        endpoint: 'https://test.domain/',
-    },
+    apiEndpoint: 'https://test.domain/',
     production: false,
 };
 
