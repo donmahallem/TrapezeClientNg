@@ -1,6 +1,6 @@
-import { async, TestBed, ComponentFixture } from "@angular/core/testing";
-import { DepartureListComponent } from "./departure-list.component";
-import { Component, Directive, Input } from "@angular/core";
+import { Component, Directive, Input } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DepartureListComponent } from './departure-list.component';
 
 @Component({
   selector: 'mat-nav-list',
@@ -14,7 +14,6 @@ export class TestMatNavList {
 })
 export class TestMatListItem {
 }
-
 
 @Directive({
   selector: 'a[routerLink]',
@@ -31,7 +30,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
           DepartureListComponent,
           TestMatNavList,
           TestMatListItem,
-          TestRouterLink
+          TestRouterLink,
         ],
       }).compileComponents();
     }));
@@ -48,7 +47,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
         cmp = fixture.debugElement.componentInstance;
       });
       const testPassages: any[] = [
-        [{ test: true }], [{ test: false }]
+        [{ test: true }], [{ test: false }],
       ];
       describe('departures', () => {
         describe('getter', () => {
@@ -66,35 +65,35 @@ describe('src/app/modules/stop/departure-list.component', () => {
               expect((<any>cmp).mDepartures).toEqual(testPassage);
             });
           });
-        })
+        });
       });
       describe('convertTime(passage)', () => {
         const passages: {
           actualRelativeTime: number,
           actualTime: string,
-          result: string
+          result: string,
         }[] = [
             {
               actualRelativeTime: 500,
-              result: "12:20",
-              actualTime: "12:20"
+              actualTime: '12:20',
+              result: '12:20',
             },
             {
               actualRelativeTime: 300,
-              result: "5min",
-              actualTime: "13:20"
+              actualTime: '13:20',
+              result: '5min',
             },
             {
               actualRelativeTime: 20,
-              result: "1min",
-              actualTime: "14:20"
-            }
+              actualTime: '14:20',
+              result: '1min',
+            },
           ];
         passages.forEach((value) => {
-          it('should convert the object to "' + value.result + "'", () => {
+          it('should convert the object to "' + value.result + '\'', () => {
             const testValue: any = {
               actualRelativeTime: value.actualRelativeTime,
-              actualTime: value.actualTime
+              actualTime: value.actualTime,
             };
             expect(cmp.convertTime(testValue)).toEqual(value.result);
           });
