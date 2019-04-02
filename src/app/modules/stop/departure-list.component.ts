@@ -2,6 +2,7 @@ import {
     Component,
     Input,
 } from '@angular/core';
+import { IDeparture } from '@donmahallem/trapeze-api-types';
 @Component({
     selector: 'app-departure-list',
     styleUrls: ['./departure-list.component.scss'],
@@ -18,7 +19,8 @@ export class DepartureListComponent {
     public get departures(): any[] {
         return this.mDepartures;
     }
-    public convertTime(time, data) {
+    public convertTime(data: IDeparture) {
+        const time: number = data.actualRelativeTime;
         if (time > 300) {
             return data.actualTime;
         } else {
