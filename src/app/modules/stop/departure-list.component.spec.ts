@@ -2,35 +2,40 @@ import { Component, Directive, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DepartureListComponent } from './departure-list.component';
 
+// tslint:disable:component-selector
+// tslint:disable:directive-selector
 @Component({
   selector: 'mat-nav-list',
   template: '<div></div>',
 })
-export class TestMatNavList {
+export class TestMatNavListComponent {
 }
 @Component({
   selector: 'mat-list-item',
   template: '<div></div>',
 })
-export class TestMatListItem {
+export class TestMatListItemComponent {
 }
 
 @Directive({
   selector: 'a[routerLink]',
 })
-export class TestRouterLink {
+export class TestRouterLinkDirective {
   @Input()
   public routerLink: string;
 }
+
+// tslint:enable:component-selector
+// tslint:enable:directive-selector
 describe('src/app/modules/stop/departure-list.component', () => {
   describe('DepartureListComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [
           DepartureListComponent,
-          TestMatNavList,
-          TestMatListItem,
-          TestRouterLink,
+          TestMatNavListComponent,
+          TestMatListItemComponent,
+          TestRouterLinkDirective,
         ],
       }).compileComponents();
     }));
