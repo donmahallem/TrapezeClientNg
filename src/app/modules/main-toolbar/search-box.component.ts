@@ -16,7 +16,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
     searchControl = new FormControl();
     filteredOptions: Observable<StopLocation[]>;
 
-    public mSearchOpen = false;
+    private mSearchOpen = false;
     @ViewChild(MatAutocomplete)
     autoComplete: MatAutocomplete;
     @ViewChild('searchInput')
