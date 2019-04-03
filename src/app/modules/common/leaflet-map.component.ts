@@ -53,8 +53,21 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                     type: MapMoveEventType.END,
                 });
             });
+            this.queryUserLocation();
         });
     }
+
+    public queryUserLocation(): void {
+        const onLocationFound = (e) => {
+            const location: Coordinates = e.coords;
+            var radius = location.accuracy / 2;
+            L.circle([location.latitude, location.longitude], radius).addTo(this.map);
+        }
+        navigator.geolocation.getCurrentPosition(onLocationFound, () => { }, {
+            timeout: 10000
+        });
+    }
+
 
     public getMap(): L.Map | undefined {
         return this.map;
