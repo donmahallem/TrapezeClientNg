@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
         });
     }
     onVoted(agreed: any) {
-        console.log('aa', agreed);
         this.tripId = agreed.tripId;
     }
 

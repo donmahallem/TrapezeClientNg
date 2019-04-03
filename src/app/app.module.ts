@@ -8,7 +8,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MapComponent } from './components';
+import { MainMapDirective } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { StopPointService } from './services/stop-point.service';
@@ -17,7 +17,7 @@ import { StopPointService } from './services/stop-point.service';
     declarations: [
         AppComponent,
         DrawableDirective,
-        MapComponent,
+        MainMapDirective,
     ],
     imports: [
         BrowserModule,

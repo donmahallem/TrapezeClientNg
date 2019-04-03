@@ -4,7 +4,7 @@ import { IStopInfo } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { StationsResponse } from '../models/stations-response.model';
-import { Bounds } from './../models';
+import { IMapBounds } from '../modules/common/leaflet-map.component';
 @Injectable({
     providedIn: 'root',
 })
@@ -31,7 +31,7 @@ export class ApiService {
     public getStopDepartures(vehicleId: string | number): Observable<IStopInfo> {
         return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + vehicleId + '/departures');
     }
-    public getVehicleLocations(bounds: Bounds): Observable<any> {
+    public getVehicleLocations(bounds: IMapBounds): Observable<any> {
         return this.http.get(this.baseUrl() + 'api/geo/vehicles', {
             params: {
                 bottom: '' + Math.round(bounds.bottom * 3600000),

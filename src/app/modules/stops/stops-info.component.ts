@@ -35,12 +35,10 @@ export class StopsInfoComponent implements AfterViewInit, OnDestroy {
     }
 
     private updateData(data: StopLocation[]): void {
-        console.log(data);
         this.mItems = data;
     }
 
     public onTripSelected(trip) {
-        console.log(trip);
         this.router.navigate(['passages', trip.tripId]);
     }
     public convertTime(time, data) {

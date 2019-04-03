@@ -43,11 +43,12 @@ mat-sidenav-content{
     height:100%;
     position:fixed;
 }
-app-map-root{
+map[main-map]{
     height:100%;
     width:100%;
     display:block;
 }
+
 button.sidebar-toggle {
     position: absolute;
     top: 8px;

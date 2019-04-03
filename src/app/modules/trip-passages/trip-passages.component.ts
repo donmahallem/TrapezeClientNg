@@ -20,16 +20,14 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public tripId: string;
     public routeName: string;
     public tripData: TripPassages;
-    private tripPassages: any[] = [];
+    public tripPassages: any[] = [];
     private updateObservable: Subscription;
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
     constructor(private route: ActivatedRoute, private apiService: ApiService) {
-        console.log('trip passages loaded');
         route.params.subscribe((params) => {
             this.tripId = params.tripId;
         });
-        console.log(this.tripPassages);
     }
 
     public get updateStatus(): UpdateStatus {
@@ -40,19 +38,12 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         this.updateStatusSubject.next(UpdateStatus.ERROR);
         return (error: any): Observable<T> => {
 
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-
             // Let the app keep running by returning an empty result.
             return error;
         };
     }
 
     private updateData(data: TripPassages): void {
-        console.log(data);
         this.routeName = data.routeName;
         this.updateStatusSubject.next(UpdateStatus.LOADED);
         if (data.tripId === this.tripId) {
@@ -60,7 +51,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             this.tripPassages = data.actual;
             // console.log(this.tripPassages, data.actual);
         }
-        console.log(this.updateStatus);
     }
 
     public ngAfterViewInit(): void {

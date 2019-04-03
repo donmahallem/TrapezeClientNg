@@ -1,1 +1,1 @@
-export { MapComponent } from './map.component';
+export * from './main-map.directive';
