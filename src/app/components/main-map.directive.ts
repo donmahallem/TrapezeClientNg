@@ -1,13 +1,23 @@
-import { AfterViewInit, Directive, ElementRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { combineLatest, of, timer, Subscription } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
+import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
 import { StopLocation } from '../models/stop-location.model';
-import { IMapBounds, LeafletMapComponent } from '../modules/common/leaflet-map.component';
+import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
 import { StopPointService } from '../services/stop-point.service';
-import { VehicleLocation } from './../models';
 import { ApiService } from './../services';
+
+export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
+
+    public constructor(private mainMap: MainMapDirective) {
+        super();
+    }
+    public next(res: IVehicleLocationList): void {
+        this.mainMap.setVehicles(res);
+    }
+}
 
 @Directive({
     selector: 'map[appMainMap]',
@@ -20,9 +30,29 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
-        private stopService: StopPointService) {
-        super(elRef);
+        private stopService: StopPointService,
+        zone: NgZone) {
+        super(elRef, zone);
     }
+
+    public setVehicles(vehicles: IVehicleLocationList): void {
+        if (this.vehicleMarkerLayer !== undefined) {
+            this.vehicleMarkerLayer.clearLayers();
+        } else {
+            this.vehicleMarkerLayer = L.featureGroup();
+            this.vehicleMarkerLayer.addTo(this.getMap());
+            this.vehicleMarkerLayer.on('click', this.markerOnClick.bind(this));
+        }
+        if (vehicles && Array.isArray(vehicles.vehicles)) {
+            for (const veh of vehicles.vehicles) {
+                if (veh.isDeleted === true) {
+                    continue;
+                }
+                this.addVehicleMarker(<IVehicleLocation>veh).addTo(this.vehicleMarkerLayer);
+            }
+        }
+    }
+
     public createStopIcon() {
         if (false) {
             return L.divIcon({ className: 'my-div-icon', html: 'JJ' });
@@ -46,37 +76,38 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
 
     public startVehicleUpdater(): void {
-
-        this.vehicleUpdateSubscription = combineLatest(timer(0, 5000), this.mapBounds)
+        // as mapMove doesn't emit on init this needs to be provided to load atleast once
+        const primedMoveObservable: Observable<MapMoveEvent> = this.mapMove.pipe(
+            startWith(<MapMoveEvent>{
+                type: MapMoveEventType.END,
+            }));
+        this.vehicleUpdateSubscription = combineLatest(timer(0, 5000), primedMoveObservable)
             .pipe(
-                map((a) => a[1]),
-                filter(num => num !== null),
-                mergeMap((bounds: IMapBounds) => {
+                map((value: [number, MapMoveEvent]): MapMoveEvent => {
+                    return value[1];
+                }),
+                filter((event: MapMoveEvent): boolean => {
+                    return (event.type === MapMoveEventType.END);
+                }),
+                flatMap((moveEvent: MapMoveEvent) => {
+                    const bounds: IMapBounds = {
+                        bottom: this.mapBounds.getSouth(),
+                        left: this.mapBounds.getWest(),
+                        right: this.mapBounds.getEast(),
+                        top: this.mapBounds.getNorth(),
+                    };
                     return this.apiService.getVehicleLocations(bounds);
                 }),
                 catchError((err: Error) => {
                     return of({});
                 }))
-            .subscribe((res) => {
-                if (this.vehicleMarkerLayer !== undefined) {
-                    this.vehicleMarkerLayer.clearLayers();
-                } else {
-                    this.vehicleMarkerLayer = L.featureGroup();
-                    this.vehicleMarkerLayer.addTo(this.getMap());
-                    this.vehicleMarkerLayer.on('click', this.markerOnClick.bind(this));
-                }
-                if (res && Array.isArray(res.vehicles)) {
-                    for (const veh of res.vehicles) {
-                        this.addVehicleMarker(veh).addTo(this.vehicleMarkerLayer);
-                    }
-                }
-            });
+            .subscribe(new VehicleLoadSubscriber(this));
     }
 
     public markerOnClick(e) {
         this.router.navigate(['passages', e.sourceTarget.data.tripId]);
     }
-    public addVehicleMarker(vehicle: VehicleLocation): L.Marker {
+    public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const greenIcon = L.divIcon({
             className: 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',

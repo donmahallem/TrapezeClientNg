@@ -1,11 +1,13 @@
+import { DomUtil, Marker } from 'leaflet';
+
 (() => {
     // save these original methods before they are overwritten
-    const proto_initIcon = (<any>L.Marker.prototype)._initIcon;
-    const proto_setPos = (<any>L.Marker.prototype)._setPos;
+    const proto_initIcon = (<any>Marker.prototype)._initIcon;
+    const proto_setPos = (<any>Marker.prototype)._setPos;
 
-    const oldIE = (L.DomUtil.TRANSFORM === 'msTransform');
+    const oldIE = (DomUtil.TRANSFORM === 'msTransform');
 
-    L.Marker.addInitHook(function () {
+    Marker.addInitHook(function () {
         const iconOptions = this.options.icon && this.options.icon.options;
         let iconAnchor = iconOptions && this.options.icon.options.iconAnchor;
         if (iconAnchor) {
@@ -18,18 +20,18 @@
         this.on('drag', (e) => { e.target._applyRotation(); });
     });
 
-    L.Marker.include({
+    Marker.include({
 
         _applyRotation: function () {
             if (this.options.rotationAngle) {
-                this._icon.style[L.DomUtil.TRANSFORM + 'Origin'] = this.options.rotationOrigin;
+                this._icon.style[DomUtil.TRANSFORM + 'Origin'] = this.options.rotationOrigin;
 
                 if (oldIE) {
                     // for IE 9, use the 2D rotation
-                    this._icon.style[L.DomUtil.TRANSFORM] = 'rotate(' + this.options.rotationAngle + 'deg)';
+                    this._icon.style[DomUtil.TRANSFORM] = 'rotate(' + this.options.rotationAngle + 'deg)';
                 } else {
                     // for modern browsers, prefer the 3D accelerated version
-                    this._icon.style[L.DomUtil.TRANSFORM] += ' rotateZ(' + this.options.rotationAngle + 'deg)';
+                    this._icon.style[DomUtil.TRANSFORM] += ' rotateZ(' + this.options.rotationAngle + 'deg)';
                 }
             }
         },
