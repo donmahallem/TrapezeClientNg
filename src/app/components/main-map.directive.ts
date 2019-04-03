@@ -104,8 +104,11 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             .subscribe(new VehicleLoadSubscriber(this));
     }
 
-    public markerOnClick(e) {
-        this.router.navigate(['passages', e.sourceTarget.data.tripId]);
+    public markerOnClick(event) {
+        // needs to be taken back into the ng zone
+        this.zone.run(() => {
+            this.router.navigate(['passages', event.sourceTarget.data.tripId]);
+        });
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const greenIcon = L.divIcon({
@@ -158,7 +161,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
 
     public stopMarkerOnClick(event: { sourceTarget: { data: StopLocation } }) {
-        this.router.navigate(['stop', event.sourceTarget.data.shortName]);
+        // needs to be taken back into the ng zone
+        this.zone.run(() => {
+            this.router.navigate(['stop', event.sourceTarget.data.shortName]);
+        });
     }
 
     public ngOnDestroy(): void {

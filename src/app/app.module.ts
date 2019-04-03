@@ -12,6 +12,7 @@ import { MainMapDirective } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { StopPointService } from './services/stop-point.service';
+import { UserLocationService } from './services/user-location.service';
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [
@@ -35,6 +36,7 @@ import { StopPointService } from './services/stop-point.service';
     ],
     providers: [
         StopPointService,
+        UserLocationService,
     ],
 })
 export class AppModule { }
