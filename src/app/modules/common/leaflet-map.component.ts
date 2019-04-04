@@ -1,10 +1,9 @@
 
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
-import { Subject, Subscription, Subscriber } from 'rxjs';
+import { Subject, Subscriber, Subscription } from 'rxjs';
+import { IAquiredPositionStatus, PositionStatus, PositionStatusCode, UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
-import { UserLocationService, PositionStatus, PositionStatusCode, IAquiredPositionStatus } from 'src/app/services/user-location.service';
-import { LocationChangeEvent } from '@angular/common';
 
 export enum MapMoveEventType {
     NONE = 0,
@@ -29,7 +28,7 @@ export interface IMapBounds {
     bottom: number;
 }
 
-export class UserLocationSubscriber extends Subscriber<PositionStatus>{
+export class UserLocationSubscriber extends Subscriber<PositionStatus> {
     public constructor(private cmp: LeafletMapComponent) {
         super();
     }
@@ -87,19 +86,20 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             this.userLocationLayer = L.featureGroup();
             this.userLocationLayer.addTo(this.map);
         }
-        if (coords === undefined)
+        if (coords === undefined) {
             return;
+        }
         const radius: number = coords.accuracy / 2;
         const userPosition: [number, number] = [coords.latitude, coords.longitude];
         L.circle(userPosition, radius, {
-            interactive: false
+            interactive: false,
         }).addTo(this.userLocationLayer);
         L.circleMarker(userPosition, {
             color: '#0000FF',
-            radius: 5,
             fillColor: '#0000FF',
+            fillOpacity: 0.9,
             opacity: 0.2,
-            fillOpacity: 0.9
+            radius: 5,
         }).addTo(this.userLocationLayer);
     }
 
@@ -119,7 +119,8 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        if (this.mUserLocationSubscription)
+        if (this.mUserLocationSubscription) {
             this.mUserLocationSubscription.unsubscribe();
+        }
     }
 }

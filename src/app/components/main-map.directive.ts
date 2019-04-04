@@ -7,8 +7,8 @@ import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
 import { StopLocation } from '../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
 import { StopPointService } from '../services/stop-point.service';
-import { ApiService } from './../services';
 import { UserLocationService } from '../services/user-location.service';
+import { ApiService } from './../services';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 

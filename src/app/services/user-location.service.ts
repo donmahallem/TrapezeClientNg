@@ -6,11 +6,11 @@ export enum PositionStatusCode {
     PERMISSION_DENIED = 1,
     POSITION_UNAVAILABLE = 2,
     TIMED_OUT = 3,
-    AQUIRED = -1
+    AQUIRED = -1,
 }
 
 export interface IPositionStatus {
-    type: PositionStatusCode
+    type: PositionStatusCode;
 }
 
 export interface IAquiredPositionStatus extends IPositionStatus {
@@ -38,14 +38,14 @@ export class UserLocationService {
     public queryPosition() {
         const geoSuccess = (position: Position): void => {
             this.userLocationSubject.next({
+                position: position,
                 type: PositionStatusCode.AQUIRED,
-                position: position
-            }
+            },
             );
         };
         const geoError = (error: PositionError): void => {
             this.userLocationSubject.next({
-                type: error.code
+                type: error.code,
             });
         };
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
