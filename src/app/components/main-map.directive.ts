@@ -8,6 +8,7 @@ import { StopLocation } from '../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
 import { StopPointService } from '../services/stop-point.service';
 import { ApiService } from './../services';
+import { UserLocationService } from '../services/user-location.service';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -31,8 +32,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private apiService: ApiService,
         private router: Router,
         private stopService: StopPointService,
+        userLocationService: UserLocationService,
         zone: NgZone) {
-        super(elRef, zone);
+        super(elRef, zone, userLocationService);
     }
 
     public setVehicles(vehicles: IVehicleLocationList): void {

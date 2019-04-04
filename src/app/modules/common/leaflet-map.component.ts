@@ -1,8 +1,10 @@
 
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, Subscriber } from 'rxjs';
 import './rotating-marker.patch';
+import { UserLocationService, PositionStatus, PositionStatusCode, IAquiredPositionStatus } from 'src/app/services/user-location.service';
+import { LocationChangeEvent } from '@angular/common';
 
 export enum MapMoveEventType {
     NONE = 0,
@@ -26,12 +28,31 @@ export interface IMapBounds {
     top: number;
     bottom: number;
 }
+
+export class UserLocationSubscriber extends Subscriber<PositionStatus>{
+    public constructor(private cmp: LeafletMapComponent) {
+        super();
+    }
+
+    public next(value: PositionStatus) {
+        if (value.type === PositionStatusCode.AQUIRED) {
+            this.cmp.setUserLocation((<IAquiredPositionStatus>value).position.coords);
+        } else {
+            this.cmp.setUserLocation(undefined);
+        }
+    }
+}
+
 export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
-    constructor(private elRef: ElementRef, protected zone: NgZone) {
+    constructor(private elRef: ElementRef,
+        protected zone: NgZone,
+        protected userLocationService: UserLocationService) {
     }
     @ViewChild('mapcontainer') mapContainer;
     private map: L.Map;
     public readonly mapMove: Subject<MapMoveEvent> = new Subject();
+    private mUserLocationSubscription: Subscription = undefined;
+    private userLocationLayer: L.FeatureGroup;
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
@@ -53,19 +74,33 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                     type: MapMoveEventType.END,
                 });
             });
-            this.queryUserLocation();
         });
+        this.mUserLocationSubscription = this.userLocationService
+            .userLocationObservable.subscribe(new UserLocationSubscriber(this));
+        this.userLocationService.queryPosition();
     }
 
-    public queryUserLocation(): void {
-        const onLocationFound = (e) => {
-            const location: Coordinates = e.coords;
-            const radius = location.accuracy / 2;
-            L.circle([location.latitude, location.longitude], radius).addTo(this.map);
-        };
-        navigator.geolocation.getCurrentPosition(onLocationFound, () => { }, {
-            timeout: 10000,
-        });
+    public setUserLocation(coords: Coordinates): void {
+        if (this.userLocationLayer) {
+            this.userLocationLayer.clearLayers();
+        } else {
+            this.userLocationLayer = L.featureGroup();
+            this.userLocationLayer.addTo(this.map);
+        }
+        if (coords === undefined)
+            return;
+        const radius: number = coords.accuracy / 2;
+        const userPosition: [number, number] = [coords.latitude, coords.longitude];
+        L.circle(userPosition, radius, {
+            interactive: false
+        }).addTo(this.userLocationLayer);
+        L.circleMarker(userPosition, {
+            color: '#0000FF',
+            radius: 5,
+            fillColor: '#0000FF',
+            opacity: 0.2,
+            fillOpacity: 0.9
+        }).addTo(this.userLocationLayer);
     }
 
     public getMap(): L.Map | undefined {
@@ -82,21 +117,9 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     public get mapBounds(): L.LatLngBounds {
         return this.map.getBounds();
     }
-    /*
-        public updateBoundsObservable() {
-            const left: number = this.map.getBounds().getWest();
-            const right: number = this.map.getBounds().getEast();
-            const top: number = this.map.getBounds().getNorth();
-            const bottom: number = this.map.getBounds().getSouth();
-            const bounds: IMapBounds = {
-                bottom: bottom,
-                left: left,
-                right: right,
-                top: top,
-            };
-            this.mapBounds.next(bounds);
-        }*/
 
     public ngOnDestroy(): void {
+        if (this.mUserLocationSubscription)
+            this.mUserLocationSubscription.unsubscribe();
     }
 }
