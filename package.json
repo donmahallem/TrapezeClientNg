@@ -1,6 +1,6 @@
 {
-  "name": "manniweb",
-  "version": "0.0.0",
+  "name": "@donmahallem/mannispotter-ng",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -15,7 +15,26 @@
     "test:build": "ng build --prod --aot --base-href /ngManniSpotter/",
     "test:lint": "ng lint"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://donmahallem.github.io/ngManniSpotter/",
+  "author": {
+    "name": "donmahallem",
+    "email": "donmahallem@users.noreply.github.com",
+    "url": "https://github.com/donmahallem"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/donmahallem/ngManniSpotter/issues"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donmahallem/ngManniSpotter.git"
+  },
   "dependencies": {
     "@angular/animations": "^7.0.0",
     "@angular/cdk": "^7.0.1",
