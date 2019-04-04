@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 })
 export class SidebarService {
 
-    private sidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    private sidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private sidebarObservable: Observable<boolean> = this.sidebarStatusSubject.asObservable();
 
     public constructor(private router: Router) {

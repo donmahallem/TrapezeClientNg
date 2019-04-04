@@ -3,6 +3,7 @@
     "rules": {
         "only-arrow-functions": true,
         "object-literal-sort-keys": true,
+        "no-console": true,
         "trailing-comma": [
             true,
             {

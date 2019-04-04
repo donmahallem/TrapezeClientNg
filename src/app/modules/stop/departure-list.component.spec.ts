@@ -44,6 +44,9 @@ describe('src/app/modules/stop/departure-list.component', () => {
       const app = fixture.debugElement.componentInstance;
       expect(app).toBeTruthy();
     }));
+    describe('layout', () => {
+      it('needs to be implemented');
+    });
     describe('Component methods and attributes', () => {
       let fixture: ComponentFixture<DepartureListComponent>;
       let cmp: DepartureListComponent;

@@ -1,7 +1,7 @@
-form(role="search")
+form(role="search",[ngClass]="{'search-hidden':!searchOpen}")
     mat-form-field
-        input(type="search",aria-label="Number",placeholder="Stopname",matInput,[formControl]="myControl",[matAutocomplete]="auto",i18n-placeholder="Stopname to search@@stopnameToSearch",i18n-aria-placeholder="Stopname to search@@stopnameToSearch")
+        input(#searchInput,(blur)="onLoseFocus()",type="search",aria-label="Number",placeholder="Stopname",matInput,[formControl]="searchControl",[matAutocomplete]="auto",i18n-placeholder="Stopname to search@@stopnameToSearch",i18n-aria-placeholder="Stopname to search@@stopnameToSearch")
         mat-autocomplete(#auto="matAutocomplete",[displayWith]="displayFn",(optionSelected)="onStopSelected($event)")
             mat-option(*ngFor="let option of filteredOptions | async",[value]="option") {{option.name}}
-button(mat-icon-button,i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")
-    mat-icon search
+button((click)="toggleSearch($event)",mat-icon-button,i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")
+    mat-icon {{searchOpen?'close':'search'}}

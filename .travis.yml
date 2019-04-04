@@ -20,10 +20,22 @@ script:
 - npm run test:$TEST_SUITE
 after_success:
 - npm install coveralls && cat ./coverage/lcov.info | coveralls
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: "$GITHUB_TOKEN"
-  local_dir: dist/manniweb
-  on:
-    branch: master
+jobs:
+  include:
+  - stage: npm release
+    node_js: '10'
+    script: 
+    - npm run build
+    - cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+    - cp ./src/environments/environment.example.ts ./src/environments/environment.ts
+    - cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
+    - ng build --aot --prod --base-href=./
+    if: tag IS present
+    deploy:
+      provider: npm
+      skip_cleanup: true
+      email: $npm_email
+      api_key: $npm_api_key
+      on:
+        tags: true
+        repo: donmahallem/ngManniSpotter

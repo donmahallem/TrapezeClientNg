@@ -8,16 +8,17 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MapComponent } from './components';
+import { MainMapDirective } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { StopPointService } from './services/stop-point.service';
+import { UserLocationService } from './services/user-location.service';
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
         DrawableDirective,
-        MapComponent,
+        MainMapDirective,
     ],
     imports: [
         BrowserModule,
@@ -35,6 +36,7 @@ import { StopPointService } from './services/stop-point.service';
     ],
     providers: [
         StopPointService,
+        UserLocationService,
     ],
 })
 export class AppModule { }
