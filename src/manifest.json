@@ -1,6 +1,6 @@
 {
-  "name": "manniweb",
-  "short_name": "manniweb",
+  "name": "trapeze-client-ng",
+  "short_name": "trapeze-client-ng",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

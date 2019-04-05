@@ -38,4 +38,4 @@ jobs:
       api_key: $npm_api_key
       on:
         tags: true
-        repo: donmahallem/ngManniSpotter
+        repo: donmahallem/TrapezeClientNg
