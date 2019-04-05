@@ -35,7 +35,7 @@
           "configurations": {
             "de": {
               "aot": true,
-              "outputPath": "dist/my-project-de/",
+              "outputPath": "dist/trapeze-client-ng_de/",
               "i18nFile": "src/locale/messages.de.xlf",
               "i18nFormat": "xlf",
               "i18nLocale": "de",
