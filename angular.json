@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "manniweb": {
+    "trapeze-client-ng": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/manniweb",
+            "outputPath": "dist/trapeze-client-ng",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -35,7 +35,7 @@
           "configurations": {
             "de": {
               "aot": true,
-              "outputPath": "dist/my-project-de/",
+              "outputPath": "dist/trapeze-client-ng_de/",
               "i18nFile": "src/locale/messages.de.xlf",
               "i18nFormat": "xlf",
               "i18nLocale": "de",
@@ -71,21 +71,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "manniweb:build"
+            "browserTarget": "trapeze-client-ng:build"
           },
           "configurations": {
             "de": {
-              "browserTarget": "manniweb:build:de"
+              "browserTarget": "trapeze-client-ng:build:de"
             },
             "production": {
-              "browserTarget": "manniweb:build:production"
+              "browserTarget": "trapeze-client-ng:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "manniweb:build"
+            "browserTarget": "trapeze-client-ng:build"
           }
         },
         "test": {
@@ -120,7 +120,7 @@
         }
       }
     },
-    "manniweb-e2e": {
+    "trapeze-client-ng-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -129,11 +129,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "manniweb:serve"
+            "devServerTarget": "trapeze-client-ng:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "manniweb:serve:production"
+              "devServerTarget": "trapeze-client-ng:serve:production"
             }
           }
         },
@@ -149,5 +149,5 @@
       }
     }
   },
-  "defaultProject": "manniweb"
+  "defaultProject": "trapeze-client-ng"
 }

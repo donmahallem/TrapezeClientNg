@@ -1,6 +1,6 @@
 {
-  "name": "@donmahallem/mannispotter-ng",
-  "version": "1.0.0",
+  "name": "@donmahallem/trapeze-client-ng",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -12,13 +12,13 @@
     "postinstall": "node ./ng-add-pug-loader.js && node ./ng-add-pug-loader.js",
     "test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "test:unit": "npm run test-headless",
-    "test:build": "ng build --prod --aot --base-href /ngManniSpotter/",
+    "test:build": "ng build --prod --aot --base-href ./",
     "test:lint": "ng lint"
   },
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://donmahallem.github.io/ngManniSpotter/",
+  "homepage": "https://donmahallem.github.io/TrapezeClientNg/",
   "author": {
     "name": "donmahallem",
     "email": "donmahallem@users.noreply.github.com",
@@ -26,14 +26,14 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/donmahallem/ngManniSpotter/issues"
+    "url": "https://github.com/donmahallem/TrapezeClientNg/issues"
   },
   "files": [
     "dist/*"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/donmahallem/ngManniSpotter.git"
+    "url": "https://github.com/donmahallem/TrapezeClientNg.git"
   },
   "dependencies": {
     "@angular/animations": "^7.0.0",

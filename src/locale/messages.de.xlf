@@ -16,8 +16,8 @@
         <note priority="1" from="description">Toggle Sidebar</note>
       </trans-unit>
       <trans-unit id="appName" datatype="html">
-        <source>Manni Spotter</source>
-        <target>Manni Sichter</target>
+        <source>Trapeze Client</source>
+        <target>Trapeze Client</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.pug</context>
           <context context-type="linenumber">1</context>
