@@ -16,7 +16,7 @@
 *.launch
 .settings/
 *.sublime-workspace
-
+publish-package.json
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

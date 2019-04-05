@@ -31,6 +31,9 @@ jobs:
     - cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
     - ng build --aot --prod --base-href=./
     if: tag IS present
+    before_deploy:
+    - npm run create-publish-package
+    - cp -rf ./publish-package.json package.json
     deploy:
       provider: npm
       skip_cleanup: true
