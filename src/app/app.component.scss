@@ -13,23 +13,6 @@
     display: flex;
 }
 
-.example-fill-remaining-space {
-    /* This fills the remaining space, by using flexbox. 
-       Every toolbar row uses a flexbox row layout. */
-    flex: 1 1 auto;
-}
-
-.wrapper {
-    display: inline-flex;
-    justify-content: flex-end;
-    border: 10px solid lighten(#ef6c00, 15%);
-    transition: border-color .2s ease-in;
-    &:hover {
-        border: 10px solid #ef6c00;
-        transition: border-color .2s ease-in;
-    }
-}
-
 mat-sidenav-container {
     flex: 1 1 auto;
     display: flex;

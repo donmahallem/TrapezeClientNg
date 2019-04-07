@@ -1,9 +1,9 @@
-mat-sidenav-container.main-container(#sidenavContainer,[hasBackdrop]="false")
+mat-sidenav-container.main-container(#sidenavContainer,[hasBackdrop]="true")
     mat-sidenav.main-nav(#sidenav,mode="over")
         h2 empty content
     mat-sidenav-content
         map(appMainMap)
-.overlay-box
-    app-main-toolbar
-    .router-box
-        router-outlet
+        .overlay-box
+            app-main-toolbar
+            .router-box
+                router-outlet
