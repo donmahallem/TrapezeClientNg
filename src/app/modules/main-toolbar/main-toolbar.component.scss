@@ -1,4 +1,4 @@
-.example-fill-remaining-space {
+.fill-remaining-space {
     /* This fills the remaining space, by using flexbox. 
        Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
@@ -10,6 +10,16 @@
     flex-direction: column;
     justify-content: flex-start;
 }
+.search-open{
+    span.mainnav{
+        display:none;
+        transform:scale(0,0);
+    }
+    app-toolbar-search{
+        display:block;
+        transform:scale(1,1);
+    }
+}
 
 span.mainnav {
     a:hover,
@@ -18,4 +28,26 @@ span.mainnav {
         color: white;
         text-decoration: none;
     }
+    animation-name: example;
+    animation-duration: 0.2s;
+    flex: 1 1 auto;
+    visibility: visible;
+    transform-origin: left;
 }
+button#btnSearch{
+}
+app-toolbar-search{
+    flex:1 1 auto;
+    animation-name: example;
+    animation-duration: 0.2s;
+    display:none;
+    transform-origin: right;
+}
+@keyframes example {
+    from {
+        transform:scale(0,1);
+    }
+    to {
+        transform:scale(1,1);
+    }
+  }

@@ -1,8 +1,10 @@
-mat-toolbar.main-toolbar(color="primary")
+mat-toolbar.main-toolbar(color="primary",[class.search-open]="searchOpen===true")
     button(mat-icon-button,(click)="toggleSidebar()",i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")
-        mat-icon menu
-    span.mainnav(i18n="App Name@@appName",role="heading",aria-level="1")
+        mat-icon {{searchOpen?"arrow_back":"menu"}}
+    span.mainnav(*ngIf="!searchOpen",i18n="App Name@@appName",role="heading",aria-level="1")
         a([routerLink]="['/']") Trapeze Client
-    span.example-fill-remaining-space
-    app-toolbar-search
+    
+    app-toolbar-search((focusSearch)="onFocusSearch($event)")
+    button#btnSearch(mat-icon-button,(click)="toggleSearch()")
+        mat-icon search
 app-route-loading-indicator

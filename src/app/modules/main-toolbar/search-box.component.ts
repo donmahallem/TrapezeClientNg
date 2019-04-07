@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { Router } from '@angular/router';
@@ -16,40 +16,40 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
     searchControl = new FormControl();
     filteredOptions: Observable<StopLocation[]>;
 
-    private mSearchOpen = false;
     @ViewChild(MatAutocomplete)
     autoComplete: MatAutocomplete;
     @ViewChild('searchInput')
     public searchInput: ElementRef;
+
+    @Output()
+    public readonly focusSearch: EventEmitter<boolean> = new EventEmitter();
     constructor(private stopService: StopPointService,
         private router: Router) {
     }
 
-    public get searchOpen(): boolean {
-        return this.mSearchOpen;
-    }
-
     public set searchOpen(open: boolean) {
-        this.mSearchOpen = open;
         if (open) {
             this.searchControl.setValue('');
-            setTimeout(() => {
-                this.searchInput.nativeElement.focus();
-                this.searchInput.nativeElement.select();
-            }, 0);
+            this.doFocusSearch();
         }
     }
-    public toggleSearch(event: MouseEvent): void {
-        this.searchOpen = !this.searchOpen;
+
+    public doFocusSearch(): void {
+        setTimeout(() => {
+            this.searchInput.nativeElement.focus();
+            this.searchInput.nativeElement.select();
+        }, 0);
     }
 
     public onLoseFocus(): void {
-        this.searchOpen = false;
+        this.focusSearch.next(false);
     }
 
     public onStopSelected(stop?: MatAutocompleteSelectedEvent): void {
         this.searchOpen = false;
+        this.focusSearch.next(false);
         if (stop.option.value) {
+            this.searchControl.setValue('');
             this.router.navigate(['/stop', stop.option.value.shortName]);
         }
     }
