@@ -66,3 +66,29 @@ mat-sidenav.main-nav {
 app-main-toolbar.main-toolbar {
     flex-grow: 0;
 }
+
+div.overlay-box{
+    width: 100%;
+    max-width: 400px;
+    position: absolute;
+    left:0px;
+    top:0px;
+    bottom:0px;
+    z-index: 1000;
+    overflow-y:auto;
+    overflow-x:hidden;
+    margin:calc((100vw - 400px) * 0.5);
+    border-radius: calc((100vw - 400px) * 0.5);
+}
+@media (min-width: 440px) {
+    div.overlay-box{
+        margin:20px;
+        border-radius: 20px 20px 20px 20px;
+    }
+}
+@media (max-width: 400px) {
+    div.overlay-box{
+        margin:0px;
+        border-radius: 0px;
+    }
+}

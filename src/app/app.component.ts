@@ -24,21 +24,6 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.train();
         // this.loadModel()
-        this.sidebarService.statusBarObservable()
-            .subscribe((open) => {
-                if (open) {
-                    this.sidenav.open();
-                } else {
-                    this.sidenav.close();
-                }
-            });
-        this.sidenav.openedChange.subscribe((open) => {
-            if (open) {
-                this.sidebarService.openSidebar();
-            } else {
-                this.sidebarService.closeSidebar();
-            }
-        });
     }
     onVoted(agreed: any) {
         this.tripId = agreed.tripId;
