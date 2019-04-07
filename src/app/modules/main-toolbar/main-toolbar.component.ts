@@ -25,7 +25,6 @@ export class MainToolbarComponent implements OnInit {
     public get isSidenavOpen(): boolean {
         return this.sidenav.opened;
     }
-    title = 'app';
     prediction: any;
 
     @ViewChild(MatSidenavContainer)

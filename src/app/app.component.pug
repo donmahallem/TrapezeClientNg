@@ -4,4 +4,6 @@ mat-sidenav-container.main-container(#sidenavContainer,[hasBackdrop]="false")
     mat-sidenav-content
         map(appMainMap)
 .overlay-box
-    router-outlet
+    app-main-toolbar
+    .router-box
+        router-outlet
