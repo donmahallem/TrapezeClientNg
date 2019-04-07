@@ -19,6 +19,11 @@ export class DepartureListComponent {
     public get departures(): any[] {
         return this.mDepartures;
     }
+
+    public get hasDepartures(): boolean {
+        return (this.mDepartures && this.mDepartures.length > 0);
+    }
+
     public convertTime(data: IDeparture) {
         const time: number = data.actualRelativeTime;
         if (time > 300) {
