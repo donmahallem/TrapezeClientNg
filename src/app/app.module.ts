@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { MainMapDirective } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
+import { SidebarModule } from './modules/sidebar/sidebar.module';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
 @NgModule({
@@ -33,6 +34,7 @@ import { UserLocationService } from './services/user-location.service';
         MatInputModule,
         MainToolbarModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+        SidebarModule,
     ],
     providers: [
         StopPointService,
