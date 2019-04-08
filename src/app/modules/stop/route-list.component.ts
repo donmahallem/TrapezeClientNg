@@ -13,11 +13,15 @@ export class RouteListComponent {
     private mDepartures: any[] = [];
     @Input('routes')
     public set routes(deps: any[]) {
-        this.mDepartures = deps;
+        this.mDepartures = deps ? deps : [];
     }
 
     public get routes(): any[] {
         return this.mDepartures;
+    }
+
+    public get hasRoutes(): boolean {
+        return this.mDepartures && this.mDepartures.length > 0;
     }
     public convertTime(time, data) {
         if (time > 300) {

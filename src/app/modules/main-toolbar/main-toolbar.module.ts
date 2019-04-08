@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatAutocompleteModule,
     MatButtonModule,
+    MatDividerModule,
     MatIconModule,
     MatInputModule,
     MatProgressBarModule,
@@ -34,6 +35,7 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         ToolbarSearchBoxComponent,
         RouteLoadingIndicatorComponent,
         MatProgressBarModule,
+        MatDividerModule,
     ],
     imports: [
         CommonModule,
@@ -44,6 +46,7 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         FormsModule,
         MatInputModule,
         MatButtonModule,
+        MatDividerModule,
         RouterModule,
         MatProgressBarModule,
     ],
