@@ -1,21 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ApiService } from 'src/app/services';
+import { NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Subscriber } from 'rxjs';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { ToolbarSearchBoxComponent } from './search-box.component';
-import { Router, NavigationEnd, RouterEvent, NavigationStart } from '@angular/router';
-import { Subscriber } from 'rxjs';
 
-export class NavigationSubscriber extends Subscriber<RouterEvent>{
+export class NavigationSubscriber extends Subscriber<RouterEvent> {
 
     public constructor(private toolbar: MainToolbarComponent) {
         super();
     }
     public next(event: RouterEvent): void {
         if (event instanceof NavigationEnd && event.url.length > 1) {
-            console.log("closeable");
             this.toolbar.closeable = true;
         } else if (event instanceof NavigationStart) {
-            console.log("not closeable");
             this.toolbar.closeable = false;
         }
     }
@@ -27,7 +24,7 @@ export class NavigationSubscriber extends Subscriber<RouterEvent>{
     templateUrl: './main-toolbar.component.pug',
 })
 export class MainToolbarComponent implements OnInit {
-    public closeable: boolean = false;
+    public closeable = false;
 
     constructor(private sidebarService: SidebarService,
         private router: Router) {
@@ -57,8 +54,9 @@ export class MainToolbarComponent implements OnInit {
         this.searchOpen = event;
     }
     public toggleSearch(): void {
-        if (this.searchBoxComponent)
+        if (this.searchBoxComponent) {
             this.searchBoxComponent.doFocusSearch();
+        }
     }
 
 }
