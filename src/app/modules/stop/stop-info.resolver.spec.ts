@@ -20,7 +20,7 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
                     {
                         provide: ApiService,
                         useValue: {
-                            getStopDepartures: getSpy,
+                            getStopPassages: getSpy,
                         },
                     }],
             });
@@ -34,8 +34,8 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
         describe('resolve(route, state)', () => {
             it('should construct the request correctly', (done) => {
                 resolver.resolve(<any>{ params: { stopId: testId } }, undefined).subscribe((res) => {
-                    expect(res)
-                        .toEqual([testId]);
+                    expect(<any>res)
+                        .toEqual([<any>testId]);
                 }, done, done);
             });
         });
