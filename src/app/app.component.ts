@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     }
     @ViewChild(DrawableDirective) canvas;
     ngOnInit() {
-        this.sidebarService.statusBarObservable()
+        this.sidebarService.sidebarObservable
             .subscribe((open) => {
                 if (open) {
                     this.sidenav.open();

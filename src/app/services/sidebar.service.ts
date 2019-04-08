@@ -6,10 +6,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SidebarService {
 
     private sidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    private sidebarObservable: Observable<boolean> = this.sidebarStatusSubject.asObservable();
+    public readonly sidebarObservable: Observable<boolean> = this.sidebarStatusSubject.asObservable();
 
     public constructor() {
     }
+
+    public get sidebarOpen(): boolean {
+        return this.sidebarStatusSubject.value;
+    }
+
     public toggleSidebar(): void {
         this.sidebarStatusSubject.next(!this.sidebarStatusSubject.getValue());
     }
@@ -22,7 +27,4 @@ export class SidebarService {
         this.sidebarStatusSubject.next(false);
     }
 
-    public statusBarObservable(): Observable<boolean> {
-        return this.sidebarObservable;
-    }
 }
