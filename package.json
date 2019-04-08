@@ -58,7 +58,7 @@
     "material-design-icons": "3.0.1",
     "ng-cli-pug-loader": "0.1.7",
     "rxjs": "6.4.0",
-    "zone.js": "0.8.29"
+    "zone.js": "0.9.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.8",
