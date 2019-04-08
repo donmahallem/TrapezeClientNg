@@ -1,4 +1,4 @@
-.example-fill-remaining-space {
+.fill-remaining-space {
     /* This fills the remaining space, by using flexbox. 
        Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
@@ -10,12 +10,19 @@
     flex-direction: column;
     justify-content: flex-start;
 }
-
-span.mainnav {
-    a:hover,
-    a:link,
-    a:visited {
-        color: white;
-        text-decoration: none;
+.search-open{
+    app-toolbar-search{
+        opacity: 1;
     }
+}
+
+app-toolbar-search{
+    flex:1 1 auto;
+    opacity:0.4;
+}
+
+mat-toolbar mat-divider{
+    height:40px;
+    color:red;
+    border-right-color: rgba(255,255,255,0.1);
 }

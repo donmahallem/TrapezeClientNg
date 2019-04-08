@@ -46,6 +46,6 @@ export class ApiService {
     }
 
     public getStations(): Observable<StationsResponse> {
-        return this.http.get<StationsResponse>(this.baseUrl() + 'api/geo/stations');
+        return this.http.get<StationsResponse>(this.baseUrl() + 'api/geo/stops');
     }
 }

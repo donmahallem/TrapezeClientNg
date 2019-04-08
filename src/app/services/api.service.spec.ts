@@ -85,7 +85,7 @@ describe('src/app/services/api.service', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getStations().subscribe((res) => {
                     expect(res)
-                        .toEqual(<any>[testEndpoint + 'api/geo/stations']);
+                        .toEqual(<any>[testEndpoint + 'api/geo/stops']);
                 }, done, done);
             });
         });

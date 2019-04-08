@@ -1,62 +1,62 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatSidenav, MatSidenavContainer } from '@angular/material';
-import { Observable } from 'rxjs';
-import { flatMap, map, shareReplay, single, startWith } from 'rxjs/operators';
-import { DrawableDirective } from 'src/app/drawable.directive';
-import { StopLocation } from 'src/app/models/stop-location.model';
-import { ApiService } from 'src/app/services';
+import { NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Subscriber } from 'rxjs';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import { ToolbarSearchBoxComponent } from './search-box.component';
+
+export class NavigationSubscriber extends Subscriber<RouterEvent> {
+
+    public constructor(private toolbar: MainToolbarComponent) {
+        super();
+    }
+    public next(event: RouterEvent): void {
+        if (event instanceof NavigationEnd && event.url.length > 1) {
+            this.toolbar.closeable = true;
+        } else if (event instanceof NavigationStart) {
+            this.toolbar.closeable = false;
+        }
+    }
+}
+
 @Component({
     selector: 'app-main-toolbar',
     styleUrls: ['./main-toolbar.component.scss'],
     templateUrl: './main-toolbar.component.pug',
 })
 export class MainToolbarComponent implements OnInit {
-    constructor(private sidebarService: SidebarService, private apiService: ApiService) {
-        this.stopsObservable = this.apiService.getStations()
-            .pipe(single(),
-                map((value) => {
-                    return value.stops;
-                }),
-                shareReplay(1));
+    public closeable = false;
+
+    constructor(private sidebarService: SidebarService,
+        private router: Router) {
+        this.router.events.subscribe(new NavigationSubscriber(this));
     }
 
-    public get isSidenavOpen(): boolean {
-        return this.sidenav.opened;
+    public get searchOpen(): boolean {
+        return this.mSearchOpen;
     }
-    title = 'app';
-    prediction: any;
 
-    @ViewChild(MatSidenavContainer)
-    sidenavContainer: MatSidenavContainer;
-    @ViewChild(MatSidenav)
-    sidenav: MatSidenav;
-    predictions: any;
-    tripId: string;
-    stopsObservable: Observable<StopLocation[]>;
-    @ViewChild(DrawableDirective) canvas;
-    myControl = new FormControl();
-    options: string[] = ['One', 'Two', 'Three'];
-    filteredOptions: Observable<StopLocation[]>;
+    public set searchOpen(open: boolean) {
+        this.mSearchOpen = open;
+    }
+    @ViewChild(ToolbarSearchBoxComponent)
+    private searchBoxComponent: ToolbarSearchBoxComponent;
+
+    private mSearchOpen = false;
+
     ngOnInit() {
-        this.filteredOptions = this.myControl.valueChanges
-            .pipe(
-                startWith(''),
-                flatMap((value) => {
-                    return this.stopsObservable
-                        .pipe(map((stops) => {
-                            return stops.filter(option => option.name.toLowerCase().includes(value));
-                        }));
-                }),
-            );
-    }
-    onVoted(agreed: any) {
-        this.tripId = agreed.tripId;
     }
 
     public toggleSidebar(): void {
         this.sidebarService.toggleSidebar();
+    }
+
+    public onFocusSearch(event) {
+        this.searchOpen = event;
+    }
+    public toggleSearch(): void {
+        if (this.searchBoxComponent) {
+            this.searchBoxComponent.doFocusSearch();
+        }
     }
 
 }

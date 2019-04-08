@@ -13,23 +13,6 @@
     display: flex;
 }
 
-.example-fill-remaining-space {
-    /* This fills the remaining space, by using flexbox. 
-       Every toolbar row uses a flexbox row layout. */
-    flex: 1 1 auto;
-}
-
-.wrapper {
-    display: inline-flex;
-    justify-content: flex-end;
-    border: 10px solid lighten(#ef6c00, 15%);
-    transition: border-color .2s ease-in;
-    &:hover {
-        border: 10px solid #ef6c00;
-        transition: border-color .2s ease-in;
-    }
-}
-
 mat-sidenav-container {
     flex: 1 1 auto;
     display: flex;
@@ -41,6 +24,7 @@ mat-sidenav-content{
     display:block;
     width:100%;
     height:100%;
+    overflow:hidden;
     position:fixed;
 }
 map[appMainMap]{
@@ -65,4 +49,44 @@ mat-sidenav.main-nav {
 
 app-main-toolbar.main-toolbar {
     flex-grow: 0;
+}
+@import '~@angular/material/theming';
+div.overlay-box{
+    display:flex;
+    width: 100%;
+    max-width: 400px;
+    max-height:100%;
+    position: absolute;
+    left:0px;
+    top:0px;
+    z-index: 1000;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    margin:calc((100vw - 400px) * 0.5);
+    border-radius: calc((100vw - 400px) * 0.5);
+    max-height: calc(100vh + 400px - 100vw);
+    flex-direction: column;
+    align-items: stretch;
+    border:1px solid #999999;
+    div.router-box{
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}
+@media (min-width: 440px) {
+    div.overlay-box{
+        margin:20px;
+        border-radius: 20px 20px 20px 20px;
+        max-height:calc(100vh - 40px);
+        //
+        @include mat-elevation(4);
+    }
+}
+@media (max-width: 400px) {
+    div.overlay-box{
+        margin:0px;
+        border-radius: 0px;
+        max-height:100vh;
+        border:none;
+    }
 }

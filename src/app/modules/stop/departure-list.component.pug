@@ -1,4 +1,4 @@
-mat-nav-list(role="list")
+mat-nav-list(*ngIf="hasDepartures",role="list")
     a(*ngFor="let passage of departures",[routerLink]="['/passages', passage.tripId]",role="listitem")
         mat-list-item
             span.pattern-text {{passage?.patternText}}
@@ -6,3 +6,5 @@ mat-nav-list(role="list")
             p(matLine)
                 span {{convertTime(passage)}}
                 span(class="demo-2") -- {{passage?.status}} -- {{passage?.plannedTime}}
+.no-departures(*ngIf="!hasDepartures")
+    h4 No Departures
