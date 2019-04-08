@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IStopInfo } from '@donmahallem/trapeze-api-types';
+import { IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { StationsResponse } from '../models/stations-response.model';
@@ -25,14 +25,14 @@ export class ApiService {
     public getRouteByTripId(vehicleId: string): Observable<any> {
         return this.http.get(this.baseUrl() + 'api/trip/' + vehicleId + '/route');
     }
-    public getStopInfo(vehicleId: string | number): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/stop/' + vehicleId + '/info');
+    public getStopInfo(vehicleId: string | number): Observable<IStopInfo> {
+        return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + vehicleId + '/info');
     }
-    public getStopDepartures(vehicleId: string | number): Observable<IStopInfo> {
-        return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + vehicleId + '/departures');
+    public getStopPassages(vehicleId: string | number): Observable<IStopPassage> {
+        return this.http.get<IStopPassage>(this.baseUrl() + 'api/stop/' + vehicleId + '/departures');
     }
-    public getVehicleLocations(bounds: IMapBounds): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/geo/vehicles', {
+    public getVehicleLocations(bounds: IMapBounds): Observable<IVehicleLocationList> {
+        return this.http.get<IVehicleLocationList>(this.baseUrl() + 'api/geo/vehicles', {
             params: {
                 bottom: '' + Math.round(bounds.bottom * 3600000),
                 left: '' + Math.round(bounds.left * 3600000),
@@ -41,8 +41,8 @@ export class ApiService {
             },
         });
     }
-    public getVehicleLocation(vehicleId: string): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/geo/vehicle/' + vehicleId);
+    public getVehicleLocation(vehicleId: string): Observable<IVehicleLocation> {
+        return this.http.get<IVehicleLocation>(this.baseUrl() + 'api/geo/vehicle/' + vehicleId);
     }
 
     public getStations(): Observable<StationsResponse> {

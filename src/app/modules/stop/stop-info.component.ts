@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IStopInfo } from '@donmahallem/trapeze-api-types';
+import { IStopPassage } from '@donmahallem/trapeze-api-types';
 import { combineLatest, merge, of, timer, Observable, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map } from 'rxjs/operators';
 import { ApiService } from '../../services';
@@ -22,7 +22,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         return this.route.snapshot.params.stopId;
     }
 
-    public get stopInfo(): IStopInfo {
+    public get stopInfo(): IStopPassage {
         return this.mStopInfo;
     }
     public tripPassages: any[] = [];
@@ -30,7 +30,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private mTimerObservable: Observable<number>;
     private mTimeUntilRefresh = 0;
     public routes: any[] = [];
-    private mStopInfo: IStopInfo;
+    private mStopInfo: IStopPassage;
     public errorOccured = false;
     public readonly ticksToRefresh: number = 50;
     /**
@@ -38,9 +38,9 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
      */
     public readonly tickInterval: number = 200;
 
-    private updateData(data: IStopInfo): void {
+    private updateData(data: IStopPassage): void {
         this.errorOccured = false;
-        if (data.stopShortName === this.stopId) {
+        if ((<any>data).stopShortName === this.stopId) {
             this.mStopInfo = data;
         }
     }
@@ -67,14 +67,14 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         })), stopIdObvservable)
             .pipe(
                 map((a): string => a[1]),
-                flatMap((stopId: string): Observable<IStopInfo> => {
-                    return this.apiService.getStopDepartures(stopId);
+                flatMap((stopId: string): Observable<IStopPassage> => {
+                    return this.apiService.getStopPassages(stopId);
                 }),
                 catchError((err, a) => {
                     this.errorOccured = true;
                     return of(undefined);
                 }),
-                filter((item: IStopInfo) => {
+                filter((item: IStopPassage) => {
                     return item !== undefined;
                 }));
         /**
