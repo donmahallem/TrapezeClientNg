@@ -2,13 +2,36 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/services';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { ToolbarSearchBoxComponent } from './search-box.component';
+import { Router, NavigationEnd, RouterEvent, NavigationStart } from '@angular/router';
+import { Subscriber } from 'rxjs';
+
+export class NavigationSubscriber extends Subscriber<RouterEvent>{
+
+    public constructor(private toolbar: MainToolbarComponent) {
+        super();
+    }
+    public next(event: RouterEvent): void {
+        if (event instanceof NavigationEnd && event.url.length > 1) {
+            console.log("closeable");
+            this.toolbar.closeable = true;
+        } else if (event instanceof NavigationStart) {
+            console.log("not closeable");
+            this.toolbar.closeable = false;
+        }
+    }
+}
+
 @Component({
     selector: 'app-main-toolbar',
     styleUrls: ['./main-toolbar.component.scss'],
     templateUrl: './main-toolbar.component.pug',
 })
 export class MainToolbarComponent implements OnInit {
-    constructor(private sidebarService: SidebarService, private apiService: ApiService) {
+    public closeable: boolean = false;
+
+    constructor(private sidebarService: SidebarService,
+        private router: Router) {
+        this.router.events.subscribe(new NavigationSubscriber(this));
     }
 
     public get searchOpen(): boolean {
@@ -17,9 +40,6 @@ export class MainToolbarComponent implements OnInit {
 
     public set searchOpen(open: boolean) {
         this.mSearchOpen = open;
-        if (this.searchBoxComponent) {
-            this.searchBoxComponent.doFocusSearch();
-        }
     }
     @ViewChild(ToolbarSearchBoxComponent)
     private searchBoxComponent: ToolbarSearchBoxComponent;
@@ -30,19 +50,15 @@ export class MainToolbarComponent implements OnInit {
     }
 
     public toggleSidebar(): void {
-        if (this.searchOpen === true) {
-            this.searchOpen = false;
-        } else {
-            this.sidebarService.toggleSidebar();
-        }
+        this.sidebarService.toggleSidebar();
     }
 
     public onFocusSearch(event) {
         this.searchOpen = event;
     }
     public toggleSearch(): void {
-        if (!this.searchOpen)
-            this.searchOpen = true;
+        if (this.searchBoxComponent)
+            this.searchBoxComponent.doFocusSearch();
     }
 
 }

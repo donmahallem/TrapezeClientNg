@@ -8,6 +8,7 @@ import {
     MatInputModule,
     MatProgressBarModule,
     MatToolbarModule,
+    MatDividerModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { MainToolbarComponent } from './main-toolbar.component';
@@ -34,6 +35,7 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         ToolbarSearchBoxComponent,
         RouteLoadingIndicatorComponent,
         MatProgressBarModule,
+        MatDividerModule
     ],
     imports: [
         CommonModule,
@@ -44,6 +46,7 @@ import { ToolbarSearchBoxComponent } from './search-box.component';
         FormsModule,
         MatInputModule,
         MatButtonModule,
+        MatDividerModule,
         RouterModule,
         MatProgressBarModule,
     ],
