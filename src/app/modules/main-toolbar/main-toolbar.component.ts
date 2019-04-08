@@ -41,7 +41,8 @@ export class MainToolbarComponent implements OnInit {
         this.searchOpen = event;
     }
     public toggleSearch(): void {
-        this.searchOpen = !this.searchOpen;
+        if (!this.searchOpen)
+            this.searchOpen = true;
     }
 
 }
