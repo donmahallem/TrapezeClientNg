@@ -21,7 +21,7 @@ export class DepartureListComponent {
     }
 
     public get hasDepartures(): boolean {
-        return (this.mDepartures && this.mDepartures.length > 0);
+        return this.mDepartures && this.mDepartures.length > 0;
     }
 
     public convertTime(data: IDeparture) {

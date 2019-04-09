@@ -60,24 +60,24 @@ describe('src/app/services/api.service', () => {
         describe('getStopInfo(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getStopInfo(testId).subscribe((res) => {
-                    expect(res)
+                    expect(<any>res)
                         .toEqual([testEndpoint + 'api/stop/' + testId + '/info']);
                 }, done, done);
             });
         });
         describe('getStopDepartures(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
-                apiService.getStopDepartures(testId).subscribe((res) => {
-                    expect(res)
-                        .toEqual(<any>[testEndpoint + 'api/stop/' + testId + '/departures']);
+                apiService.getStopPassages(testId).subscribe((res) => {
+                    expect(<any>res)
+                        .toEqual([testEndpoint + 'api/stop/' + testId + '/departures']);
                 }, done, done);
             });
         });
         describe('getVehicleLocation(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getVehicleLocation(testId).subscribe((res) => {
-                    expect(res)
-                        .toEqual([testEndpoint + 'api/geo/vehicle/testId1234']);
+                    expect(<any>res)
+                        .toEqual([<any>testEndpoint + 'api/geo/vehicle/testId1234']);
                 }, done, done);
             });
         });
