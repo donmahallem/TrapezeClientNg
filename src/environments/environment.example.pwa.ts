@@ -3,7 +3,7 @@ import { IEnvironmentBase } from './environment.base';
 export const environment: IEnvironmentBase = {
     apiEndpoint: './',
     production: true,
-    pwa: false,
+    pwa: true,
 };
 
 /*
