@@ -33,7 +33,9 @@ import { UserLocationService } from './services/user-location.service';
         MatButtonModule,
         MatInputModule,
         MainToolbarModule,
-        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: (environment.production && environment.pwa === true),
+        }),
         SidebarModule,
     ],
     providers: [
