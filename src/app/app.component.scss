@@ -67,7 +67,6 @@ div.overlay-box{
     max-height: calc(100vh + 400px - 100vw);
     flex-direction: column;
     align-items: stretch;
-    border:1px solid #999999;
     div.router-box{
         overflow-x: hidden;
         overflow-y: auto;
@@ -82,11 +81,17 @@ div.overlay-box{
         @include mat-elevation(4);
     }
 }
+// Elevation Transition
+@media (max-width: 439px) and (min-width:401px){
+    div.overlay-box{
+        @include mat-elevation(2);
+    }
+}
 @media (max-width: 400px) {
     div.overlay-box{
         margin:0px;
         border-radius: 0px;
         max-height:100vh;
-        border:none;
+        border-bottom:1px solid #999999;
     }
 }
