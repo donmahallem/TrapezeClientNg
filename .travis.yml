@@ -42,3 +42,23 @@ jobs:
       on:
         tags: true
         repo: donmahallem/TrapezeClientNg
+  - stage: npm release pwa
+    node_js: '10'
+    script: 
+    - npm run build
+    - cp ./src/environments/environment.example.pwa.ts ./src/environments/environment.prod.ts
+    - cp ./src/environments/environment.example.pwa.ts ./src/environments/environment.ts
+    - cp ./src/environments/environment.example.pwa.ts ./src/environments/environment.dev.ts
+    - ng build --aot --prod --base-href=/
+    if: tag IS present
+    before_deploy:
+    - npm run create-publish-package pwa
+    - cp -rf ./publish-package.json package.json
+    deploy:
+      provider: npm
+      skip_cleanup: true
+      email: $npm_email
+      api_key: $npm_api_key
+      on:
+        tags: true
+        repo: donmahallem/TrapezeClientNg
