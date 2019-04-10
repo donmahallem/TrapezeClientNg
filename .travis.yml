@@ -29,7 +29,7 @@ jobs:
     - cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
     - cp ./src/environments/environment.example.ts ./src/environments/environment.ts
     - cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
-    - ng build --aot --prod --base-href=./
+    - ng build --aot --prod --base-href=/
     if: tag IS present
     before_deploy:
     - npm run create-publish-package
