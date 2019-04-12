@@ -1,16 +1,11 @@
-mat-card-content.llla {
-    overflow-y: scroll;
-}
-
 :host {
-    display: flex;
-    flex-direction: column;
-    flex-flow: column;
-    height: 100%;
+    display:flex;
     background: #F9F9F9;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 div.error-box{
-    flex:0;
+    flex:0 0 auto;
     background:#B00020;
     color:white;
     padding:5px 20px 5px 20px;
@@ -28,21 +23,17 @@ div.error-box{
     }
 }
 mat-tab-group{
-    flex:1;
-
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 100%;
+    max-height: 100%;
+    div.mat-tab-body-wrapper{
+        overflow-y:auto;
+    }
+    mat-tab-header{
+        position: fixed;
+    }
 }
-mat-nav-list.stoplist {
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex: 1;
-}
-
-app-follow-bus-map {
-    display: block;
-    height: 200px;
-    width: 100%;
-}
-
 mat-toolbar {
     flex-grow: 0;
 }
@@ -55,4 +46,9 @@ mat-toolbar span.title {
 mat-toolbar span.subtitle {
     font-size: 12px;
     margin-top: 0px;
+}
+
+app-departure-list{
+    overflow-y:auto;
+    height: 100%;
 }

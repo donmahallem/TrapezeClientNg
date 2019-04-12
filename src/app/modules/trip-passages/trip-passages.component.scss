@@ -47,8 +47,29 @@ mat-list {
     }
 }
 
-app-follow-bus-map {
-    display: block;
-    height: 200px;
+div.header-box{
+    position: relative;
+    height:200px;
     width: 100%;
+    user-select: none; 
+}
+app-follow-bus-map {
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+div.header-box span{
+    position: absolute;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    z-index: 800;
+    padding:20px 20px 10px 20px;
+    color:white;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 5px black;
+    background-image: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.7));
 }

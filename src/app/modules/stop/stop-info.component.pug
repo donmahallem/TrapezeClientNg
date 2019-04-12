@@ -2,7 +2,7 @@ mat-toolbar(color="primary")
     div
         span.title(i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
         span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
-mat-tab-group.mat-evelation-z4(mat-stretch-tabs)
+mat-tab-group(mat-stretch-tabs,[dynamicHeight]="true")
     mat-tab(label="Departures")
         app-departure-list([departures]="stopInfo?.actual")
     mat-tab(label="Routes")
