@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material';
 import { DrawableDirective } from './drawable.directive';
 import { SidebarService } from './services/sidebar.service';
+import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-root',
     styleUrls: ['./app.component.scss'],
