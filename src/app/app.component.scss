@@ -53,6 +53,8 @@ app-main-toolbar.main-toolbar {
 }
 @import '~@angular/material/theming';
 
+$searchBorderRadius: 8px;
+
 app-main-toolbar{
     max-width: $boxMaxWidth;
     position: absolute;
@@ -61,23 +63,53 @@ app-main-toolbar{
     right:0px;
     margin:$boxMarginVertical auto 0px auto;
     z-index: #{$overlayZIndex};
-    border-radius: 8px;
+    border-radius: $searchBorderRadius;
     border:1px solid rgb(87, 99, 207);
-    @include mat-elevation(8);
+    @include mat-elevation(4);
     overflow: hidden;
+}
+@keyframes router-box-expand-animation {
+    to {
+        width:100vw;
+    }
+    from {
+        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+    }
 }
 .router-box{
     z-index: #{$overlayZIndex - 1};
-    background:white;
-    width: $breakpoint;
+    background:#F9F9F9;
+    width: 100vw;
     position: absolute;
     top:0px;
     left:0px;
     right:0px;
     bottom:0px;
+    animation-name: router-box-expand-animation;
+    animation-duration: 1s;
+    //border-right:1px solid rgba(0,0,0,0.5);
+    overflow-y:auto;
+    @include mat-elevation(4);
 }
 
+.router-box:matches(*){
+    opacity:0.5;
+}
+@media (max-width: #{$boxMaxWidth + (2 * $boxMarginHorizontal)}) and (min-width: #{$boxMaxWidth + 1}){
+    app-main-toolbar{
+        border-radius: calc( #{$searchBorderRadius /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
+        margin-top: calc( #{$boxMarginVertical /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
+    }
+}
 @media (min-width: $breakpoint){
+    @keyframes router-box-width-animation {
+        from {
+            width:100vw;
+        }
+        to {
+            width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+        }
+    }
     app-main-toolbar{
         right:unset;
         margin:$boxMarginVertical 0px 0px $boxMarginHorizontal;
@@ -86,5 +118,14 @@ app-main-toolbar{
 
     .router-box{
         width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+        animation-name: router-box-width-animation;
+        animation-duration: 1s;
+    }
+}
+
+@media (max-width: #{$boxMaxWidth} ){
+    app-main-toolbar{
+        border-radius: 0px;
+        margin-top: 0px;
     }
 }
