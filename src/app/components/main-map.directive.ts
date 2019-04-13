@@ -59,14 +59,15 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         if (false) {
             return L.divIcon({ className: 'my-div-icon', html: 'JJ' });
         } else {
+            const iconSize = 24;
             return L.icon({
-                iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
+                iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
                 // shadowUrl: 'leaf-shadow.png',
-                iconSize: [16, 16], // size of the icon
+                iconSize: [iconSize, iconSize], // size of the icon
                 iconUrl: 'assets/iconmonstr-part-24.png',
-                popupAnchor: [8, 8], // point from which the popup should open relative to the iconAnchor
-                shadowAnchor: [32, 32],  // the same for the shadow
-                shadowSize: [24, 24], // size of the shadow
+                popupAnchor: [iconSize / 2, iconSize / 2], // point from which the popup should open relative to the iconAnchor
+                shadowAnchor: [iconSize, iconSize],  // the same for the shadow
+                shadowSize: [iconSize, iconSize], // size of the shadow
             });
         }
     }
@@ -114,10 +115,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const greenIcon = L.divIcon({
-            className: 'vehiclemarker',
+            className: vehicle.heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
-            iconSize: [32, 32], // size of the icon
+            iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+            iconSize: [40, 40], // size of the icon
             popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
