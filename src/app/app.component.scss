@@ -87,9 +87,10 @@ app-main-toolbar{
     overflow-y:auto;
     pointer-events:none;
     ::ng-deep > *:not(:first-child) {
-        background:#F9F9F9;
+        background-color:#F9F9F9;
         pointer-events:visible;
         height:100%;
+        background-attachment: fixed;
         @include mat-elevation(4);
     }
 }
