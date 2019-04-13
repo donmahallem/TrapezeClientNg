@@ -11,13 +11,14 @@ import { DepartureListComponent } from './departure-list.component';
 import { RouteListComponent } from './route-list.component';
 import { StopInfoComponent } from './stop-info.component';
 import { StopInfoResolver } from './stop-info.resolver';
-// import { TripPassagesComponent } from './trip.passages.component';
+import { StopLocationMapDirective } from './stop-map.directive';
 import { StopRoutingModule } from './stop-routing.module';
 @NgModule({
     declarations: [
         StopInfoComponent,
         DepartureListComponent,
         RouteListComponent,
+        StopLocationMapDirective,
     ],
     imports: [
         CommonModule,

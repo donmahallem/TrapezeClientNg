@@ -46,6 +46,15 @@ export class StopPointService {
         this.stopLocationsSubject.next(locations ? locations : []);
     }
 
+    public getStopLocation(stopShortName: string): StopLocation {
+        for (const stop of this.stopLocations) {
+            if (stop.shortName === stopShortName) {
+                return stop;
+            }
+        }
+        return undefined;
+    }
+
     public get isLoading(): boolean {
         return this.stopLoadSubscription && !this.stopLoadSubscription.closed;
     }

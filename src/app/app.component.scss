@@ -13,6 +13,7 @@
     display: flex;
 }
 
+@import './box-settings.scss';
 mat-sidenav-container {
     flex: 1 1 auto;
     display: flex;
@@ -47,51 +48,87 @@ mat-sidenav.main-nav {
     overflow: hidden;
 }
 
-app-main-toolbar.main-toolbar {
-    flex-grow: 0;
-}
 @import '~@angular/material/theming';
-div.overlay-box{
-    display:flex;
-    width: 100%;
-    max-width: 400px;
-    max-height:100%;
+
+$searchBorderRadius: 8px;
+
+app-main-toolbar{
+    max-width: $boxMaxWidth;
     position: absolute;
-    left:0px;
     top:0px;
-    z-index: 1000;
-    overflow-y:hidden;
-    overflow-x:hidden;
-    margin:calc((100vw - 400px) * 0.5);
-    border-radius: calc((100vw - 400px) * 0.5);
-    max-height: calc(100vh + 400px - 100vw);
-    flex-direction: column;
-    align-items: stretch;
-    div.router-box{
-        overflow-x: hidden;
-        overflow-y: auto;
+    left:0px;
+    right:0px;
+    margin:$boxMarginVertical auto 0px auto;
+    z-index: #{$overlayZIndex};
+    border-radius: $searchBorderRadius;
+    border:1px solid rgb(87, 99, 207);
+    @include mat-elevation(4);
+    overflow: hidden;
+}
+@keyframes router-box-expand-animation {
+    to {
+        width:100vw;
+    }
+    from {
+        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
     }
 }
-@media (min-width: 440px) {
-    div.overlay-box{
-        margin:20px;
-        border-radius: 20px 20px 20px 20px;
-        max-height:calc(100vh - 40px);
-        //
+.router-box{
+    z-index: #{$overlayZIndex - 1};
+    width: 100vw;
+    position: absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    animation-name: router-box-expand-animation;
+    animation-duration: 1s;
+    //border-right:1px solid rgba(0,0,0,0.5);
+    overflow-y:auto;
+    pointer-events:none;
+    ::ng-deep > *:not(:first-child) {
+        background-color:#F9F9F9;
+        pointer-events:visible;
+        height:100%;
+        background-attachment: fixed;
         @include mat-elevation(4);
     }
 }
-// Elevation Transition
-@media (max-width: 439px) and (min-width:401px){
-    div.overlay-box{
-        @include mat-elevation(2);
+
+@media (max-width: #{$boxMaxWidth + (2 * $boxMarginHorizontal)}) and (min-width: #{$boxMaxWidth + 1}){
+    app-main-toolbar{
+        border-radius: calc( #{$searchBorderRadius /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
+        margin-top: calc( #{$boxMarginVertical /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
     }
 }
-@media (max-width: 400px) {
-    div.overlay-box{
-        margin:0px;
+@media (min-width: $breakpoint){
+    @keyframes router-box-width-animation {
+        from {
+            width:100vw;
+        }
+        to {
+            width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+        }
+    }
+    app-main-toolbar{
+        right:unset;
+        margin:$boxMarginVertical 0px 0px $boxMarginHorizontal;
+        width:$boxMaxWidth;
+    }
+
+    // Needed for dropshadow to appear for nav box
+    $rightPadding: 20px;
+    .router-box{
+        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+        animation-name: router-box-width-animation;
+        animation-duration: 1s;
+        padding-right:$rightPadding;
+    }
+}
+
+@media (max-width: #{$boxMaxWidth} ){
+    app-main-toolbar{
         border-radius: 0px;
-        max-height:100vh;
-        border-bottom:1px solid #999999;
+        margin-top: 0px;
     }
 }

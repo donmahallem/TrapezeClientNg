@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { IStopPassage } from '@donmahallem/trapeze-api-types';
 import { combineLatest, merge, of, timer, Observable, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map } from 'rxjs/operators';
+import { StopLocation } from 'src/app/models/stop-location.model';
+import { StopPointService } from 'src/app/services/stop-point.service';
 import { ApiService } from '../../services';
 @Component({
     selector: 'app-stop-info',
@@ -11,7 +13,8 @@ import { ApiService } from '../../services';
 })
 export class StopInfoComponent implements AfterViewInit, OnDestroy {
 
-    constructor(private route: ActivatedRoute, private apiService: ApiService) {
+    constructor(private route: ActivatedRoute, private apiService: ApiService,
+        private stopService: StopPointService) {
         this.mStopInfo = this.route.snapshot.data.stopInfo;
     }
 
@@ -38,6 +41,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
      */
     public readonly tickInterval: number = 200;
 
+    public stopLocation: StopLocation = undefined;
     private updateData(data: IStopPassage): void {
         this.errorOccured = false;
         if ((<any>data).stopShortName === this.stopId) {
@@ -62,6 +66,12 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         });
         const stopIdObvservable: Observable<string> = this.route.params
             .pipe(map((a: { stopId: string }): string => a.stopId));
+        stopIdObvservable.pipe(map((id: string) => {
+            return this.stopService.getStopLocation(id);
+        }))
+            .subscribe((stop) => {
+                this.stopLocation = stop;
+            });
         const refreshObservable = combineLatest(this.mTimerObservable.pipe(filter((val: number) => {
             return val % this.ticksToRefresh === 0 && val > 0;
         })), stopIdObvservable)
