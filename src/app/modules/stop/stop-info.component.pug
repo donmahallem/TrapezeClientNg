@@ -1,6 +1,7 @@
-mat-toolbar(color="primary")
-    div
-        span.title(i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
+.header-box
+    map(appStopLocation,[location]="stopLocation",role="none")
+    .title-box
+        span.title(role="heading",aria-level="2",i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
         span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
 mat-tab-group(mat-stretch-tabs,[dynamicHeight]="true")
     mat-tab(label="Departures")
