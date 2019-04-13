@@ -116,10 +116,13 @@ app-main-toolbar{
         width:$boxMaxWidth;
     }
 
+    // Needed for dropshadow to appear for nav box
+    $rightPadding: 20px;
     .router-box{
         width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
         animation-name: router-box-width-animation;
         animation-duration: 1s;
+        padding-right:$rightPadding;
     }
 }
 
