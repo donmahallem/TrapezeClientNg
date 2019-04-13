@@ -24,14 +24,16 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopLocationSubject: BehaviorSubject<StopLocation> = new BehaviorSubject(undefined);
 
     public createStopIcon(): L.Icon {
+        const iconSize = 24;
         return L.icon({
-            iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
+            iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
             // shadowUrl: 'leaf-shadow.png',
-            iconSize: [16, 16], // size of the icon
-            iconUrl: 'assets/iconmonstr-part-24.png',
-            popupAnchor: [8, 8], // point from which the popup should open relative to the iconAnchor
-            shadowAnchor: [32, 32],  // the same for the shadow
-            shadowSize: [24, 24], // size of the shadow
+            iconSize: [iconSize, iconSize], // size of the icon
+            iconUrl: 'assets/stop-icon.png',
+            popupAnchor: [iconSize / 2, iconSize / 2], // point from which the popup should open relative to the iconAnchor
+            shadowAnchor: [iconSize / 7 * 3, iconSize / 7 * 3],  // the same for the shadow
+            shadowSize: [iconSize * 1.1, iconSize * 1.1], // size of the shadow
+            shadowUrl: 'assets/stop-icon-shadow.png',
         });
     }
 

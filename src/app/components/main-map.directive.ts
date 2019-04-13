@@ -64,10 +64,11 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
                 // shadowUrl: 'leaf-shadow.png',
                 iconSize: [iconSize, iconSize], // size of the icon
-                iconUrl: 'assets/iconmonstr-part-24.png',
+                iconUrl: 'assets/stop-icon.png',
                 popupAnchor: [iconSize / 2, iconSize / 2], // point from which the popup should open relative to the iconAnchor
-                shadowAnchor: [iconSize, iconSize],  // the same for the shadow
-                shadowSize: [iconSize, iconSize], // size of the shadow
+                shadowAnchor: [iconSize / 7 * 3, iconSize / 7 * 3],  // the same for the shadow
+                shadowSize: [iconSize * 1.1, iconSize * 1.1], // size of the shadow
+                shadowUrl: 'assets/stop-icon-shadow.png',
             });
         }
     }
