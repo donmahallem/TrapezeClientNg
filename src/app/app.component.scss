@@ -65,11 +65,19 @@ app-main-toolbar{
     @include mat-elevation(4);
     overflow: hidden;
 }
-@keyframes router-box-expand-animation {
+@keyframes overlay-box-expand-animation {
     to {
         width:100vw;
     }
     from {
+        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+    }
+}
+@keyframes overlay-box-contract-animation {
+    from {
+        width:100vw;
+    }
+    to {
         width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
     }
 }
@@ -84,6 +92,8 @@ app-main-toolbar{
     right:0px;
     bottom:0px;
     pointer-events:none;
+    animation-name: router-box-expand-animation;
+    animation-duration: 1s;
     app-main-toolbar{
         margin:#{$boxMarginVertical} auto 0 auto;
         pointer-events:visible;
@@ -96,8 +106,6 @@ app-main-toolbar{
         left:0px;
         right:0px;
         bottom:0px;
-        animation-name: router-box-expand-animation;
-        animation-duration: 1s;
         //border-right:1px solid rgba(0,0,0,0.5);
         overflow-y:auto;
         ::ng-deep > *:not(:first-child) {
@@ -115,14 +123,6 @@ app-main-toolbar{
         }
     }
     @media (min-width: $breakpoint){
-        @keyframes router-box-width-animation {
-            from {
-                width:100vw;
-            }
-            to {
-                width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
-            }
-        }
         app-main-toolbar{
             right:unset;
             margin:$boxMarginVertical 0px 0px $boxMarginHorizontal;
@@ -133,8 +133,6 @@ app-main-toolbar{
         $rightPadding: 20px;
         .router-box{
             width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
-            animation-name: router-box-width-animation;
-            animation-duration: 1s;
             padding-right:$rightPadding;
         }
     }
@@ -147,6 +145,14 @@ app-main-toolbar{
     }
 }
 
+@media (min-width: #{$breakpoint + 1}){
+    .overlay-box{
+        animation-name: router-box-contract-animation;
+        animation-duration: 1s;
+        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+        right:unset;
+    }
+}
 @media (max-width: #{$boxMaxWidth} ){
     .overlay-box{
         display:flex;
