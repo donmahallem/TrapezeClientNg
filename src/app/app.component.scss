@@ -73,7 +73,9 @@ app-main-toolbar{
         width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
     }
 }
-.router-box{
+
+.overlay-box{
+    display:block;
     z-index: #{$overlayZIndex - 1};
     width: 100vw;
     position: absolute;
@@ -81,54 +83,86 @@ app-main-toolbar{
     left:0px;
     right:0px;
     bottom:0px;
-    animation-name: router-box-expand-animation;
-    animation-duration: 1s;
-    //border-right:1px solid rgba(0,0,0,0.5);
-    overflow-y:auto;
     pointer-events:none;
-    ::ng-deep > *:not(:first-child) {
-        background-color:#F9F9F9;
+    app-main-toolbar{
+        margin:#{$boxMarginVertical} auto 0 auto;
         pointer-events:visible;
-        height:100%;
-        background-attachment: fixed;
-        @include mat-elevation(4);
     }
-}
-
-@media (max-width: #{$boxMaxWidth + (2 * $boxMarginHorizontal)}) and (min-width: #{$boxMaxWidth + 1}){
-    app-main-toolbar{
-        border-radius: calc( #{$searchBorderRadius /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
-        margin-top: calc( #{$boxMarginVertical /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
-    }
-}
-@media (min-width: $breakpoint){
-    @keyframes router-box-width-animation {
-        from {
-            width:100vw;
-        }
-        to {
-            width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
-        }
-    }
-    app-main-toolbar{
-        right:unset;
-        margin:$boxMarginVertical 0px 0px $boxMarginHorizontal;
-        width:$boxMaxWidth;
-    }
-
-    // Needed for dropshadow to appear for nav box
-    $rightPadding: 20px;
     .router-box{
-        width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
-        animation-name: router-box-width-animation;
+        z-index: #{$overlayZIndex - 1};
+        width: 100vw;
+        position: absolute;
+        top:0px;
+        left:0px;
+        right:0px;
+        bottom:0px;
+        animation-name: router-box-expand-animation;
         animation-duration: 1s;
-        padding-right:$rightPadding;
+        //border-right:1px solid rgba(0,0,0,0.5);
+        overflow-y:auto;
+        ::ng-deep > *:not(:first-child) {
+            background-color:#F9F9F9;
+            pointer-events:visible;
+            height:100%;
+            background-attachment: fixed;
+            @include mat-elevation(4);
+        }
+    }
+    @media (max-width: #{$boxMaxWidth + (2 * $boxMarginHorizontal)}) and (min-width: #{$boxMaxWidth + 1}){
+        app-main-toolbar{
+            border-radius: calc( #{$searchBorderRadius /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
+            margin-top: calc( #{$boxMarginVertical /(2 * $boxMarginHorizontal)}*(100vw - #{$boxMaxWidth}) );
+        }
+    }
+    @media (min-width: $breakpoint){
+        @keyframes router-box-width-animation {
+            from {
+                width:100vw;
+            }
+            to {
+                width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+            }
+        }
+        app-main-toolbar{
+            right:unset;
+            margin:$boxMarginVertical 0px 0px $boxMarginHorizontal;
+            width:$boxMaxWidth;
+        }
+    
+        // Needed for dropshadow to appear for nav box
+        $rightPadding: 20px;
+        .router-box{
+            width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
+            animation-name: router-box-width-animation;
+            animation-duration: 1s;
+            padding-right:$rightPadding;
+        }
+    }
+
+    @media (max-width: #{$boxMaxWidth} ){
+        app-main-toolbar{
+            border-radius: 0px;
+            margin-top: 0px;
+        }
     }
 }
 
 @media (max-width: #{$boxMaxWidth} ){
-    app-main-toolbar{
-        border-radius: 0px;
-        margin-top: 0px;
+    .overlay-box{
+        display:flex;
+        flex-direction: column;
+        position: absolute;
+        align-items: stretch;
+        app-main-toolbar{
+            margin:0px;
+            position: relative;
+            flex:0 0 auto;
+            order: 1;
+        }
+        .router-box{
+            position: unset;
+            flex:1 0 auto;
+            order: 2;
+        }
     }
 }
