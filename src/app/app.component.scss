@@ -161,8 +161,9 @@ app-main-toolbar{
         }
         .router-box{
             position: unset;
-            flex:1 0 auto;
+            flex:1 1 auto;
             order: 2;
+            height: 100%;
         }
     }
 }
