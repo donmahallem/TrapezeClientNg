@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
+import { createStopIcon } from 'src/app/leaflet';
 import { StopLocation } from 'src/app/models/stop-location.model';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
@@ -22,20 +23,6 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private stopLocationSubject: BehaviorSubject<StopLocation> = new BehaviorSubject(undefined);
-
-    public createStopIcon(): L.Icon {
-        const iconSize = 24;
-        return L.icon({
-            iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
-            // shadowUrl: 'leaf-shadow.png',
-            iconSize: [iconSize, iconSize], // size of the icon
-            iconUrl: 'assets/stop-icon.png',
-            popupAnchor: [iconSize / 2, iconSize / 2], // point from which the popup should open relative to the iconAnchor
-            shadowAnchor: [iconSize / 7 * 3, iconSize / 7 * 3],  // the same for the shadow
-            shadowSize: [iconSize * 1.1, iconSize * 1.1], // size of the shadow
-            shadowUrl: 'assets/stop-icon-shadow.png',
-        });
-    }
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -62,7 +49,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     this.stopMarkerLayer.addTo(this.getMap());
                 }
                 if (location) {
-                    const stopIcon: L.Icon = this.createStopIcon();
+                    const stopIcon: L.Icon = createStopIcon();
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
                             clickable: false,
