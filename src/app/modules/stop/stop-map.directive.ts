@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
+import { createStopIcon } from 'src/app/leaflet';
 import { StopLocation } from 'src/app/models/stop-location.model';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
@@ -22,18 +23,6 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private stopLocationSubject: BehaviorSubject<StopLocation> = new BehaviorSubject(undefined);
-
-    public createStopIcon(): L.Icon {
-        return L.icon({
-            iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
-            // shadowUrl: 'leaf-shadow.png',
-            iconSize: [16, 16], // size of the icon
-            iconUrl: 'assets/iconmonstr-part-24.png',
-            popupAnchor: [8, 8], // point from which the popup should open relative to the iconAnchor
-            shadowAnchor: [32, 32],  // the same for the shadow
-            shadowSize: [24, 24], // size of the shadow
-        });
-    }
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -60,7 +49,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     this.stopMarkerLayer.addTo(this.getMap());
                 }
                 if (location) {
-                    const stopIcon: L.Icon = this.createStopIcon();
+                    const stopIcon: L.Icon = createStopIcon();
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
                             clickable: false,

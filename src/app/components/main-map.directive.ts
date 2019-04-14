@@ -4,6 +4,7 @@ import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
+import { createStopIcon } from '../leaflet';
 import { StopLocation } from '../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
 import { StopPointService } from '../services/stop-point.service';
@@ -24,10 +25,6 @@ export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
     selector: 'map[appMainMap]',
 })
 export class MainMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-
-    private stopMarkerLayer: L.FeatureGroup = undefined;
-    private vehicleMarkerLayer: L.FeatureGroup = undefined;
-    private vehicleUpdateSubscription: Subscription;
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
@@ -36,6 +33,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         zone: NgZone) {
         super(elRef, zone, userLocationService);
     }
+
+    private stopMarkerLayer: L.FeatureGroup = undefined;
+    private vehicleMarkerLayer: L.FeatureGroup = undefined;
+    private vehicleUpdateSubscription: Subscription;
 
     public setVehicles(vehicles: IVehicleLocationList): void {
         if (this.vehicleMarkerLayer !== undefined) {
@@ -52,22 +53,6 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 }
                 this.addVehicleMarker(<IVehicleLocation>veh).addTo(this.vehicleMarkerLayer);
             }
-        }
-    }
-
-    public createStopIcon() {
-        if (false) {
-            return L.divIcon({ className: 'my-div-icon', html: 'JJ' });
-        } else {
-            return L.icon({
-                iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
-                // shadowUrl: 'leaf-shadow.png',
-                iconSize: [16, 16], // size of the icon
-                iconUrl: 'assets/iconmonstr-part-24.png',
-                popupAnchor: [8, 8], // point from which the popup should open relative to the iconAnchor
-                shadowAnchor: [32, 32],  // the same for the shadow
-                shadowSize: [24, 24], // size of the shadow
-            });
         }
     }
 
@@ -114,10 +99,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const greenIcon = L.divIcon({
-            className: 'vehiclemarker',
+            className: vehicle.heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
-            iconSize: [32, 32], // size of the icon
+            iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+            iconSize: [40, 40], // size of the icon
             popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
@@ -140,7 +125,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     if (stop === null) {
                         continue;
                     }
-                    const greenIcon = this.createStopIcon();
+                    const greenIcon = createStopIcon();
                     const markerT: L.Marker = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
                         {
                             clickable: true,
