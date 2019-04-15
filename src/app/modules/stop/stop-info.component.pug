@@ -4,9 +4,9 @@
         span.title(role="heading",aria-level="2",i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
         span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
 mat-tab-group(mat-stretch-tabs,[dynamicHeight]="true")
-    mat-tab(label="Departures")
+    mat-tab(i18n-label="tab header departures|Departures@@departures",label="Departures")
         app-departure-list([departures]="stopInfo?.actual")
-    mat-tab(label="Routes")
+    mat-tab(i18n-label="tab header routes|Routes@@Routes",label="Routes")
         app-route-list([routes]="stopInfo?.routes")
 div.error-box(*ngIf="errorOccured")
     h3 Error occured
