@@ -76,6 +76,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "ngx-i18nsupport": "^0.17.1",
     "protractor": "^6.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
