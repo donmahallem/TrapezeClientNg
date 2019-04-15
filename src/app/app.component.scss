@@ -92,7 +92,7 @@ app-main-toolbar{
     right:0px;
     bottom:0px;
     pointer-events:none;
-    animation-name: router-box-expand-animation;
+    animation-name: overlay-box-expand-animation;
     animation-duration: 1s;
     app-main-toolbar{
         margin:#{$boxMarginVertical} auto 0 auto;
@@ -100,7 +100,7 @@ app-main-toolbar{
     }
     .router-box{
         z-index: #{$overlayZIndex - 1};
-        width: 100vw;
+        width: 100%;
         position: absolute;
         top:0px;
         left:0px;
@@ -132,7 +132,6 @@ app-main-toolbar{
         // Needed for dropshadow to appear for nav box
         $rightPadding: 20px;
         .router-box{
-            width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
             padding-right:$rightPadding;
         }
     }
@@ -145,9 +144,9 @@ app-main-toolbar{
     }
 }
 
-@media (min-width: #{$breakpoint + 1}){
+@media (min-width: #{$breakpoint }){
     .overlay-box{
-        animation-name: router-box-contract-animation;
+        animation-name: overlay-box-contract-animation;
         animation-duration: 1s;
         width:#{$boxMaxWidth + (2 * $boxMarginHorizontal)};
         right:unset;
