@@ -1,4 +1,4 @@
-app-map-header-box([blur]="tripData!==undefined",title=" {{routeName}} - {{tripData?.directionText}}")
+app-map-header-box([blur]="true",title="{{routeName}} - {{tripData?.directionText}}")
     map(appTripPassages,[location]="tripData?.location",role="none")
 div.error-box(*ngIf="updateStatus==StatusOps.ERROR",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
     span.title(i18n="@@error") Error

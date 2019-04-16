@@ -19,7 +19,7 @@ enum UpdateStatus {
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public tripId: string;
     public routeName: string;
-    public tripData: TripPassages;
+    public tripData: any;
     public tripPassages: any[] = [];
     private updateObservable: Subscription;
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
