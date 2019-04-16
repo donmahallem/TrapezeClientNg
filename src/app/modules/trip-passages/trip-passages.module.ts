@@ -5,10 +5,11 @@ import { FollowBusMapDirective } from './follow-bus-map.directive';
 import { TripPassagesRoutingModule } from './trip-passages-routing.module';
 import { TripPassagesComponent } from './trip-passages.component';
 import { TripPassagesResolver } from './trip-passages.resolver';
+import { MapHeaderBoxModule } from '../common';
 @NgModule({
     declarations: [
         TripPassagesComponent,
-        FollowBusMapDirective,
+        FollowBusMapDirective
     ],
     imports: [
         CommonModule,
@@ -18,6 +19,7 @@ import { TripPassagesResolver } from './trip-passages.resolver';
         MatToolbarModule,
         MatProgressSpinnerModule,
         TripPassagesRoutingModule,
+        MapHeaderBoxModule
     ],
     providers: [
         TripPassagesResolver,

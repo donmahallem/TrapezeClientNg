@@ -13,6 +13,8 @@ import { StopInfoComponent } from './stop-info.component';
 import { StopInfoResolver } from './stop-info.resolver';
 import { StopLocationMapDirective } from './stop-map.directive';
 import { StopRoutingModule } from './stop-routing.module';
+import { MapHeaderBoxComponent } from '../common/map-header-box/map-header-box.component';
+import { MapHeaderBoxModule } from '../common';
 @NgModule({
     declarations: [
         StopInfoComponent,
@@ -28,6 +30,7 @@ import { StopRoutingModule } from './stop-routing.module';
         MatProgressSpinnerModule,
         StopRoutingModule,
         MatTabsModule,
+        MapHeaderBoxModule
     ],
     providers: [
         StopInfoResolver,

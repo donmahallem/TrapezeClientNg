@@ -1,8 +1,5 @@
-.header-box
+app-map-header-box([blur]="stopLocation===undefined",title="{{stopInfo?.stopName}}",i18n-title="@@stopName",i18n-subtitle="Refreshing in x seconds@@refreshingInXSeconds",subtitle="Refreshing in {{timeUntilRefresh}}s")
     map(appStopLocation,[location]="stopLocation",role="none")
-    .title-box
-        span.title(role="heading",aria-level="2",i18n-title="@@stopName",title="Stop Name") {{stopInfo?.stopName}}
-        span.subtitle(i18n="Refreshing in x seconds@@refreshingInXSeconds") Refreshing in {{timeUntilRefresh}}s
 mat-tab-group(mat-stretch-tabs,[dynamicHeight]="true")
     mat-tab(i18n-label="tab header departures|Departures@@departures",label="Departures")
         app-departure-list([departures]="stopInfo?.actual")
