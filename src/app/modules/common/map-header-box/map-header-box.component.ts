@@ -1,8 +1,8 @@
-import { Component, Input, ViewEncapsulation, HostBinding } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 @Component({
     selector: 'app-map-header-box',
     styleUrls: ['./map-header-box.component.scss'],
-    templateUrl: './map-header-box.component.pug'
+    templateUrl: './map-header-box.component.pug',
 })
 export class MapHeaderBoxComponent {
 
@@ -12,5 +12,5 @@ export class MapHeaderBoxComponent {
     public subtitle: string = undefined;
     @Input()
     @HostBinding('class.no-location')
-    public blur: boolean = false;
+    public blur = false;
 }

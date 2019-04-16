@@ -7,14 +7,13 @@ import {
     MatTabsModule,
     MatToolbarModule,
 } from '@angular/material';
+import { MapHeaderBoxModule } from '../common';
 import { DepartureListComponent } from './departure-list.component';
 import { RouteListComponent } from './route-list.component';
 import { StopInfoComponent } from './stop-info.component';
 import { StopInfoResolver } from './stop-info.resolver';
 import { StopLocationMapDirective } from './stop-map.directive';
 import { StopRoutingModule } from './stop-routing.module';
-import { MapHeaderBoxComponent } from '../common/map-header-box/map-header-box.component';
-import { MapHeaderBoxModule } from '../common';
 @NgModule({
     declarations: [
         StopInfoComponent,
@@ -30,7 +29,7 @@ import { MapHeaderBoxModule } from '../common';
         MatProgressSpinnerModule,
         StopRoutingModule,
         MatTabsModule,
-        MapHeaderBoxModule
+        MapHeaderBoxModule,
     ],
     providers: [
         StopInfoResolver,

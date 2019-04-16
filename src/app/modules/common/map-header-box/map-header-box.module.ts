@@ -7,7 +7,7 @@ import { MapHeaderBoxComponent } from './map-header-box.component';
 
 @NgModule({
     declarations: [
-        MapHeaderBoxComponent
+        MapHeaderBoxComponent,
     ],
     exports: [
         CommonModule,
