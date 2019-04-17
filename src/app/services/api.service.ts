@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { TripPassagesLocation } from '../models';
 import { StationsResponse } from '../models/stations-response.model';
 import { IMapBounds } from '../modules/common/leaflet-map.component';
-import { TripPassagesLocation } from '../models';
 @Injectable({
     providedIn: 'root',
 })

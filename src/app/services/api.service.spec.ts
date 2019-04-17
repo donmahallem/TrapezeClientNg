@@ -36,7 +36,7 @@ describe('src/app/services/api.service', () => {
         describe('getTripPassages(tripId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getTripPassages(testId).subscribe((res) => {
-                    expect(res)
+                    expect(<any>res)
                         .toEqual([testEndpoint + 'api/trip/' + testId + '/passages?mode=departure']);
                 }, done, done);
             });

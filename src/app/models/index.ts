@@ -9,5 +9,5 @@ export interface Bounds {
 }
 
 export type TripPassagesLocation = ITripPassages & {
-    location: IVehicleLocation
+    location: IVehicleLocation,
 };
