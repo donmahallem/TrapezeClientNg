@@ -11,7 +11,7 @@ const tripPassagesRoute: Routes = [
         },
         path: ':tripId',
         resolve: {
-            stopInfo: TripPassagesResolver,
+            tripPassages: TripPassagesResolver,
         },
     },
 ];
