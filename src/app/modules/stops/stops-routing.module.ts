@@ -7,14 +7,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, Routes } from '@angular/router';
 import { StopsInfoComponent } from './stops-info.component';
+import { StopsResolver } from './stops.resolver';
 
 const tripPassagesRoute: Routes = [
     {
         component: StopsInfoComponent,
-        data: {
-            openSidebar: true,
-        },
         path: '',
+        resolve: {
+            stops: StopsResolver,
+        },
     },
 ];
 

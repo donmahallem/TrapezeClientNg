@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
 import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
-import { filter, map, mergeMap, retry } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, retry } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
 
@@ -41,7 +41,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * short hand to retrieve route name
      */
     public get routeName(): string {
-        return (this.tripData) ? this.tripData.routeName : "";
+        return (this.tripData) ? this.tripData.routeName : '';
     }
 
     /**
@@ -76,6 +76,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 mergeMap((tripId: TripId): Observable<TripPassagesLocation> => {
                     return this.apiService.getTripPassages(tripId);
                 }),
+                catchError(this.handleError.bind(this)),
                 retry(3))
             .subscribe(new Subscriber(this.updateData.bind(this), this.handleError.bind(this)));
     }
