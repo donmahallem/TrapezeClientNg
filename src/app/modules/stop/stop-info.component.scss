@@ -64,4 +64,28 @@ div.header-box{
             font-weight: bold;
         }
     }
+    mat-icon{
+        position: absolute;
+        z-index: 799;
+        bottom:0px;
+        left:0px;
+        right:0px;
+        top:0px;
+        margin:auto;
+        font-size: 64px;
+        width:64px;
+        height:64px;
+        opacity:0.9;
+        display:none;
+    }
+}
+
+
+div.header-box.no-location{
+    map {
+        filter: blur(5px);
+    }
+    mat-icon{
+        display:block;
+    }
 }
