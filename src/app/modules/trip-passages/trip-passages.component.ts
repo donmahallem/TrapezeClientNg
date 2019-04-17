@@ -4,6 +4,7 @@ import { IActualTripPassage, ITripPassages } from '@donmahallem/trapeze-api-type
 import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { filter, map, mergeMap, retry } from 'rxjs/operators';
 import { ApiService } from '../../services';
+import { TripPassagesLocation } from 'src/app/models';
 
 enum UpdateStatus {
     LOADING = 1,
@@ -19,7 +20,7 @@ enum UpdateStatus {
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public tripId: string;
     public routeName: string;
-    public tripData: ITripPassages = undefined;
+    public tripData: TripPassagesLocation = undefined;
     private updateObservable: Subscription;
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
@@ -49,7 +50,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         };
     }
 
-    private updateData(data: ITripPassages): void {
+    private updateData(data: TripPassagesLocation): void {
         this.routeName = data.routeName;
         this.updateStatusSubject.next(UpdateStatus.LOADED);
         if (data.tripId === this.tripId) {
