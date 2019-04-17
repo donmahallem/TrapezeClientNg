@@ -1,7 +1,3 @@
-mat-card-content.llla {
-    overflow-y: scroll;
-}
-
 h3.route-title {
     padding: 24px;
 }
@@ -17,61 +13,17 @@ h3.route-title {
 div.error-box {
     background: #F44336;
     padding: 16px;
-}
-
-div.error-box span.title {
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 18px;
-    display: block;
-}
-
-div.error-box span.title {
-    font-size: 12px;
-}
-
-mat-list {
-    padding: 20px;
-}
-@import './../../box-settings.scss';
-div.header-box{
-    position: relative;
-    height:calc(100vw / 4 * 3);
-    min-height:250px;
-    max-height:300px;
-    width: 100%;
-    user-select: none; 
-
-    map[appTripPassages] {
-        position: absolute;
+    flex:0 0 auto; 
+    span.title {
+        text-transform: uppercase;
+        font-weight: bold;
         display: block;
-        height: 100%;
-        width: 100%;
-        ::ng-deep .leaflet-control-attribution{
-            display:none;
-        }
     }
-    
-    .title-box{
-        position: absolute;
-        bottom:0px;
-        left:0px;
-        right:0px;
-        z-index: 800;
-        padding:20px 20px 10px 20px;
-        color:white;
-        text-shadow: 0 0 5px black;
-        background-image: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.7));
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        span.title{
-            font-size: 20px;
-            font-weight: bold;
-        }
-        span.subtitle{
-            font-size: 12px;
-            font-weight: bold;
-        }
+    span.title {
+        font-size: 12px;
     }
+}
+
+mat-nav-list{
+    flex-grow: 1;
 }
