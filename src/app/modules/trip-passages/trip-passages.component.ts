@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IActualTripPassage, ITripPassages } from '@donmahallem/trapeze-api-types';
 import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { filter, map, mergeMap, retry } from 'rxjs/operators';
 import { ApiService } from '../../services';
-import { ITripPassages, IActualTripPassage } from '@donmahallem/trapeze-api-types';
 
 enum UpdateStatus {
     LOADING = 1,
