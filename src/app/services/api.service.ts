@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { TripPassagesLocation } from '../models';
 import { StationsResponse } from '../models/stations-response.model';
 import { IMapBounds } from '../modules/common/leaflet-map.component';
 @Injectable({
@@ -16,8 +17,8 @@ export class ApiService {
         return environment.apiEndpoint.endsWith('\/') ? environment.apiEndpoint : (environment.apiEndpoint + '\/');
     }
 
-    public getTripPassages(tripId: string): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/trip/' + tripId + '/passages?mode=departure');
+    public getTripPassages(tripId: string): Observable<TripPassagesLocation> {
+        return this.http.get<TripPassagesLocation>(this.baseUrl() + 'api/trip/' + tripId + '/passages?mode=departure');
     }
     public getRouteByVehicleId(vehicleId: string): Observable<any> {
         return this.http.get(this.baseUrl() + 'api/vehicle/' + vehicleId + '/route');

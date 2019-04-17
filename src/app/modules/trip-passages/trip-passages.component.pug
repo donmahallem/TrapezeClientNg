@@ -1,7 +1,5 @@
-.header-box
-    app-follow-bus-map(*ngIf="tripId==tripData?.tripId",[location]="tripData?.location",role="none")
-    .title-box
-        span.title(role="heading",aria-level="2") {{routeName}} - {{tripData?.directionText}}
+app-map-header-box([blur]="true",title="{{routeName}} - {{tripData?.directionText}}")
+    map(appTripPassages,[location]="tripData?.location",role="none")
 div.error-box(*ngIf="updateStatus==StatusOps.ERROR",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
     span.title(i18n="@@error") Error
     span.text(i18n="@@error") Error

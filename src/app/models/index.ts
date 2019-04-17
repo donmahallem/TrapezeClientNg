@@ -1,4 +1,5 @@
-export * from './trip.passages';
+import { ITripPassages, IVehicleLocation } from '@donmahallem/trapeze-api-types';
+
 export * from './vehicle-location.model';
 export interface Bounds {
     left: number;
@@ -6,3 +7,7 @@ export interface Bounds {
     top: number;
     bottom: number;
 }
+
+export type TripPassagesLocation = ITripPassages & {
+    location: IVehicleLocation,
+};
