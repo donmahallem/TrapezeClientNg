@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IActualTripPassage, ITripPassages } from '@donmahallem/trapeze-api-types';
 import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { filter, map, mergeMap, retry } from 'rxjs/operators';
 import { ApiService } from '../../services';
-import { TripPassages } from './../../models';
 
 enum UpdateStatus {
     LOADING = 1,
@@ -19,8 +19,7 @@ enum UpdateStatus {
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public tripId: string;
     public routeName: string;
-    public tripData: any;
-    public tripPassages: any[] = [];
+    public tripData: ITripPassages = undefined;
     private updateObservable: Subscription;
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
@@ -34,6 +33,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return this.updateStatusSubject.getValue();
     }
 
+    /**
+     * List of passages
+     */
+    public get tripPassages(): IActualTripPassage[] {
+        return (this.tripData !== undefined) ? this.tripData.actual : [];
+    }
+
     private handleError<T>(operation = 'operation', result?: T) {
         this.updateStatusSubject.next(UpdateStatus.ERROR);
         return (error: any): Observable<T> => {
@@ -43,12 +49,11 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         };
     }
 
-    private updateData(data: TripPassages): void {
+    private updateData(data: ITripPassages): void {
         this.routeName = data.routeName;
         this.updateStatusSubject.next(UpdateStatus.LOADED);
         if (data.tripId === this.tripId) {
             this.tripData = data;
-            this.tripPassages = data.actual;
             // console.log(this.tripPassages, data.actual);
         }
     }
