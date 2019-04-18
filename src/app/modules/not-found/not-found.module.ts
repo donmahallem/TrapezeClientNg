@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
-    MatListModule, MatIcon, MatIconModule,
+    MatIconModule, MatListModule,
 } from '@angular/material';
 import { NotFoundRoutingModule } from './not-found-routing.module';
 import { NotFoundComponent } from './not-found.component';
@@ -13,7 +13,7 @@ import { NotFoundComponent } from './not-found.component';
         NotFoundRoutingModule,
         CommonModule,
         MatListModule,
-        MatIconModule
+        MatIconModule,
     ],
     providers: [
     ],
