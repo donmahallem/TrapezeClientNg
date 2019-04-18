@@ -5,6 +5,20 @@ import { Component } from '@angular/core';
     templateUrl: './not-found.component.pug',
 })
 export class NotFoundComponent {
+
+    public readonly endpoints: {
+        icon: string;
+        path: string;
+        title: string;
+    }[] = [{
+        icon: 'home',
+        path: '/',
+        title: 'Home',
+    }, {
+        icon: 'place',
+        path: '/stops',
+        title: 'Stops',
+    }];
     constructor() {
     }
 
