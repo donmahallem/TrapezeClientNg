@@ -1,7 +1,3 @@
-mat-card-content.llla {
-    overflow-y: scroll;
-}
-
 :host {
     display: flex;
     flex-direction: column;
@@ -15,23 +11,9 @@ mat-nav-list.stoplist {
     overflow-x: hidden;
     flex: 1;
 }
-
-app-follow-bus-map {
-    display: block;
-    height: 200px;
-    width: 100%;
-}
-
-mat-toolbar {
-    flex-grow: 0;
-}
-
-mat-toolbar span.title {
-    display: block;
-    margin-bottom: 0px;
-}
-
-mat-toolbar span.subtitle {
-    font-size: 12px;
-    margin-top: 0px;
+@import './../../box-settings.scss';
+@media (min-width: #{$boxMaxWidth + 1}){
+    mat-nav-list.stoplist{
+        padding-top:100px;
+    }
 }
