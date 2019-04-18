@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IActualTripPassage } from '@donmahallem/trapeze-api-types';
+import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
 import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
-import { filter, map, mergeMap, retry } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, retry } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
 
@@ -18,20 +18,30 @@ enum UpdateStatus {
     templateUrl: './trip-passages.component.pug',
 })
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
-    public tripId: string;
-    public routeName: string;
     public tripData: TripPassagesLocation = undefined;
     private updateObservable: Subscription;
     private updateStatusSubject: BehaviorSubject<UpdateStatus> = new BehaviorSubject(UpdateStatus.LOADING);
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
     constructor(private route: ActivatedRoute, private apiService: ApiService) {
-        route.params.subscribe((params) => {
-            this.tripId = params.tripId;
-        });
+        this.tripData = this.route.snapshot.data.tripPassages;
     }
 
     public get updateStatus(): UpdateStatus {
         return this.updateStatusSubject.getValue();
+    }
+
+    /**
+     * returns the current tripID
+     */
+    public get tripId(): TripId {
+        return this.route.snapshot.params.tripId;
+    }
+
+    /**
+     * short hand to retrieve route name
+     */
+    public get routeName(): string {
+        return (this.tripData) ? this.tripData.routeName : '';
     }
 
     /**
@@ -51,27 +61,24 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     }
 
     private updateData(data: TripPassagesLocation): void {
-        this.routeName = data.routeName;
         this.updateStatusSubject.next(UpdateStatus.LOADED);
         if (data.tripId === this.tripId) {
             this.tripData = data;
-            // console.log(this.tripPassages, data.actual);
         }
     }
 
     public ngAfterViewInit(): void {
         const tripIdObvservable: Observable<string> = this.route.params.pipe(map((a) => a.tripId));
-        this.updateObservable = combineLatest(timer(0, 5000), tripIdObvservable)
+        this.updateObservable = combineLatest(timer(5000, 5000), tripIdObvservable)
             .pipe(
                 map((a) => a[1]),
                 filter(num => num !== null),
-                mergeMap(boundsa => {
-                    return this.apiService.getTripPassages(boundsa);
+                mergeMap((tripId: TripId): Observable<TripPassagesLocation> => {
+                    return this.apiService.getTripPassages(tripId);
                 }),
+                catchError(this.handleError.bind(this)),
                 retry(3))
             .subscribe(new Subscriber(this.updateData.bind(this), this.handleError.bind(this)));
-    }
-    public refreshData(): void {
     }
 
     public ngOnDestroy(): void {
