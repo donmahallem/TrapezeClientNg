@@ -14,6 +14,12 @@ const appRoutes: Routes = [
         loadChildren: './modules/stops/stops.module#StopsModule',
         path: 'stops',
     },
+    {
+        loadChildren: './modules/not-found/not-found.module#NotFoundModule',
+        path: 'not-found'
+    }, {
+        path: '**', redirectTo: '/not-found'
+    }
 ];
 
 @NgModule({
