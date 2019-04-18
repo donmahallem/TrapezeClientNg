@@ -1,7 +1,1 @@
-mat-nav-list.stoplist(role="list")
-    ng-container(*ngFor="let item of stops;let idx = index;")
-        mat-divider(*ngIf="hasHeader(idx)&&idx>0")
-        h3(*ngIf="hasHeader(idx)",matSubHeader) {{item.name.charAt(0)}}
-        a([routerLink]="['/stop', item.shortName]",role="listitem")
-            mat-list-item
-                span.pattern-text {{item?.name}}
+h3 Title

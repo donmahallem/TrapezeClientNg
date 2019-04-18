@@ -16,10 +16,10 @@ const appRoutes: Routes = [
     },
     {
         loadChildren: './modules/not-found/not-found.module#NotFoundModule',
-        path: 'not-found'
+        path: 'not-found',
     }, {
-        path: '**', redirectTo: '/not-found'
-    }
+        path: '**', redirectTo: '/not-found',
+    },
 ];
 
 @NgModule({

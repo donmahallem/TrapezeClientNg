@@ -1,8 +1,8 @@
 import { async, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { of, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services';
 import { StopInfoResolver } from './stop-info.resolver';
-import { Router } from '@angular/router';
 // import * as sinon from "sinon";
 
 describe('src/app/modules/stop/stop-info.resolver', () => {
@@ -26,7 +26,7 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
                         },
                     }, {
                         provide: Router,
-                        useValue: {}
+                        useValue: {},
                     }],
             });
             resolver = TestBed.get(StopInfoResolver);
