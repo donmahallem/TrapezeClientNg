@@ -28,12 +28,10 @@ const moduleImports: any[] = [
     MatInputModule,
     MainToolbarModule,
     SidebarModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+        enabled: environment.production && environment.pwa === true,
+    }),
 ];
-if (environment.pwa === true) {
-    moduleImports.push(ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: environment.production,
-    }));
-}
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [
