@@ -76,7 +76,6 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
         });
         this.mUserLocationSubscription = this.userLocationService
             .userLocationObservable.subscribe(new UserLocationSubscriber(this));
-        this.userLocationService.queryPosition();
     }
 
     public setUserLocation(coords: Coordinates): void {
