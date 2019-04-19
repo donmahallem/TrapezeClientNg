@@ -1,24 +1,25 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IActualTripPassage, TripId, ITripPassages } from '@donmahallem/trapeze-api-types';
-import { combineLatest, timer, BehaviorSubject, Observable, Subscriber, Subscription, NEVER, EMPTY, of, merge } from 'rxjs';
-import { catchError, filter, map, mergeMap, retry, retryWhen, tap, delay, throttleTime, flatMap, single, debounceTime } from 'rxjs/operators';
+import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
+import { of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
 
 enum UpdateStatus {
     LOADING = 1,
-    ERROR = 2,
-    LOADED = 3,
+    LOADED = 2,
+    ERROR = 3,
     PAUSED = 4,
-    NOT_FOUND = 5,
-    SERVER_ERROR = 6
+    NOT_FOUND = 404,
+    SERVER_ERROR = 6,
 }
 
 export interface IPassageStatus {
-    status: UpdateStatus,
-    passages: TripPassagesLocation,
+    status: UpdateStatus;
+    passages: TripPassagesLocation;
     timestamp: number;
+    failures?: number;
 }
 
 @Component({
@@ -27,23 +28,24 @@ export interface IPassageStatus {
     templateUrl: './trip-passages.component.pug',
 })
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
-    private updateObservable: Subscription;
     private status: BehaviorSubject<IPassageStatus> = new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
+    private pollSubscription: Subscription;
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
     constructor(private route: ActivatedRoute, private apiService: ApiService) {
         this.snapshotDataSubscription = this.route.data.subscribe((data) => {
             this.status.next({
-                status: UpdateStatus.LOADED,
                 passages: data['tripPassages'],
-                timestamp: Date.now()
-            })
+                status: UpdateStatus.LOADED,
+                timestamp: Date.now(),
+            });
         });
     }
 
     public get updateStatus(): UpdateStatus {
-        if (this.status.value)
+        if (this.status.value) {
             return this.status.value.status;
+        }
         return UpdateStatus.LOADING;
     }
 
@@ -75,6 +77,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !== undefined) ? this.tripData.actual : [];
     }
 
+    public get hasError(): boolean {
+        return this.updateStatus >= UpdateStatus.ERROR;
+    }
+
     private handleError(err?: any): Observable<any> {
         let status: UpdateStatus = UpdateStatus.ERROR;
         if (err.status) {
@@ -86,16 +92,17 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 status = UpdateStatus.SERVER_ERROR;
             }
         }
-        return of({
-            passages: this.tripPassages,
-            status: status,
-            timestamp: 0
-        });
+        const returnValue: IPassageStatus = Object.assign({}, this.status.value);
+        returnValue.status = status;
+        if (returnValue.failures) {
+            returnValue.failures += 1;
+        } else {
+            returnValue.failures = 1;
+        }
+        return of(returnValue);
     }
     public ngAfterViewInit(): void {
-        const tripIdObvservable: Observable<string> = this.route.params
-            .pipe(map((params: { tripId?: string }) => params.tripId ? params.tripId : ""));
-        this.status.pipe(debounceTime(5000),
+        this.pollSubscription = this.status.pipe(debounceTime(5000),
             map(() => {
                 return this.route.snapshot.params['tripId'];
             }),
@@ -105,18 +112,28 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             map((passages: TripPassagesLocation): IPassageStatus => {
                 return {
                     passages: passages,
+                    status: UpdateStatus.LOADED,
                     timestamp: Date.now(),
-                    status: UpdateStatus.LOADED
-                }
+                };
             }),
             catchError(this.handleError.bind(this)))
-            .subscribe(new Subscriber((val) => {
-                this.status.next(val);
+            .subscribe(new Subscriber((val: IPassageStatus) => {
+                if (val.passages.tripId === this.tripId) {
+                    this.status.next(val);
+                } else {
+                    // trigger so a reload can execute
+                    this.status.next(this.status.value);
+                }
             }));
     }
 
     public ngOnDestroy(): void {
-        this.updateObservable.unsubscribe();
+        if (this.snapshotDataSubscription) {
+            this.snapshotDataSubscription.unsubscribe();
+        }
+        if (this.pollSubscription) {
+            this.pollSubscription.unsubscribe();
+        }
     }
 
 }

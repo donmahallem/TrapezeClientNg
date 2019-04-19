@@ -1,9 +1,8 @@
 app-map-header-box([blur]="false",title="{{routeName}} - {{tripData?.directionText}}")
     map(appTripPassages,[location]="tripData?.location",role="none")
-div.error-box(*ngIf="updateStatus==StatusOps.ERROR",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
+div.error-box(*ngIf="hasError()",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
     span.title(i18n="@@error") Error
-    span.text(i18n="@@error") Error
-    button(mat-button,(click)="refreshData()",role="button",i18n="@@retry") Retry
+    span.text Code: {{statusCode}}
 mat-nav-list(*ngIf="tripId==tripData?.tripId",role="list")
     a(*ngFor="let passage of tripPassages",[routerLink]="['/stop', passage?.stop?.shortName]",role="listitem")
         mat-list-item
