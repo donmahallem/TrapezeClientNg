@@ -14,6 +14,26 @@ import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
+
+const moduleImports: any[] = [
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    AppRoutingModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    MainToolbarModule,
+    SidebarModule,
+];
+if (environment.pwa === true) {
+    moduleImports.push(ServiceWorkerModule.register('ngsw-worker.js', {
+        enabled: environment.production,
+    }));
+}
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [
@@ -21,23 +41,7 @@ import { UserLocationService } from './services/user-location.service';
         DrawableDirective,
         MainMapDirective,
     ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MatCardModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        AppRoutingModule,
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        MainToolbarModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {
-            enabled: (environment.production && environment.pwa === true),
-        }),
-        SidebarModule,
-    ],
+    imports: moduleImports,
     providers: [
         StopPointService,
         UserLocationService,
