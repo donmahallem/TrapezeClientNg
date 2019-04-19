@@ -29,7 +29,7 @@ const moduleImports: any[] = [
     MainToolbarModule,
     SidebarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: environment.production,
+        enabled: environment.production && environment.pwa === true,
     }),
 ];
 @NgModule({
