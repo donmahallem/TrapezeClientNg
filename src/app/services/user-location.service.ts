@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { debounceTime, filter, flatMap } from 'rxjs/operators';
 
 export enum PositionStatusCode {
     UNKNOWN = 0,
@@ -29,26 +30,47 @@ export class UserLocationService {
     public readonly userLocationObservable: Observable<PositionStatus> = this.userLocationSubject.asObservable();
 
     public constructor() {
+        this.userLocationObservable
+            .pipe(debounceTime(10000),
+                filter((val) => {
+                    return val.type !== PositionStatusCode.PERMISSION_DENIED;
+                }),
+                flatMap((val) => {
+                    return this.createPositionRequest();
+                }))
+            .subscribe((val) => {
+                this.userLocationSubject.next({
+                    position: val,
+                    type: PositionStatusCode.AQUIRED,
+                });
+            });
     }
 
     public get featureAvailable(): boolean {
         return (window.location) ? true : false;
     }
 
-    public queryPosition() {
-        const geoSuccess = (position: Position): void => {
-            this.userLocationSubject.next({
-                position: position,
-                type: PositionStatusCode.AQUIRED,
-            },
-            );
-        };
-        const geoError = (error: PositionError): void => {
-            this.userLocationSubject.next({
-                type: error.code,
+    public createPositionRequest(timeout: number = 10000, highAccuracy: boolean = false) {
+        return new Observable<any>((subscriber) => {
+
+            const geoSuccess = (position: Position): void => {
+                subscriber.next({
+                    position: position,
+                    type: PositionStatusCode.AQUIRED,
+                });
+                subscriber.complete();
+            };
+            const geoError = (error: PositionError): void => {
+                subscriber.next({
+                    type: error.code,
+                });
+                subscriber.complete();
+            };
+            navigator.geolocation.getCurrentPosition(geoSuccess, geoError, {
+                enableHighAccuracy: highAccuracy,
+                timeout: timeout,
             });
-        };
-        navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+        });
     }
 
 }
