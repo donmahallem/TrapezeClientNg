@@ -31,7 +31,7 @@ export class UserLocationService {
 
     public constructor() {
         this.userLocationObservable
-            .pipe(debounceTime(10000),
+            .pipe(debounceTime(30000),
                 filter((val) => {
                     return val.type !== PositionStatusCode.PERMISSION_DENIED;
                 }),
