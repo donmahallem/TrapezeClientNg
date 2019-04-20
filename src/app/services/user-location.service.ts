@@ -12,6 +12,7 @@ export enum PositionStatusCode {
 
 export interface IPositionStatus {
     type: PositionStatusCode;
+    position?: Position;
 }
 
 export interface IAquiredPositionStatus extends IPositionStatus {
@@ -29,6 +30,8 @@ export class UserLocationService {
     private userLocationSubject: BehaviorSubject<PositionStatus> = new BehaviorSubject({ type: PositionStatusCode.UNKNOWN });
     public readonly userLocationObservable: Observable<PositionStatus> = this.userLocationSubject.asObservable();
 
+    private locationSubject: BehaviorSubject<Position> = new BehaviorSubject(undefined);
+    public readonly locationObservable: Observable<Position> = this.locationSubject.asObservable();
     public constructor() {
         this.userLocationObservable
             .pipe(debounceTime(30000),
@@ -48,6 +51,13 @@ export class UserLocationService {
 
     public get featureAvailable(): boolean {
         return (window.location) ? true : false;
+    }
+
+    public get location(): Position {
+        if (this.userLocationSubject.value.type === PositionStatusCode.AQUIRED) {
+            return (<any>this.userLocationSubject.value).position;
+        }
+        return undefined;
     }
 
     public createPositionRequest(timeout: number = 10000, highAccuracy: boolean = false) {

@@ -35,7 +35,7 @@ export class UserLocationSubscriber extends Subscriber<PositionStatus> {
 
     public next(value: PositionStatus) {
         if (value.type === PositionStatusCode.AQUIRED) {
-            this.cmp.setUserLocation((<IAquiredPositionStatus>value).position.coords);
+            this.cmp.setUserLocation.call(this.cmp, (<IAquiredPositionStatus>value).position.coords);
         } else {
             this.cmp.setUserLocation(undefined);
         }
@@ -85,6 +85,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             this.userLocationLayer = L.featureGroup();
             this.userLocationLayer.addTo(this.map);
         }
+        console.log('COOCO', coords);
         if (coords === undefined) {
             return;
         }
