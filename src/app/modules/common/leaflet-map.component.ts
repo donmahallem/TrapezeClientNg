@@ -2,7 +2,7 @@
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import { Subject, Subscriber, Subscription } from 'rxjs';
-import { IAquiredPositionStatus, PositionStatus, PositionStatusCode, UserLocationService } from 'src/app/services/user-location.service';
+import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
 
 export enum MapMoveEventType {
@@ -28,17 +28,13 @@ export interface IMapBounds {
     bottom: number;
 }
 
-export class UserLocationSubscriber extends Subscriber<PositionStatus> {
+export class UserLocationSubscriber extends Subscriber<Position> {
     public constructor(private cmp: LeafletMapComponent) {
         super();
     }
 
-    public next(value: PositionStatus) {
-        if (value.type === PositionStatusCode.AQUIRED) {
-            this.cmp.setUserLocation.call(this.cmp, (<IAquiredPositionStatus>value).position.coords);
-        } else {
-            this.cmp.setUserLocation(undefined);
-        }
+    public next(value: Position) {
+        this.cmp.setUserLocation(value ? value.coords : undefined);
     }
 }
 
@@ -75,7 +71,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             });
         });
         this.mUserLocationSubscription = this.userLocationService
-            .userLocationObservable.subscribe(new UserLocationSubscriber(this));
+            .locationObservable.subscribe(new UserLocationSubscriber(this));
     }
 
     public setUserLocation(coords: Coordinates): void {
@@ -85,7 +81,6 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             this.userLocationLayer = L.featureGroup();
             this.userLocationLayer.addTo(this.map);
         }
-        console.log('COOCO', coords);
         if (coords === undefined) {
             return;
         }

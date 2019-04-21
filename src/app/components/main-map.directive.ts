@@ -8,7 +8,7 @@ import { createStopIcon } from '../leaflet';
 import { StopLocation } from '../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
 import { StopPointService } from '../services/stop-point.service';
-import { IAquiredPositionStatus, UserLocationService } from '../services/user-location.service';
+import { UserLocationService } from '../services/user-location.service';
 import { ApiService } from './../services';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
@@ -60,13 +60,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         super.ngAfterViewInit();
         this.addMarker();
         this.startVehicleUpdater();
-        let ourCustomControl = L.Control.extend({
-            options: {
-                position: 'bottomright',
-                // control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
-            },
-            onAdd: (map) => {
-                let container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
+        const ourCustomControl = L.Control.extend({
+            onAdd: () => {
+                const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
                 container.style.backgroundColor = 'white';
                 container.style.width = '42px';
                 container.style.height = '42px';
@@ -78,18 +74,21 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 container.style.userSelect = 'none';
                 container.style.msUserSelect = 'none';
                 container.onclick = () => {
-                    console.log('loca ', this.userLocationService.location);
                     if (this.userLocationService.location) {
-                        const pos: IAquiredPositionStatus = <any>this.userLocationService.location;
+                        const pos: Position = this.userLocationService.location;
                         this.getMap().panTo({
                             alt: 5000,
-                            lat: pos.position.coords.latitude, // / 3600000,
-                            lng: pos.position.coords.longitude,// / 3600000,
+                            lat: pos.coords.latitude, // / 3600000,
+                            lng: pos.coords.longitude, // / 3600000,
                         },
                             { animate: true });
                     }
                 };
                 return container;
+            },
+            options: {
+                position: 'bottomright',
+                // control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
             },
         });
         this.getMap().addControl(new ourCustomControl());

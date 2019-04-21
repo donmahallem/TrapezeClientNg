@@ -1,83 +1,54 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { debounceTime, filter, flatMap } from 'rxjs/operators';
-
-export enum PositionStatusCode {
-    UNKNOWN = 0,
-    PERMISSION_DENIED = 1,
-    POSITION_UNAVAILABLE = 2,
-    TIMED_OUT = 3,
-    AQUIRED = -1,
-}
-
-export interface IPositionStatus {
-    type: PositionStatusCode;
-    position?: Position;
-}
-
-export interface IAquiredPositionStatus extends IPositionStatus {
-    type: PositionStatusCode.AQUIRED;
-    position: Position;
-}
-
-export type PositionStatus = IPositionStatus | IAquiredPositionStatus;
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { catchError, debounceTime, flatMap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserLocationService {
 
-    private userLocationSubject: BehaviorSubject<PositionStatus> = new BehaviorSubject({ type: PositionStatusCode.UNKNOWN });
-    public readonly userLocationObservable: Observable<PositionStatus> = this.userLocationSubject.asObservable();
+    private locationErrorSubject: BehaviorSubject<PositionError> = new BehaviorSubject(undefined);
+    public readonly locationErrorObservable: Observable<PositionError> = this.locationErrorSubject.asObservable();
 
     private locationSubject: BehaviorSubject<Position> = new BehaviorSubject(undefined);
     public readonly locationObservable: Observable<Position> = this.locationSubject.asObservable();
     public constructor() {
-        this.userLocationObservable
+        this.locationErrorObservable
             .pipe(debounceTime(30000),
-                filter((val) => {
-                    return val.type !== PositionStatusCode.PERMISSION_DENIED;
-                }),
                 flatMap((val) => {
                     return this.createPositionRequest();
+                }),
+                catchError((err) => {
+                    this.locationErrorSubject.next(err);
+                    return EMPTY;
                 }))
             .subscribe((val) => {
-                this.userLocationSubject.next({
-                    position: val,
-                    type: PositionStatusCode.AQUIRED,
-                });
+                this.locationErrorSubject.next(undefined);
+                this.locationSubject.next(val);
             });
     }
 
     public get featureAvailable(): boolean {
-        return (window.location) ? true : false;
+        return (navigator.geolocation) ? true : false;
     }
 
     public get location(): Position {
-        if (this.userLocationSubject.value.type === PositionStatusCode.AQUIRED) {
-            return (<any>this.userLocationSubject.value).position;
-        }
-        return undefined;
+        return this.locationSubject.value;
     }
 
     public createPositionRequest(timeout: number = 10000, highAccuracy: boolean = false) {
         return new Observable<any>((subscriber) => {
 
             const geoSuccess = (position: Position): void => {
-                subscriber.next({
-                    position: position,
-                    type: PositionStatusCode.AQUIRED,
-                });
+                subscriber.next(position);
                 subscriber.complete();
             };
             const geoError = (error: PositionError): void => {
-                subscriber.next({
-                    type: error.code,
-                });
-                subscriber.complete();
+                subscriber.error(error);
             };
             navigator.geolocation.getCurrentPosition(geoSuccess, geoError, {
                 enableHighAccuracy: highAccuracy,
+                maximumAge: 5 * 60 * 1000, // Cache 5 minutes
                 timeout: timeout,
             });
         });
