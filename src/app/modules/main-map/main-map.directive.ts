@@ -141,8 +141,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         const greenIcon = L.divIcon({
             className: vehicle.heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-            iconSize: [40, 40], // size of the icon
+            iconAnchor: [20, Math.round(20 / 68 * 44)], // point of the icon which will correspond to marker's location
+            iconSize: [40, Math.round(40 / 68 * 44)], // size of the icon
             popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
