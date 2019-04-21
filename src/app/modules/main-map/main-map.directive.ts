@@ -1,15 +1,16 @@
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
-import { createStopIcon } from '../leaflet';
-import { StopLocation } from '../models/stop-location.model';
-import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
-import { StopPointService } from '../services/stop-point.service';
-import { UserLocationService } from '../services/user-location.service';
-import { ApiService } from './../services';
+import { createStopIcon } from '../../leaflet';
+import { StopLocation } from '../../models/stop-location.model';
+import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
+import { StopPointService } from '../../services/stop-point.service';
+import { UserLocationService } from '../../services/user-location.service';
+import { ApiService } from './../../services';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -30,6 +31,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private router: Router,
         private stopService: StopPointService,
         userLocationService: UserLocationService,
+        private snackBar: MatSnackBar,
         zone: NgZone) {
         super(elRef, zone, userLocationService);
     }
@@ -82,6 +84,12 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                             lng: pos.coords.longitude, // / 3600000,
                         },
                             { animate: true });
+                    } else {
+                        this.snackBar.open('No location acquired yet!',
+                            undefined,
+                            {
+                                duration: 2000,
+                            });
                     }
                 };
                 return container;
@@ -133,8 +141,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         const greenIcon = L.divIcon({
             className: vehicle.heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-            iconSize: [40, 40], // size of the icon
+            iconAnchor: [20, Math.round(20 / 68 * 44)], // point of the icon which will correspond to marker's location
+            iconSize: [40, Math.round(40 / 68 * 44)], // size of the icon
             popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
