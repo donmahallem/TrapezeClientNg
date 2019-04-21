@@ -8,7 +8,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainMapDirective } from './components';
 import { DrawableDirective } from './drawable.directive';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
