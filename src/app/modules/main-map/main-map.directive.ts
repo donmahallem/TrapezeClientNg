@@ -1,4 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
@@ -10,7 +11,6 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
-import { MatSnackBar } from '@angular/material';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -85,10 +85,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                         },
                             { animate: true });
                     } else {
-                        this.snackBar.open("No location acquired yet!",
+                        this.snackBar.open('No location acquired yet!',
                             undefined,
                             {
-                                duration: 2000
+                                duration: 2000,
                             });
                     }
                 };
