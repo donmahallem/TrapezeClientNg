@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { MatIconModule, MatInputModule } from '@angular/material';
+import { MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
+import { MainMapModule } from './modules/main-map';
 
 const moduleImports: any[] = [
     BrowserModule,
@@ -23,6 +24,7 @@ const moduleImports: any[] = [
     AppRoutingModule,
     MatIconModule,
     MatInputModule,
+    MainMapModule,
     MainToolbarModule,
     SidebarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -34,7 +36,6 @@ const moduleImports: any[] = [
     declarations: [
         AppComponent,
         DrawableDirective,
-        MainMapDirective,
     ],
     imports: moduleImports,
     providers: [

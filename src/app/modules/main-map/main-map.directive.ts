@@ -4,12 +4,13 @@ import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
-import { createStopIcon } from '../leaflet';
-import { StopLocation } from '../models/stop-location.model';
-import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../modules/common/leaflet-map.component';
-import { StopPointService } from '../services/stop-point.service';
-import { UserLocationService } from '../services/user-location.service';
-import { ApiService } from './../services';
+import { createStopIcon } from '../../leaflet';
+import { StopLocation } from '../../models/stop-location.model';
+import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
+import { StopPointService } from '../../services/stop-point.service';
+import { UserLocationService } from '../../services/user-location.service';
+import { ApiService } from './../../services';
+import { MatSnackBar } from '@angular/material';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -30,6 +31,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private router: Router,
         private stopService: StopPointService,
         userLocationService: UserLocationService,
+        private snackBar: MatSnackBar,
         zone: NgZone) {
         super(elRef, zone, userLocationService);
     }
@@ -82,6 +84,12 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                             lng: pos.coords.longitude, // / 3600000,
                         },
                             { animate: true });
+                    } else {
+                        this.snackBar.open("No location acquired yet!",
+                            undefined,
+                            {
+                                duration: 2000
+                            });
                     }
                 };
                 return container;
