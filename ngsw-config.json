@@ -4,24 +4,13 @@
     {
       "name": "api-performance",
       "urls": [
-        "/api/geo/stops"
+        "/api/geo/stops",
+        "/api/settings"
       ],
       "cacheConfig": {
         "strategy": "performance",
         "maxSize": 100,
         "maxAge": "3d"
-      }
-    },
-    {
-      "name": "api-freshness",
-      "urls": [
-        "/api/**"
-      ],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 100,
-        "maxAge": "3d",
-        "timeout": "10s"
       }
     }
   ],
