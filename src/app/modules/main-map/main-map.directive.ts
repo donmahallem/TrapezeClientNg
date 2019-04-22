@@ -5,6 +5,7 @@ import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
+import { SettingsService } from 'src/app/services/settings.service';
 import { createStopIcon } from '../../leaflet';
 import { StopLocation } from '../../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
@@ -32,8 +33,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private stopService: StopPointService,
         userLocationService: UserLocationService,
         private snackBar: MatSnackBar,
+        settings: SettingsService,
         zone: NgZone) {
-        super(elRef, zone, userLocationService);
+        super(elRef, zone, userLocationService, settings);
     }
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
@@ -100,6 +102,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
+        // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
     }
 
     public startVehicleUpdater(): void {
