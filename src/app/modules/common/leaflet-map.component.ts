@@ -2,6 +2,7 @@
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import { Subject, Subscriber, Subscription } from 'rxjs';
+import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
 
@@ -41,7 +42,8 @@ export class UserLocationSubscriber extends Subscriber<Position> {
 export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     constructor(private elRef: ElementRef,
         protected zone: NgZone,
-        protected userLocationService: UserLocationService) {
+        protected userLocationService: UserLocationService,
+        protected settings: SettingsService) {
     }
     @ViewChild('mapcontainer') mapContainer;
     private map: L.Map;
@@ -51,7 +53,8 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
-            this.map = L.map(this.elRef.nativeElement, { zoomControl: false }).setView([54.3364478, 10.1510508], 14);
+            this.map = L.map(this.elRef.nativeElement, { zoomControl: false })
+                .setView(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> '
                     + 'contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '

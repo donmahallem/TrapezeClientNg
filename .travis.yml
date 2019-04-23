@@ -7,7 +7,7 @@ env:
   - TEST_SUITE=build
   - TEST_SUITE=unit
 node_js:
-- stable
+- 11
 cache:
   directories:
   - node_modules

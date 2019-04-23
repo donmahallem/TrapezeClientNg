@@ -5,7 +5,8 @@ import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
-import { createStopIcon } from '../../leaflet';
+import { SettingsService } from 'src/app/services/settings.service';
+import { createStopIcon, createVehicleIcon } from '../../leaflet';
 import { StopLocation } from '../../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
 import { StopPointService } from '../../services/stop-point.service';
@@ -32,8 +33,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private stopService: StopPointService,
         userLocationService: UserLocationService,
         private snackBar: MatSnackBar,
+        settings: SettingsService,
         zone: NgZone) {
-        super(elRef, zone, userLocationService);
+        super(elRef, zone, userLocationService, settings);
     }
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
@@ -100,6 +102,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
+        // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
     }
 
     public startVehicleUpdater(): void {
@@ -138,18 +141,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         });
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
-        const greenIcon = L.divIcon({
-            className: vehicle.heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
-            html: '<span>' + vehicle.name.split(' ')[0] + '</span>',
-            iconAnchor: [20, Math.round(20 / 68 * 44)], // point of the icon which will correspond to marker's location
-            iconSize: [40, Math.round(40 / 68 * 44)], // size of the icon
-            popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
-            shadowAnchor: [32, 32],  // the same for the shadow
-            shadowSize: [24, 24], // size of the shadow
-        });
+        const vehicleIcon: L.DivIcon = createVehicleIcon(vehicle.heading, vehicle.name.split(' ')[0], 40);
         const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], <any>
             {
-                icon: greenIcon,
+                icon: vehicleIcon,
                 rotationAngle: vehicle.heading - 90,
                 title: vehicle.name,
                 zIndexOffset: 100,
