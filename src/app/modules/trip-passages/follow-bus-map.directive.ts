@@ -3,6 +3,7 @@ import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
+import { createVehicleIcon } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
@@ -72,20 +73,6 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
             }
         });
     }
-
-    public createVehicleMarker(): L.Icon {
-
-        const greenIcon = L.icon({
-            iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
-            iconSize: [24, 24], // size of the icon
-            iconUrl: 'assets/iconmonstr-arrow-24.png',
-            // shadowUrl: 'leaf-shadow.png',
-            popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
-            shadowAnchor: [32, 32],  // the same for the shadow
-            shadowSize: [24, 24], // size of the shadow
-        });
-        return greenIcon;
-    }
     public addMarker(): void {
         this.updateObservable = this.vehicleLocationSubject
             .subscribe((location) => {
@@ -96,11 +83,12 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                     this.stopMarkerLayer.addTo(this.getMap());
                 }
                 if (location) {
-                    const stopIcon: L.Icon = this.createVehicleMarker();
+
+                    const vehicleIcon: L.DivIcon = createVehicleIcon(location.heading, location.name.split(' ')[0], 40);
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
                             clickable: false,
-                            icon: stopIcon,
+                            icon: vehicleIcon,
                             interactive: false,
                             title: location.name,
                             zIndexOffset: 100,
