@@ -12,3 +12,15 @@ export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number =
         shadowUrl: STOP_ICON_SHADOW_URL,
     });
 };
+
+export const createVehicleIcon: (heading: number, name: string) => L.DivIcon = (heading: number, name: string) => {
+    return L.divIcon({
+        className: heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
+        html: '<span>' + name.split(' ')[0] + '</span>',
+        iconAnchor: [20, Math.round(20 / 68 * 44)], // point of the icon which will correspond to marker's location
+        iconSize: [40, Math.round(40 / 68 * 44)], // size of the icon
+        popupAnchor: [12, 12], // point from which the popup should open relative to the iconAnchor
+        shadowAnchor: [32, 32],  // the same for the shadow
+        shadowSize: [24, 24], // size of the shadow
+    });
+}
