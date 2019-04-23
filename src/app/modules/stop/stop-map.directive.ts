@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
 import { StopLocation } from 'src/app/models/stop-location.model';
+import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
@@ -12,8 +13,9 @@ import { LeafletMapComponent } from '../common/leaflet-map.component';
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
-        zone: NgZone) {
-        super(elRef, zone, userLocationService);
+        zone: NgZone,
+        settingsService: SettingsService) {
+        super(elRef, zone, userLocationService, settingsService);
     }
     @Input('location')
     public set location(loc: StopLocation) {
