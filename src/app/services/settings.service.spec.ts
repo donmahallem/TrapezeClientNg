@@ -1,4 +1,5 @@
 import { async, TestBed } from '@angular/core/testing';
+import { LatLng } from 'leaflet';
 import { of, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { SettingsService } from './settings.service';
@@ -43,23 +44,58 @@ describe('src/app/services/settings.service', () => {
         });
         describe('getInitialMapZoom()', () => {
             const testValues: {
-                inp: {
-                    lat?: number,
-                    lon?: number,
+                settings?: {
+                    INITIAL_LAT?: number,
+                    INITIAL_LON?: number,
                 },
                 out: {
                     lat: number,
                     lon: number,
                 },
             }[] = [{
-                inp: {},
                 out: {
                     lat: 0,
                     lon: 0,
                 },
+            }, {
+                out: {
+                    lat: 0,
+                    lon: 0,
+                },
+                settings: {
+
+                },
+            }, {
+                out: {
+                    lat: 0,
+                    lon: 0,
+                },
+                settings: {
+                    INITIAL_LAT: 20,
+                },
+            }, {
+                out: {
+                    lat: 0,
+                    lon: 0,
+                },
+                settings: {
+                    INITIAL_LON: 5005,
+                },
+            }, {
+                out: {
+                    lat: 49383292 / 3600000,
+                    lon: 2039290 / 3600000,
+                },
+                settings: {
+                    INITIAL_LAT: 49383292,
+                    INITIAL_LON: 2039290,
+                },
             }];
             testValues.forEach((testValue) => {
-                it('needs to be implemented');
+                it('should return LatLon(' + testValue.out.lat + ',' + testValue.out.lon + ')', () => {
+                    (<any>settingsService).mSettings = testValue.settings;
+                    expect(settingsService.getInitialMapCenter()).toEqual(new LatLng(testValue.out.lat, testValue.out.lon));
+                });
             });
         });
         describe('getInitialMapZoom()', () => {
