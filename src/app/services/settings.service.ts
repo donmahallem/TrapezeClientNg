@@ -61,7 +61,7 @@ export class SettingsService {
                     catchError((err: any): Observable<any> => {
                         return of(undefined);
                     }))
-                .subscribe(new SettingsLoadSubscriber(resolve, reject));
+                .subscribe(new SettingsLoadSubscriber(resolve));
         });
     }
 }
