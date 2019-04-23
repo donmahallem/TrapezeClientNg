@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ISettings } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { of, BehaviorSubject, Observable, Subscriber } from 'rxjs';
+import { of, Observable, Subscriber } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -26,34 +26,36 @@ export class SettingsLoadSubscriber extends Subscriber<void> {
 )
 export class SettingsService {
 
-    private settingsSubject: BehaviorSubject<ISettings> = new BehaviorSubject(undefined);
+    private mSettings: ISettings = undefined;
 
     constructor(private apiService: ApiService) {
 
     }
 
     public get settings(): ISettings {
-        return this.settingsSubject.value;
+        return this.mSettings;
     }
 
     public getInitialMapCenter(): L.LatLng {
-        if (this.settings) {
+        if (this.settings &&
+            this.settings.INITIAL_LAT &&
+            this.settings.INITIAL_LON) {
             return new L.LatLng(this.settings.INITIAL_LAT / 3600000, this.settings.INITIAL_LON / 3600000);
         }
         return new L.LatLng(0, 0);
     }
     public getInitialMapZoom(): number {
-        if (this.settings) {
+        if (this.settings && this.settings.INITIAL_ZOOM) {
             return this.settings.INITIAL_ZOOM;
         }
-        return 5000;
+        return 20;
     }
 
     public load(): Promise<void> {
         return new Promise((resolve: (arg: void) => void, reject: (err: any) => void) => {
             return this.apiService.getSettings()
                 .pipe(tap((value: ISettings): void => {
-                    this.settingsSubject.next(value);
+                    this.mSettings = value;
                 }),
                     map((value: ISettings): void => {
                         return;
