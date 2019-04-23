@@ -1,9 +1,25 @@
 import { Injectable } from '@angular/core';
 import { ISettings } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { BehaviorSubject, EMPTY, Observable, Subscriber } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { of, BehaviorSubject, Observable, Subscriber } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
+
+export class SettingsLoadSubscriber extends Subscriber<void> {
+    public constructor(private resolve: (arg: void) => void) {
+        super();
+    }
+
+    public error(err: any): void {
+        this.resolve();
+        // tslint:disable-next-line:no-console
+        console.error(err);
+    }
+
+    public complete(): void {
+        this.resolve();
+    }
+}
 
 @Injectable(
     { providedIn: 'root' },
@@ -33,16 +49,19 @@ export class SettingsService {
         return 5000;
     }
 
-    load() {
-        return new Promise((resolve, reject) => {
+    public load(): Promise<void> {
+        return new Promise((resolve: (arg: void) => void, reject: (err: any) => void) => {
             return this.apiService.getSettings()
                 .pipe(tap((value: ISettings): void => {
                     this.settingsSubject.next(value);
                 }),
+                    map((value: ISettings): void => {
+                        return;
+                    }),
                     catchError((err: any): Observable<any> => {
-                        return EMPTY;
+                        return of(undefined);
                     }))
-                .subscribe(new Subscriber(resolve.bind(this), reject.bind(this)));
+                .subscribe(new SettingsLoadSubscriber(resolve, reject));
         });
     }
 }
