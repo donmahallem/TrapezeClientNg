@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services';
+import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
@@ -23,8 +24,9 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
         zone: NgZone,
-        private apiService: ApiService) {
-        super(elRef, zone, userLocationService);
+        private apiService: ApiService,
+        settingsService: SettingsService) {
+        super(elRef, zone, userLocationService, settingsService);
     }
     @Input('location')
     public set location(id: IVehicleLocation) {

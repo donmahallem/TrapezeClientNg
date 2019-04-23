@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import { ISettings, IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { TripPassagesLocation } from '../models';
@@ -48,5 +48,9 @@ export class ApiService {
 
     public getStations(): Observable<StationsResponse> {
         return this.http.get<StationsResponse>(this.baseUrl() + 'api/geo/stops');
+    }
+
+    public getSettings(): Observable<ISettings> {
+        return this.http.get<ISettings>(this.baseUrl() + 'api/settings');
     }
 }

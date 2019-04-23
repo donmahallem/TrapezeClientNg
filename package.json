@@ -1,6 +1,6 @@
 {
   "name": "@donmahallem/trapeze-client-ng",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -57,7 +57,7 @@
     "leaflet-rotatedmarker": "^0.2.0",
     "material-design-icons": "^3.0.1",
     "ng-cli-pug-loader": "^0.1.7",
-    "rxjs": "^6.4.0",
+    "rxjs": "^6.5.1",
     "zone.js": "^0.9.0"
   },
   "devDependencies": {
@@ -67,7 +67,7 @@
     "@angular/language-service": "7.2.13",
     "@types/jasmine": "^3.3.12",
     "@types/jasminewd2": "^2.0.6",
-    "@types/node": "^11.13.5",
+    "@types/node": "^11.13.7",
     "apply-loader": "^2.0.0",
     "codelyzer": "^5.0.0",
     "jasmine-core": "^3.4.0",
