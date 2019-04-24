@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { of, throwError, Observable } from 'rxjs';
+import { from, throwError, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services';
 import { StopInfoResolver } from './stop-info.resolver';
 // import * as sinon from "sinon";
@@ -45,7 +45,7 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
             describe('should succeed', () => {
                 beforeEach(() => {
                     getSpy.and.callFake((...args: any[]): Observable<any> => {
-                        return of(args);
+                        return from([args]);
                     });
                 });
                 it('should construct the request correctly', (done) => {

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { async, TestBed } from '@angular/core/testing';
-import { of, Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 // import * as sinon from "sinon";
 describe('src/app/services/api.service', () => {
@@ -14,7 +14,7 @@ describe('src/app/services/api.service', () => {
         });
         beforeEach(async(() => {
             getSpy.and.callFake((...args: any[]): Observable<any> => {
-                return of(args);
+                return from([args]);
             });
             TestBed.configureTestingModule({
                 providers: [ApiService,
