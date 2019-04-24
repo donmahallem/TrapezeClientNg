@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
 import { of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
@@ -11,8 +11,9 @@ enum UpdateStatus {
     LOADED = 2,
     ERROR = 3,
     PAUSED = 4,
+    UNKNOWN = 5,
     NOT_FOUND = 404,
-    SERVER_ERROR = 6,
+    SERVER_ERROR = 500,
 }
 
 export interface IPassageStatus {
@@ -28,11 +29,14 @@ export interface IPassageStatus {
     templateUrl: './trip-passages.component.pug',
 })
 export class TripPassagesComponent implements AfterViewInit, OnDestroy {
+    public readonly DEBOUNCE_TIME: number = 5000;
     private status: BehaviorSubject<IPassageStatus> = new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
-    constructor(private route: ActivatedRoute, private apiService: ApiService) {
+    constructor(private route: ActivatedRoute,
+        private apiService: ApiService,
+        private router: Router) {
         this.snapshotDataSubscription = this.route.data.subscribe((data) => {
             this.status.next({
                 passages: data['tripPassages'],
@@ -54,6 +58,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             return this.status.value.passages;
         }
         return undefined;
+    }
+
+    public get statusCode(): number {
+        if (this.status.value) {
+            return this.status.value.status;
+        }
+        return UpdateStatus.UNKNOWN;
     }
 
     /**
@@ -88,6 +99,11 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             const statusCode: number = err.status;
             if (statusCode === 404) {
                 status = UpdateStatus.NOT_FOUND;
+                this.router.navigate(['not-found'], {
+                    queryParams: {
+                        type: 'passages',
+                    },
+                });
             } else if (statusCode >= 500 && statusCode < 600) {
                 status = UpdateStatus.SERVER_ERROR;
             }
@@ -101,8 +117,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         }
         return of(returnValue);
     }
+
     public ngAfterViewInit(): void {
-        this.pollSubscription = this.status.pipe(debounceTime(5000),
+        this.pollSubscription = this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
             map(() => {
                 return this.route.snapshot.params['tripId'];
             }),
