@@ -8,6 +8,7 @@ import {
     MatToolbarModule,
 } from '@angular/material';
 import { MapHeaderBoxModule } from '../common';
+import { DepartureListItemComponent } from './departure-list-item.component';
 import { DepartureListComponent } from './departure-list.component';
 import { RouteListComponent } from './route-list.component';
 import { StopInfoComponent } from './stop-info.component';
@@ -20,6 +21,7 @@ import { StopRoutingModule } from './stop-routing.module';
         DepartureListComponent,
         RouteListComponent,
         StopLocationMapDirective,
+        DepartureListItemComponent,
     ],
     imports: [
         CommonModule,
