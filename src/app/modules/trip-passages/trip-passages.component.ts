@@ -112,7 +112,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             map((passages: TripPassagesLocation): IPassageStatus => {
                 return {
                     passages: passages,
-                    status: UpdateStatus.LOADED,
+                    status: UpdateStatus.ERROR,
                     timestamp: Date.now(),
                 };
             }),

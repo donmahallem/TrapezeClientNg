@@ -54,9 +54,13 @@ mat-icon{
     opacity:0.9;
     display:none;
 }
+
+
 :host-context(.no-location){
     ::ng-deep map {
-        filter: blur(5px);
+        filter: blur(2px);
+        filter: grayscale(100%);
+        transition: all 1s ease-out;
     }
     mat-icon{
         display:block;
