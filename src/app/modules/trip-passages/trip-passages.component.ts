@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
+import { IActualTripPassage, TripId, ITripPassage } from '@donmahallem/trapeze-api-types';
 import { of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
