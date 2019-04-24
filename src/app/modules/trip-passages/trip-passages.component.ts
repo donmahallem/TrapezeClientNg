@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IActualTripPassage, TripId, ITripPassage } from '@donmahallem/trapeze-api-types';
-import { of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
+import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
@@ -122,7 +122,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         } else {
             returnValue.failures = 1;
         }
-        return of(returnValue);
+        return from([returnValue]);
     }
 
     public ngAfterViewInit(): void {

@@ -1,12 +1,10 @@
-import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
+import { Directive, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, timer, BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-@Component({
-    selector: 'span[app-countdown-timer]',
-    styleUrls: ['./countdown-timer.component.scss'],
-    templateUrl: './countdown-timer.component.pug',
+@Directive({
+    selector: 'span[appCountdownTimer]',
 })
-export class CountdownTimerComponent implements OnInit, OnDestroy {
+export class CountdownTimerDirective implements OnInit, OnDestroy {
 
     private timestamp = '';
     private updateSubscription: Subscription;
@@ -26,7 +24,7 @@ export class CountdownTimerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.updateSubscription = combineLatest(timer(0, 200), this.timestampSubject)
+        this.updateSubscription = combineLatest([timer(0, 200), this.timestampSubject])
             .pipe(map((value: [number, number]): string => {
                 const diff: number = Math.max(value[1] - Date.now(), 0);
                 if (diff <= 0) {

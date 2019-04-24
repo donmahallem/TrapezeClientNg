@@ -1,2 +1,2 @@
 export * from './countdown-timer.module';
-export * from './countdown-timer.component';
+export * from './countdown-timer.directive';

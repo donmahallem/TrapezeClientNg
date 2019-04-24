@@ -3,16 +3,16 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule,
 } from '@angular/material';
-import { CountdownTimerComponent } from './countdown-timer.component';
+import { CountdownTimerDirective } from './countdown-timer.directive';
 
 @NgModule({
     declarations: [
-        CountdownTimerComponent,
+        CountdownTimerDirective,
     ],
     exports: [
         CommonModule,
         MatIconModule,
-        CountdownTimerComponent,
+        CountdownTimerDirective,
     ],
     imports: [
         CommonModule,
