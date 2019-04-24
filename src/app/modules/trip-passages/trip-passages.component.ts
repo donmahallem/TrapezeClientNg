@@ -60,6 +60,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return undefined;
     }
 
+    public get lastTimestamp(): number {
+        if (this.status.value) {
+            return this.status.value.timestamp;
+        }
+        return 0;
+    }
+
     public get statusCode(): number {
         if (this.status.value) {
             return this.status.value.status;
@@ -129,7 +136,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
             map((passages: TripPassagesLocation): IPassageStatus => {
                 return {
                     passages: passages,
-                    status: UpdateStatus.ERROR,
+                    status: UpdateStatus.LOADED,
                     timestamp: Date.now(),
                 };
             }),
