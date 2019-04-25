@@ -20,7 +20,10 @@ export class StopsInfoComponent {
     public hasHeader(idx: number): boolean {
         return idx === 0 || this.stops[idx].name.charAt(0) !== this.stops[idx - 1].name.charAt(0);
     }
-
+    /**
+     * The stops to be displayed
+     * @returns a list of stops to be used
+     */
     public get stops(): IStopLocation[] {
         return this.mStops;
     }
