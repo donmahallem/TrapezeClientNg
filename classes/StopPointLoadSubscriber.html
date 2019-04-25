@@ -296,7 +296,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>next(stops: <a href="../interfaces/StopLocation.html">StopLocation[]</a>)</code>
+                    <code>next(stops: IStopLocation[])</code>
                 </td>
             </tr>
 
@@ -326,7 +326,7 @@
                                 <tr>
                                     <td>stops</td>
                                     <td>
-                                                <code><a href="../interfaces/StopLocation.html" target="_self" >StopLocation[]</a></code>
+                                            <code>IStopLocation[]</code>
                                     </td>
 
                                     <td>
@@ -362,18 +362,18 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { IStopLocation } from &#x27;@donmahallem/trapeze-api-types&#x27;;
 import { BehaviorSubject, Observable, Subscriber, Subscription } from &#x27;rxjs&#x27;;
 import { map } from &#x27;rxjs/operators&#x27;;
-import { StopLocation } from &#x27;../models/stop-location.model&#x27;;
 import { ApiService } from &#x27;./api.service&#x27;;
 
-export class StopPointLoadSubscriber extends Subscriber&lt;StopLocation[]&gt; {
+export class StopPointLoadSubscriber extends Subscriber&lt;IStopLocation[]&gt; {
 
     public constructor(private service: StopPointService) {
         super();
     }
 
-    public next(stops: StopLocation[]): void {
+    public next(stops: IStopLocation[]): void {
         this.service.stopLocations &#x3D; stops;
     }
 
@@ -390,7 +390,7 @@ export class StopPointLoadSubscriber extends Subscriber&lt;StopLocation[]&gt; {
 })
 export class StopPointService {
 
-    private stopLocationsSubject: BehaviorSubject&lt;StopLocation[]&gt; &#x3D; new BehaviorSubject([]);
+    private stopLocationsSubject: BehaviorSubject&lt;IStopLocation[]&gt; &#x3D; new BehaviorSubject([]);
     private stopLoadSubscription: Subscription;
     constructor(private api: ApiService) {
     }
@@ -402,14 +402,14 @@ export class StopPointService {
             }))
             .subscribe(new StopPointLoadSubscriber(this));
     }
-    public get stopLocations(): StopLocation[] {
+    public get stopLocations(): IStopLocation[] {
         return this.stopLocationsSubject.value;
     }
-    public set stopLocations(locations: StopLocation[]) {
+    public set stopLocations(locations: IStopLocation[]) {
         this.stopLocationsSubject.next(locations ? locations : []);
     }
 
-    public getStopLocation(stopShortName: string): StopLocation {
+    public getStopLocation(stopShortName: string): IStopLocation {
         for (const stop of this.stopLocations) {
             if (stop.shortName &#x3D;&#x3D;&#x3D; stopShortName) {
                 return stop;
@@ -422,7 +422,7 @@ export class StopPointService {
         return this.stopLoadSubscription &amp;&amp; !this.stopLoadSubscription.closed;
     }
 
-    public get stopLocationsObservable(): Observable&lt;StopLocation[]&gt; {
+    public get stopLocationsObservable(): Observable&lt;IStopLocation[]&gt; {
         if (this.stopLocations.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !this.isLoading) {
             this.loadStops();
         }

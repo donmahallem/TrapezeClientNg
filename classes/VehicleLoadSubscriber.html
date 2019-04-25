@@ -114,7 +114,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:16</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:15</a></div>
                             </td>
                         </tr>
 
@@ -175,15 +175,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>next(res: <a href="../interfaces/VehicleLocation.html">IVehicleLocationList</a>)</code>
+                    <code>next(res: IVehicleLocationList)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="21"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:21</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:20</a></div>
                 </td>
             </tr>
 
@@ -205,7 +205,7 @@
                                 <tr>
                                     <td>res</td>
                                     <td>
-                                                <code><a href="../interfaces/VehicleLocation.html" target="_self" >IVehicleLocationList</a></code>
+                                            <code>IVehicleLocationList</code>
                                     </td>
 
                                     <td>
@@ -243,13 +243,12 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from &#x27;@angular/core&#x27;;
 import { MatSnackBar } from &#x27;@angular/material&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
-import { IVehicleLocation, IVehicleLocationList } from &#x27;@donmahallem/trapeze-api-types&#x27;;
+import { IStopLocation, IVehicleLocation, IVehicleLocationList } from &#x27;@donmahallem/trapeze-api-types&#x27;;
 import * as L from &#x27;leaflet&#x27;;
 import { combineLatest, from, timer, Observable, Subscriber, Subscription } from &#x27;rxjs&#x27;;
 import { catchError, filter, flatMap, map, startWith } from &#x27;rxjs/operators&#x27;;
 import { SettingsService } from &#x27;src/app/services/settings.service&#x27;;
 import { createStopIcon, createVehicleIcon } from &#x27;../../leaflet&#x27;;
-import { StopLocation } from &#x27;../../models/stop-location.model&#x27;;
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from &#x27;../../modules/common/leaflet-map.component&#x27;;
 import { StopPointService } from &#x27;../../services/stop-point.service&#x27;;
 import { UserLocationService } from &#x27;../../services/user-location.service&#x27;;
@@ -396,7 +395,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addMarker() {
         this.stopService.stopLocationsObservable
-            .subscribe((stops: StopLocation[]) &#x3D;&gt; {
+            .subscribe((stops: IStopLocation[]) &#x3D;&gt; {
                 const stopList: L.Marker[] &#x3D; [];
                 for (const stop of stops) {
                     if (stop &#x3D;&#x3D;&#x3D; null) {
@@ -424,7 +423,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             });
     }
 
-    public stopMarkerOnClick(event: { sourceTarget: { data: StopLocation } }) {
+    public stopMarkerOnClick(event: { sourceTarget: { data: IStopLocation } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() &#x3D;&gt; {
             this.router.navigate([&#x27;stop&#x27;, event.sourceTarget.data.shortName]);

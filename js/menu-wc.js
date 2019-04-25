@@ -114,13 +114,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/CountdownTimerModule.html" data-type="entity-link">CountdownTimerModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-CountdownTimerModule-eafa0e8a76ded59a1d0ea146f2649d75"' : 'data-target="#xs-directives-links-module-CountdownTimerModule-eafa0e8a76ded59a1d0ea146f2649d75"' }>
+                                        'data-target="#directives-links-module-CountdownTimerModule-dfaacf534f1573a8b4eb33ad2d632a5c"' : 'data-target="#xs-directives-links-module-CountdownTimerModule-dfaacf534f1573a8b4eb33ad2d632a5c"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-CountdownTimerModule-eafa0e8a76ded59a1d0ea146f2649d75"' :
-                                        'id="xs-directives-links-module-CountdownTimerModule-eafa0e8a76ded59a1d0ea146f2649d75"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-CountdownTimerModule-dfaacf534f1573a8b4eb33ad2d632a5c"' :
+                                        'id="xs-directives-links-module-CountdownTimerModule-dfaacf534f1573a8b4eb33ad2d632a5c"' }>
                                         <li class="link">
                                             <a href="directives/CountdownTimerDirective.html"
                                                 data-type="entity-link" data-context="sub-entity" data-context-id="modules">CountdownTimerDirective</a>
@@ -433,15 +433,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/IPassageStatus.html" data-type="entity-link">IPassageStatus</a>
-                            </li>
-                            <li class="link">
-                                <a href="interfaces/StationsResponse.html" data-type="entity-link">StationsResponse</a>
-                            </li>
-                            <li class="link">
-                                <a href="interfaces/StopLocation.html" data-type="entity-link">StopLocation</a>
-                            </li>
-                            <li class="link">
-                                <a href="interfaces/VehicleLocation.html" data-type="entity-link">VehicleLocation</a>
                             </li>
                         </ul>
                     </li>

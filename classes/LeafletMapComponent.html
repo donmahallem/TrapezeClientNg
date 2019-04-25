@@ -437,8 +437,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="108"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:108</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:112</a></div>
                 </td>
             </tr>
 
@@ -509,8 +509,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="104"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:104</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="108"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:108</a></div>
                 </td>
             </tr>
 
@@ -589,8 +589,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="119"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:119</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:123</a></div>
                 </td>
             </tr>
 
@@ -630,14 +630,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="80"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:80</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:84</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Sets the user location. To clear the location set it to undefined</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -647,6 +649,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -661,6 +664,10 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>The coords or undefined</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -704,7 +711,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="115" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:115</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="119" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:119</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -804,6 +811,10 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             .locationObservable.subscribe(new UserLocationSubscriber(this));
     }
 
+    /**
+     * Sets the user location. To clear the location set it to undefined
+     * @param coords The coords or undefined
+     */
     public setUserLocation(coords: Coordinates): void {
         if (this.userLocationLayer) {
             this.userLocationLayer.clearLayers();

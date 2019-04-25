@@ -223,7 +223,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/StationsResponse.html" target="_self" >Observable&lt;StationsResponse&gt;</a></code>
+                        <b>Returns : </b>    <code>Observable&lt;IStopLocations&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -240,15 +240,15 @@
         <div class="tab-pane fade  tab-source-code" id="c-source">
             <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from &#x27;@angular/router&#x27;;
+import { IStopLocations } from &#x27;@donmahallem/trapeze-api-types&#x27;;
 import { Observable } from &#x27;rxjs&#x27;;
-import { StationsResponse } from &#x27;src/app/models/stations-response.model&#x27;;
 import { ApiService } from &#x27;../../services&#x27;;
 
 @Injectable()
-export class StopsResolver implements Resolve&lt;StationsResponse&gt; {
+export class StopsResolver implements Resolve&lt;IStopLocations&gt; {
 
     public constructor(private api: ApiService) { }
-    public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable&lt;StationsResponse&gt; {
+    public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable&lt;IStopLocations&gt; {
         return this.api
             .getStations();
     }
