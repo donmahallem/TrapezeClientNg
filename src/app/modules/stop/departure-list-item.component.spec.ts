@@ -70,8 +70,8 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           let calculateDelaySpy: jasmine.Spy<InferableFunction>;
           let convertTimeSpy: jasmine.Spy<InferableFunction>;
           beforeEach(() => {
-            calculateDelaySpy = spyOn(cmp, "calculateDelay");
-            convertTimeSpy = spyOn(cmp, "convertTime");
+            calculateDelaySpy = spyOn(cmp, 'calculateDelay');
+            convertTimeSpy = spyOn(cmp, 'convertTime');
             calculateDelaySpy.and.callFake((arg: any) => {
               return { delay: arg };
             });
@@ -94,7 +94,27 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           afterEach(() => {
             calculateDelaySpy.calls.reset();
             convertTimeSpy.calls.reset();
-          })
+          });
+        });
+      });
+      describe('time', () => {
+        describe('getter', () => {
+          testPassages.forEach((value) => {
+            it('should convert the object to "' + value + '\'', () => {
+              (<any>cmp).mTime = value;
+              expect(cmp.time).toEqual(value);
+            });
+          });
+        });
+      });
+      describe('delay', () => {
+        describe('getter', () => {
+          testPassages.forEach((value) => {
+            it('should convert the object to "' + value + '\'', () => {
+              (<any>cmp).mDelay = value;
+              expect(cmp.delay).toEqual(value);
+            });
+          });
         });
       });
       describe('convertTime(departure)', () => {
