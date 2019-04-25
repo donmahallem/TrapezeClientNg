@@ -1,0 +1,894 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@donmahallem/trapeze-client-ng documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@donmahallem/trapeze-client-ng documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>MainToolbarComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/modules/main-toolbar/main-toolbar.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-main-toolbar</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./main-toolbar.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./main-toolbar.component.pug</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#closeable">closeable</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#mSearchOpen">mSearchOpen</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#searchBoxComponent">searchBoxComponent</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#onFocusSearch">onFocusSearch</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#toggleSearch">toggleSearch</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#toggleSidebar">toggleSidebar</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#searchOpen">searchOpen</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(sidebarService: <a href="../injectables/SidebarService.html">SidebarService</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:27</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>sidebarService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SidebarService.html" target="_self" >SidebarService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="46"
+                            class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:46</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onFocusSearch"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            onFocusSearch
+                        </b>
+                        <a href="#onFocusSearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onFocusSearch(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleSearch"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            toggleSearch
+                        </b>
+                        <a href="#toggleSearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>toggleSearch()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="56"
+                            class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:56</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleSidebar"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            toggleSidebar
+                        </b>
+                        <a href="#toggleSidebar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>toggleSidebar()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="49"
+                            class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:49</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="closeable"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            closeable</b>
+                            <a href="#closeable"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:27</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mSearchOpen"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mSearchOpen</b>
+                            <a href="#mSearchOpen"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="searchBoxComponent"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            searchBoxComponent</b>
+                            <a href="#searchBoxComponent"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/ToolbarSearchBoxComponent.html" target="_self" >ToolbarSearchBoxComponent</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(ToolbarSearchBoxComponent)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="searchOpen"></a>
+                        <span class="name"><b>searchOpen</b><a href="#searchOpen"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>searchOpen()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:34</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>searchOpen(open: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:38</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                        <td>Type</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>open</td>
+                                                    
+                                                            <td>
+                                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                                            </td>
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { NavigationEnd, NavigationStart, Router, RouterEvent } from &#x27;@angular/router&#x27;;
+import { Subscriber } from &#x27;rxjs&#x27;;
+import { SidebarService } from &#x27;src/app/services/sidebar.service&#x27;;
+import { ToolbarSearchBoxComponent } from &#x27;./search-box.component&#x27;;
+
+export class NavigationSubscriber extends Subscriber&lt;RouterEvent&gt; {
+
+    public constructor(private toolbar: MainToolbarComponent) {
+        super();
+    }
+    public next(event: RouterEvent): void {
+        if (event instanceof NavigationEnd &amp;&amp; event.url.length &gt; 1) {
+            this.toolbar.closeable &#x3D; true;
+        } else if (event instanceof NavigationStart) {
+            this.toolbar.closeable &#x3D; false;
+        }
+    }
+}
+
+@Component({
+    selector: &#x27;app-main-toolbar&#x27;,
+    styleUrls: [&#x27;./main-toolbar.component.scss&#x27;],
+    templateUrl: &#x27;./main-toolbar.component.pug&#x27;,
+})
+export class MainToolbarComponent implements OnInit {
+    public closeable &#x3D; false;
+
+    constructor(private sidebarService: SidebarService,
+        private router: Router) {
+        this.router.events.subscribe(new NavigationSubscriber(this));
+    }
+
+    public get searchOpen(): boolean {
+        return this.mSearchOpen;
+    }
+
+    public set searchOpen(open: boolean) {
+        this.mSearchOpen &#x3D; open;
+    }
+    @ViewChild(ToolbarSearchBoxComponent)
+    private searchBoxComponent: ToolbarSearchBoxComponent;
+
+    private mSearchOpen &#x3D; false;
+
+    ngOnInit() {
+    }
+
+    public toggleSidebar(): void {
+        this.sidebarService.toggleSidebar();
+    }
+
+    public onFocusSearch(event) {
+        this.searchOpen &#x3D; event;
+    }
+    public toggleSearch(): void {
+        if (this.searchBoxComponent) {
+            this.searchBoxComponent.doFocusSearch();
+        }
+    }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">mat-toolbar.main-toolbar(color&#x3D;&quot;primary&quot;,[ngClass]&#x3D;&quot;{&#x27;search-open&#x27;:(searchOpen&#x3D;&#x3D;&#x3D;true),&#x27;navigation-closeable&#x27;:(closeable&#x3D;&#x3D;&#x3D;true)}&quot;)
+    button.sidebar-toggle(mat-icon-button,(click)&#x3D;&quot;toggleSidebar()&quot;,i18n-aria-label&#x3D;&quot;Toggle Sidebar@@toggleSidebar&quot;,aria-label&#x3D;&quot;Toggle Sidebar&quot;,role&#x3D;&quot;button&quot;,aria-pressed&#x3D;&quot;false&quot;)
+        mat-icon menu
+    app-toolbar-search((focusSearch)&#x3D;&quot;onFocusSearch($event)&quot;)
+    button#btnSearch(mat-icon-button,(click)&#x3D;&quot;toggleSearch()&quot;)
+        mat-icon search
+    mat-divider.close-divider([vertical]&#x3D;&quot;true&quot;)
+    button.close(mat-icon-button,[routerLink]&#x3D;&quot;[&#x27;/&#x27;]&quot;)
+        mat-icon
+app-route-loading-indicator</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./main-toolbar.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.search-open{
+    app-toolbar-search{
+        opacity: 1;
+    }
+}
+button.sidebar-toggle{
+    display:block;
+}
+
+@media (max-width: 439px){
+    .navigation-closeable{
+        button.close{
+            display:none;
+        }
+        mat-divider.close-divider{
+            display:none;
+        }
+    }
+}
+button.close{
+    display:none;
+    ::after{
+        content: &quot;close&quot;
+    }
+}
+mat-divider.close-divider{
+    display:none;
+}
+@media (max-width:439px){
+    .navigation-closeable{
+        button.close{
+            display:block;
+            order: 1;
+            ::after{
+                content: &quot;arrow_back&quot;
+            }
+        }
+        mat-divider.close-divider{
+            display:none;
+        }
+        app-toolbar-search{
+            order:2;
+        }
+        button#btnSearch{
+            order:3;
+        }
+        button.sidebar-toggle{
+            display:none;
+        }
+    }
+}
+@media (min-width:440px){
+    .navigation-closeable{
+        button.close{
+            display:block;
+            order: 4;
+        }
+        mat-divider.close-divider{
+            display:block;
+            order: 3;
+        }
+    }
+}
+
+app-toolbar-search{
+    flex:1 1 auto;
+    opacity:0.4;
+}
+
+mat-toolbar mat-divider{
+    height:40px;
+    border-right-color: rgba(255,255,255,0.1);
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div>mat-toolbar.main-toolbar(color="primary",[ngClass]="{\'search-open\':(searchOpen===true),\'navigation-closeable\':(closeable===true)}")    button.sidebar-toggle(mat-icon-button,(click)="toggleSidebar()",i18n-aria-label="Toggle Sidebar@@toggleSidebar",aria-label="Toggle Sidebar",role="button",aria-pressed="false")        mat-icon menu    app-toolbar-search((focusSearch)="onFocusSearch($event)")    button#btnSearch(mat-icon-button,(click)="toggleSearch()")        mat-icon search    mat-divider.close-divider([vertical]="true")    button.close(mat-icon-button,[routerLink]="[\'/\']")        mat-iconapp-route-loading-indicator</div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DepartureListComponent', 'selector': 'app-departure-list'},{'name': 'DepartureListItemComponent', 'selector': 'app-departure-list-item'},{'name': 'MainToolbarComponent', 'selector': 'app-main-toolbar'},{'name': 'MapHeaderBoxComponent', 'selector': 'app-map-header-box'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'RouteListComponent', 'selector': 'app-route-list'},{'name': 'RouteLoadingIndicatorComponent', 'selector': 'app-route-loading-indicator'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'StopInfoComponent', 'selector': 'app-stop-info'},{'name': 'StopsInfoComponent', 'selector': 'app-stops-info'},{'name': 'ToolbarSearchBoxComponent', 'selector': 'app-toolbar-search'},{'name': 'TripPassagesComponent', 'selector': 'app-trip-passages'}];
+    var DIRECTIVES = [{'name': 'CountdownTimerDirective', 'selector': 'span[appCountdownTimer]'},{'name': 'DrawableDirective', 'selector': '[appDrawable]'},{'name': 'FollowBusMapDirective', 'selector': 'map[appTripPassages]'},{'name': 'MainMapDirective', 'selector': 'map[appMainMap]'},{'name': 'StopLocationMapDirective', 'selector': 'map[appStopLocation]'}];
+    var ACTUAL_COMPONENT = {'name': 'MainToolbarComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'MainToolbarComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
