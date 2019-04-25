@@ -22,7 +22,9 @@ export interface IPassageStatus {
     timestamp: number;
     failures?: number;
 }
-
+/**
+ * Component displaying the TripPassages for a Trip
+ */
 @Component({
     selector: 'app-trip-passages',
     styleUrls: ['./trip-passages.component.scss'],
@@ -46,13 +48,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    public get updateStatus(): UpdateStatus {
-        if (this.status.value) {
-            return this.status.value.status;
-        }
-        return UpdateStatus.LOADING;
-    }
-
+    /**
+     * Returns the TripPassages
+     * @returns undefined or {@link TripPassagesLocation}
+     */
     public get tripData(): TripPassagesLocation {
         if (this.status.value) {
             return this.status.value.passages;
@@ -60,6 +59,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return undefined;
     }
 
+    /**
+     * Returns the last timestamp when data was tried to be retrieved
+     * @returns number or 0 if no timestamp is set
+     */
     public get lastTimestamp(): number {
         if (this.status.value) {
             return this.status.value.timestamp;
@@ -67,11 +70,15 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return 0;
     }
 
-    public get statusCode(): number {
+    /**
+     * Returns the current set update status or {@link UpdateStatus.LOADING}
+     * @returns the {@link UpdateStatus}
+     */
+    public get statusCode(): UpdateStatus {
         if (this.status.value) {
             return this.status.value.status;
         }
-        return UpdateStatus.UNKNOWN;
+        return UpdateStatus.LOADING;
     }
 
     /**
@@ -95,8 +102,12 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !== undefined) ? this.tripData.actual : [];
     }
 
-    public get hasError(): boolean {
-        return this.updateStatus >= UpdateStatus.ERROR;
+    /**
+     * Returns if an error has happened during the last update
+     * @returns true if an error occured
+     */
+    public hasError(): boolean {
+        return this.statusCode >= UpdateStatus.ERROR;
     }
 
     private handleError(err?: any): Observable<any> {
@@ -125,6 +136,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return from([returnValue]);
     }
 
+    /**
+     * Initializes the update observable
+     */
     public ngAfterViewInit(): void {
         this.pollSubscription = this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
             map(() => {
@@ -150,7 +164,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 }
             }));
     }
-
+    /**
+     * destroys created update observables
+     */
     public ngOnDestroy(): void {
         if (this.snapshotDataSubscription) {
             this.snapshotDataSubscription.unsubscribe();
