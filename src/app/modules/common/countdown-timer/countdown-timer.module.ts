@@ -5,6 +5,9 @@ import {
 } from '@angular/material';
 import { CountdownTimerDirective } from './countdown-timer.directive';
 
+/**
+ * Module containing the CountdownDirective
+ */
 @NgModule({
     declarations: [
         CountdownTimerDirective,
