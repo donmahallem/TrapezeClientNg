@@ -13,7 +13,18 @@ import { ApiService } from '../../services';
 @Injectable()
 export class StopInfoResolver implements Resolve<IStopPassage> {
 
+    /**
+     * Constructor
+     * @param api the {@ApiService}
+     * @param router the {@Router}
+     */
     public constructor(private api: ApiService, private router: Router) { }
+
+    /**
+     * Resolves the stop information via the stopId param inside the route
+     * @param route The RouteSnapshot
+     * @param state The RouterState
+     */
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IStopPassage> {
         return this.api
             .getStopPassages(route.params['stopId'])
