@@ -1,13 +1,18 @@
 pull_request_rules:
-  - name: add tags
+  - name: merge documentation into dev
     conditions:
       - status-success=continuous-integration/travis-ci/pr
       - status-success=coverage/coveralls
       - base=dev
       - head=documentation
     actions:
+      merge:
+        method: rebase
+  - name: add tags to documenation
+    conditions:
+      - base=dev
+      - head=documentation
+    actions:
       label:
         add:
         - enhancement
-      merge:
-        method: rebase
