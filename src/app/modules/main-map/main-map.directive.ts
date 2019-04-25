@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { combineLatest, of, timer, Observable, Subscriber, Subscription } from 'rxjs';
+import { combineLatest, from, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { createStopIcon, createVehicleIcon } from '../../leaflet';
@@ -111,7 +111,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             startWith(<MapMoveEvent>{
                 type: MapMoveEventType.END,
             }));
-        this.vehicleUpdateSubscription = combineLatest(timer(0, 5000), primedMoveObservable)
+        this.vehicleUpdateSubscription = combineLatest([timer(0, 5000), primedMoveObservable])
             .pipe(
                 map((value: [number, MapMoveEvent]): MapMoveEvent => {
                     return value[1];
@@ -129,7 +129,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     return this.apiService.getVehicleLocations(bounds);
                 }),
                 catchError((err: Error) => {
-                    return of({});
+                    return from([{}]);
                 }))
             .subscribe(new VehicleLoadSubscriber(this));
     }

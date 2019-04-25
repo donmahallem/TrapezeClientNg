@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { LatLng } from 'leaflet';
-import { of, throwError } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { SettingsService } from './settings.service';
 // import * as sinon from "sinon";
@@ -140,7 +140,7 @@ describe('src/app/services/settings.service', () => {
                     test1: 2,
                 };
                 beforeEach(() => {
-                    getSettingsSpy.and.returnValue(of(testValue));
+                    getSettingsSpy.and.returnValue(from([testValue]));
                 });
                 it('should resolve', (done) => {
                     settingsService.load()

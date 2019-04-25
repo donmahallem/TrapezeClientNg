@@ -1,6 +1,8 @@
+import { AppVersion } from './app-version';
 
 export interface IEnvironmentBase {
-    production: boolean;
-    apiEndpoint: string;
-    pwa?: boolean;
+    readonly apiEndpoint: string;
+    readonly production: boolean;
+    readonly pwa?: boolean;
+    readonly version: AppVersion;
 }

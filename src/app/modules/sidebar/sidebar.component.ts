@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, VERSION } from '@angular/core';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import { environment } from 'src/environments/environment.example';
 @Component({
     selector: 'app-sidebar',
     styleUrls: ['./sidebar.component.scss'],
@@ -12,5 +13,21 @@ export class SidebarComponent {
 
     public closeSidebar(): void {
         this.sidebarService.closeSidebar();
+    }
+
+    /**
+     * The app version found inside the package
+     * @returns the package version
+     */
+    public get appVersion(): string {
+        return environment.version;
+    }
+
+    /**
+     * The @angular/core version used
+     * @returns Version {@link VERSION.full}
+     */
+    public get angularVersion(): string {
+        return VERSION.full;
     }
 }

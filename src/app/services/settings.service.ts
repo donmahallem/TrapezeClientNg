@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ISettings } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { of, Observable, Subscriber } from 'rxjs';
+import { from, Observable, Subscriber } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -61,7 +61,7 @@ export class SettingsService {
                         return;
                     }),
                     catchError((err: any): Observable<any> => {
-                        return of(undefined);
+                        return from([undefined]);
                     }))
                 .subscribe(new SettingsLoadSubscriber(resolve));
         });

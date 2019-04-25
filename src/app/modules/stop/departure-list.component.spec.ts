@@ -1,5 +1,6 @@
-import { Component, Directive, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { IDeparture } from '@donmahallem/trapeze-api-types';
 import { DepartureListComponent } from './departure-list.component';
 
 // tslint:disable:component-selector
@@ -11,18 +12,12 @@ import { DepartureListComponent } from './departure-list.component';
 export class TestMatNavListComponent {
 }
 @Component({
-  selector: 'mat-list-item',
+  selector: 'app-departure-list-item',
   template: '<div></div>',
 })
-export class TestMatListItemComponent {
-}
-
-@Directive({
-  selector: 'a[routerLink]',
-})
-export class TestRouterLinkDirective {
+export class TestDepartureListItemComponent {
   @Input()
-  public routerLink: string;
+  public departure: IDeparture;
 }
 
 // tslint:enable:component-selector
@@ -34,8 +29,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
         declarations: [
           DepartureListComponent,
           TestMatNavListComponent,
-          TestMatListItemComponent,
-          TestRouterLinkDirective,
+          TestDepartureListItemComponent,
         ],
       }).compileComponents();
     }));
@@ -54,56 +48,54 @@ describe('src/app/modules/stop/departure-list.component', () => {
         fixture = TestBed.createComponent(DepartureListComponent);
         cmp = fixture.debugElement.componentInstance;
       });
-      const testPassages: any[] = [
-        [{ test: true }], [{ test: false }],
+      const testPassages: { value: IDeparture[], result: IDeparture[] }[] = [
+        {
+          result: [],
+          value: undefined,
+        }, {
+          result: [],
+          value: [],
+        }, {
+          result: <any>[1, 2],
+          value: <any>[1, 2],
+        },
       ];
       describe('departures', () => {
         describe('getter', () => {
           testPassages.forEach((testPassage) => {
-            it('should get the correct value', () => {
-              (<any>cmp).mDepartures = testPassage;
-              expect(cmp.departures).toEqual(testPassage);
+            it('should get the correct value for "' + testPassage.value + '"', () => {
+              (<any>cmp).mDepartures = testPassage.value;
+              expect(cmp.departures).toEqual(testPassage.result);
             });
           });
         });
         describe('setter', () => {
           testPassages.forEach((testPassage) => {
-            it('should set the correct value', () => {
-              cmp.departures = testPassage;
-              expect((<any>cmp).mDepartures).toEqual(testPassage);
+            it('should set the correct value for "' + testPassage.value + '"', () => {
+              cmp.departures = testPassage.value;
+              expect((<any>cmp).mDepartures).toEqual(testPassage.result);
             });
           });
         });
       });
-      describe('convertTime(passage)', () => {
-        const passages: {
-          actualRelativeTime: number,
-          actualTime: string,
-          result: string,
-        }[] = [
-            {
-              actualRelativeTime: 500,
-              actualTime: '12:20',
-              result: '12:20',
-            },
-            {
-              actualRelativeTime: 300,
-              actualTime: '13:20',
-              result: '5min',
-            },
-            {
-              actualRelativeTime: 20,
-              actualTime: '14:20',
-              result: '1min',
-            },
-          ];
-        passages.forEach((value) => {
-          it('should convert the object to "' + value.result + '\'', () => {
-            const testValue: any = {
-              actualRelativeTime: value.actualRelativeTime,
-              actualTime: value.actualTime,
-            };
-            expect(cmp.convertTime(testValue)).toEqual(value.result);
+      describe('hasDepartures()', () => {
+        const data: { value: any, result: boolean }[] = [{
+          result: false,
+          value: undefined,
+        }, {
+          result: false,
+          value: [],
+        }, {
+          result: true,
+          value: [1],
+        }, {
+          result: true,
+          value: [1, 2],
+        }];
+        data.forEach((testData) => {
+          it('should return "' + testData.result + '" for ' + JSON.stringify(testData.value), () => {
+            (<any>cmp).mDepartures = testData.value;
+            expect(cmp.hasDepartures()).toEqual(testData.result);
           });
         });
       });
