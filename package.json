@@ -15,7 +15,8 @@
     "test:build": "ng build --prod --aot --base-href ./",
     "test:lint": "ng lint",
     "create-publish-package": "node ./npm-publish-package.js",
-    "extract-i18n": "ng xi18n --outputPath locale && xliffmerge --profile xliffmerge.json en fr de"
+    "extract-i18n": "ng xi18n --outputPath locale && xliffmerge --profile xliffmerge.json en fr de",
+    "compodoc": "npx compodoc -p src/tsconfig.app.json -d ./docs"
   },
   "publishConfig": {
     "access": "public"
@@ -66,6 +67,7 @@
     "@angular/cli": "^7.3.8",
     "@angular/compiler-cli": "^7.2.12",
     "@angular/language-service": "7.2.14",
+    "@compodoc/compodoc": "^1.1.9",
     "@types/jasmine": "^3.3.12",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^11.13.7",
