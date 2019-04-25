@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IStopPassage } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
 import { combineLatest, from, merge, timer, Observable, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map } from 'rxjs/operators';
-import { StopLocation } from 'src/app/models/stop-location.model';
 import { StopPointService } from 'src/app/services/stop-point.service';
 import { ApiService } from '../../services';
 @Component({
@@ -48,9 +47,9 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
 
     /**
      * The stop location.
-     * Can be undefined or an instance of {@link StopLocation}
+     * Can be undefined or an instance of {@link IStopLocation}
      */
-    public stopLocation: StopLocation = undefined;
+    public stopLocation: IStopLocation = undefined;
     private updateData(data: IStopPassage): void {
         this.errorOccured = false;
         if ((<any>data).stopShortName === this.stopId) {

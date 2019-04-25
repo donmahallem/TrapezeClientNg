@@ -1,14 +1,14 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
-import { StopLocation } from 'src/app/models/stop-location.model';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
 @Directive({
-    selector: 'map[appStopLocation]',
+    selector: 'map[appIStopLocation]',
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     constructor(elRef: ElementRef,
@@ -18,13 +18,13 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
         super(elRef, zone, userLocationService, settingsService);
     }
     @Input('location')
-    public set location(loc: StopLocation) {
-        this.stopLocationSubject.next(loc);
+    public set location(loc: IStopLocation) {
+        this.IStopLocationSubject.next(loc);
     }
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
-    private stopLocationSubject: BehaviorSubject<StopLocation> = new BehaviorSubject(undefined);
+    private IStopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -42,7 +42,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     }
 
     public addMarker(): void {
-        this.stopLocationSubject
+        this.IStopLocationSubject
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();

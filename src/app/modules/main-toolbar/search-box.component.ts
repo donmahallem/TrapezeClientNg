@@ -2,9 +2,9 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChi
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { Router } from '@angular/router';
+import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { flatMap, map, startWith } from 'rxjs/operators';
-import { StopLocation } from 'src/app/models/stop-location.model';
 import { StopPointService } from 'src/app/services/stop-point.service';
 @Component({
     selector: 'app-toolbar-search',
@@ -14,7 +14,7 @@ import { StopPointService } from 'src/app/services/stop-point.service';
 export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     searchControl = new FormControl();
-    filteredOptions: Observable<StopLocation[]>;
+    filteredOptions: Observable<IStopLocation[]>;
 
     @ViewChild(MatAutocomplete)
     autoComplete: MatAutocomplete;
@@ -53,7 +53,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
             this.router.navigate(['/stop', stop.option.value.shortName]);
         }
     }
-    displayFn(user?: StopLocation): string | undefined {
+    displayFn(user?: IStopLocation): string | undefined {
         return user ? user.name : undefined;
     }
     public ngOnInit(): void {
@@ -62,7 +62,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
                 startWith(''),
                 flatMap((value: string) => {
                     return this.stopService.stopLocationsObservable
-                        .pipe(map((stops: StopLocation[]) => {
+                        .pipe(map((stops: IStopLocation[]) => {
                             return stops.filter(option => option.name.toLowerCase().includes(value));
                         }));
                 }),
