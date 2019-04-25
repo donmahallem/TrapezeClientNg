@@ -1,8 +1,8 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
-import { StopLocation } from 'src/app/models/stop-location.model';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
@@ -18,13 +18,13 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
         super(elRef, zone, userLocationService, settingsService);
     }
     @Input('location')
-    public set location(loc: StopLocation) {
+    public set location(loc: IStopLocation) {
         this.stopLocationSubject.next(loc);
     }
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
-    private stopLocationSubject: BehaviorSubject<StopLocation> = new BehaviorSubject(undefined);
+    private stopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();

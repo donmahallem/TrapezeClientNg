@@ -1,6 +1,10 @@
 import { Directive, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, timer, BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
+
+/**
+ * CountdownTimerDirective
+ */
 @Directive({
     selector: 'span[appCountdownTimer]',
 })
@@ -10,14 +14,23 @@ export class CountdownTimerDirective implements OnInit, OnDestroy {
     private updateSubscription: Subscription;
     private timestampSubject: BehaviorSubject<number> = new BehaviorSubject(0);
 
+    /**
+     * Placeholder if time has run out
+     */
     @Input()
     public placeholder = '-';
 
+    /**
+     * Sets the targetTime
+     */
     @Input()
     public set targetTime(timestamp: number) {
         this.timestampSubject.next(timestamp);
     }
 
+    /**
+     * The innerHtml for the directive
+     */
     @HostBinding('innerHTML')
     public get text() {
         return this.timestamp;
