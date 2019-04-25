@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { IStopLocations } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
-import { StationsResponse } from 'src/app/models/stations-response.model';
 import { ApiService } from '../../services';
 
 /**
  * A Resolver for the Stations Response
  */
 @Injectable()
-export class StopsResolver implements Resolve<StationsResponse> {
+export class StopsResolver implements Resolve<IStopLocations> {
 
     /**
      * Constructor
      * @param api the {@ApiService}
      */
     public constructor(private api: ApiService) { }
-
+  
     /**
      * Resolves the station response
      * @param route The activated RouteSnapshot

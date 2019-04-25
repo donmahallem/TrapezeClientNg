@@ -1,5 +1,9 @@
 import * as L from 'leaflet';
 import { STOP_ICON_SHADOW_URL, STOP_ICON_URL } from './constants';
+/**
+ * Creates an StopIcon instance to be used for leaflet markers
+ * @param iconSize icon size in pixels
+ */
 export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number = 24): L.Icon => {
     return L.icon({
         iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
@@ -13,6 +17,12 @@ export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number =
     });
 };
 
+/**
+ * Creates an vehicle icon to be used for leaflet markers
+ * @param heading in degrees
+ * @param name Name to be displayed inside icon
+ * @param iconSize icon size in pixels
+ */
 export const createVehicleIcon: (heading: number, name: string, iconSize?: number) => L.DivIcon =
     (heading: number, name: string, iconSize: number = 40) => {
         return L.divIcon({
