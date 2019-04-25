@@ -1,10 +1,6 @@
-import { IEnvironmentBase } from './environment.base';
+import { createEnvironment, IEnvironmentBase } from './environment.base';
 
-export const environment: IEnvironmentBase = {
-    apiEndpoint: '/',
-    production: true,
-    pwa: true,
-};
+export const environment: IEnvironmentBase = createEnvironment(true, '/', true);
 
 /*
  * In development mode, to ignore zone related error stack frames such as
