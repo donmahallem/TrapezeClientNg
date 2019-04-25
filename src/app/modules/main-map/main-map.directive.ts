@@ -1,13 +1,12 @@
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, from, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { createStopIcon, createVehicleIcon } from '../../leaflet';
-import { StopLocation } from '../../models/stop-location.model';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
@@ -154,7 +153,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addMarker() {
         this.stopService.stopLocationsObservable
-            .subscribe((stops: StopLocation[]) => {
+            .subscribe((stops: IStopLocation[]) => {
                 const stopList: L.Marker[] = [];
                 for (const stop of stops) {
                     if (stop === null) {
@@ -182,7 +181,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             });
     }
 
-    public stopMarkerOnClick(event: { sourceTarget: { data: StopLocation } }) {
+    public stopMarkerOnClick(event: { sourceTarget: { data: IStopLocation } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {
             this.router.navigate(['stop', event.sourceTarget.data.shortName]);
