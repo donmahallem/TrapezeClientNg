@@ -1,12 +1,15 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
 import { StopLocation } from 'src/app/models/stop-location.model';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
+/**
+ * Directive displaying a map with the StopLocation
+ */
 @Directive({
     selector: 'map[appStopLocation]',
 })
@@ -21,6 +24,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     public set location(loc: StopLocation) {
         this.stopLocationSubject.next(loc);
     }
+    private updateSubscription: Subscription;
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
@@ -28,7 +32,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
-        this.addMarker();
+        this.startUpdater();
         this.getMap().dragging.disable();
         this.getMap().touchZoom.disable();
         this.getMap().doubleClickZoom.disable();
@@ -41,8 +45,14 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
         });
     }
 
-    public addMarker(): void {
-        this.stopLocationSubject
+    /**
+     * Creates the Update Observable
+     */
+    public startUpdater(): void {
+        if (this.updateSubscription) {
+            return;
+        }
+        this.updateSubscription = this.stopLocationSubject
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -73,6 +83,9 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
     public ngOnDestroy(): void {
         super.ngOnDestroy();
+        if (this.updateSubscription) {
+            this.updateSubscription.unsubscribe();
+        }
     }
 
 }
