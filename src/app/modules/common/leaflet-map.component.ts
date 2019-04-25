@@ -77,6 +77,10 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             .locationObservable.subscribe(new UserLocationSubscriber(this));
     }
 
+    /**
+     * Sets the user location. To clear the location set it to undefined
+     * @param coords The coords or undefined
+     */
     public setUserLocation(coords: Coordinates): void {
         if (this.userLocationLayer) {
             this.userLocationLayer.clearLayers();
