@@ -1,9 +1,9 @@
+import { getAppVersion } from './app-version';
 import { IEnvironmentBase } from './environment.base';
-import { getVersion } from './version';
 
 export const environment: IEnvironmentBase = {
     apiEndpoint: '/',
     production: true,
     pwa: true,
-    version: getVersion(),
+    version: getAppVersion(),
 };
