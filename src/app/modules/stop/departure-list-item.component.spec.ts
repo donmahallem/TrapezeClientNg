@@ -67,12 +67,34 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           });
         });
         describe('setter', () => {
+          let calculateDelaySpy: jasmine.Spy<InferableFunction>;
+          let convertTimeSpy: jasmine.Spy<InferableFunction>;
+          beforeEach(() => {
+            calculateDelaySpy = spyOn(cmp, "calculateDelay");
+            convertTimeSpy = spyOn(cmp, "convertTime");
+            calculateDelaySpy.and.callFake((arg: any) => {
+              return { delay: arg };
+            });
+            convertTimeSpy.and.callFake((arg: any) => {
+              return { time: arg };
+            });
+          });
           testPassages.forEach((testPassage) => {
             it('should set the correct value', () => {
               cmp.departure = testPassage;
               expect((<any>cmp).mDeparture).toEqual(testPassage);
+              expect(calculateDelaySpy).toHaveBeenCalledTimes(1);
+              expect(convertTimeSpy).toHaveBeenCalledTimes(1);
+              expect(calculateDelaySpy).toHaveBeenCalledWith(testPassage);
+              expect(convertTimeSpy).toHaveBeenCalledWith(testPassage);
+              expect((<any>cmp).mTime).toEqual({ time: testPassage });
+              expect((<any>cmp).mDelay).toEqual({ delay: testPassage });
             });
           });
+          afterEach(() => {
+            calculateDelaySpy.calls.reset();
+            convertTimeSpy.calls.reset();
+          })
         });
       });
       describe('convertTime(departure)', () => {
@@ -104,6 +126,56 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
               actualTime: value.actualTime,
             };
             expect(cmp.convertTime(testValue)).toEqual(value.result);
+          });
+        });
+      });
+      describe('calculateDelay(departure)', () => {
+        const passages: {
+          value: {
+            actualTime: string
+            plannedTime: string,
+          },
+          result: false | number,
+        }[] = [
+            {
+              result: +3,
+              value: {
+                actualTime: '13:01',
+                plannedTime: '12:58',
+              },
+            },
+            {
+              result: -3,
+              value: {
+                actualTime: '12:58',
+                plannedTime: '13:01',
+              },
+            },
+            {
+              result: false,
+              value: {
+                actualTime: '13:05',
+                plannedTime: '13:05',
+              },
+            },
+            {
+              result: -6,
+              value: {
+                actualTime: '23:55',
+                plannedTime: '00:01',
+              },
+            },
+            {
+              result: +6,
+              value: {
+                actualTime: '00:01',
+                plannedTime: '23:55',
+              },
+            },
+          ];
+        passages.forEach((value) => {
+          it('should convert the "' + value.value + '" to "' + value.result + '\'', () => {
+            expect(cmp.calculateDelay(<any>value.value)).toEqual(value.result);
           });
         });
       });

@@ -13,7 +13,7 @@ import * as moment from 'moment';
 export class DepartureListItemComponent {
 
     private mDeparture: IDeparture = undefined;
-    private mDelay: boolean | string = false;
+    private mDelay: boolean | number = false;
     private mTime = '';
     @Input('departure')
     public set departure(deps: IDeparture) {
@@ -57,16 +57,22 @@ export class DepartureListItemComponent {
         }
     }
 
-    public get delay(): boolean | string {
+    public get delay(): boolean | number {
         return this.mDelay;
     }
 
-    public calculateDelay(data: IDeparture): false | string {
+    public calculateDelay(data: IDeparture): false | number {
         if (data && data.actualTime && data.plannedTime) {
             if (data.actualTime !== data.plannedTime) {
                 const actual: moment.Moment = moment(data.actualTime, 'HH:mm');
                 const planned: moment.Moment = moment(data.plannedTime, 'HH:mm');
-                return '+' + moment.duration(actual.diff(planned)).asMinutes();
+                let diffMinutes: number = moment.duration(actual.diff(planned)).asMinutes();
+                if (diffMinutes > 60 * 12) {
+                    diffMinutes -= 60 * 24;
+                } else if (diffMinutes < - 60 * 12) {
+                    diffMinutes += 60 * 24;
+                }
+                return diffMinutes;
             }
         }
         return false;
