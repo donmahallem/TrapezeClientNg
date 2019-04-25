@@ -1,0 +1,13 @@
+pull_request_rules:
+  - name: add tags
+    conditions:
+      - status-success=continuous-integration/travis-ci/pr
+      - status-success=coverage/coveralls
+      - base=dev
+      - head=documentation
+    actions:
+      label:
+        add:
+        - enhancement
+      merge:
+        method: rebase
