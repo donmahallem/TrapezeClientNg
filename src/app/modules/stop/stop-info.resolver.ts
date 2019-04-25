@@ -6,6 +6,10 @@ import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from '../../services';
 
+/**
+ * Resolves information for a stop provided in the route parameter 'stopId'
+ * Redirects to /stops if the server responds with an 404 status
+ */
 @Injectable()
 export class StopInfoResolver implements Resolve<IStopPassage> {
 
