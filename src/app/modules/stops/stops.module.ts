@@ -1,5 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-// import { TripPassagesComponent } from './trip.passages.component';
+import {
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatToolbarModule,
+} from '@angular/material';
+import { StopsInfoComponent } from './stops-info.component';
 import { StopsRoutingModule } from './stops-routing.module';
 import { StopsResolver } from './stops.resolver';
 
@@ -8,10 +16,16 @@ import { StopsResolver } from './stops.resolver';
  */
 @NgModule({
     declarations: [
-        // TripPassagesComponent
+        StopsInfoComponent,
     ],
     imports: [
         StopsRoutingModule,
+        CommonModule,
+        MatIconModule,
+        MatListModule,
+        MatToolbarModule,
+        MatProgressSpinnerModule,
+        MatInputModule,
     ],
     providers: [
         StopsResolver,
