@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ISettings, IStopInfo, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import { ISettings, IStopInfo, IStopLocations, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { TripPassagesLocation } from '../models';
-import { StationsResponse } from '../models/stations-response.model';
 import { IMapBounds } from '../modules/common/leaflet-map.component';
 @Injectable({
     providedIn: 'root',
@@ -46,8 +45,8 @@ export class ApiService {
         return this.http.get<IVehicleLocation>(this.baseUrl() + 'api/geo/vehicle/' + vehicleId);
     }
 
-    public getStations(): Observable<StationsResponse> {
-        return this.http.get<StationsResponse>(this.baseUrl() + 'api/geo/stops');
+    public getStations(): Observable<IStopLocations> {
+        return this.http.get<IStopLocations>(this.baseUrl() + 'api/geo/stops');
     }
 
     public getSettings(): Observable<ISettings> {
