@@ -28,8 +28,13 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     public get stopInfo(): IStopPassage {
         return this.mStopInfo;
     }
-    public tripPassages: any[] = [];
+    /**
+     * Subscription for the update Observable
+     */
     private updateSubscription: Subscription;
+    /**
+     * The timer overservable dictating the update interval
+     */
     private mTimerObservable: Observable<number>;
     private mTimeUntilRefresh = 0;
     public routes: any[] = [];
@@ -41,6 +46,10 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
      */
     public readonly tickInterval: number = 200;
 
+    /**
+     * The stop location.
+     * Can be undefined or an instance of {@link StopLocation}
+     */
     public stopLocation: StopLocation = undefined;
     private updateData(data: IStopPassage): void {
         this.errorOccured = false;
@@ -48,6 +57,12 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
             this.mStopInfo = data;
         }
     }
+
+    /**
+     * Converts the time to a human readable format
+     * @param time time
+     * @param data data
+     */
     public convertTime(time, data) {
         if (time > 300) {
             return data.actualTime;
