@@ -57,7 +57,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
       const testPassages: any[] = [
         [{ test: true }], [{ test: false }],
       ];
-      describe('departures', () => {
+      describe('departure', () => {
         describe('getter', () => {
           testPassages.forEach((testPassage) => {
             it('should get the correct value', () => {
@@ -75,7 +75,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           });
         });
       });
-      describe('convertTime(passage)', () => {
+      describe('convertTime(departure)', () => {
         const passages: {
           actualRelativeTime: number,
           actualTime: string,

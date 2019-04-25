@@ -3,6 +3,10 @@ import {
     Input,
 } from '@angular/core';
 import { IDeparture } from '@donmahallem/trapeze-api-types';
+
+/**
+ * List of Departures Component
+ */
 @Component({
     selector: 'app-departure-list',
     styleUrls: ['./departure-list.component.scss'],
@@ -11,17 +15,28 @@ import { IDeparture } from '@donmahallem/trapeze-api-types';
 export class DepartureListComponent {
 
     private mDepartures: IDeparture[] = [];
+
+    /**
+     * set the departures
+     */
     @Input('departures')
     public set departures(deps: IDeparture[]) {
-        this.mDepartures = deps;
+        this.mDepartures = deps ? deps : [];
     }
 
+    /**
+     * departures
+     */
     public get departures(): IDeparture[] {
-        return this.mDepartures;
+        return this.mDepartures ? this.mDepartures : [];
     }
 
-    public get hasDepartures(): boolean {
-        return this.mDepartures && this.mDepartures.length > 0;
+    /**
+     * Returns if the atleast one departure was provided
+     * @returns true if there is atleast one departure
+     */
+    public hasDepartures(): boolean {
+        return this.mDepartures !== undefined && this.mDepartures.length > 0;
     }
 
 }
