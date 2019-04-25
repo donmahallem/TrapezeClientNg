@@ -360,9 +360,22 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/stops/stops-info.component.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/stops/stops-info.component.ts:27</a></div>
                                 </td>
                             </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>The stops to be displayed</p>
+</div>
+
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="../interfaces/StopLocation.html" target="_self" >IStopLocation[]</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
 
             </tbody>
         </table>
@@ -393,7 +406,10 @@ export class StopsInfoComponent {
     public hasHeader(idx: number): boolean {
         return idx &#x3D;&#x3D;&#x3D; 0 || this.stops[idx].name.charAt(0) !&#x3D;&#x3D; this.stops[idx - 1].name.charAt(0);
     }
-
+    /**
+     * The stops to be displayed
+     * @returns a list of stops to be used
+     */
     public get stops(): IStopLocation[] {
         return this.mStops;
     }
