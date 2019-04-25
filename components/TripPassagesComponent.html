@@ -64,6 +64,13 @@
     <code>src/app/modules/trip-passages/trip-passages.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Component displaying the TripPassages for a Trip</p>
+
+    </p>
 
 
     <p class="comment">
@@ -170,6 +177,10 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                <a href="#hasError">hasError</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
                                 <a href="#ngAfterViewInit">ngAfterViewInit</a>
                             </li>
                             <li>
@@ -193,9 +204,6 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                    <a href="#updateStatus">updateStatus</a>
-                                </li>
-                                <li>
                                     <a href="#tripData">tripData</a>
                                 </li>
                                 <li>
@@ -212,9 +220,6 @@
                                 </li>
                                 <li>
                                     <a href="#tripPassages">tripPassages</a>
-                                </li>
-                                <li>
-                                    <a href="#hasError">hasError</a>
                                 </li>
                             </ul>
                         </td>
@@ -234,7 +239,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:38</a></div>
                             </td>
                         </tr>
 
@@ -329,8 +334,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="102"
-                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:102</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="113"
+                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:113</a></div>
                 </td>
             </tr>
 
@@ -381,6 +386,55 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="hasError"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            hasError
+                        </b>
+                        <a href="#hasError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>hasError()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="109"
+                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:109</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Returns if an error has happened during the last update</p>
+</div>
+
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>true if an error occured</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="ngAfterViewInit"></a>
                     <span class="name">
                         <b>
@@ -401,14 +455,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="128"
-                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:128</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:142</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Initializes the update observable</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -442,14 +498,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="154"
-                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:154</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:170</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>destroys created update observables</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -492,7 +550,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:32</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:34</a></div>
                             </td>
                         </tr>
 
@@ -520,7 +578,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:35</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -548,7 +606,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:34</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -581,7 +639,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:33</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -609,7 +667,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:36</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:38</a></div>
                             </td>
                         </tr>
 
@@ -626,28 +684,6 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="updateStatus"></a>
-                        <span class="name"><b>updateStatus</b><a href="#updateStatus"><span class="icon ion-ios-link"></span></a></span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <span class="accessor"><b>get</b><code>updateStatus()</code></span>
-                    </td>
-                </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:49</a></div>
-                                </td>
-                            </tr>
-
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
                         <a name="tripData"></a>
                         <span class="name"><b>tripData</b><a href="#tripData"><span class="icon ion-ios-link"></span></a></span>
                     </td>
@@ -660,9 +696,22 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:56</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:55</a></div>
                                 </td>
                             </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Returns the TripPassages</p>
+</div>
+
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#TripPassagesLocation" target="_self" >TripPassagesLocation</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
 
             </tbody>
         </table>
@@ -682,9 +731,22 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:63</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:66</a></div>
                                 </td>
                             </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Returns the last timestamp when data was tried to be retrieved</p>
+</div>
+
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
 
             </tbody>
         </table>
@@ -704,9 +766,22 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:70</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:77</a></div>
                                 </td>
                             </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Returns the current set update status or <a href="UpdateStatus.LOADING">UpdateStatus.LOADING</a></p>
+</div>
+
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="../miscellaneous/enumerations.html#UpdateStatus" target="_self" >UpdateStatus</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
 
             </tbody>
         </table>
@@ -726,7 +801,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:80</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:87</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -759,7 +834,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:87</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:94</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -792,7 +867,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:94</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:101</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -806,28 +881,6 @@
                                 </div>
                         </td>
                     </tr>
-
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="hasError"></a>
-                        <span class="name"><b>hasError</b><a href="#hasError"><span class="icon ion-ios-link"></span></a></span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <span class="accessor"><b>get</b><code>hasError()</code></span>
-                    </td>
-                </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/modules/trip-passages/trip-passages.component.ts:98</a></div>
-                                </td>
-                            </tr>
 
             </tbody>
         </table>
@@ -860,7 +913,9 @@ export interface IPassageStatus {
     timestamp: number;
     failures?: number;
 }
-
+/**
+ * Component displaying the TripPassages for a Trip
+ */
 @Component({
     selector: &#x27;app-trip-passages&#x27;,
     styleUrls: [&#x27;./trip-passages.component.scss&#x27;],
@@ -884,13 +939,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    public get updateStatus(): UpdateStatus {
-        if (this.status.value) {
-            return this.status.value.status;
-        }
-        return UpdateStatus.LOADING;
-    }
-
+    /**
+     * Returns the TripPassages
+     * @returns undefined or {@link TripPassagesLocation}
+     */
     public get tripData(): TripPassagesLocation {
         if (this.status.value) {
             return this.status.value.passages;
@@ -898,6 +950,10 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return undefined;
     }
 
+    /**
+     * Returns the last timestamp when data was tried to be retrieved
+     * @returns number or 0 if no timestamp is set
+     */
     public get lastTimestamp(): number {
         if (this.status.value) {
             return this.status.value.timestamp;
@@ -905,11 +961,15 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return 0;
     }
 
-    public get statusCode(): number {
+    /**
+     * Returns the current set update status or {@link UpdateStatus.LOADING}
+     * @returns the {@link UpdateStatus}
+     */
+    public get statusCode(): UpdateStatus {
         if (this.status.value) {
             return this.status.value.status;
         }
-        return UpdateStatus.UNKNOWN;
+        return UpdateStatus.LOADING;
     }
 
     /**
@@ -933,8 +993,12 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !&#x3D;&#x3D; undefined) ? this.tripData.actual : [];
     }
 
-    public get hasError(): boolean {
-        return this.updateStatus &gt;&#x3D; UpdateStatus.ERROR;
+    /**
+     * Returns if an error has happened during the last update
+     * @returns true if an error occured
+     */
+    public hasError(): boolean {
+        return this.statusCode &gt;&#x3D; UpdateStatus.ERROR;
     }
 
     private handleError(err?: any): Observable&lt;any&gt; {
@@ -963,6 +1027,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return from([returnValue]);
     }
 
+    /**
+     * Initializes the update observable
+     */
     public ngAfterViewInit(): void {
         this.pollSubscription &#x3D; this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
             map(() &#x3D;&gt; {
@@ -988,7 +1055,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 }
             }));
     }
-
+    /**
+     * destroys created update observables
+     */
     public ngOnDestroy(): void {
         if (this.snapshotDataSubscription) {
             this.snapshotDataSubscription.unsubscribe();
@@ -1003,9 +1072,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">app-map-header-box([blur]&#x3D;&quot;hasError&quot;,title&#x3D;&quot;{{routeName}} - {{tripData?.directionText}}&quot;)
+        <pre class="line-numbers"><code class="language-html">app-map-header-box([blur]&#x3D;&quot;hasError()&quot;,title&#x3D;&quot;{{routeName}} - {{tripData?.directionText}}&quot;)
     map(appTripPassages,[location]&#x3D;&quot;tripData?.location&quot;,role&#x3D;&quot;none&quot;)
-div.error-box(*ngIf&#x3D;&quot;hasError&quot;,aria-errormessage&#x3D;&quot;Error retrieving data&quot;,i18n-aria-errormessage&#x3D;&quot;@@errorUpdatingData&quot;)
+div.error-box(*ngIf&#x3D;&quot;hasError()&quot;,aria-errormessage&#x3D;&quot;Error retrieving data&quot;,i18n-aria-errormessage&#x3D;&quot;@@errorUpdatingData&quot;)
     span.title(i18n&#x3D;&quot;@@anErrorOccured&quot;) An error occured (Code: {{statusCode}})
     span.text Retrying in
         |
@@ -1083,7 +1152,7 @@ mat-nav-list{
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div>app-map-header-box([blur]="hasError",title="{{routeName}} - {{tripData?.directionText}}")    map(appTripPassages,[location]="tripData?.location",role="none")div.error-box(*ngIf="hasError",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")    span.title(i18n="@@anErrorOccured") An error occured (Code: {{statusCode}})    span.text Retrying in        |        span(appCountdownTimer,[targetTime]="lastTimestamp + DEBOUNCE_TIME",[placeholder]="\'<i class=\"material-icons\">sync</i>\'") testmat-nav-list(*ngIf="tripId==tripData?.tripId",role="list")    a(*ngFor="let passage of tripPassages",[routerLink]="[\'/stop\', passage?.stop?.shortName]",role="listitem")        mat-list-item            mat-icon(matListIcon,role="figure",i18n-aria-label="@@busStopIcon",aria-label="Bus stop icon") trip_origin            h3(matLine,aria-label="Stop name",i18n-aria-label="@@stopName") {{passage?.stop?.name}}            p(matLine)                span(role="timer") {{passage?.actualTime}}                |                span(class="demo-2",role="status") -- {{passage?.status}}</div>'
+        var COMPONENT_TEMPLATE = '<div>app-map-header-box([blur]="hasError()",title="{{routeName}} - {{tripData?.directionText}}")    map(appTripPassages,[location]="tripData?.location",role="none")div.error-box(*ngIf="hasError()",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")    span.title(i18n="@@anErrorOccured") An error occured (Code: {{statusCode}})    span.text Retrying in        |        span(appCountdownTimer,[targetTime]="lastTimestamp + DEBOUNCE_TIME",[placeholder]="\'<i class=\"material-icons\">sync</i>\'") testmat-nav-list(*ngIf="tripId==tripData?.tripId",role="list")    a(*ngFor="let passage of tripPassages",[routerLink]="[\'/stop\', passage?.stop?.shortName]",role="listitem")        mat-list-item            mat-icon(matListIcon,role="figure",i18n-aria-label="@@busStopIcon",aria-label="Bus stop icon") trip_origin            h3(matLine,aria-label="Stop name",i18n-aria-label="@@stopName") {{passage?.stop?.name}}            p(matLine)                span(role="timer") {{passage?.actualTime}}                |                span(class="demo-2",role="status") -- {{passage?.status}}</div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DepartureListComponent', 'selector': 'app-departure-list'},{'name': 'DepartureListItemComponent', 'selector': 'app-departure-list-item'},{'name': 'MainToolbarComponent', 'selector': 'app-main-toolbar'},{'name': 'MapHeaderBoxComponent', 'selector': 'app-map-header-box'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'RouteListComponent', 'selector': 'app-route-list'},{'name': 'RouteLoadingIndicatorComponent', 'selector': 'app-route-loading-indicator'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'StopInfoComponent', 'selector': 'app-stop-info'},{'name': 'StopsInfoComponent', 'selector': 'app-stops-info'},{'name': 'ToolbarSearchBoxComponent', 'selector': 'app-toolbar-search'},{'name': 'TripPassagesComponent', 'selector': 'app-trip-passages'}];
     var DIRECTIVES = [{'name': 'CountdownTimerDirective', 'selector': 'span[appCountdownTimer]'},{'name': 'DrawableDirective', 'selector': '[appDrawable]'},{'name': 'FollowBusMapDirective', 'selector': 'map[appTripPassages]'},{'name': 'MainMapDirective', 'selector': 'map[appMainMap]'},{'name': 'StopLocationMapDirective', 'selector': 'map[appStopLocation]'}];
     var ACTUAL_COMPONENT = {'name': 'TripPassagesComponent'};
