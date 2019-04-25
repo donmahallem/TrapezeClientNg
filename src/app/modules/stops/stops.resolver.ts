@@ -15,14 +15,14 @@ export class StopsResolver implements Resolve<IStopLocations> {
      * @param api the {@ApiService}
      */
     public constructor(private api: ApiService) { }
-  
+
     /**
      * Resolves the station response
      * @param route The activated RouteSnapshot
      * @param state The router state snapshot
      * @returns An observable that resolves the {@StationsResponse}
      */
-    public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<StationsResponse> {
+    public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IStopLocations> {
         return this.api
             .getStations();
     }
