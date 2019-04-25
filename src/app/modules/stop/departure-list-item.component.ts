@@ -12,9 +12,25 @@ import * as moment from 'moment';
 })
 export class DepartureListItemComponent {
 
+    /**
+     * Object holding the current departure
+     * Can be undefined
+     */
     private mDeparture: IDeparture = undefined;
+    /**
+     * The delay of the departure. Can be positive or negative excluding zero
+     * or false if no delay is to be expected
+     */
     private mDelay: boolean | number = false;
+    /**
+     * The time of arrival
+     */
     private mTime = '';
+
+    /**
+     * Sets the departure
+     * @param deps The departures
+     */
     @Input('departure')
     public set departure(deps: IDeparture) {
         this.mDeparture = deps;
@@ -22,6 +38,10 @@ export class DepartureListItemComponent {
         this.mTime = this.convertTime(deps);
     }
 
+    /**
+     * gets the departure
+     * @returns the departure or undefined
+     */
     public get departure(): IDeparture {
         return this.mDeparture;
     }
@@ -44,7 +64,11 @@ export class DepartureListItemComponent {
         }
     }
 
-    public get status(): string {
+    /**
+     * Returns the DepartureStatus
+     * @returns vehicle status {@VEHICLE_STATUS}
+     */
+    public get status(): VEHICLE_STATUS {
         return this.mDeparture.status;
     }
 
@@ -57,10 +81,18 @@ export class DepartureListItemComponent {
         }
     }
 
+    /**
+     * Returns the delay
+     * @returns false or an integer except 0
+     */
     public get delay(): boolean | number {
         return this.mDelay;
     }
 
+    /**
+     * Calculates the delay
+     * @param data a number except 0 or false
+     */
     public calculateDelay(data: IDeparture): false | number {
         if (data && data.actualTime && data.plannedTime) {
             if (data.actualTime !== data.plannedTime) {

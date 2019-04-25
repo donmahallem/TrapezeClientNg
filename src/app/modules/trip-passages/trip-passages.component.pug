@@ -1,6 +1,6 @@
-app-map-header-box([blur]="hasError",title="{{routeName}} - {{tripData?.directionText}}")
+app-map-header-box([blur]="hasError()",title="{{routeName}} - {{tripData?.directionText}}")
     map(appTripPassages,[location]="tripData?.location",role="none")
-div.error-box(*ngIf="hasError",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
+div.error-box(*ngIf="hasError()",aria-errormessage="Error retrieving data",i18n-aria-errormessage="@@errorUpdatingData")
     span.title(i18n="@@anErrorOccured") An error occured (Code: {{statusCode}})
     span.text Retrying in
         |
