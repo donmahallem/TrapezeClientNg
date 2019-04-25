@@ -1,7 +1,7 @@
 pull_request_rules:
   - name: merge documentation into dev
     conditions:
-      - status-success=continuous-integration/travis-ci/pr
+      - status-success=Travis CI - Pull Request
       - status-success=coverage/coveralls
       - base=dev
       - head=documentation
