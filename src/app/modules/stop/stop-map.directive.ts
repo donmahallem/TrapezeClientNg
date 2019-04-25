@@ -8,7 +8,7 @@ import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
 @Directive({
-    selector: 'map[appIStopLocation]',
+    selector: 'map[appStopLocation]',
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     constructor(elRef: ElementRef,
@@ -19,12 +19,12 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     }
     @Input('location')
     public set location(loc: IStopLocation) {
-        this.IStopLocationSubject.next(loc);
+        this.stopLocationSubject.next(loc);
     }
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
-    private IStopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
+    private stopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -42,7 +42,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     }
 
     public addMarker(): void {
-        this.IStopLocationSubject
+        this.stopLocationSubject
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
