@@ -1,5 +1,6 @@
 import { Component, Directive, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { IDeparture } from '@donmahallem/trapeze-api-types';
 import { DepartureListComponent } from './departure-list.component';
 
 // tslint:disable:component-selector
@@ -11,10 +12,12 @@ import { DepartureListComponent } from './departure-list.component';
 export class TestMatNavListComponent {
 }
 @Component({
-  selector: 'mat-list-item',
+  selector: 'app-departure-list-item',
   template: '<div></div>',
 })
-export class TestMatListItemComponent {
+export class TestDepartureListItemComponent {
+  @Input()
+  public departure: IDeparture;
 }
 
 @Directive({
@@ -34,7 +37,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
         declarations: [
           DepartureListComponent,
           TestMatNavListComponent,
-          TestMatListItemComponent,
+          TestDepartureListItemComponent,
           TestRouterLinkDirective,
         ],
       }).compileComponents();
@@ -72,38 +75,6 @@ describe('src/app/modules/stop/departure-list.component', () => {
               cmp.departures = testPassage;
               expect((<any>cmp).mDepartures).toEqual(testPassage);
             });
-          });
-        });
-      });
-      describe('convertTime(passage)', () => {
-        const passages: {
-          actualRelativeTime: number,
-          actualTime: string,
-          result: string,
-        }[] = [
-            {
-              actualRelativeTime: 500,
-              actualTime: '12:20',
-              result: '12:20',
-            },
-            {
-              actualRelativeTime: 300,
-              actualTime: '13:20',
-              result: '5min',
-            },
-            {
-              actualRelativeTime: 20,
-              actualTime: '14:20',
-              result: '1min',
-            },
-          ];
-        passages.forEach((value) => {
-          it('should convert the object to "' + value.result + '\'', () => {
-            const testValue: any = {
-              actualRelativeTime: value.actualRelativeTime,
-              actualTime: value.actualTime,
-            };
-            expect(cmp.convertTime(testValue)).toEqual(value.result);
           });
         });
       });
