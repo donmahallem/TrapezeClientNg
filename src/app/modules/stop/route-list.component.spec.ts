@@ -1,41 +1,40 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouteListComponent } from './route-list.component';
 
-/* tslint:disable */
+// tslint:disable:component-selector
+// tslint:disable:directive-selector
 @Component({
     selector: 'mat-divider',
-    template: '<div></div>'
+    template: '<div></div>',
 })
-export class TestMatDivider {
+export class TestMatDividerComponent {
 }
 
 @Component({
     selector: 'mat-list-item',
-    template: '<div></div>'
+    template: '<div></div>',
 })
-export class TestMatListItem {
+export class TestMatListItemComponent {
 }
 
 @Component({
     selector: 'mat-list',
-    template: '<div></div>'
+    template: '<div></div>',
 })
-export class TestMatList {
+export class TestMatListComponent {
 }
 
 @Component({
-    template: '<app-route-list [routes]="testData"></app-route-list>'
+    template: '<app-route-list [routes]="testData"></app-route-list>',
 })
-export class TestParent {
+export class TestParentComponent {
     public testData: any[];
 }
-
-
-/* tslint:enable */
+// tslint:enable:component-selector
+// tslint:enable:directive-selector
 
 describe('src/modules/stop/route-list.component.ts', () => {
     describe('RouteListComponent', () => {
@@ -43,14 +42,13 @@ describe('src/modules/stop/route-list.component.ts', () => {
             TestBed.configureTestingModule({
                 declarations: [
                     RouteListComponent,
-                    TestMatDivider,
-                    TestMatListItem,
-                    TestMatList,
-                    TestParent,
+                    TestMatDividerComponent,
+                    TestMatListItemComponent,
+                    TestMatListComponent,
+                    TestParentComponent,
                 ],
                 imports: [
                     RouterTestingModule,
-                    MatButtonModule,
                 ],
                 providers: [
                 ],
@@ -61,11 +59,11 @@ describe('src/modules/stop/route-list.component.ts', () => {
             // testUploadDataService.
         });
         describe('as child element', () => {
-            let fixture: ComponentFixture<TestParent>;
-            let component: TestParent;
+            let fixture: ComponentFixture<TestParentComponent>;
+            let component: TestParentComponent;
             let routeListCmp: RouteListComponent;
             beforeEach(() => {
-                fixture = TestBed.createComponent(TestParent);
+                fixture = TestBed.createComponent(TestParentComponent);
                 component = fixture.debugElement.componentInstance;
                 routeListCmp = fixture.debugElement.query(By.directive(RouteListComponent)).componentInstance;
             });
