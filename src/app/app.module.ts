@@ -13,6 +13,7 @@ import { DrawableDirective } from './drawable.directive';
 import { MainMapModule } from './modules/main-map';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
+import { AppNotificationService } from './services/app-notification.service';
 import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
@@ -48,6 +49,7 @@ const moduleImports: any[] = [
         StopPointService,
         UserLocationService,
         SettingsService,
+        AppNotificationService,
         {
             deps: [SettingsService],
             multi: true,

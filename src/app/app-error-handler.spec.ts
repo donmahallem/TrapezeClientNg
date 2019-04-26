@@ -4,7 +4,7 @@ describe('src/app/app-error-handler.ts', () => {
     describe('AppErrorHandler', () => {
         let handler: AppErrorHandler;
         beforeEach(() => {
-            handler = new AppErrorHandler();
+            handler = new AppErrorHandler(undefined);
         });
     });
 });
