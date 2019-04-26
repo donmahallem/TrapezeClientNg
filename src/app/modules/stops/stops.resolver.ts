@@ -21,7 +21,7 @@ export class StopsResolver implements Resolve<IStopLocations> {
     public constructor(private api: ApiService,
         private router: Router,
         private dialog: MatDialog) { }
-    public i = 0;
+
     /**
      * Resolves the station response
      * @param route The activated RouteSnapshot
