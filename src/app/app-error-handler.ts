@@ -9,6 +9,16 @@ import { AppNotificationService, AppNotificationType } from './services/app-noti
 export class AppErrorHandler implements ErrorHandler {
 
     public constructor(private injector: Injector) { }
+
+    /**
+     * If the browser supports the online tag it will
+     * returns its value. otherwise it will always be true
+     * @returns true if the navigator is offline
+     */
+    public isClientOffline(): boolean {
+        return (navigator.onLine === false);
+    }
+
     /**
      * Handles all errors
      */
@@ -17,7 +27,7 @@ export class AppErrorHandler implements ErrorHandler {
         const notificationService: AppNotificationService = this.injector.get(AppNotificationService);
         if (error instanceof HttpErrorResponse) {
             // Server or connection error happened
-            if (!navigator.onLine) {
+            if (this.isClientOffline()) {
                 // Handle offline error
                 return notificationService.notify({
                     title: 'No Internet Connection',
