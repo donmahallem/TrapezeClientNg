@@ -10,7 +10,6 @@ describe('src/app/app-error-handler.ts', () => {
         const notifySpy: jasmine.Spy<InferableFunction> = jasmine.createSpy();
         let isClientOfflineSpy: jasmine.Spy<InferableFunction>;
         beforeAll(() => {
-            isClientOfflineSpy = spyOn(handler, 'isClientOffline');
             TestBed.configureTestingModule({
                 providers: [{
                     provide: AppNotificationService,
@@ -23,6 +22,7 @@ describe('src/app/app-error-handler.ts', () => {
                 }],
             });
             handler = TestBed.get(ErrorHandler);
+            isClientOfflineSpy = spyOn(handler, 'isClientOffline');
         });
         afterEach(() => {
             isClientOfflineSpy.calls.reset();
