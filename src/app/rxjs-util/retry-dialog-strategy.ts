@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { flatMap, map, skipWhile } from 'rxjs/operators';
 import { RetryDialogComponent } from '../modules/common/retry-dialog';
 
-type ErrorItem = any | HttpErrorResponse;
-type CreateDialogFuncResponse = MatDialogRef<RetryDialogComponent, boolean>;
-type CreateDialogFunc = (error?: ErrorItem) => CreateDialogFuncResponse;
-type RetryDialogStrategyFuncResponse = (errors: Observable<ErrorItem>) => Observable<true>;
-type RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) => RetryDialogStrategyFuncResponse;
+export type ErrorItem = any | HttpErrorResponse;
+export type CreateDialogFuncResponse = MatDialogRef<RetryDialogComponent, boolean>;
+export type CreateDialogFunc = (error?: ErrorItem) => CreateDialogFuncResponse;
+export type RetryDialogStrategyFuncResponse = (errors: Observable<ErrorItem>) => Observable<true>;
+export type RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) => RetryDialogStrategyFuncResponse;
 
 export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) => {
     return (errors: Observable<ErrorItem>): Observable<true> => {
