@@ -1,5 +1,5 @@
-import { from } from 'rxjs';
-import { retryWhen } from 'rxjs/operators';
+import { from, merge, throwError, Subject } from 'rxjs';
+import { delay, flatMap, retryWhen, tap } from 'rxjs/operators';
 import { retryDialogStrategy, RetryDialogStrategyFuncResponse } from './retry-dialog-strategy';
 
 describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
@@ -38,11 +38,82 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
             });
         });
         describe('Error occurs', () => {
+            const testError: Error = new Error('testError');
+            const afterClosedSubject: Subject<boolean> = new Subject();
+            beforeEach(() => {
+                createDialogSpy.and.callFake(() => {
+                    return {
+                        afterClosed: () => afterClosedSubject.pipe(delay(100)),
+                    };
+                });
+            });
             describe('Should be retried', () => {
-                it('needs to be implemented');
+                it('should open the dialog and succeed after first retry', (done) => {
+                    let tries = 0;
+                    from([1])
+                        .pipe(
+                            tap((value) => {
+                                tries++;
+                                if (tries < 2) {
+                                    throw testError;
+                                }
+                            }),
+                            retryWhen(strategy))
+                        .subscribe(nextSpy, errorSpy, () => {
+                            expect(errorSpy).not.toHaveBeenCalled();
+                            expect(nextSpy).toHaveBeenCalledTimes(1);
+                            expect(nextSpy.calls.allArgs()).toEqual([[1]]);
+                            expect(createDialogSpy).toHaveBeenCalledTimes(1);
+                            done();
+                        });
+                    afterClosedSubject.next(true);
+                });
+                it('should not open dialogs twice', (done) => {
+                    let tries = 0;
+                    from([1])
+                        .pipe(
+                            flatMap((value) => {
+                                tries++;
+                                if (tries < 2) {
+                                    return merge(throwError(testError), throwError(testError));
+                                } else {
+                                    return from([value]);
+                                }
+                            }),
+                            retryWhen(strategy))
+                        .subscribe(nextSpy, errorSpy, () => {
+                            expect(errorSpy).not.toHaveBeenCalled();
+                            expect(nextSpy).toHaveBeenCalledTimes(1);
+                            expect(nextSpy.calls.allArgs()).toEqual([[1]]);
+                            expect(createDialogSpy).toHaveBeenCalledTimes(1);
+                            done();
+                        });
+                    afterClosedSubject.next(true);
+                });
             });
             describe('Should not be retried', () => {
-                it('needs to be implemented');
+                it('should open the dialog and fail the observable', (done) => {
+                    throwError(testError)
+                        .pipe(retryWhen(strategy))
+                        .subscribe(nextSpy, () => {
+                            expect(nextSpy).not.toHaveBeenCalled();
+                            expect(createDialogSpy).toHaveBeenCalledTimes(1);
+                            done();
+                        });
+                    afterClosedSubject.next(false);
+                });
+                it('should open the dialog and retry once and fail the observable after', (done) => {
+                    throwError(testError)
+                        .pipe(retryWhen(strategy))
+                        .subscribe(nextSpy, () => {
+                            expect(errorSpy).not.toHaveBeenCalled();
+                            expect(nextSpy).not.toHaveBeenCalled();
+                            expect(createDialogSpy).toHaveBeenCalledTimes(2);
+                            done();
+                        });
+                    afterClosedSubject.next(true);
+                    afterClosedSubject.next(false);
+                });
             });
         });
     });
