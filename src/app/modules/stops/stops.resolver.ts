@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { IStopLocations } from '@donmahallem/trapeze-api-types';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, flatMap, retryWhen, skipWhile, tap } from 'rxjs/operators';
+import { catchError, retryWhen } from 'rxjs/operators';
+import { retryDialogStrategy } from 'src/app/rxjs-util';
 import { ApiService } from '../../services';
 import { RetryDialogComponent } from '../common/retry-dialog';
 
@@ -37,25 +38,13 @@ export class StopsResolver implements Resolve<IStopLocations> {
                 }
                 return EMPTY;
             }),
-                retryWhen((errors: Observable<any>): Observable<any> => {
-                    let dialogOpen = false;
-                    return errors.pipe(skipWhile(() => dialogOpen),
-                        flatMap((error: any | HttpErrorResponse) => {
-                            dialogOpen = true;
-                            const dialogRef: MatDialogRef<RetryDialogComponent, boolean> = this.dialog.open(RetryDialogComponent, {
-                                data: {
-                                    code: error.status ? error.status : undefined,
-                                    message: 'test',
-                                },
-                            });
-                            return dialogRef.afterClosed()
-                                .pipe(tap((tapedValue: boolean): void => {
-                                    dialogOpen = false;
-                                    if (tapedValue !== true) {
-                                        throw new Error();
-                                    }
-                                }));
-                        }));
-                }));
+                retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) => {
+                    return this.dialog.open(RetryDialogComponent, {
+                        data: {
+                            code: error.status ? error.status : undefined,
+                            message: 'test',
+                        },
+                    });
+                })));
     }
 }
