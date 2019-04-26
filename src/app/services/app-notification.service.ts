@@ -32,6 +32,10 @@ export interface IAppNotification {
      * Notification Message
      */
     message?: string;
+    /**
+     * Reportable
+     */
+    reportable?: boolean;
 }
 
 @Injectable({

@@ -32,6 +32,21 @@ describe('src/app/app-error-handler.ts', () => {
             expect(handler).toBeTruthy();
         });
         describe('handleError()', () => {
+            describe('client is offnline', () => {
+                const notifyReturnValue = 'any value';
+                beforeEach(() => {
+                    isClientOfflineSpy.and.returnValue(true);
+                    notifySpy.and.returnValue(notifyReturnValue);
+                });
+                it('should abort early if the client is offline', () => {
+                    expect(handler.handleError(undefined)).toEqual(notifyReturnValue);
+                    expect(notifySpy).toHaveBeenCalledTimes(1);
+                    expect(notifySpy).toHaveBeenCalledWith([{
+                        title: 'No Internet Connection',
+                        type: AppNotificationType.ERROR,
+                    }]);
+                });
+            });
             describe('client is online', () => {
                 beforeEach(() => {
                     isClientOfflineSpy.and.returnValue(false);
@@ -48,6 +63,22 @@ describe('src/app/app-error-handler.ts', () => {
                             expect(notifySpy).toHaveBeenCalledWith([{
                                 message: `${err.status} - ${err.message}`,
                                 title: 'Server-Error',
+                                type: AppNotificationType.ERROR,
+                            }]);
+                            expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
+                        });
+                    });
+                    [400, 450, 499].forEach((testValue: number): void => {
+                        it('should propagate a Request error for code: ' + testValue, () => {
+                            const err = new HttpErrorResponse({
+                                status: testValue,
+                                statusText: '400 error message',
+                            });
+                            handler.handleError(err);
+                            expect(notifySpy).toHaveBeenCalledTimes(1);
+                            expect(notifySpy).toHaveBeenCalledWith([{
+                                message: `${err.status} - ${err.message}`,
+                                title: 'Request-Error',
                                 type: AppNotificationType.ERROR,
                             }]);
                             expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
