@@ -1,11 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { MatIconModule, MatInputModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AppErrorHandler } from './app-error-handler';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DrawableDirective } from './drawable.directive';
@@ -52,6 +53,10 @@ const moduleImports: any[] = [
             multi: true,
             provide: APP_INITIALIZER,
             useFactory: SettingsInitializer,
+        },
+        {
+            provide: ErrorHandler,
+            useClass: AppErrorHandler,
         },
     ],
 })
