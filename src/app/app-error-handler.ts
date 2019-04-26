@@ -13,9 +13,8 @@ export class AppErrorHandler implements ErrorHandler {
      * Handles all errors
      */
     public handleError(error: Error | HttpErrorResponse | any): void {
-        // Do whatever you like with the error (send it to the server?)
-        // And log it to the console
-        const notificationService = this.injector.get(AppNotificationService);
+        // The notification service
+        const notificationService: AppNotificationService = this.injector.get(AppNotificationService);
         if (error instanceof HttpErrorResponse) {
             // Server or connection error happened
             if (!navigator.onLine) {
