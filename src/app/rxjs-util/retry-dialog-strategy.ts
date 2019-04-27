@@ -26,8 +26,14 @@ export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: Creat
                     .pipe(map((tapedValue: boolean): true => {
                         dialogOpen = false;
                         if (tapedValue !== true) {
-                            throw new Error();
+                            /**
+                             * Rethrow error if dialog was dismissed
+                             */
+                            throw error;
                         }
+                        /**
+                         * Retry the preceeding stream
+                         */
                         return true;
                     }));
             }));
