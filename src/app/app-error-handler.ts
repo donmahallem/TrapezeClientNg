@@ -34,6 +34,11 @@ export class AppErrorHandler implements ErrorHandler {
         console.error('It happens: ', error);
     }
 
+    /**
+     * Handles HttpErrorResponses
+     * @param errorResponse the response to handle
+     * @param notificationService the notification service to be used
+     */
     public handleHttpErrorResponse(errorResponse: HttpErrorResponse, notificationService: AppNotificationService): void {
         // Server or connection error happened
         if (this.isClientOffline()) {
