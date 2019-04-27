@@ -28,7 +28,12 @@ export class AppErrorHandler implements ErrorHandler {
         if (error instanceof HttpErrorResponse) {
             return this.handleHttpErrorResponse(error, notificationService);
         } else {
-            // Handle Client Error (Angular Error, ReferenceError...)
+            notificationService.notify({
+                message: error.message,
+                reportable: true,
+                title: 'Uncaught error occured',
+                type: AppNotificationType.ERROR,
+            });
         }
         // tslint:disable-next-line:no-console
         console.error('It happens: ', error);

@@ -57,6 +57,22 @@ describe('src/app/app-error-handler.ts', () => {
                     });
                 });
             });
+            describe('an Error is reported', () => {
+                [new Error('test error'),
+                ].forEach((testError: any) => {
+                    it('should call notify()', () => {
+                        handler.handleError(testError);
+                        expect(handleHttpErrorResponseSpy).toHaveBeenCalledTimes(0);
+                        expect(notifySpy).toHaveBeenCalledTimes(1);
+                        expect(notifySpy).toHaveBeenCalledWith({
+                            message: testError.message,
+                            reportable: true,
+                            title: 'Uncaught error occured',
+                            type: AppNotificationType.ERROR,
+                        });
+                    });
+                });
+            });
         });
         describe('handleHttpErrorResponse(err,notificationService)', () => {
             const createError = (code: number) => {
