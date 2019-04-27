@@ -7,9 +7,10 @@ import { AppNotificationService, AppNotificationType } from './services/app-noti
 describe('src/app/app-error-handler.ts', () => {
     describe('AppErrorHandler', () => {
         let handler: AppErrorHandler;
-        const notifySpy: jasmine.Spy<InferableFunction> = jasmine.createSpy();
+        const notifySpy: jasmine.Spy<InferableFunction> = jasmine.createSpy('notifySpy');
         let isClientOfflineSpy: jasmine.Spy<InferableFunction>;
-        beforeAll(() => {
+        let notificationService: AppNotificationService;
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 providers: [{
                     provide: AppNotificationService,
@@ -22,6 +23,7 @@ describe('src/app/app-error-handler.ts', () => {
                 }],
             });
             handler = TestBed.get(ErrorHandler);
+            notificationService = TestBed.get(AppNotificationService);
             isClientOfflineSpy = spyOn(handler, 'isClientOffline');
         });
         afterEach(() => {
@@ -32,57 +34,93 @@ describe('src/app/app-error-handler.ts', () => {
             expect(handler).toBeTruthy();
         });
         describe('handleError()', () => {
-            describe('client is offnline', () => {
-                const notifyReturnValue = 'any value';
+            let handleHttpErrorResponseSpy: jasmine.Spy<InferableFunction>;
+            beforeEach(() => {
+                handleHttpErrorResponseSpy = spyOn(handler, 'handleHttpErrorResponse');
+                handleHttpErrorResponseSpy.and.callFake(() => {
+                    return false;
+                });
+            });
+            afterEach(() => {
+                handleHttpErrorResponseSpy.calls.reset();
+            });
+            describe('an HttpErrorResponse is reported', () => {
+                [new HttpErrorResponse({
+                    status: 200,
+                    statusText: '500 error message',
+                })].forEach((testError: any) => {
+                    it('should call handleHttpErrorResponse()', () => {
+                        handler.handleError(testError);
+                        expect(handleHttpErrorResponseSpy).toHaveBeenCalledTimes(1);
+                        expect(handleHttpErrorResponseSpy).toHaveBeenCalledWith(testError, notificationService);
+                        expect(notifySpy).toHaveBeenCalledTimes(0);
+                    });
+                });
+            });
+        });
+        describe('handleHttpErrorResponse(err,notificationService)', () => {
+            const createError = (code: number) => {
+                return new HttpErrorResponse({
+                    status: code,
+                    statusText: 'Status ' + code,
+                    url: 'http://test.com/' + code,
+                });
+            };
+            const testHttpErrors: {
+                error: HttpErrorResponse,
+                message: {
+                    type?: AppNotificationType;
+                    title: string;
+                    message?: string;
+                    reportable?: boolean;
+                },
+            }[] = [{
+                error: createError(404),
+                message: {
+                    message: `404 - ${createError(404).message}`,
+                    title: 'Request-Error',
+                    type: AppNotificationType.ERROR,
+                },
+            }, {
+                error: createError(520),
+                message: {
+                    message: `520 - ${createError(520).message}`,
+                    title: 'Server-Error',
+                    type: AppNotificationType.ERROR,
+                },
+            }, {
+                error: createError(350),
+                message: {
+                    title: 'Unknown HTTP-Error occured',
+                    type: AppNotificationType.ERROR,
+                },
+            }];
+            describe('client is offline', () => {
                 beforeEach(() => {
                     isClientOfflineSpy.and.returnValue(true);
-                    notifySpy.and.returnValue(notifyReturnValue);
                 });
-                it('should abort early if the client is offline', () => {
-                    expect(handler.handleError(undefined)).toEqual(notifyReturnValue);
-                    expect(notifySpy).toHaveBeenCalledTimes(1);
-                    expect(notifySpy).toHaveBeenCalledWith([{
-                        title: 'No Internet Connection',
-                        type: AppNotificationType.ERROR,
-                    }]);
+                testHttpErrors.forEach((testError) => {
+                    it('should notify that the client is offline for status: ' + testError.error.status, () => {
+                        handler.handleHttpErrorResponse(testError.error, notificationService);
+                        expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
+                        expect(notifySpy).toHaveBeenCalledTimes(1);
+                        expect(notifySpy).toHaveBeenCalledWith({
+                            title: 'No Internet Connection',
+                            type: AppNotificationType.ERROR,
+                        });
+                    });
                 });
             });
             describe('client is online', () => {
                 beforeEach(() => {
-                    isClientOfflineSpy.and.returnValue(false);
+                    isClientOfflineSpy.and.callFake(() => false);
                 });
-                describe('HttpErrorResponse was provided', () => {
-                    [500, 550, 599].forEach((testValue: number): void => {
-                        it('should propagate a server error for code: ' + testValue, () => {
-                            const err = new HttpErrorResponse({
-                                status: testValue,
-                                statusText: '500 error message',
-                            });
-                            handler.handleError(err);
-                            expect(notifySpy).toHaveBeenCalledTimes(1);
-                            expect(notifySpy).toHaveBeenCalledWith([{
-                                message: `${err.status} - ${err.message}`,
-                                title: 'Server-Error',
-                                type: AppNotificationType.ERROR,
-                            }]);
-                            expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
-                        });
-                    });
-                    [400, 450, 499].forEach((testValue: number): void => {
-                        it('should propagate a Request error for code: ' + testValue, () => {
-                            const err = new HttpErrorResponse({
-                                status: testValue,
-                                statusText: '400 error message',
-                            });
-                            handler.handleError(err);
-                            expect(notifySpy).toHaveBeenCalledTimes(1);
-                            expect(notifySpy).toHaveBeenCalledWith([{
-                                message: `${err.status} - ${err.message}`,
-                                title: 'Request-Error',
-                                type: AppNotificationType.ERROR,
-                            }]);
-                            expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
-                        });
+                testHttpErrors.forEach((testError) => {
+                    it('should propagate a server error for code: ' + testError.error.status, () => {
+                        handler.handleHttpErrorResponse(testError.error, notificationService);
+                        expect(isClientOfflineSpy).toHaveBeenCalledTimes(1);
+                        expect(notifySpy).toHaveBeenCalledTimes(1);
+                        expect(notifySpy).toHaveBeenCalledWith(testError.message);
                     });
                 });
             });

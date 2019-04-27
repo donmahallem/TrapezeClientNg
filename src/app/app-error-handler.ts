@@ -26,37 +26,40 @@ export class AppErrorHandler implements ErrorHandler {
         // The notification service
         const notificationService: AppNotificationService = this.injector.get(AppNotificationService);
         if (error instanceof HttpErrorResponse) {
-            // Server or connection error happened
-            if (this.isClientOffline()) {
-                // Handle offline error
-                return notificationService.notify({
-                    title: 'No Internet Connection',
-                    type: AppNotificationType.ERROR,
-                });
-            } else if (error.status) {
-                if (error.status >= 500 && error.status < 600) {
-                    return notificationService.notify({
-                        message: `${error.status} - ${error.message}`,
-                        title: 'Server-Error',
-                        type: AppNotificationType.ERROR,
-                    });
-                } else if (error.status >= 400 && error.status < 500) {
-                    return notificationService.notify({
-                        message: `${error.status} - ${error.message}`,
-                        title: 'Request-Error',
-                        type: AppNotificationType.ERROR,
-                    });
-                }
-            }
-            return notificationService.notify({
-                title: 'Unknown HTTP-Error occured',
-                type: AppNotificationType.ERROR,
-            });
-
+            return this.handleHttpErrorResponse(error, notificationService);
         } else {
             // Handle Client Error (Angular Error, ReferenceError...)
         }
         // tslint:disable-next-line:no-console
         console.error('It happens: ', error);
+    }
+
+    public handleHttpErrorResponse(errorResponse: HttpErrorResponse, notificationService: AppNotificationService): void {
+        // Server or connection error happened
+        if (this.isClientOffline()) {
+            // Handle offline error
+            return notificationService.notify({
+                title: 'No Internet Connection',
+                type: AppNotificationType.ERROR,
+            });
+        } else if (errorResponse.status) {
+            if (errorResponse.status >= 500 && errorResponse.status < 600) {
+                return notificationService.notify({
+                    message: `${errorResponse.status} - ${errorResponse.message}`,
+                    title: 'Server-Error',
+                    type: AppNotificationType.ERROR,
+                });
+            } else if (errorResponse.status >= 400 && errorResponse.status < 500) {
+                return notificationService.notify({
+                    message: `${errorResponse.status} - ${errorResponse.message}`,
+                    title: 'Request-Error',
+                    type: AppNotificationType.ERROR,
+                });
+            }
+        }
+        notificationService.notify({
+            title: 'Unknown HTTP-Error occured',
+            type: AppNotificationType.ERROR,
+        });
     }
 }
