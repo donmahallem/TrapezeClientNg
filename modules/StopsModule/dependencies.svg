@@ -22,29 +22,57 @@
 <text text-anchor="start" x="429.7258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
 <g id="clust1" class="cluster">
 <title>cluster_StopsModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="164,-70 164,-195 332,-195 332,-70 164,-70"/>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="11,-70 11,-195 485,-195 485,-70 11,-70"/>
 </g>
-<g id="clust3" class="cluster">
+<g id="clust2" class="cluster">
+<title>cluster_StopsModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="325,-78 325,-130 477,-130 477,-78 325,-78"/>
+</g>
+<g id="clust4" class="cluster">
 <title>cluster_StopsModule_imports</title>
-<polygon fill="none" stroke="#000000" points="172,-78 172,-130 324,-130 324,-78 172,-78"/>
+<polygon fill="none" stroke="#000000" points="19,-78 19,-130 317,-130 317,-78 19,-78"/>
 </g>
-<!-- StopsRoutingModule -->
+<!-- StopsInfoComponent -->
 <g id="node1" class="node">
-<title>StopsRoutingModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="315.7856,-122 312.7856,-126 291.7856,-126 288.7856,-122 180.2144,-122 180.2144,-86 315.7856,-86 315.7856,-122"/>
-<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">StopsRoutingModule</text>
+<title>StopsInfoComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="468.7716,-122 333.2284,-122 333.2284,-86 468.7716,-86 468.7716,-122"/>
+<text text-anchor="middle" x="401" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">StopsInfoComponent</text>
 </g>
 <!-- StopsModule -->
 <g id="node2" class="node">
 <title>StopsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="293.1682,-187 290.1682,-191 269.1682,-191 266.1682,-187 202.8318,-187 202.8318,-151 293.1682,-151 293.1682,-187"/>
-<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">StopsModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="290.1682,-187 287.1682,-191 266.1682,-191 263.1682,-187 199.8318,-187 199.8318,-151 290.1682,-151 290.1682,-187"/>
+<text text-anchor="middle" x="245" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">StopsModule</text>
+</g>
+<!-- StopsInfoComponent&#45;&gt;StopsModule -->
+<g id="edge1" class="edge">
+<title>StopsInfoComponent&#45;&gt;StopsModule</title>
+<path fill="none" stroke="#000000" d="M401,-122.1061C401,-141.3391 401,-169 401,-169 401,-169 300.541,-169 300.541,-169"/>
+<polygon fill="#000000" stroke="#000000" points="300.5411,-165.5001 290.541,-169 300.541,-172.5001 300.5411,-165.5001"/>
+</g>
+<!-- RetryDialogModule -->
+<g id="node3" class="node">
+<title>RetryDialogModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="309.2548,-122 306.2548,-126 285.2548,-126 282.2548,-122 180.7452,-122 180.7452,-86 309.2548,-86 309.2548,-122"/>
+<text text-anchor="middle" x="245" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">RetryDialogModule</text>
+</g>
+<!-- RetryDialogModule&#45;&gt;StopsModule -->
+<g id="edge2" class="edge">
+<title>RetryDialogModule&#45;&gt;StopsModule</title>
+<path fill="none" stroke="#000000" d="M245,-122.1061C245,-122.1061 245,-140.991 245,-140.991"/>
+<polygon fill="#000000" stroke="#000000" points="241.5001,-140.9909 245,-150.991 248.5001,-140.991 241.5001,-140.9909"/>
+</g>
+<!-- StopsRoutingModule -->
+<g id="node4" class="node">
+<title>StopsRoutingModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="162.7856,-122 159.7856,-126 138.7856,-126 135.7856,-122 27.2144,-122 27.2144,-86 162.7856,-86 162.7856,-122"/>
+<text text-anchor="middle" x="95" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">StopsRoutingModule</text>
 </g>
 <!-- StopsRoutingModule&#45;&gt;StopsModule -->
-<g id="edge1" class="edge">
+<g id="edge3" class="edge">
 <title>StopsRoutingModule&#45;&gt;StopsModule</title>
-<path fill="none" stroke="#000000" d="M248,-122.1061C248,-122.1061 248,-140.991 248,-140.991"/>
-<polygon fill="#000000" stroke="#000000" points="244.5001,-140.9909 248,-150.991 251.5001,-140.991 244.5001,-140.9909"/>
+<path fill="none" stroke="#000000" d="M95,-122.1061C95,-141.3391 95,-169 95,-169 95,-169 189.588,-169 189.588,-169"/>
+<polygon fill="#000000" stroke="#000000" points="189.588,-172.5001 199.588,-169 189.588,-165.5001 189.588,-172.5001"/>
 </g>
 </g>
 </svg>

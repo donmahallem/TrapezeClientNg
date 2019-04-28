@@ -63,6 +63,9 @@
                             <a href="#createVehicleIcon" title="src/app/leaflet/icons.ts"><b>createVehicleIcon</b>&nbsp;&nbsp;&nbsp;(src/.../icons.ts)</a>
                         </li>
                         <li>
+                            <a href="#environment" title="src/environments/environment.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.ts)</a>
+                        </li>
+                        <li>
                             <a href="#environment" title="src/environments/environment.dev.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.dev.ts)</a>
                         </li>
                         <li>
@@ -75,10 +78,10 @@
                             <a href="#environment" title="src/environments/environment.prod.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.prod.ts)</a>
                         </li>
                         <li>
-                            <a href="#environment" title="src/environments/environment.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.ts)</a>
+                            <a href="#moduleImports" title="src/app/app.module.ts"><b>moduleImports</b>&nbsp;&nbsp;&nbsp;(src/.../app.module.ts)</a>
                         </li>
                         <li>
-                            <a href="#moduleImports" title="src/app/app.module.ts"><b>moduleImports</b>&nbsp;&nbsp;&nbsp;(src/.../app.module.ts)</a>
+                            <a href="#retryDialogStrategy" title="src/app/rxjs-util/retry-dialog-strategy.ts"><b>retryDialogStrategy</b>&nbsp;&nbsp;&nbsp;(src/.../retry-dialog-strategy.ts)</a>
                         </li>
                         <li>
                             <a href="#SettingsInitializer" title="src/app/app.module.ts"><b>SettingsInitializer</b>&nbsp;&nbsp;&nbsp;(src/.../app.module.ts)</a>
@@ -182,6 +185,41 @@
 </div>
                     </td>
                 </tr>
+
+            </tbody>
+        </table>
+</section>
+    <h3>src/environments/environment.ts</h3>
+    <section>
+    <h3></h3>        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="environment"></a>
+                        <span class="name">
+                            <b>
+                            environment</b>
+                            <a href="#environment"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/IEnvironmentBase.html" target="_self" >IEnvironmentBase</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>{
+    apiEndpoint: &#x27;/&#x27;,
+    production: true,
+    pwa: false,
+    version: getAppVersion(),
+}</code>
+                        </td>
+                    </tr>
+
 
             </tbody>
         </table>
@@ -326,41 +364,6 @@
             </tbody>
         </table>
 </section>
-    <h3>src/environments/environment.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="environment"></a>
-                        <span class="name">
-                            <b>
-                            environment</b>
-                            <a href="#environment"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../interfaces/IEnvironmentBase.html" target="_self" >IEnvironmentBase</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-    apiEndpoint: &#x27;/&#x27;,
-    production: true,
-    pwa: false,
-    version: getAppVersion(),
-}</code>
-                        </td>
-                    </tr>
-
-
-            </tbody>
-        </table>
-</section>
     <h3>src/app/app.module.ts</h3>
     <section>
     <h3></h3>        <table class="table table-sm table-bordered">
@@ -426,6 +429,66 @@
                         </td>
                     </tr>
 
+
+            </tbody>
+        </table>
+</section>
+    <h3>src/app/rxjs-util/retry-dialog-strategy.ts</h3>
+    <section>
+    <h3></h3>        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="retryDialogStrategy"></a>
+                        <span class="name">
+                            <b>
+                            retryDialogStrategy</b>
+                            <a href="#retryDialogStrategy"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../miscellaneous/typealiases.html#RetryDialogStrategyFunc" target="_self" >RetryDialogStrategyFunc</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>(createDialog: CreateDialogFunc) &#x3D;&gt; {
+    return (errors: Observable&lt;ErrorItem&gt;): Observable&lt;true&gt; &#x3D;&gt; {
+        let dialogOpen &#x3D; false;
+        return errors.pipe(skipWhile((): boolean &#x3D;&gt; dialogOpen),
+            flatMap((error: ErrorItem): Observable&lt;true&gt; &#x3D;&gt; {
+                dialogOpen &#x3D; true;
+                const dialogRef: CreateDialogFuncResponse &#x3D; createDialog(error);
+                return dialogRef.afterClosed()
+                    .pipe(map((tapedValue: boolean): true &#x3D;&gt; {
+                        dialogOpen &#x3D; false;
+                        if (tapedValue !&#x3D;&#x3D; true) {
+                            /**
+                             * Rethrow error if dialog was dismissed
+                             */
+                            throw error;
+                        }
+                        /**
+                         * Retry the preceeding stream
+                         */
+                        return true;
+                    }));
+            }));
+    };
+}</code>
+                        </td>
+                    </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>If an error occurs it will call the dialog and waits for its result.
+If the result equals true the stream will be retried</p>
+</div>
+                    </td>
+                </tr>
 
             </tbody>
         </table>
