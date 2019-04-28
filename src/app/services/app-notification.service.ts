@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 
 /**
@@ -47,7 +48,7 @@ export class AppNotificationService {
      * Subject for replaying notifcations
      */
     private notificationSubject: Subject<IAppNotification> = new Subject();
-    constructor() { }
+    constructor(private matSnackBar: MatSnackBar) { }
 
     /**
      * Will publish the notification
