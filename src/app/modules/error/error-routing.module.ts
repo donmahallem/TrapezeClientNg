@@ -5,6 +5,10 @@ import { NotFoundComponent } from './not-found.component';
 const tripPassagesRoute: Routes = [
     {
         component: NotFoundComponent,
+        path: 'not-found',
+    },
+    {
+        component: NotFoundComponent,
         path: '**',
     },
 ];
@@ -17,4 +21,4 @@ const tripPassagesRoute: Routes = [
         RouterModule.forChild(tripPassagesRoute),
     ],
 })
-export class NotFoundRoutingModule { }
+export class ErrorRoutingModule { }
