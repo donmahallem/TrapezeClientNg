@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { StopsInfoComponent } from './stops-info.component';
@@ -30,6 +30,8 @@ export class TestMatDividerComponent {
 
 describe('src/modules/stops/stops-info.component.ts', () => {
     describe('StopsInfoComponent', () => {
+        let fixture: ComponentFixture<StopsInfoComponent>;
+        let app: StopsInfoComponent;
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 declarations: [
@@ -49,8 +51,11 @@ describe('src/modules/stops/stops-info.component.ts', () => {
                                 data: {
                                     stops: {
                                         stops: [
-                                            { name: 'a' },
-                                            { name: 'b' }],
+                                            { name: 'c' },
+                                            { name: 'aa' },
+                                            { name: 'b' },
+                                            { name: 'ab' },
+                                        ],
                                     },
                                 },
                             },
@@ -58,12 +63,39 @@ describe('src/modules/stops/stops-info.component.ts', () => {
                     },
                 ],
             }).compileComponents();
+            fixture = TestBed.createComponent(StopsInfoComponent);
+            app = fixture.debugElement.componentInstance;
         }));
 
         it('should create the app', async(() => {
-            const fixture = TestBed.createComponent(StopsInfoComponent);
-            const app = fixture.debugElement.componentInstance;
             expect(app).toBeTruthy();
         }));
+
+        describe('Class', () => {
+            describe('constructor', () => {
+                it('should sort the provided stops', () => {
+                    const stops = (<any>app).mStops;
+                    expect(stops[0].name).toEqual('aa');
+                    expect(stops[1].name).toEqual('ab');
+                    expect(stops[2].name).toEqual('b');
+                    expect(stops[3].name).toEqual('c');
+                });
+            });
+            describe('stops', () => {
+                describe('getter', () => {
+                    it('should return mStops', () => {
+                        const stops = (<any>app).mStops;
+                        expect(app.stops).toEqual(stops);
+                    });
+                });
+            });
+            describe('hasHeader(idx)', () => {
+                [true, false, true, true].forEach((responseValue, idx) => {
+                    it('should return ' + responseValue + ' for idx: ' + idx, () => {
+                        expect(app.hasHeader(idx)).toEqual(responseValue);
+                    });
+                });
+            });
+        });
     });
 });
