@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { IStopLocations } from '@donmahallem/trapeze-api-types';
-import { EMPTY, Observable } from 'rxjs';
+import { throwError, EMPTY, Observable } from 'rxjs';
 import { catchError, retryWhen } from 'rxjs/operators';
 import { retryDialogStrategy } from 'src/app/rxjs-util';
 import { ApiService } from '../../services';
@@ -34,9 +34,11 @@ export class StopsResolver implements Resolve<IStopLocations> {
             .getStations()
             .pipe(catchError((err: any | HttpErrorResponse): Observable<IStopLocations> => {
                 if (err.status === 404) {
-                    this.router.navigate(['not-found']);
+                    this.router.navigate(['error', 'not-found']);
+                    return EMPTY;
+                } else {
+                    return throwError(err);
                 }
-                return EMPTY;
             }),
                 retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) => {
                     return this.dialog.open(RetryDialogComponent, {
