@@ -88,6 +88,58 @@ describe('src/app/modules/stops/stops.resolver', () => {
                         });
                 });
             });
+            describe('retry dialog gets triggered', () => {
+                describe('retry dialog gets dismissed', () => {
+                    const testError: Error = new Error('Test Error');
+                    beforeEach(() => {
+                        getSpy.and.returnValue(throwError(testError));
+                        openDialogSpy.and.returnValue({
+                            afterClosed: () => {
+                                return from([false]);
+                            },
+                        });
+                    });
+                    afterEach(() => {
+
+                    });
+                    it('should redirect to the 404 page', (done) => {
+                        resolver.resolve(undefined, undefined)
+                            .subscribe(nextSpy, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(0);
+                                expect(errorSpy).toHaveBeenCalledTimes(0);
+                                expect(openDialogSpy).toHaveBeenCalledTimes(1);
+                                // expect(openDialogSpy).toHaveBeenCalledTimes(1);
+                                expect(navigateSpy).toHaveBeenCalledTimes(0);
+                                done();
+                            });
+                    });
+                });
+                describe('retry dialog gets opened once', () => {
+                    const testError: Error = new Error('Test Error');
+                    beforeEach(() => {
+                        getSpy.and.returnValue(throwError(testError));
+                        openDialogSpy.and.returnValue({
+                            afterClosed: () => {
+                                return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
+                            },
+                        });
+                    });
+                    afterEach(() => {
+
+                    });
+                    it('should redirect to the 404 page', (done) => {
+                        resolver.resolve(undefined, undefined)
+                            .subscribe(nextSpy, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(0);
+                                expect(errorSpy).toHaveBeenCalledTimes(0);
+                                expect(openDialogSpy).toHaveBeenCalledTimes(2);
+                                // expect(openDialogSpy).toHaveBeenCalledTimes(1);
+                                expect(navigateSpy).toHaveBeenCalledTimes(0);
+                                done();
+                            });
+                    });
+                });
+            });
         });
     });
 });
