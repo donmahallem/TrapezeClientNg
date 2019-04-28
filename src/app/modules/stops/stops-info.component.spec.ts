@@ -70,6 +70,9 @@ describe('src/modules/stops/stops-info.component.ts', () => {
         it('should create the app', async(() => {
             expect(app).toBeTruthy();
         }));
+        describe('layout', () => {
+            it('needs to done');
+        });
 
         describe('Class', () => {
             describe('constructor', () => {
