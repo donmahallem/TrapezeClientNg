@@ -114,29 +114,56 @@ describe('src/app/modules/stops/stops.resolver', () => {
                             });
                     });
                 });
-                describe('retry dialog gets opened once', () => {
-                    const testError: Error = new Error('Test Error');
-                    beforeEach(() => {
-                        getSpy.and.returnValue(throwError(testError));
-                        openDialogSpy.and.returnValue({
-                            afterClosed: () => {
-                                return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
-                            },
+                describe('retry dialog gets opened', () => {
+                    describe('for an error with status property', () => {
+                        const testError: HttpErrorResponse = new HttpErrorResponse({ status: 505 });
+                        beforeEach(() => {
+                            getSpy.and.returnValue(throwError(testError));
+                            openDialogSpy.and.returnValue({
+                                afterClosed: () => {
+                                    return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
+                                },
+                            });
+                        });
+                        afterEach(() => {
+
+                        });
+                        it('should redirect to the 404 page', (done) => {
+                            resolver.resolve(undefined, undefined)
+                                .subscribe(nextSpy, () => {
+                                    expect(nextSpy).toHaveBeenCalledTimes(0);
+                                    expect(errorSpy).toHaveBeenCalledTimes(0);
+                                    expect(openDialogSpy).toHaveBeenCalledTimes(2);
+                                    // expect(openDialogSpy).toHaveBeenCalledTimes(1);
+                                    expect(navigateSpy).toHaveBeenCalledTimes(0);
+                                    done();
+                                });
                         });
                     });
-                    afterEach(() => {
-
-                    });
-                    it('should redirect to the 404 page', (done) => {
-                        resolver.resolve(undefined, undefined)
-                            .subscribe(nextSpy, () => {
-                                expect(nextSpy).toHaveBeenCalledTimes(0);
-                                expect(errorSpy).toHaveBeenCalledTimes(0);
-                                expect(openDialogSpy).toHaveBeenCalledTimes(2);
-                                // expect(openDialogSpy).toHaveBeenCalledTimes(1);
-                                expect(navigateSpy).toHaveBeenCalledTimes(0);
-                                done();
+                    describe('for an error without status property', () => {
+                        const testError: Error = new Error('Test Error');
+                        beforeEach(() => {
+                            getSpy.and.returnValue(throwError(testError));
+                            openDialogSpy.and.returnValue({
+                                afterClosed: () => {
+                                    return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
+                                },
                             });
+                        });
+                        afterEach(() => {
+
+                        });
+                        it('should redirect to the 404 page', (done) => {
+                            resolver.resolve(undefined, undefined)
+                                .subscribe(nextSpy, () => {
+                                    expect(nextSpy).toHaveBeenCalledTimes(0);
+                                    expect(errorSpy).toHaveBeenCalledTimes(0);
+                                    expect(openDialogSpy).toHaveBeenCalledTimes(2);
+                                    // expect(openDialogSpy).toHaveBeenCalledTimes(1);
+                                    expect(navigateSpy).toHaveBeenCalledTimes(0);
+                                    done();
+                                });
+                        });
                     });
                 });
             });
