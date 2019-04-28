@@ -2,13 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { async, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { ApiService } from 'src/app/services';
 import { StopsResolver } from './stops.resolver';
 
-class TestMatDialog {
-
-}
 // import * as sinon from "sinon";
 describe('src/app/modules/stops/stops.resolver', () => {
     describe('StopsResolver', () => {
@@ -17,11 +14,13 @@ describe('src/app/modules/stops/stops.resolver', () => {
         let navigateSpy: jasmine.Spy<InferableFunction>;
         let nextSpy: jasmine.Spy<InferableFunction>;
         let errorSpy: jasmine.Spy<InferableFunction>;
+        let openDialogSpy: jasmine.Spy<InferableFunction>;
         beforeAll(() => {
             getSpy = jasmine.createSpy();
             navigateSpy = jasmine.createSpy();
             nextSpy = jasmine.createSpy();
             errorSpy = jasmine.createSpy();
+            openDialogSpy = jasmine.createSpy();
         });
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -38,7 +37,9 @@ describe('src/app/modules/stops/stops.resolver', () => {
                         },
                     }, {
                         provide: MatDialog,
-                        useClass: TestMatDialog,
+                        useValue: {
+                            open: openDialogSpy,
+                        },
                     }],
             });
             resolver = TestBed.get(StopsResolver);
@@ -49,6 +50,7 @@ describe('src/app/modules/stops/stops.resolver', () => {
             nextSpy.calls.reset();
             navigateSpy.calls.reset();
             errorSpy.calls.reset();
+            openDialogSpy.calls.reset();
         });
 
         describe('resolve(route, state)', () => {
@@ -62,8 +64,26 @@ describe('src/app/modules/stops/stops.resolver', () => {
                         .subscribe(nextSpy, errorSpy, () => {
                             expect(nextSpy).toHaveBeenCalledTimes(0);
                             expect(errorSpy).toHaveBeenCalledTimes(0);
+                            expect(openDialogSpy).toHaveBeenCalledTimes(0);
                             expect(navigateSpy).toHaveBeenCalledTimes(1);
                             expect(navigateSpy).toHaveBeenCalledWith(['error', 'not-found']);
+                            done();
+                        });
+                });
+            });
+            describe('no error occurs', () => {
+                const testValues: number[] = [1, 2, 3];
+                beforeEach(() => {
+                    getSpy.and.returnValue(from(testValues));
+                });
+                it('should redirect to the 404 page', (done) => {
+                    resolver.resolve(undefined, undefined)
+                        .subscribe(nextSpy, errorSpy, () => {
+                            expect(nextSpy).toHaveBeenCalledTimes(3);
+                            expect(nextSpy.calls.allArgs()).toEqual(testValues.map(value => [value]));
+                            expect(errorSpy).toHaveBeenCalledTimes(0);
+                            expect(openDialogSpy).toHaveBeenCalledTimes(0);
+                            expect(navigateSpy).toHaveBeenCalledTimes(0);
                             done();
                         });
                 });
