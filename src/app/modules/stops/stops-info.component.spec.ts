@@ -32,12 +32,6 @@ class TestMatDividerComponent {
 class TestMatIconComponent {
 
 }
-@Component({
-    selector: 'mat-icon',
-    template: '<div></div>',
-})
-export class TestMatIconComponent {
-}
 
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
