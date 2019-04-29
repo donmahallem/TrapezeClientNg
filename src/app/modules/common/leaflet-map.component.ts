@@ -100,7 +100,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             color: '#0000FF',
             fillColor: '#0000FF',
             fillOpacity: 0.9,
-            opacity: 0.2,
+            opacity: 0.1,
             radius: 5,
         }).addTo(this.userLocationLayer);
     }
