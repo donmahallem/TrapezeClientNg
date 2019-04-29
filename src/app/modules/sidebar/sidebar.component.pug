@@ -3,6 +3,14 @@ button(mat-icon-button,(click)="closeSidebar()")
 mat-list
     h3(matSubheader) Head
     mat-list-item
+        mat-icon(matListIcon) home
+        h4(matLine) Home
+        p(matLine) Home
+    mat-list-item
+        mat-icon(matListIcon) place
+        h4(matLine) Stops
+        p(matLine) List of stops
+    mat-list-item
         mat-icon(matListIcon) warning
         h4(matLine) No Content yet
         p(matLine) New stuff to come?
@@ -15,3 +23,6 @@ mat-list
         mat-icon(matListIcon) info
         h4(matLine) Angular Version
         p(matLine) {{angularVersion}}
+.info-box
+    span(title="Angular Version") {{angularVersion}}
+    span(title="App Version") {{appVersion}}
