@@ -1,11 +1,12 @@
 :host {
     position: relative;
-    height:calc(100vw / 4 * 3);
     min-height:250px;
     max-height:300px;
+    height:calc(100vw / 4 * 3);
     width: 100%;
     user-select: none;
     overflow:none;
+    flex:0 0;
 }
 
 :host > ::ng-deep map {
