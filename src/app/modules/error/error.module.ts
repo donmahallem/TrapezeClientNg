@@ -5,9 +5,11 @@ import {
 } from '@angular/material';
 import { ErrorRoutingModule } from './error-routing.module';
 import { NotFoundComponent } from './not-found.component';
+import { CommonErrorComponent } from './common-error.component';
 @NgModule({
     declarations: [
         NotFoundComponent,
+        CommonErrorComponent
     ],
     imports: [
         ErrorRoutingModule,

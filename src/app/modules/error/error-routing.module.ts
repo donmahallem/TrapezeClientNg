@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found.component';
+import { CommonErrorComponent } from './common-error.component';
 
-const tripPassagesRoute: Routes = [
+const errorRoutes: Routes = [
+    {
+        component: CommonErrorComponent,
+        path: '',
+    },
     {
         component: NotFoundComponent,
         path: 'not-found',
     },
     {
-        component: NotFoundComponent,
         path: '**',
+        redirectTo: 'not-found'
     },
 ];
 
@@ -18,7 +23,7 @@ const tripPassagesRoute: Routes = [
         RouterModule,
     ],
     imports: [
-        RouterModule.forChild(tripPassagesRoute),
+        RouterModule.forChild(errorRoutes),
     ],
 })
 export class ErrorRoutingModule { }
