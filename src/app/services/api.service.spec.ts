@@ -8,7 +8,7 @@ describe('src/app/services/api.service', () => {
         let apiService: ApiService;
         let getSpy: jasmine.Spy<InferableFunction>;
         const testEndpoint = 'https://test.com/';
-        const testId = 'testId1234';
+        const testId: any = 'testId1234';
         beforeAll(() => {
             getSpy = jasmine.createSpy();
         });
