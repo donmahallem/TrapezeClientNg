@@ -106,7 +106,7 @@ app-main-toolbar{
         left:0px;
         right:0px;
         bottom:0px;
-        overflow-y:auto;
+        overflow:auto;
         ::ng-deep > *:not(:first-child) {
             background-color:#F9F9F9;
             pointer-events:visible;
