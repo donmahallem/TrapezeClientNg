@@ -10,19 +10,27 @@ import { StopsInfoComponent } from './stops-info.component';
     selector: 'mat-nav-list',
     template: '<div></div>',
 })
-export class TestMatListComponent {
+class TestMatListComponent {
 }
 @Component({
     selector: 'mat-list-item',
     template: '<div></div>',
 })
-export class TestMatListItemComponent {
+class TestMatListItemComponent {
 }
 @Component({
     selector: 'mat-divider',
     template: '<div></div>',
 })
-export class TestMatDividerComponent {
+class TestMatDividerComponent {
+}
+
+@Component({
+    selector: 'mat-icon',
+    template: '<div></div>',
+})
+class TestMatIconComponent {
+
 }
 
 // tslint:enable:component-selector
@@ -39,6 +47,7 @@ describe('src/modules/stops/stops-info.component.ts', () => {
                     TestMatListComponent,
                     TestMatDividerComponent,
                     TestMatListItemComponent,
+                    TestMatIconComponent,
                 ],
                 imports: [
                     RouterTestingModule,
