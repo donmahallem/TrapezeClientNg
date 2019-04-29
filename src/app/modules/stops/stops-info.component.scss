@@ -1,15 +1,8 @@
-:host {
-    display: flex;
-    flex-direction: column;
-    flex-flow: column;
-    height: 100%;
-    background: #F9F9F9;
-}
-
 mat-nav-list.stoplist {
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
+    padding: 10px 20px 10px 20px;
 }
 @import './../../box-settings.scss';
 @media (min-width: #{$boxMaxWidth + 1}){

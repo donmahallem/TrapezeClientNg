@@ -2,14 +2,6 @@ h3.route-title {
     padding: 24px;
 }
 
-:host {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    background: #F9F9F9;
-    overflow-y: auto;
-}
-
 div.error-box {
     background: #F44336;
     padding: 16px;
