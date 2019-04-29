@@ -3,14 +3,16 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule, MatListModule,
 } from '@angular/material';
-import { NotFoundRoutingModule } from './not-found-routing.module';
+import { CommonErrorComponent } from './common-error.component';
+import { ErrorRoutingModule } from './error-routing.module';
 import { NotFoundComponent } from './not-found.component';
 @NgModule({
     declarations: [
         NotFoundComponent,
+        CommonErrorComponent,
     ],
     imports: [
-        NotFoundRoutingModule,
+        ErrorRoutingModule,
         CommonModule,
         MatListModule,
         MatIconModule,
@@ -18,4 +20,4 @@ import { NotFoundComponent } from './not-found.component';
     providers: [
     ],
 })
-export class NotFoundModule { }
+export class ErrorModule { }
