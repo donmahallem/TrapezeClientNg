@@ -24,6 +24,12 @@ export class TestMatListItemComponent {
 })
 export class TestMatDividerComponent {
 }
+@Component({
+    selector: 'mat-icon',
+    template: '<div></div>',
+})
+export class TestMatIconComponent {
+}
 
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
@@ -39,6 +45,7 @@ describe('src/modules/stops/stops-info.component.ts', () => {
                     TestMatListComponent,
                     TestMatDividerComponent,
                     TestMatListItemComponent,
+                    TestMatIconComponent,
                 ],
                 imports: [
                     RouterTestingModule,
