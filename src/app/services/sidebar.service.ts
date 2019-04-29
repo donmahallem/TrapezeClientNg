@@ -8,8 +8,7 @@ export class SidebarService {
     private sidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public readonly sidebarObservable: Observable<boolean> = this.sidebarStatusSubject.asObservable();
 
-    public constructor() {
-    }
+    public constructor() { }
 
     public get sidebarOpen(): boolean {
         return this.sidebarStatusSubject.value;
