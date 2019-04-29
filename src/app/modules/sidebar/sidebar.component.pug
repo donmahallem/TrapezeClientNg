@@ -19,10 +19,14 @@ mat-list
         mat-icon(matListIcon) info
         h4(matLine) Version
         p(matLine) {{appVersion}}
+    mat-list-item((click)="openGithub()")
+        mat-icon(matListIcon) info
+        h4(matLine) Github
+        p(matLine) The Projects Source Code
     mat-list-item
         mat-icon(matListIcon) info
         h4(matLine) Angular Version
         p(matLine) {{angularVersion}}
 .info-box
-    span(title="Angular Version") {{angularVersion}}
-    span(title="App Version") {{appVersion}}
+    span(title="App Version") App: {{appVersion}}
+    span(title="Angular Version") Angular: {{angularVersion}}

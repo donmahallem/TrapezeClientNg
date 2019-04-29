@@ -15,6 +15,10 @@ export class SidebarComponent {
         this.sidebarService.closeSidebar();
     }
 
+    public openGithub(): void {
+        window.open('https://github.com/donmahallem/TrapezeClientNg', '_blank');
+    }
+
     /**
      * The app version found inside the package
      * @returns the package version
