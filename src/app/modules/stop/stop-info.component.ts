@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, IStopPassage, StopId } from '@donmahallem/trapeze-api-types';
 import { combineLatest, from, merge, timer, Observable, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map } from 'rxjs/operators';
 import { StopPointService } from 'src/app/services/stop-point.service';
@@ -91,7 +91,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         })), stopIdObvservable])
             .pipe(
                 map((a): string => a[1]),
-                flatMap((stopId: string): Observable<IStopPassage> => {
+                flatMap((stopId: StopId): Observable<IStopPassage> => {
                     return this.apiService.getStopPassages(stopId);
                 }),
                 catchError((err, a) => {

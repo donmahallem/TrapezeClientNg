@@ -1,6 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ISettings, IStopInfo, IStopLocations, IStopPassage, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import {
+    ISettings,
+    IStopInfo,
+    IStopLocations,
+    IStopPassage,
+    IVehicleLocation,
+    IVehicleLocationList,
+    StopId,
+    TripId,
+    VehicleId,
+} from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { TripPassagesLocation } from '../models';
@@ -16,20 +26,20 @@ export class ApiService {
         return environment.apiEndpoint.endsWith('\/') ? environment.apiEndpoint : (environment.apiEndpoint + '\/');
     }
 
-    public getTripPassages(tripId: string): Observable<TripPassagesLocation> {
+    public getTripPassages(tripId: TripId): Observable<TripPassagesLocation> {
         return this.http.get<TripPassagesLocation>(this.baseUrl() + 'api/trip/' + tripId + '/passages?mode=departure');
     }
-    public getRouteByVehicleId(vehicleId: string): Observable<any> {
+    public getRouteByVehicleId(vehicleId: VehicleId): Observable<any> {
         return this.http.get(this.baseUrl() + 'api/vehicle/' + vehicleId + '/route');
     }
-    public getRouteByTripId(vehicleId: string): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/trip/' + vehicleId + '/route');
+    public getRouteByTripId(tripId: TripId): Observable<any> {
+        return this.http.get(this.baseUrl() + 'api/trip/' + tripId + '/route');
     }
-    public getStopInfo(vehicleId: string | number): Observable<IStopInfo> {
-        return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + vehicleId + '/info');
+    public getStopInfo(stopId: StopId): Observable<IStopInfo> {
+        return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + stopId + '/info');
     }
-    public getStopPassages(vehicleId: string | number): Observable<IStopPassage> {
-        return this.http.get<IStopPassage>(this.baseUrl() + 'api/stop/' + vehicleId + '/departures');
+    public getStopPassages(stopId: StopId): Observable<IStopPassage> {
+        return this.http.get<IStopPassage>(this.baseUrl() + 'api/stop/' + stopId + '/departures');
     }
     public getVehicleLocations(bounds: IMapBounds): Observable<IVehicleLocationList> {
         return this.http.get<IVehicleLocationList>(this.baseUrl() + 'api/geo/vehicles', {
@@ -41,7 +51,7 @@ export class ApiService {
             },
         });
     }
-    public getVehicleLocation(vehicleId: string): Observable<IVehicleLocation> {
+    public getVehicleLocation(vehicleId: VehicleId): Observable<IVehicleLocation> {
         return this.http.get<IVehicleLocation>(this.baseUrl() + 'api/geo/vehicle/' + vehicleId);
     }
 
