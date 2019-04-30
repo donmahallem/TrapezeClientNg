@@ -1,8 +1,0 @@
-.header
-    mat-icon help_outline
-h3 Not Found
-mat-nav-list(role="list")
-    a(*ngFor="let endpoint of endpoints",[routerLink]="[endpoint.path]")
-        mat-list-item(role="listitem")
-            mat-icon(matListIcon) {{endpoint.icon}}
-            h3(matLine) {{endpoint.title}}

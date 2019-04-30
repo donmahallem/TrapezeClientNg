@@ -16,8 +16,8 @@ const appRoutes: Routes = [
         path: 'stops',
     },
     {
-        loadChildren: './modules/not-found/not-found.module#NotFoundModule',
-        path: 'not-found',
+        loadChildren: './modules/error/error.module#ErrorModule',
+        path: 'error',
     },
     {
         children: [
@@ -25,7 +25,7 @@ const appRoutes: Routes = [
         path: '',
     },
     {
-        path: '**', redirectTo: '/not-found',
+        path: '**', redirectTo: '/error/not-found',
     },
 ];
 
