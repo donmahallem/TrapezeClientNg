@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IStopLocation } from '@donmahallem/trapeze-api-types';
-import { BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { IStopLocation, IStopLocations } from '@donmahallem/trapeze-api-types';
+import { BehaviorSubject, Observable, Subscriber, Subscription, Subject, merge, combineLatest, from, NEVER } from 'rxjs';
+import { map, shareReplay, mergeAll, flatMap, catchError, delay } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
 export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
@@ -27,23 +27,28 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
 })
 export class StopPointService {
 
-    private stopLocationsSubject: BehaviorSubject<IStopLocation[]> = new BehaviorSubject([]);
-    private stopLoadSubscription: Subscription;
+    private mStopLocations: IStopLocation[];
+    private sharedReplay: Observable<IStopLocation[]>;
+    private retrySubject: BehaviorSubject<void> = new BehaviorSubject(undefined);
     constructor(private api: ApiService) {
+        this.sharedReplay = this.retrySubject
+            .pipe(flatMap((err): Observable<IStopLocations> => {
+                return this.api.getStations();
+            }),
+                catchError((err) => {
+                    this.retrySubject.next();
+                    return NEVER;
+                }), map((value): IStopLocation[] => {
+                    return value.stops;
+                }), shareReplay(1));
+        this.sharedReplay.subscribe(new StopPointLoadSubscriber(this));
     }
 
-    private loadStops(): void {
-        this.stopLoadSubscription = this.api.getStations()
-            .pipe(map((value) => {
-                return value.stops;
-            }))
-            .subscribe(new StopPointLoadSubscriber(this));
-    }
     public get stopLocations(): IStopLocation[] {
-        return this.stopLocationsSubject.value;
+        return this.mStopLocations;
     }
-    public set stopLocations(locations: IStopLocation[]) {
-        this.stopLocationsSubject.next(locations ? locations : []);
+    public set stopLocations(stops: IStopLocation[]) {
+        this.mStopLocations = stops;
     }
 
     public getStopLocation(stopShortName: string): IStopLocation {
@@ -55,15 +60,8 @@ export class StopPointService {
         return undefined;
     }
 
-    public get isLoading(): boolean {
-        return this.stopLoadSubscription && !this.stopLoadSubscription.closed;
-    }
-
     public get stopLocationsObservable(): Observable<IStopLocation[]> {
-        if (this.stopLocations.length === 0 && !this.isLoading) {
-            this.loadStops();
-        }
-        return this.stopLocationsSubject.asObservable();
+        return this.sharedReplay;
     }
 
 }
