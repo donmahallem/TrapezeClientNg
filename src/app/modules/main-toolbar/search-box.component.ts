@@ -44,23 +44,16 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
     public onLoseFocus(): void {
         this.focusSearch.next(false);
     }
-
-    public onStopSelected(stop?: MatAutocompleteSelectedEvent): void {
-        this.searchOpen = false;
-        this.focusSearch.next(false);
-        if (stop.option.value) {
-            this.searchControl.setValue('');
-            this.router.navigate(['/stop', stop.option.value.shortName]);
-        }
-    }
-    displayFn(user?: IStopLocation): string | undefined {
-        return user ? user.name : undefined;
-    }
     public ngOnInit(): void {
         this.filteredOptions = this.searchControl.valueChanges
             .pipe(
                 startWith(''),
                 flatMap((value: string) => {
+                    this.router.navigate(['search'], {
+                        queryParams: {
+                            q: value
+                        }, skipLocationChange: true
+                    });
                     return this.stopService.stopLocationsObservable
                         .pipe(map((stops: IStopLocation[]) => {
                             return stops.filter(option => option.name.toLowerCase().includes(value));
