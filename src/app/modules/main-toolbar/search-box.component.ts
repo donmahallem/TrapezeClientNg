@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { debounceTime, filter, startWith } from 'rxjs/operators';
 @Component({
     selector: 'app-toolbar-search',
