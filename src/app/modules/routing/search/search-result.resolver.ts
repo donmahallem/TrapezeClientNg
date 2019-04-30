@@ -22,4 +22,3 @@ export class SearchResultResolver implements Resolve<any> {
                 }));
     }
 }
-
