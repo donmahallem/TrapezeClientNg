@@ -88,8 +88,8 @@ const appRoutes: Routes &#x3D; [
         path: &#x27;stops&#x27;,
     },
     {
-        loadChildren: &#x27;./modules/not-found/not-found.module#NotFoundModule&#x27;,
-        path: &#x27;not-found&#x27;,
+        loadChildren: &#x27;./modules/error/error.module#ErrorModule&#x27;,
+        path: &#x27;error&#x27;,
     },
     {
         children: [
@@ -97,7 +97,7 @@ const appRoutes: Routes &#x3D; [
         path: &#x27;&#x27;,
     },
     {
-        path: &#x27;**&#x27;, redirectTo: &#x27;/not-found&#x27;,
+        path: &#x27;**&#x27;, redirectTo: &#x27;/error/not-found&#x27;,
     },
 ];
 

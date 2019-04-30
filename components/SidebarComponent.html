@@ -128,6 +128,10 @@
                                     <span class="modifier">Public</span>
                                 <a href="#closeSidebar">closeSidebar</a>
                             </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#openGithub">openGithub</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -257,6 +261,47 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openGithub"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            openGithub
+                        </b>
+                        <a href="#openGithub"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openGithub()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="18"
+                            class="link-to-prism">src/app/modules/sidebar/sidebar.component.ts:18</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
 
     <section>
@@ -279,7 +324,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/modules/sidebar/sidebar.component.ts:22</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/modules/sidebar/sidebar.component.ts:26</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -314,7 +359,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/modules/sidebar/sidebar.component.ts:30</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/sidebar/sidebar.component.ts:34</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -355,6 +400,10 @@ export class SidebarComponent {
         this.sidebarService.closeSidebar();
     }
 
+    public openGithub(): void {
+        window.open(&#x27;https://github.com/donmahallem/TrapezeClientNg&#x27;, &#x27;_blank&#x27;);
+    }
+
     /**
      * The app version found inside the package
      * @returns the package version
@@ -380,6 +429,14 @@ export class SidebarComponent {
 mat-list
     h3(matSubheader) Head
     mat-list-item
+        mat-icon(matListIcon) home
+        h4(matLine) Home
+        p(matLine) Home
+    mat-list-item
+        mat-icon(matListIcon) place
+        h4(matLine) Stops
+        p(matLine) List of stops
+    mat-list-item
         mat-icon(matListIcon) warning
         h4(matLine) No Content yet
         p(matLine) New stuff to come?
@@ -388,10 +445,17 @@ mat-list
         mat-icon(matListIcon) info
         h4(matLine) Version
         p(matLine) {{appVersion}}
+    mat-list-item((click)&#x3D;&quot;openGithub()&quot;)
+        mat-icon(matListIcon) info
+        h4(matLine) Github
+        p(matLine) The Projects Source Code
     mat-list-item
         mat-icon(matListIcon) info
         h4(matLine) Angular Version
-        p(matLine) {{angularVersion}}</code></pre>
+        p(matLine) {{angularVersion}}
+.info-box
+    span(title&#x3D;&quot;App Version&quot;) App: {{appVersion}}
+    span(title&#x3D;&quot;Angular Version&quot;) Angular: {{angularVersion}}</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-styleData">
@@ -399,10 +463,21 @@ mat-list
                     <code>./sidebar.component.scss</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss">:host{
-    display:block;
+    display:flex;
+    justify-items: stretch;
+    flex-direction: column;
+    height:100%;
 }
-form,mat-form-field{
-    width:100%;
+mat-list{
+    flex:1 0 auto;
+    overflow-y:auto;
+}
+.info-box{
+    border-top: 1px solid grey;
+    flex:0 0;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }</code></pre>
     </div>
 
@@ -431,8 +506,8 @@ form,mat-form-field{
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div>button(mat-icon-button,(click)="closeSidebar()")    mat-icon closemat-list    h3(matSubheader) Head    mat-list-item        mat-icon(matListIcon) warning        h4(matLine) No Content yet        p(matLine) New stuff to come?    mat-divider    mat-list-item        mat-icon(matListIcon) info        h4(matLine) Version        p(matLine) {{appVersion}}    mat-list-item        mat-icon(matListIcon) info        h4(matLine) Angular Version        p(matLine) {{angularVersion}}</div>'
-    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DepartureListComponent', 'selector': 'app-departure-list'},{'name': 'DepartureListItemComponent', 'selector': 'app-departure-list-item'},{'name': 'MainToolbarComponent', 'selector': 'app-main-toolbar'},{'name': 'MapHeaderBoxComponent', 'selector': 'app-map-header-box'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'RetryDialogComponent', 'selector': 'app-retry-dialog'},{'name': 'RouteListComponent', 'selector': 'app-route-list'},{'name': 'RouteLoadingIndicatorComponent', 'selector': 'app-route-loading-indicator'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'StopInfoComponent', 'selector': 'app-stop-info'},{'name': 'StopsInfoComponent', 'selector': 'app-stops-info'},{'name': 'ToolbarSearchBoxComponent', 'selector': 'app-toolbar-search'},{'name': 'TripPassagesComponent', 'selector': 'app-trip-passages'}];
+        var COMPONENT_TEMPLATE = '<div>button(mat-icon-button,(click)="closeSidebar()")    mat-icon closemat-list    h3(matSubheader) Head    mat-list-item        mat-icon(matListIcon) home        h4(matLine) Home        p(matLine) Home    mat-list-item        mat-icon(matListIcon) place        h4(matLine) Stops        p(matLine) List of stops    mat-list-item        mat-icon(matListIcon) warning        h4(matLine) No Content yet        p(matLine) New stuff to come?    mat-divider    mat-list-item        mat-icon(matListIcon) info        h4(matLine) Version        p(matLine) {{appVersion}}    mat-list-item((click)="openGithub()")        mat-icon(matListIcon) info        h4(matLine) Github        p(matLine) The Projects Source Code    mat-list-item        mat-icon(matListIcon) info        h4(matLine) Angular Version        p(matLine) {{angularVersion}}.info-box    span(title="App Version") App: {{appVersion}}    span(title="Angular Version") Angular: {{angularVersion}}</div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CommonErrorComponent', 'selector': 'app-common-error'},{'name': 'DepartureListComponent', 'selector': 'app-departure-list'},{'name': 'DepartureListItemComponent', 'selector': 'app-departure-list-item'},{'name': 'MainToolbarComponent', 'selector': 'app-main-toolbar'},{'name': 'MapHeaderBoxComponent', 'selector': 'app-map-header-box'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'RetryDialogComponent', 'selector': 'app-retry-dialog'},{'name': 'RouteListComponent', 'selector': 'app-route-list'},{'name': 'RouteLoadingIndicatorComponent', 'selector': 'app-route-loading-indicator'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'StopInfoComponent', 'selector': 'app-stop-info'},{'name': 'StopsInfoComponent', 'selector': 'app-stops-info'},{'name': 'ToolbarSearchBoxComponent', 'selector': 'app-toolbar-search'},{'name': 'TripPassagesComponent', 'selector': 'app-trip-passages'}];
     var DIRECTIVES = [{'name': 'CountdownTimerDirective', 'selector': 'span[appCountdownTimer]'},{'name': 'DrawableDirective', 'selector': '[appDrawable]'},{'name': 'FollowBusMapDirective', 'selector': 'map[appTripPassages]'},{'name': 'MainMapDirective', 'selector': 'map[appMainMap]'},{'name': 'StopLocationMapDirective', 'selector': 'map[appStopLocation]'}];
     var ACTUAL_COMPONENT = {'name': 'SidebarComponent'};
 </script>

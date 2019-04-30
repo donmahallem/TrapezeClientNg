@@ -133,6 +133,31 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                             </li>
                             <li class="link">
+                                <a href="modules/ErrorModule.html" data-type="entity-link">ErrorModule</a>
+                                    <li class="chapter inner">
+                                        <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
+                                            'data-target="#components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' : 'data-target="#xs-components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' }>
+                                            <span class="icon ion-md-cog"></span>
+                                            <span>Components</span>
+                                            <span class="icon ion-ios-arrow-down"></span>
+                                        </div>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' :
+                                            'id="xs-components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' }>
+                                            <li class="link">
+                                                <a href="components/CommonErrorComponent.html"
+                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">CommonErrorComponent</a>
+                                            </li>
+                                            <li class="link">
+                                                <a href="components/NotFoundComponent.html"
+                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">NotFoundComponent</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                            </li>
+                            <li class="link">
+                                <a href="modules/ErrorRoutingModule.html" data-type="entity-link">ErrorRoutingModule</a>
+                            </li>
+                            <li class="link">
                                 <a href="modules/MainMapModule.html" data-type="entity-link">MainMapModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
@@ -193,27 +218,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                             </li>
                                         </ul>
                                     </li>
-                            </li>
-                            <li class="link">
-                                <a href="modules/NotFoundModule.html" data-type="entity-link">NotFoundModule</a>
-                                    <li class="chapter inner">
-                                        <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-NotFoundModule-7a10343a8d42363679198726109cfe1c"' : 'data-target="#xs-components-links-module-NotFoundModule-7a10343a8d42363679198726109cfe1c"' }>
-                                            <span class="icon ion-md-cog"></span>
-                                            <span>Components</span>
-                                            <span class="icon ion-ios-arrow-down"></span>
-                                        </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-NotFoundModule-7a10343a8d42363679198726109cfe1c"' :
-                                            'id="xs-components-links-module-NotFoundModule-7a10343a8d42363679198726109cfe1c"' }>
-                                            <li class="link">
-                                                <a href="components/NotFoundComponent.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">NotFoundComponent</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                            </li>
-                            <li class="link">
-                                <a href="modules/NotFoundRoutingModule.html" data-type="entity-link">NotFoundRoutingModule</a>
                             </li>
                             <li class="link">
                                 <a href="modules/RetryDialogModule.html" data-type="entity-link">RetryDialogModule</a>

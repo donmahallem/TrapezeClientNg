@@ -34,7 +34,7 @@
 
 <ol class="breadcrumb">
     <li>Modules</li>
-    <li>NotFoundRoutingModule</li>
+    <li>ErrorRoutingModule</li>
 </ol>
 
 
@@ -54,7 +54,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/modules/not-found/not-found-routing.module.ts</code>
+            <code>src/app/modules/error/error-routing.module.ts</code>
         </p>
 
 
@@ -72,12 +72,21 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgModule } from &#x27;@angular/core&#x27;;
 import { RouterModule, Routes } from &#x27;@angular/router&#x27;;
+import { CommonErrorComponent } from &#x27;./common-error.component&#x27;;
 import { NotFoundComponent } from &#x27;./not-found.component&#x27;;
 
-const tripPassagesRoute: Routes &#x3D; [
+const errorRoutes: Routes &#x3D; [
+    {
+        component: CommonErrorComponent,
+        path: &#x27;&#x27;,
+    },
     {
         component: NotFoundComponent,
+        path: &#x27;not-found&#x27;,
+    },
+    {
         path: &#x27;**&#x27;,
+        redirectTo: &#x27;not-found&#x27;,
     },
 ];
 
@@ -86,10 +95,10 @@ const tripPassagesRoute: Routes &#x3D; [
         RouterModule,
     ],
     imports: [
-        RouterModule.forChild(tripPassagesRoute),
+        RouterModule.forChild(errorRoutes),
     ],
 })
-export class NotFoundRoutingModule { }
+export class ErrorRoutingModule { }
 </code></pre>
     </div>
 </div>
@@ -124,7 +133,7 @@ export class NotFoundRoutingModule { }
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'module';
-            var COMPODOC_CURRENT_PAGE_URL = 'NotFoundRoutingModule.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'ErrorRoutingModule.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>

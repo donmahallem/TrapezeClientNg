@@ -205,7 +205,7 @@ import { EMPTY, Observable } from &#x27;rxjs&#x27;;
 
 export class AppPreloadingStrategy implements PreloadingStrategy {
   preload(route: Route, load: Function): Observable&lt;any&gt; {
-    return route.path.startsWith(&#x27;not-found&#x27;) ? load() : EMPTY;
+    return route.path.startsWith(&#x27;error&#x27;) ? load() : EMPTY;
   }
 }
 </code></pre>
