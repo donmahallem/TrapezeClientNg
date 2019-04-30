@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { debounceTime, filter, startWith } from 'rxjs/operators';
 @Component({
@@ -18,8 +18,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     @Output()
     public readonly focusSearch: EventEmitter<boolean> = new EventEmitter();
-    constructor(private activatedRoute: ActivatedRoute,
-        private router: Router) {
+    constructor(private router: Router) {
     }
 
     public onLoseFocus(): void {
@@ -36,7 +35,6 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
                 debounceTime(200),
             )
             .subscribe((value: string) => {
-                console.log('(JJJ', value);
                 this.router.navigate(['search'], {
                     queryParams: {
                         q: value,
