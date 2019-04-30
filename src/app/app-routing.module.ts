@@ -20,6 +20,10 @@ const appRoutes: Routes = [
         path: 'error',
     },
     {
+        loadChildren: './modules/routing/search/search.module#SearchModule',
+        path: 'search',
+    },
+    {
         children: [
         ],
         path: '',
