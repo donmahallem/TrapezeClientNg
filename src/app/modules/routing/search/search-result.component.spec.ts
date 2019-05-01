@@ -1,11 +1,9 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, Input } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SearchComponent } from './search.component';
-import { Title } from '@angular/platform-browser';
-import { SearchResultResolver } from './search-result.resolver';
 import { StopPointService } from 'src/app/services';
+import { SearchResultResolver } from './search-result.resolver';
+import { SearchComponent } from './search.component';
 
 // tslint:disable:component-selector
 // tslint:disable:directive-selector
@@ -27,7 +25,6 @@ class TestMatListItemComponent {
     public value: any;
 }
 
-
 @Component({
     selector: 'mat-icon',
     template: '<div></div>',
@@ -37,7 +34,6 @@ class TestMatIconComponent {
 
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
-
 
 describe('src/modules/routing/search/search-result.resolver.ts', () => {
     describe('SearchResultResolver', () => {
@@ -62,7 +58,7 @@ describe('src/modules/routing/search/search-result.resolver.ts', () => {
                     {
                         provide: StopPointService,
                         useValue: {
-                            stopLocationsObservable: stopLocationSpy
+                            stopLocationsObservable: stopLocationSpy,
                         },
                     },
                 ],
@@ -71,7 +67,7 @@ describe('src/modules/routing/search/search-result.resolver.ts', () => {
         }));
         afterEach(() => {
             stopLocationSpy.calls.reset();
-        })
+        });
 
         it('should create the component', async(() => {
             expect(testResolver).toBeTruthy();

@@ -1,9 +1,8 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, Input } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Title } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SearchComponent } from './search.component';
-import { Title } from '@angular/platform-browser';
 
 // tslint:disable:component-selector
 // tslint:disable:directive-selector
@@ -25,7 +24,6 @@ class TestMatListItemComponent {
     public value: any;
 }
 
-
 @Component({
     selector: 'mat-icon',
     template: '<div></div>',
@@ -35,7 +33,6 @@ class TestMatIconComponent {
 
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
-
 
 describe('src/modules/routing/search/search.component.ts', () => {
     describe('SearchComponent', () => {
@@ -60,7 +57,7 @@ describe('src/modules/routing/search/search.component.ts', () => {
                     {
                         provide: Title,
                         useValue: {
-                            getTitle: getTitleSpy
+                            getTitle: getTitleSpy,
                         },
                     },
                 ],
@@ -70,7 +67,7 @@ describe('src/modules/routing/search/search.component.ts', () => {
         }));
         afterEach(() => {
             getTitleSpy.calls.reset();
-        })
+        });
 
         it('should create the component', async(() => {
             expect(cmp).toBeTruthy();
