@@ -21,6 +21,9 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
     }
 }
 
+/**
+ * Service for caching and retrieving Stop Locations
+ */
 @Injectable({
     providedIn: 'root',
 })
@@ -46,6 +49,11 @@ export class StopPointService {
     public get stopLocations(): IStopLocation[] {
         return this.mStopLocations;
     }
+
+    /**
+     * retrieves the stop or undefined if not loaded yet or undefined
+     * @param stopShortName short name
+     */
     public getStopLocation(stopShortName: string): IStopLocation {
         for (const stop of this.stopLocations) {
             if (stop.shortName === stopShortName) {
