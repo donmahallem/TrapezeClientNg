@@ -44,7 +44,6 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(): void {
-        // console.log("submit", this.searchControl.value);
         this.router.navigate(['search'], {
             queryParams: {
                 q: this.searchControl.value,
