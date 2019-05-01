@@ -1,6 +1,5 @@
 import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
-import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { StopPointService } from './stop-point.service';
 
@@ -8,12 +7,10 @@ class TestApiService {
 
 }
 
-
 describe('src/app/services/stop-point.service', () => {
     describe('StopPointService', () => {
         let stopService: StopPointService;
         let nextSpy: jasmine.Spy<InferableFunction>;
-        const initialValue: any[] = ['testdata1', 'testdata2'];
         const testLocations: IStopLocation[] = [
             <any>{
                 latitude: 1,
