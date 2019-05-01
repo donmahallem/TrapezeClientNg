@@ -11,7 +11,7 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
     }
 
     public next(stops: IStopLocation[]): void {
-        this.service.stopLocations = stops;
+        (<any>this.service).mStopLocations = stops;
     }
 
     public error(err: any): void {
@@ -46,10 +46,6 @@ export class StopPointService {
     public get stopLocations(): IStopLocation[] {
         return this.mStopLocations;
     }
-    public set stopLocations(stops: IStopLocation[]) {
-        this.mStopLocations = stops;
-    }
-
     public getStopLocation(stopShortName: string): IStopLocation {
         for (const stop of this.stopLocations) {
             if (stop.shortName === stopShortName) {

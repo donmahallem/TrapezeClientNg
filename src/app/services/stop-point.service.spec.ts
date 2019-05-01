@@ -8,11 +8,11 @@ class TestApiService {
 
 }
 
+
 describe('src/app/services/stop-point.service', () => {
     describe('StopPointService', () => {
         let stopService: StopPointService;
         let nextSpy: jasmine.Spy<InferableFunction>;
-        let subject: BehaviorSubject<IStopLocation[]>;
         const initialValue: any[] = ['testdata1', 'testdata2'];
         const testLocations: IStopLocation[] = [
             <any>{
@@ -43,8 +43,6 @@ describe('src/app/services/stop-point.service', () => {
                     }],
             });
             stopService = TestBed.get(StopPointService);
-            subject = (<any>stopService).stopLocationsSubject;
-            subject.next(initialValue);
         }));
 
         afterEach(() => {
@@ -58,33 +56,18 @@ describe('src/app/services/stop-point.service', () => {
         describe('stopLocations', () => {
             describe('getter', () => {
                 it('should get an empty list if undefined is provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    subject.next(testLocations);
+                    (<any>stopService).mStopLocations = testLocations;
                     expect(stopService.stopLocations).toEqual(testLocations);
-                });
-            });
-            describe('setter', () => {
-                it('should set an empty list if undefined is provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    stopService.stopLocations = undefined;
-                    expect(subject.value).toEqual([]);
-                });
-                it('should set the list provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    stopService.stopLocations = testLocations;
-                    expect(subject.value).toEqual(testLocations);
                 });
             });
         });
         describe('getStopLocation(stopShortName)', () => {
             it('should return if the stopShortName is unknown', () => {
-                expect(subject.value).toEqual(initialValue);
-                subject.next([]);
+                (<any>stopService).mStopLocations = [];
                 expect(stopService.getStopLocation('1')).toBeUndefined();
             });
             it('should return the expected item', () => {
-                expect(subject.value).toEqual(initialValue);
-                subject.next(testLocations);
+                (<any>stopService).mStopLocations = testLocations;
                 expect(stopService.getStopLocation('1')).toEqual(testLocations[0]);
                 expect(stopService.getStopLocation('3')).toEqual(testLocations[2]);
             });
