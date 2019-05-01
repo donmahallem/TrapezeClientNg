@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IStopLocation, IStopLocations } from '@donmahallem/trapeze-api-types';
 import { BehaviorSubject, NEVER, Observable, Subscriber } from 'rxjs';
-import { catchError, flatMap, map, shareReplay, tap } from 'rxjs/operators';
+import { catchError, flatMap, map, shareReplay } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
 export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
@@ -15,11 +15,9 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
     }
 
     public error(err: any): void {
-        console.error('resp', err);
     }
 
     public complete(): void {
-        console.info('complete');
     }
 }
 

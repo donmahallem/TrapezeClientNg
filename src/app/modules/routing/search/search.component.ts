@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
-import { Subscription, Observable, from, NEVER } from 'rxjs';
-import { IStopLocation } from '@donmahallem/trapeze-api-types';
-import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Data } from '@angular/router';
+import { IStopLocation } from '@donmahallem/trapeze-api-types';
+import { NEVER, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Component({
     selector: 'app-search',
     styleUrls: ['./search.component.scss'],
@@ -29,8 +29,9 @@ export class SearchComponent implements OnInit, OnDestroy {
             });
         this.resultObservable = this.activatedRoute.data
             .pipe(map((val: Data): IStopLocation[] => {
-                if (val['results'])
+                if (val['results']) {
                     return val['results'];
+                }
                 return [];
             }));
     }

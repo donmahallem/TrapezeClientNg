@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
-import { map, single, tap, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { StopPointService } from 'src/app/services/stop-point.service';
 
 @Injectable()

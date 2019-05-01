@@ -10,7 +10,7 @@ const tripPassagesRoute: Routes = [
         resolve: {
             results: SearchResultResolver,
         },
-        runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     },
 ];
 
