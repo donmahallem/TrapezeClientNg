@@ -30,7 +30,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
             .pipe(
                 startWith(''),
                 filter((value: string): boolean => {
-                    return value.length > 2;
+                    return value.length > 0;
                 }),
                 debounceTime(200),
             )
@@ -38,7 +38,8 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
                 this.router.navigate(['search'], {
                     queryParams: {
                         q: value,
-                    }, // skipLocationChange: true
+                    },
+                    replaceUrl: value.length > 1,
                 });
             });
     }
