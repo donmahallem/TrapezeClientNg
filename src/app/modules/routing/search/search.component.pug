@@ -1,4 +1,6 @@
 h5 test
 h6 {{data}}
-div(*ngFor="let result of results | async")
-    h3 {{result.name}}
+mat-nav-list(role="list")
+    mat-list-item(*ngFor="let item of results | async",[routerLink]="['/stop', item.shortName]",role="listitem")
+        mat-icon(mat-list-icon) place
+        h4(mat-line) {{item?.name}}

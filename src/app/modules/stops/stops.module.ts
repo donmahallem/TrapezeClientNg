@@ -3,10 +3,7 @@ import { NgModule } from '@angular/core';
 import {
     MatDialogModule,
     MatIconModule,
-    MatInputModule,
     MatListModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule,
 } from '@angular/material';
 import { RetryDialogModule } from '../common/retry-dialog';
 import { StopsInfoComponent } from './stops-info.component';
@@ -25,9 +22,6 @@ import { StopsResolver } from './stops.resolver';
         CommonModule,
         MatIconModule,
         MatListModule,
-        MatToolbarModule,
-        MatProgressSpinnerModule,
-        MatInputModule,
         RetryDialogModule,
         MatDialogModule,
     ],
