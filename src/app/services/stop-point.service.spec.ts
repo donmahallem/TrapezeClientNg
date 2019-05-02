@@ -52,7 +52,11 @@ describe('src/app/services/stop-point.service', () => {
 
         describe('stopLocations', () => {
             describe('getter', () => {
-                it('should get an empty list if undefined is provided', () => {
+                it('should get an empty list if mStopLocations is set to undefined', () => {
+                    (<any>stopService).mStopLocations = undefined;
+                    expect(stopService.stopLocations).toEqual([]);
+                });
+                it('should get an empty list if mStopLocations is a list', () => {
                     (<any>stopService).mStopLocations = testLocations;
                     expect(stopService.stopLocations).toEqual(testLocations);
                 });
