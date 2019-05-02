@@ -74,10 +74,28 @@ describe('src/app/services/stop-point.service', () => {
                 expect(stopService.getStopLocation('3')).toEqual(testLocations[2]);
             });
         });
-        describe('isLoading', () => {
+        describe('searchStop(stopShortName)', () => {
+            describe('no stops available', () => {
 
-            describe('getter', () => {
+            });
+            describe('no known stop is provided', () => {
                 it('needs to implemented');
+            });
+            describe('known stop is provided', () => {
+                let observableSpy: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
+                    observableSpy.and.returnValue(from([testLocations]));
+                });
+                it('should return a stop', (done) => {
+                    stopService
+                        .searchStop('1')
+                        .subscribe(nextSpy, done, () => {
+                            expect(nextSpy).toHaveBeenCalledTimes(1);
+                            expect(nextSpy).toHaveBeenCalledWith(testLocations[0])
+                            done();
+                        });
+                });
             });
 
         });

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IStopLocation, IStopLocations } from '@donmahallem/trapeze-api-types';
 import { BehaviorSubject, NEVER, Observable, Subscriber, merge, interval, timer, EMPTY, from, Subject } from 'rxjs';
-import { catchError, flatMap, map, shareReplay, startWith, tap, delay } from 'rxjs/operators';
+import { catchError, flatMap, map, shareReplay, startWith, tap, delay, filter, take } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
 
@@ -79,14 +79,16 @@ export class StopPointService {
      */
     public searchStop(stopShortName: string): Observable<IStopLocation> {
         return this.stopLocationsObservable
-            .pipe(flatMap((stops: IStopLocation[]): Observable<IStopLocation> => {
-                for (const stop of this.stopLocations) {
-                    if (stop.shortName === stopShortName) {
-                        return from([stop]);
+            .pipe(
+                flatMap((stops: IStopLocation[]): Observable<IStopLocation> => {
+                    return from(stops);
+                }),
+                filter((stop: IStopLocation) => {
+                    if (stop) {
+                        return stop.shortName === stopShortName;
                     }
-                }
-                return EMPTY;
-            }));
+                    return false;
+                }));
     }
 
     /**
