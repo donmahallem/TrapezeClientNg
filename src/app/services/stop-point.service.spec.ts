@@ -1,9 +1,8 @@
 import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
+import { from, EMPTY } from 'rxjs';
 import { ApiService } from './api.service';
 import { StopPointService } from './stop-point.service';
-import { from, EMPTY } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 
 class TestApiService {
 

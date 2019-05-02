@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IStopLocation, IStopLocations } from '@donmahallem/trapeze-api-types';
-import { BehaviorSubject, NEVER, Observable, Subscriber, merge, interval, timer, EMPTY, from, Subject } from 'rxjs';
-import { catchError, flatMap, map, shareReplay, startWith, tap, delay, filter, take } from 'rxjs/operators';
+import { IStopLocation } from '@donmahallem/trapeze-api-types';
+import { from, merge, NEVER, Observable, Subject, Subscriber } from 'rxjs';
+import { catchError, delay, filter, flatMap, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
 
