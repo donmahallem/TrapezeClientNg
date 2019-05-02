@@ -64,4 +64,8 @@ export class AppNotificationService {
         return this.notificationSubject.asObservable();
     }
 
+    public report(err: any) {
+
+    }
+
 }

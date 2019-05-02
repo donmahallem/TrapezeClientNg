@@ -55,7 +55,7 @@ export class MainToolbarComponent implements OnInit {
     }
     public toggleSearch(): void {
         if (this.searchBoxComponent) {
-            this.searchBoxComponent.doFocusSearch();
+            // this.searchBoxComponent.doFocusSearch();
         }
     }
 

@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
-import { BehaviorSubject } from 'rxjs';
+import { from, EMPTY } from 'rxjs';
 import { ApiService } from './api.service';
 import { StopPointService } from './stop-point.service';
 
@@ -12,8 +12,6 @@ describe('src/app/services/stop-point.service', () => {
     describe('StopPointService', () => {
         let stopService: StopPointService;
         let nextSpy: jasmine.Spy<InferableFunction>;
-        let subject: BehaviorSubject<IStopLocation[]>;
-        const initialValue: any[] = ['testdata1', 'testdata2'];
         const testLocations: IStopLocation[] = [
             <any>{
                 latitude: 1,
@@ -43,8 +41,6 @@ describe('src/app/services/stop-point.service', () => {
                     }],
             });
             stopService = TestBed.get(StopPointService);
-            subject = (<any>stopService).stopLocationsSubject;
-            subject.next(initialValue);
         }));
 
         afterEach(() => {
@@ -57,49 +53,106 @@ describe('src/app/services/stop-point.service', () => {
 
         describe('stopLocations', () => {
             describe('getter', () => {
-                it('should get an empty list if undefined is provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    subject.next(testLocations);
+                it('should get an empty list if mStopLocations is set to undefined', () => {
+                    (<any>stopService).mStopLocations = undefined;
+                    expect(stopService.stopLocations).toEqual([]);
+                });
+                it('should get an empty list if mStopLocations is a list', () => {
+                    (<any>stopService).mStopLocations = testLocations;
                     expect(stopService.stopLocations).toEqual(testLocations);
-                });
-            });
-            describe('setter', () => {
-                it('should set an empty list if undefined is provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    stopService.stopLocations = undefined;
-                    expect(subject.value).toEqual([]);
-                });
-                it('should set the list provided', () => {
-                    expect(subject.value).toEqual(initialValue);
-                    stopService.stopLocations = testLocations;
-                    expect(subject.value).toEqual(testLocations);
                 });
             });
         });
         describe('getStopLocation(stopShortName)', () => {
             it('should return if the stopShortName is unknown', () => {
-                expect(subject.value).toEqual(initialValue);
-                subject.next([]);
+                (<any>stopService).mStopLocations = [];
                 expect(stopService.getStopLocation('1')).toBeUndefined();
             });
             it('should return the expected item', () => {
-                expect(subject.value).toEqual(initialValue);
-                subject.next(testLocations);
+                (<any>stopService).mStopLocations = testLocations;
                 expect(stopService.getStopLocation('1')).toEqual(testLocations[0]);
                 expect(stopService.getStopLocation('3')).toEqual(testLocations[2]);
             });
         });
-        describe('isLoading', () => {
-
-            describe('getter', () => {
-                it('needs to implemented');
+        describe('searchStop(stopShortName)', () => {
+            describe('no stops available', () => {
+                let observableSpy: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
+                    observableSpy.and.returnValue(EMPTY);
+                });
+                it('should return no stop', (done) => {
+                    stopService
+                        .searchStop('4')
+                        .subscribe(nextSpy, done, () => {
+                            expect(nextSpy).toHaveBeenCalledTimes(0);
+                            done();
+                        });
+                });
+            });
+            describe('a stop list was loaded', () => {
+                let observableSpy: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
+                    observableSpy.and.returnValue(from([testLocations, testLocations]));
+                });
+                describe('no known stop is provided', () => {
+                    it('should return no stop and just complete', (done) => {
+                        stopService
+                            .searchStop('4')
+                            .subscribe(nextSpy, done, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(0);
+                                done();
+                            });
+                    });
+                });
+                describe('known stop is provided', () => {
+                    it('should return a stop', (done) => {
+                        stopService
+                            .searchStop('1')
+                            .subscribe(nextSpy, done, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(2);
+                                expect(nextSpy).toHaveBeenCalledWith(testLocations[0]);
+                                done();
+                            });
+                    });
+                });
             });
 
         });
         describe('stopLocationsObservable', () => {
-
             describe('getter', () => {
-                it('needs to implemented');
+                let createObservable: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    createObservable = spyOn(stopService, 'createStopLoadObservable');
+                    createObservable.and.returnValue(from([false]));
+                });
+                afterEach(() => {
+                    createObservable.calls.reset();
+                });
+                describe('sharedReplay observable was already created', () => {
+                    it('createStopLoadObservable should not be called', (done) => {
+                        (<any>stopService).sharedReplay = from([true]);
+                        stopService.stopLocationsObservable
+                            .subscribe(nextSpy, () => { }, () => {
+                                expect(createObservable).toHaveBeenCalledTimes(0);
+                                expect(nextSpy).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledWith(true);
+                                done();
+                            });
+                    });
+                });
+                describe('sharedReplay observable was not already created', () => {
+                    it('createStopLoadObservable should be called', (done) => {
+                        stopService.stopLocationsObservable
+                            .subscribe(nextSpy, () => { }, () => {
+                                expect(createObservable).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledWith(false);
+                                done();
+                            });
+                    });
+                });
             });
 
         });
