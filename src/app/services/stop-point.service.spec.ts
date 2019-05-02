@@ -2,6 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { ApiService } from './api.service';
 import { StopPointService } from './stop-point.service';
+import { from } from 'rxjs';
 
 class TestApiService {
 
@@ -81,9 +82,38 @@ describe('src/app/services/stop-point.service', () => {
 
         });
         describe('stopLocationsObservable', () => {
-
             describe('getter', () => {
-                it('needs to implemented');
+                let createObservable: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    createObservable = spyOn(stopService, 'createStopLoadObservable');
+                    createObservable.and.returnValue(from([false]));
+                });
+                afterEach(() => {
+                    createObservable.calls.reset();
+                });
+                describe('sharedReplay observable was already created', () => {
+                    it('createStopLoadObservable should not be called', (done) => {
+                        (<any>stopService).sharedReplay = from([true]);
+                        stopService.stopLocationsObservable
+                            .subscribe(nextSpy, () => { }, () => {
+                                expect(createObservable).toHaveBeenCalledTimes(0);
+                                expect(nextSpy).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledWith(true);
+                                done();
+                            });
+                    });
+                });
+                describe('sharedReplay observable was not already created', () => {
+                    it('createStopLoadObservable should be called', (done) => {
+                        stopService.stopLocationsObservable
+                            .subscribe(nextSpy, () => { }, () => {
+                                expect(createObservable).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledTimes(1);
+                                expect(nextSpy).toHaveBeenCalledWith(false);
+                                done();
+                            });
+                    });
+                });
             });
 
         });

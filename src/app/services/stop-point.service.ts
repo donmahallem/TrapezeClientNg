@@ -73,6 +73,10 @@ export class StopPointService {
         return undefined;
     }
 
+    /**
+     * Searches the stops for a given stopShortName
+     * @param stopShortName the stop shortName
+     */
     public searchStop(stopShortName: string): Observable<IStopLocation> {
         return this.stopLocationsObservable
             .pipe(flatMap((stops: IStopLocation[]): Observable<IStopLocation> => {
@@ -85,6 +89,9 @@ export class StopPointService {
             }));
     }
 
+    /**
+     * Gets the shared stop location observable
+     */
     public get stopLocationsObservable(): Observable<IStopLocation[]> {
         if (this.sharedReplay === undefined) {
             this.sharedReplay = this.createStopLoadObservable();
