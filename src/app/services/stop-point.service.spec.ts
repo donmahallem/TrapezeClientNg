@@ -2,7 +2,8 @@ import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { ApiService } from './api.service';
 import { StopPointService } from './stop-point.service';
-import { from } from 'rxjs';
+import { from, EMPTY } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 class TestApiService {
 
@@ -76,25 +77,46 @@ describe('src/app/services/stop-point.service', () => {
         });
         describe('searchStop(stopShortName)', () => {
             describe('no stops available', () => {
-
-            });
-            describe('no known stop is provided', () => {
-                it('needs to implemented');
-            });
-            describe('known stop is provided', () => {
                 let observableSpy: jasmine.Spy<InferableFunction>;
                 beforeEach(() => {
                     observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
-                    observableSpy.and.returnValue(from([testLocations]));
+                    observableSpy.and.returnValue(EMPTY);
                 });
-                it('should return a stop', (done) => {
+                it('should return no stop', (done) => {
                     stopService
-                        .searchStop('1')
+                        .searchStop('4')
                         .subscribe(nextSpy, done, () => {
-                            expect(nextSpy).toHaveBeenCalledTimes(1);
-                            expect(nextSpy).toHaveBeenCalledWith(testLocations[0])
+                            expect(nextSpy).toHaveBeenCalledTimes(0);
                             done();
                         });
+                });
+            });
+            describe('a stop list was loaded', () => {
+                let observableSpy: jasmine.Spy<InferableFunction>;
+                beforeEach(() => {
+                    observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
+                    observableSpy.and.returnValue(from([testLocations, testLocations]));
+                });
+                describe('no known stop is provided', () => {
+                    it('should return no stop and just complete', (done) => {
+                        stopService
+                            .searchStop('4')
+                            .subscribe(nextSpy, done, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(0);
+                                done();
+                            });
+                    });
+                });
+                describe('known stop is provided', () => {
+                    it('should return a stop', (done) => {
+                        stopService
+                            .searchStop('1')
+                            .subscribe(nextSpy, done, () => {
+                                expect(nextSpy).toHaveBeenCalledTimes(2);
+                                expect(nextSpy).toHaveBeenCalledWith(testLocations[0]);
+                                done();
+                            });
+                    });
                 });
             });
 
