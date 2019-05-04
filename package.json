@@ -60,7 +60,7 @@
     "moment": "^2.24.0",
     "ng-cli-pug-loader": "^0.1.7",
     "rxjs": "^6.5.1",
-    "zone.js": "^0.9.0"
+    "zone.js": "^0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.8",
