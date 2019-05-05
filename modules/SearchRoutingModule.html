@@ -34,7 +34,7 @@
 
 <ol class="breadcrumb">
     <li>Modules</li>
-    <li>AppRoutingModule</li>
+    <li>SearchRoutingModule</li>
 </ol>
 
 
@@ -54,7 +54,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/app-routing.module.ts</code>
+            <code>src/app/modules/routing/search/search-routing.module.ts</code>
         </p>
 
 
@@ -72,36 +72,17 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgModule } from &#x27;@angular/core&#x27;;
 import { RouterModule, Routes } from &#x27;@angular/router&#x27;;
-import { AppPreloadingStrategy } from &#x27;./app-preloading-strategy&#x27;;
+import { SearchResultResolver } from &#x27;./search-result.resolver&#x27;;
+import { SearchComponent } from &#x27;./search.component&#x27;;
 
-const appRoutes: Routes &#x3D; [
+const tripPassagesRoute: Routes &#x3D; [
     {
-        loadChildren: &#x27;./modules/trip-passages/trip-passages.module#TripPassagesModule&#x27;,
-        path: &#x27;passages&#x27;,
-    },
-    {
-        loadChildren: &#x27;./modules/stop/stop.module#StopModule&#x27;,
-        path: &#x27;stop&#x27;,
-    },
-    {
-        loadChildren: &#x27;./modules/stops/stops.module#StopsModule&#x27;,
-        path: &#x27;stops&#x27;,
-    },
-    {
-        loadChildren: &#x27;./modules/error/error.module#ErrorModule&#x27;,
-        path: &#x27;error&#x27;,
-    },
-    {
-        loadChildren: &#x27;./modules/routing/search/search.module#SearchModule&#x27;,
-        path: &#x27;search&#x27;,
-    },
-    {
-        children: [
-        ],
+        component: SearchComponent,
         path: &#x27;&#x27;,
-    },
-    {
-        path: &#x27;**&#x27;, redirectTo: &#x27;/error/not-found&#x27;,
+        resolve: {
+            results: SearchResultResolver,
+        },
+        runGuardsAndResolvers: &#x27;paramsOrQueryParamsChange&#x27;,
     },
 ];
 
@@ -110,17 +91,10 @@ const appRoutes: Routes &#x3D; [
         RouterModule,
     ],
     imports: [
-        RouterModule.forRoot(
-            appRoutes,
-            {
-                enableTracing: false,
-                preloadingStrategy: AppPreloadingStrategy,
-            }, // &lt;-- debugging purposes only
-        ),
+        RouterModule.forChild(tripPassagesRoute),
     ],
-    providers: [AppPreloadingStrategy],
 })
-export class AppRoutingModule { }
+export class SearchRoutingModule { }
 </code></pre>
     </div>
 </div>
@@ -155,7 +129,7 @@ export class AppRoutingModule { }
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'module';
-            var COMPODOC_CURRENT_PAGE_URL = 'AppRoutingModule.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'SearchRoutingModule.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>

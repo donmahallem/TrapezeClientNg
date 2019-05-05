@@ -27,7 +27,7 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content class">
+               <div class="content guard">
                    <div class="content-data">
 
 
@@ -38,11 +38,9 @@
 
 
 
-
-
 <ol class="breadcrumb">
-  <li>Classes</li>
-  <li>NavigationSubscriber</li>
+    <li>Guards</li>
+    <li>SearchResultResolver</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -55,25 +53,19 @@
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
-        <p class="comment">
+        <div class="tab-pane fade active in" id="c-info">
+            <p class="comment">
             <h3>File</h3>
-        </p>
-        <p class="comment">
-            <code>src/app/modules/main-toolbar/main-toolbar.component.ts</code>
-        </p>
-
-
-            <p class="comment">
-                <h3>Extends</h3>
             </p>
             <p class="comment">
-                    <code>Subscriber</code>
+                <code>src/app/modules/routing/search/search-result.resolver.ts</code>
             </p>
 
 
 
-            <section>
+
+
+                <section>
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -88,7 +80,7 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#next">next</a>
+                                <a href="#resolve">resolve</a>
                             </li>
                         </ul>
                     </td>
@@ -102,19 +94,19 @@
     </table>
 </section>
 
-            <section>
+                <section>
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
                                 <span class="modifier">Public</span>
-                        <code>constructor(toolbar: <a href="../components/MainToolbarComponent.html">MainToolbarComponent</a>)</code>
+                        <code>constructor(stopService: <a href="../injectables/StopPointService.html">StopPointService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:7</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/app/modules/routing/search/search-result.resolver.ts:9</a></div>
                             </td>
                         </tr>
 
@@ -132,10 +124,10 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>toolbar</td>
+                                                        <td>stopService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../components/MainToolbarComponent.html" target="_self" >MainToolbarComponent</a></code>
+                                                                        <code><a href="../injectables/StopPointService.html" target="_self" >StopPointService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -152,8 +144,7 @@
         </table>
 </section>
 
-
-            <section>
+                <section>
     
     <h3 id="methods">
         Methods
@@ -162,20 +153,20 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="next"></a>
+                    <a name="resolve"></a>
                     <span class="name">
                         <b>
                             <span class="modifier">Public</span>
-                            next
+                            resolve
                         </b>
-                        <a href="#next"><span class="icon ion-ios-link"></span></a>
+                        <a href="#resolve"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>next(event: <a href="https://angular.io/api/router/RouterEvent" target="_blank">RouterEvent</a>)</code>
+                    <code>resolve(route: <a href="https://angular.io/api/router/ActivatedRouteSnapshot" target="_blank">ActivatedRouteSnapshot</a>, state: <a href="https://angular.io/api/router/RouterStateSnapshot" target="_blank">RouterStateSnapshot</a>)</code>
                 </td>
             </tr>
 
@@ -183,7 +174,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="12"
-                            class="link-to-prism">src/app/modules/main-toolbar/main-toolbar.component.ts:12</a></div>
+                            class="link-to-prism">src/app/modules/routing/search/search-result.resolver.ts:12</a></div>
                 </td>
             </tr>
 
@@ -203,9 +194,21 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>event</td>
+                                    <td>route</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/router/RouterEvent" target="_blank" >RouterEvent</a></code>
+                                                <code><a href="https://angular.io/api/router/ActivatedRouteSnapshot" target="_blank" >ActivatedRouteSnapshot</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>state</td>
+                                    <td>
+                                                <code><a href="https://angular.io/api/router/RouterStateSnapshot" target="_blank" >RouterStateSnapshot</a></code>
                                     </td>
 
                                     <td>
@@ -220,7 +223,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>    <code>Observable&lt;IStopLocation[]&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -231,80 +234,39 @@
         </tbody>
     </table>
 </section>
+        </div>
 
 
+        <div class="tab-pane fade  tab-source-code" id="c-source">
+            <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from &#x27;@angular/router&#x27;;
+import { IStopLocation } from &#x27;@donmahallem/trapeze-api-types&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { map, take } from &#x27;rxjs/operators&#x27;;
+import { StopPointService } from &#x27;src/app/services/stop-point.service&#x27;;
 
+@Injectable()
+export class SearchResultResolver implements Resolve&lt;any&gt; {
 
-
-    </div>
-
-
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
-import { NavigationEnd, NavigationStart, Router, RouterEvent } from &#x27;@angular/router&#x27;;
-import { Subscriber } from &#x27;rxjs&#x27;;
-import { SidebarService } from &#x27;src/app/services/sidebar.service&#x27;;
-import { ToolbarSearchBoxComponent } from &#x27;./search-box.component&#x27;;
-
-export class NavigationSubscriber extends Subscriber&lt;RouterEvent&gt; {
-
-    public constructor(private toolbar: MainToolbarComponent) {
-        super();
+    public constructor(private stopService: StopPointService) { }
+    public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable&lt;IStopLocation[]&gt; {
+        return this.stopService.stopLocationsObservable
+            .pipe(take(1),
+                map((stops: IStopLocation[]): IStopLocation[] &#x3D;&gt; {
+                    return stops
+                        /**
+                         * Filter by search term
+                         */
+                        .filter(option &#x3D;&gt; option.name.toLowerCase().includes(route.queryParams[&#x27;q&#x27;]))
+                        .sort((a, b) &#x3D;&gt; a.name.localeCompare(b.name));
+                }));
     }
-    public next(event: RouterEvent): void {
-        if (event instanceof NavigationEnd &amp;&amp; event.url.length &gt; 1) {
-            this.toolbar.closeable &#x3D; true;
-        } else if (event instanceof NavigationStart) {
-            this.toolbar.closeable &#x3D; false;
-        }
-    }
-}
-
-@Component({
-    selector: &#x27;app-main-toolbar&#x27;,
-    styleUrls: [&#x27;./main-toolbar.component.scss&#x27;],
-    templateUrl: &#x27;./main-toolbar.component.pug&#x27;,
-})
-export class MainToolbarComponent implements OnInit {
-    public closeable &#x3D; false;
-
-    constructor(private sidebarService: SidebarService,
-        private router: Router) {
-        this.router.events.subscribe(new NavigationSubscriber(this));
-    }
-
-    public get searchOpen(): boolean {
-        return this.mSearchOpen;
-    }
-
-    public set searchOpen(open: boolean) {
-        this.mSearchOpen &#x3D; open;
-    }
-    @ViewChild(ToolbarSearchBoxComponent)
-    private searchBoxComponent: ToolbarSearchBoxComponent;
-
-    private mSearchOpen &#x3D; false;
-
-    ngOnInit() {
-    }
-
-    public toggleSidebar(): void {
-        this.sidebarService.toggleSidebar();
-    }
-
-    public onFocusSearch(event) {
-        this.searchOpen &#x3D; event;
-    }
-    public toggleSearch(): void {
-        if (this.searchBoxComponent) {
-            // this.searchBoxComponent.doFocusSearch();
-        }
-    }
-
 }
 </code></pre>
-    </div>
+        </div>
 </div>
+
+
 
 
 
@@ -328,8 +290,8 @@ export class MainToolbarComponent implements OnInit {
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'NavigationSubscriber.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'guard';
+            var COMPODOC_CURRENT_PAGE_URL = 'SearchResultResolver.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>

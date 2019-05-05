@@ -238,6 +238,27 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     </li>
                             </li>
                             <li class="link">
+                                <a href="modules/SearchModule.html" data-type="entity-link">SearchModule</a>
+                                    <li class="chapter inner">
+                                        <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
+                                            'data-target="#components-links-module-SearchModule-d05724aee2337fe825408fa4dca23d39"' : 'data-target="#xs-components-links-module-SearchModule-d05724aee2337fe825408fa4dca23d39"' }>
+                                            <span class="icon ion-md-cog"></span>
+                                            <span>Components</span>
+                                            <span class="icon ion-ios-arrow-down"></span>
+                                        </div>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-SearchModule-d05724aee2337fe825408fa4dca23d39"' :
+                                            'id="xs-components-links-module-SearchModule-d05724aee2337fe825408fa4dca23d39"' }>
+                                            <li class="link">
+                                                <a href="components/SearchComponent.html"
+                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">SearchComponent</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                            </li>
+                            <li class="link">
+                                <a href="modules/SearchRoutingModule.html" data-type="entity-link">SearchRoutingModule</a>
+                            </li>
+                            <li class="link">
                                 <a href="modules/SidebarModule.html" data-type="entity-link">SidebarModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
@@ -307,13 +328,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/StopsModule.html" data-type="entity-link">StopsModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-StopsModule-9f01be4ebcabafc492b592a7755aed1f"' : 'data-target="#xs-components-links-module-StopsModule-9f01be4ebcabafc492b592a7755aed1f"' }>
+                                            'data-target="#components-links-module-StopsModule-fe8144caf2211dcb0e50208e71e7a0a2"' : 'data-target="#xs-components-links-module-StopsModule-fe8144caf2211dcb0e50208e71e7a0a2"' }>
                                             <span class="icon ion-md-cog"></span>
                                             <span>Components</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-StopsModule-9f01be4ebcabafc492b592a7755aed1f"' :
-                                            'id="xs-components-links-module-StopsModule-9f01be4ebcabafc492b592a7755aed1f"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-StopsModule-fe8144caf2211dcb0e50208e71e7a0a2"' :
+                                            'id="xs-components-links-module-StopsModule-fe8144caf2211dcb0e50208e71e7a0a2"' }>
                                             <li class="link">
                                                 <a href="components/StopsInfoComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">StopsInfoComponent</a>
@@ -429,6 +450,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             <span class="icon ion-ios-arrow-down"></span>
                         </div>
                         <ul class="links collapse" ${ isNormalMode ? 'id="guards-links"' : 'id="xs-guards-links"' }>
+                            <li class="link">
+                                <a href="guards/SearchResultResolver.html" data-type="entity-link">SearchResultResolver</a>
+                            </li>
                             <li class="link">
                                 <a href="guards/StopInfoResolver.html" data-type="entity-link">StopInfoResolver</a>
                             </li>

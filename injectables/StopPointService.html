@@ -59,6 +59,13 @@
             <code>src/app/services/stop-point.service.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Service for caching and retrieving Stop Locations</p>
+
+            </p>
 
 
 
@@ -76,11 +83,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#stopLoadSubscription">stopLoadSubscription</a>
+                                <a href="#mStopLocations">mStopLocations</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#stopLocationsSubject">stopLocationsSubject</a>
+                                <a href="#retrySubject">retrySubject</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#sharedReplay">sharedReplay</a>
                             </li>
                         </ul>
                     </td>
@@ -96,11 +107,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
+                                <a href="#createStopLoadObservable">createStopLoadObservable</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
                                 <a href="#getStopLocation">getStopLocation</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#loadStops">loadStops</a>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchStop">searchStop</a>
                             </li>
                         </ul>
                     </td>
@@ -122,9 +137,6 @@
                                     <a href="#stopLocations">stopLocations</a>
                                 </li>
                                 <li>
-                                    <a href="#isLoading">isLoading</a>
-                                </li>
-                                <li>
                                     <a href="#stopLocationsObservable">stopLocationsObservable</a>
                                 </li>
                             </ul>
@@ -140,12 +152,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(api: <a href="../injectables/ApiService.html">ApiService</a>)</code>
+<code>constructor(api: <a href="../injectables/ApiService.html">ApiService</a>, notificationService: <a href="../injectables/AppNotificationService.html">AppNotificationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/services/stop-point.service.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/services/stop-point.service.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -174,6 +186,18 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>notificationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AppNotificationService.html" target="_self" >AppNotificationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -188,6 +212,47 @@
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createStopLoadObservable"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            createStopLoadObservable
+                        </b>
+                        <a href="#createStopLoadObservable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createStopLoadObservable()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="38"
+                            class="link-to-prism">src/app/services/stop-point.service.ts:38</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;IStopLocation[]&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -212,14 +277,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="49"
-                            class="link-to-prism">src/app/services/stop-point.service.ts:49</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/services/stop-point.service.ts:67</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>retrieves the stop or undefined if not loaded yet or undefined</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -229,6 +296,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -243,6 +311,10 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>short name</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -264,38 +336,76 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="loadStops"></a>
+                    <a name="searchStop"></a>
                     <span class="name">
                         <b>
-                            <span class="modifier">Private</span>
-                            loadStops
+                            <span class="modifier">Public</span>
+                            searchStop
                         </b>
-                        <a href="#loadStops"><span class="icon ion-ios-link"></span></a>
+                        <a href="#searchStop"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>loadStops()</code>
+                    <code>searchStop(stopShortName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="35"
-                            class="link-to-prism">src/app/services/stop-point.service.ts:35</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="80"
+                            class="link-to-prism">src/app/services/stop-point.service.ts:80</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Searches the stops for a given stopShortName</p>
+</div>
 
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>stopShortName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
 
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>the stop shortName</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;IStopLocation&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -311,24 +421,24 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="stopLoadSubscription"></a>
+                        <a name="mStopLocations"></a>
                         <span class="name">
                             <b>
                                 <span class="modifier">Private</span>
-                            stopLoadSubscription</b>
-                            <a href="#stopLoadSubscription"><span class="icon ion-ios-link"></span></a>
+                            mStopLocations</b>
+                            <a href="#mStopLocations"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Type : </i>    <code>Subscription</code>
+                            <i>Type : </i>    <code>IStopLocation[]</code>
 
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/services/stop-point.service.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/services/stop-point.service.ts:33</a></div>
                             </td>
                         </tr>
 
@@ -339,29 +449,62 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="stopLocationsSubject"></a>
+                        <a name="retrySubject"></a>
                         <span class="name">
                             <b>
                                 <span class="modifier">Private</span>
-                            stopLocationsSubject</b>
-                            <a href="#stopLocationsSubject"><span class="icon ion-ios-link"></span></a>
+                            retrySubject</b>
+                            <a href="#retrySubject"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Type : </i>    <code>BehaviorSubject&lt;IStopLocation[]&gt;</code>
+                            <i>Type : </i>    <code>Subject&lt;void&gt;</code>
 
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>new BehaviorSubject([])</code>
+                            <i>Default value : </i><code>new Subject()</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/services/stop-point.service.ts:30</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/services/stop-point.service.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="sharedReplay"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            sharedReplay</b>
+                            <a href="#sharedReplay"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Observable&lt;IStopLocation[]&gt;</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>undefined</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/services/stop-point.service.ts:34</a></div>
                             </td>
                         </tr>
 
@@ -390,76 +533,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/services/stop-point.service.ts:42</a></div>
-                                </td>
-                            </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <span class="accessor"><b>set</b><code>stopLocations(locations: [])</code></span>
-                    </td>
-                </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/services/stop-point.service.ts:45</a></div>
-                                </td>
-                            </tr>
-                    <tr>
-                        <td class="col-md-4">
-
-                                <div class="io-description">
-                                        <b>Parameters :</b>
-                                        <table class="params">
-                                            <thead>
-                                                <tr>
-                                                    <td>Name</td>
-                                                        <td>Type</td>
-                                                    <td>Optional</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                    <tr>
-                                                            <td>locations</td>
-                                                    
-                                                            <td>
-                                                                        <code>[]</code>
-                                                            </td>
-                                                    
-                                                        <td>
-                                                                No
-                                                        </td>
-                                                        
-                                                    </tr>
-                                            </tbody>
-                                        </table>
-                                </div>
-                                <div>
-                                </div>
-                                <div class="io-description">
-                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                                </div>
-                        </td>
-                    </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="isLoading"></a>
-                        <span class="name"><b>isLoading</b><a href="#isLoading"><span class="icon ion-ios-link"></span></a></span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <span class="accessor"><b>get</b><code>isLoading()</code></span>
-                    </td>
-                </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/services/stop-point.service.ts:58</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/services/stop-point.service.ts:59</a></div>
                                 </td>
                             </tr>
 
@@ -481,9 +555,20 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/services/stop-point.service.ts:62</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/services/stop-point.service.ts:97</a></div>
                                 </td>
                             </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Gets the shared stop location observable</p>
+</div>
+
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code>Observable&lt;IStopLocation[]&gt;</code>
+
+                                </div>
+                        </td>
+                    </tr>
 
             </tbody>
         </table>
@@ -494,9 +579,10 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { IStopLocation } from &#x27;@donmahallem/trapeze-api-types&#x27;;
-import { BehaviorSubject, Observable, Subscriber, Subscription } from &#x27;rxjs&#x27;;
-import { map } from &#x27;rxjs/operators&#x27;;
+import { from, merge, NEVER, Observable, Subject, Subscriber } from &#x27;rxjs&#x27;;
+import { catchError, delay, filter, flatMap, map, shareReplay, startWith, tap } from &#x27;rxjs/operators&#x27;;
 import { ApiService } from &#x27;./api.service&#x27;;
+import { AppNotificationService } from &#x27;./app-notification.service&#x27;;
 
 export class StopPointLoadSubscriber extends Subscriber&lt;IStopLocation[]&gt; {
 
@@ -505,41 +591,58 @@ export class StopPointLoadSubscriber extends Subscriber&lt;IStopLocation[]&gt; {
     }
 
     public next(stops: IStopLocation[]): void {
-        this.service.stopLocations &#x3D; stops;
+        (&lt;any&gt;this.service).mStopLocations &#x3D; stops;
     }
 
     public error(err: any): void {
-
     }
 
     public complete(): void {
     }
 }
 
+/**
+ * Service for caching and retrieving Stop Locations
+ */
 @Injectable({
     providedIn: &#x27;root&#x27;,
 })
 export class StopPointService {
 
-    private stopLocationsSubject: BehaviorSubject&lt;IStopLocation[]&gt; &#x3D; new BehaviorSubject([]);
-    private stopLoadSubscription: Subscription;
-    constructor(private api: ApiService) {
+    private mStopLocations: IStopLocation[];
+    private sharedReplay: Observable&lt;IStopLocation[]&gt; &#x3D; undefined;
+    private retrySubject: Subject&lt;void&gt; &#x3D; new Subject();
+    constructor(private api: ApiService, private notificationService: AppNotificationService) { }
+
+    public createStopLoadObservable(): Observable&lt;IStopLocation[]&gt; {
+        return merge(startWith(), this.retrySubject.pipe(delay(10 * 1000)))
+            .pipe(
+                flatMap((): Observable&lt;IStopLocation[]&gt; &#x3D;&gt; {
+                    return this.api.getStations()
+                        .pipe(
+                            map((value): IStopLocation[] &#x3D;&gt; {
+                                return value.stops;
+                            }),
+                            catchError((err: any, caught: Observable&lt;IStopLocation[]&gt;) &#x3D;&gt; {
+                                this.notificationService.report(err);
+                                this.retrySubject.next();
+                                return NEVER;
+                            }));
+                }),
+                tap((value: IStopLocation[]) &#x3D;&gt; {
+                    this.mStopLocations &#x3D; value;
+                }),
+                shareReplay(1));
     }
 
-    private loadStops(): void {
-        this.stopLoadSubscription &#x3D; this.api.getStations()
-            .pipe(map((value) &#x3D;&gt; {
-                return value.stops;
-            }))
-            .subscribe(new StopPointLoadSubscriber(this));
-    }
     public get stopLocations(): IStopLocation[] {
-        return this.stopLocationsSubject.value;
-    }
-    public set stopLocations(locations: IStopLocation[]) {
-        this.stopLocationsSubject.next(locations ? locations : []);
+        return this.mStopLocations ? this.mStopLocations : [];
     }
 
+    /**
+     * retrieves the stop or undefined if not loaded yet or undefined
+     * @param stopShortName short name
+     */
     public getStopLocation(stopShortName: string): IStopLocation {
         for (const stop of this.stopLocations) {
             if (stop.shortName &#x3D;&#x3D;&#x3D; stopShortName) {
@@ -549,15 +652,32 @@ export class StopPointService {
         return undefined;
     }
 
-    public get isLoading(): boolean {
-        return this.stopLoadSubscription &amp;&amp; !this.stopLoadSubscription.closed;
+    /**
+     * Searches the stops for a given stopShortName
+     * @param stopShortName the stop shortName
+     */
+    public searchStop(stopShortName: string): Observable&lt;IStopLocation&gt; {
+        return this.stopLocationsObservable
+            .pipe(
+                flatMap((stops: IStopLocation[]): Observable&lt;IStopLocation&gt; &#x3D;&gt; {
+                    return from(stops);
+                }),
+                filter((stop: IStopLocation) &#x3D;&gt; {
+                    if (stop) {
+                        return stop.shortName &#x3D;&#x3D;&#x3D; stopShortName;
+                    }
+                    return false;
+                }));
     }
 
+    /**
+     * Gets the shared stop location observable
+     */
     public get stopLocationsObservable(): Observable&lt;IStopLocation[]&gt; {
-        if (this.stopLocations.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !this.isLoading) {
-            this.loadStops();
+        if (this.sharedReplay &#x3D;&#x3D;&#x3D; undefined) {
+            this.sharedReplay &#x3D; this.createStopLoadObservable();
         }
-        return this.stopLocationsSubject.asObservable();
+        return this.sharedReplay;
     }
 
 }

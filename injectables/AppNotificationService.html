@@ -94,6 +94,10 @@
                                     <span class="modifier">Public</span>
                                 <a href="#notify">notify</a>
                             </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#report">report</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -206,6 +210,78 @@
                                         <p>the notification</p>
 
                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="report"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            report
+                        </b>
+                        <a href="#report"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>report(err: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/services/app-notification.service.ts:67</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>err</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
                                 </tr>
                             </tbody>
                         </table>
@@ -376,6 +452,10 @@ export class AppNotificationService {
      */
     public get notificationObservable(): Observable&lt;any&gt; {
         return this.notificationSubject.asObservable();
+    }
+
+    public report(err: any) {
+
     }
 
 }
