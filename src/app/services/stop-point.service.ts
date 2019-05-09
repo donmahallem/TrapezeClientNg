@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
-import { from, merge, NEVER, Observable, Subject, Subscriber } from 'rxjs';
+import { from, Observable, Subject, Subscriber } from 'rxjs';
 import { catchError, delay, filter, flatMap, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
@@ -36,22 +36,26 @@ export class StopPointService {
     constructor(private api: ApiService, private notificationService: AppNotificationService) { }
 
     public createStopLoadObservable(): Observable<IStopLocation[]> {
-        return merge(startWith(), this.retrySubject.pipe(delay(10 * 1000)))
+        return this.retrySubject.pipe(delay(10 * 1000))
             .pipe(
+                startWith(undefined),
                 flatMap((): Observable<IStopLocation[]> => {
                     return this.api.getStations()
                         .pipe(
                             map((value): IStopLocation[] => {
                                 return value.stops;
                             }),
-                            catchError((err: any, caught: Observable<IStopLocation[]>) => {
+                            catchError((err: any, caught: Observable<IStopLocation[]>): Observable<IStopLocation[]> => {
                                 this.notificationService.report(err);
                                 this.retrySubject.next();
-                                return NEVER;
+                                return from([[]]);
                             }));
                 }),
                 tap((value: IStopLocation[]) => {
                     this.mStopLocations = value;
+                }),
+                catchError((err) => {
+                    return from([[]]);
                 }),
                 shareReplay(1));
     }
