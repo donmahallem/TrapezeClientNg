@@ -28,6 +28,7 @@ describe('src/app/services/stop-point.service', () => {
                 longitude: 45,
                 shortName: '3',
             } as any,
+            undefined as any,
         ];
         beforeAll(() => {
             nextSpy = jasmine.createSpy();
