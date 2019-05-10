@@ -342,11 +342,9 @@ import { SettingsService } from &#x27;./services/settings.service&#x27;;
 import { StopPointService } from &#x27;./services/stop-point.service&#x27;;
 import { UserLocationService } from &#x27;./services/user-location.service&#x27;;
 
-export const SettingsInitializer &#x3D; (appInitService: SettingsService) &#x3D;&gt; {
-    return (): Promise&lt;any&gt; &#x3D;&gt; {
-        return appInitService.load();
-    };
-};
+export const SettingsInitializer &#x3D; (appInitService: SettingsService) &#x3D;&gt;
+    (): Promise&lt;any&gt; &#x3D;&gt;
+        appInitService.load();
 const moduleImports: any[] &#x3D; [
     BrowserModule,
     HttpClientModule,
@@ -359,7 +357,7 @@ const moduleImports: any[] &#x3D; [
     MainToolbarModule,
     SidebarModule,
     ServiceWorkerModule.register(&#x27;ngsw-worker.js&#x27;, {
-        enabled: environment.production &amp;&amp; environment.pwa &#x3D;&#x3D;&#x3D; true,
+        enabled: environment.production &amp;&amp; environment.pwa,
     }),
 ];
 @NgModule({

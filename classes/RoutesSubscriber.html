@@ -109,7 +109,7 @@
                 <tr>
                     <td class="col-md-4">
                                 <span class="modifier">Public</span>
-                        <code>constructor(map: FollowBusMapDirective)</code>
+                        <code>constructor(followMapInstance: FollowBusMapDirective)</code>
                     </td>
                 </tr>
                         <tr>
@@ -132,7 +132,7 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>map</td>
+                                                        <td>followMapInstance</td>
                                                   
                                                         <td>
                                                                     <code>FollowBusMapDirective</code>
@@ -237,29 +237,42 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from &#x27;@angular/core&#x27;;
-import { IVehicleLocation } from &#x27;@donmahallem/trapeze-api-types&#x27;;
 import * as L from &#x27;leaflet&#x27;;
 import { BehaviorSubject, Subscriber, Subscription } from &#x27;rxjs&#x27;;
-import { distinctUntilChanged, filter, mergeMap } from &#x27;rxjs/operators&#x27;;
+import { distinctUntilChanged, filter, map, mergeMap } from &#x27;rxjs/operators&#x27;;
 import { createVehicleIcon } from &#x27;src/app/leaflet&#x27;;
+import { ITimestampVehicleLocation } from &#x27;src/app/models&#x27;;
 import { ApiService } from &#x27;src/app/services&#x27;;
 import { SettingsService } from &#x27;src/app/services/settings.service&#x27;;
 import { UserLocationService } from &#x27;src/app/services/user-location.service&#x27;;
 import { LeafletMapComponent } from &#x27;../common/leaflet-map.component&#x27;;
 
 export class RoutesSubscriber extends Subscriber&lt;any&gt; {
-    public constructor(private map: FollowBusMapDirective) {
+    public constructor(private followMapInstance: FollowBusMapDirective) {
         super();
     }
     public next(routes) {
-        this.map.setRoutePaths(routes.paths);
+        this.followMapInstance.setRoutePaths(routes.paths);
     }
 }
 @Directive({
     selector: &#x27;map[appTripPassages]&#x27;,
 })
 export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    private vehicleLocationSubject: BehaviorSubject&lt;IVehicleLocation&gt; &#x3D; new BehaviorSubject(undefined);
+    @Input(&#x27;location&#x27;)
+    public set location(loc: ITimestampVehicleLocation) {
+        this.vehicleLocationSubject.next(loc);
+    }
+
+    public get location(): ITimestampVehicleLocation {
+        return this.vehicleLocationSubject.getValue();
+    }
+    private vehicleLocationSubject: BehaviorSubject&lt;ITimestampVehicleLocation&gt; &#x3D; new BehaviorSubject(undefined);
+
+    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
+
+    private updateObservable: Subscription;
+    private routePolyLines: L.Polyline[] &#x3D; [];
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
         zone: NgZone,
@@ -267,21 +280,12 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
         settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
-    @Input(&#x27;location&#x27;)
-    public set location(id: IVehicleLocation) {
-        this.vehicleLocationSubject.next(id);
-    }
-
-    public get location(): IVehicleLocation {
-        return this.vehicleLocationSubject.getValue();
-    }
-
-    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
-
-    private updateObservable: Subscription;
-    private routePolyLines: L.Polyline[] &#x3D; [];
 
     public setRoutePaths(paths: any[]): void {
+        for (const line of this.routePolyLines) {
+            line.remove();
+        }
+        this.routePolyLines &#x3D; [];
         for (const path of paths) {
             const pointList: any[] &#x3D; [];
             for (const wayPoint of path.wayPoints) {
@@ -313,6 +317,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     }
     public addMarker(): void {
         this.updateObservable &#x3D; this.vehicleLocationSubject
+            .pipe(map((loc: ITimestampVehicleLocation) &#x3D;&gt; loc.vehicle))
             .subscribe((location) &#x3D;&gt; {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -331,7 +336,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                             title: location.name,
                             zIndexOffset: 100,
                         });
-                    (&lt;any&gt;marker).setRotationAngle(location.heading - 90);
+                    (marker as any).setRotationAngle(location.heading - 90);
                     marker.addTo(this.stopMarkerLayer);
                     this.getMap().panTo({
                         alt: 2000,
@@ -345,9 +350,8 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
             .pipe(
                 filter(num &#x3D;&gt; num !&#x3D;&#x3D; null),
                 distinctUntilChanged(),
-                mergeMap(boundsa &#x3D;&gt; {
-                    return this.apiService.getRouteByTripId(boundsa.tripId);
-                }))
+                mergeMap(boundsa &#x3D;&gt;
+                    this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
             .subscribe(new RoutesSubscriber(this));
     }
 

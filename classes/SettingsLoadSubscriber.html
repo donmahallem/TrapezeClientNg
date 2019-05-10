@@ -339,19 +339,17 @@ export class SettingsService {
     }
 
     public load(): Promise&lt;void&gt; {
-        return new Promise((resolve: (arg: void) &#x3D;&gt; void, reject: (err: any) &#x3D;&gt; void) &#x3D;&gt; {
-            return this.apiService.getSettings()
+        return new Promise((resolve: (arg: void) &#x3D;&gt; void, reject: (err: any) &#x3D;&gt; void) &#x3D;&gt;
+            this.apiService.getSettings()
                 .pipe(tap((value: ISettings): void &#x3D;&gt; {
                     this.mSettings &#x3D; value;
                 }),
                     map((value: ISettings): void &#x3D;&gt; {
                         return;
                     }),
-                    catchError((err: any): Observable&lt;any&gt; &#x3D;&gt; {
-                        return from([undefined]);
-                    }))
-                .subscribe(new SettingsLoadSubscriber(resolve));
-        });
+                    catchError((err: any): Observable&lt;any&gt; &#x3D;&gt;
+                        from([undefined])))
+                .subscribe(new SettingsLoadSubscriber(resolve)));
     }
 }
 </code></pre>

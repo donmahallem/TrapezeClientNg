@@ -334,14 +334,13 @@ export class StopsResolver implements Resolve&lt;IStopLocations&gt; {
                     return throwError(err);
                 }
             }),
-                retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) &#x3D;&gt; {
-                    return this.dialog.open(RetryDialogComponent, {
+                retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) &#x3D;&gt;
+                    this.dialog.open(RetryDialogComponent, {
                         data: {
                             code: error.status ? error.status : undefined,
                             message: &#x27;test&#x27;,
                         },
-                    });
-                })));
+                    }))));
     }
 }
 </code></pre>

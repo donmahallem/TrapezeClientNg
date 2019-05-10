@@ -188,7 +188,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:16</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:25</a></div>
                             </td>
                         </tr>
 
@@ -274,7 +274,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:18</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -445,7 +445,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:25</a></div>
                             </td>
                         </tr>
 
@@ -478,7 +478,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:29</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:23</a></div>
                             </td>
                         </tr>
 
@@ -506,7 +506,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:21</a></div>
                             </td>
                         </tr>
 
@@ -536,7 +536,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:18</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -596,12 +596,6 @@ import { LeafletMapComponent } from &#x27;../common/leaflet-map.component&#x27;;
     selector: &#x27;map[appStopLocation]&#x27;,
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        settingsService: SettingsService) {
-        super(elRef, zone, userLocationService, settingsService);
-    }
     @Input(&#x27;location&#x27;)
     public set location(loc: IStopLocation) {
         this.stopLocationSubject.next(loc);
@@ -611,6 +605,12 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
 
     private stopLocationSubject: BehaviorSubject&lt;IStopLocation&gt; &#x3D; new BehaviorSubject(undefined);
+    constructor(elRef: ElementRef,
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        settingsService: SettingsService) {
+        super(elRef, zone, userLocationService, settingsService);
+    }
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();

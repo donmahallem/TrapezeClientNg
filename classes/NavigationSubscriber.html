@@ -266,12 +266,6 @@ export class NavigationSubscriber extends Subscriber&lt;RouterEvent&gt; {
     templateUrl: &#x27;./main-toolbar.component.pug&#x27;,
 })
 export class MainToolbarComponent implements OnInit {
-    public closeable &#x3D; false;
-
-    constructor(private sidebarService: SidebarService,
-        private router: Router) {
-        this.router.events.subscribe(new NavigationSubscriber(this));
-    }
 
     public get searchOpen(): boolean {
         return this.mSearchOpen;
@@ -280,10 +274,16 @@ export class MainToolbarComponent implements OnInit {
     public set searchOpen(open: boolean) {
         this.mSearchOpen &#x3D; open;
     }
+    public closeable &#x3D; false;
     @ViewChild(ToolbarSearchBoxComponent)
     private searchBoxComponent: ToolbarSearchBoxComponent;
 
     private mSearchOpen &#x3D; false;
+
+    constructor(private sidebarService: SidebarService,
+        private router: Router) {
+        this.router.events.subscribe(new NavigationSubscriber(this));
+    }
 
     ngOnInit() {
     }

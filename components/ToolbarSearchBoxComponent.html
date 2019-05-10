@@ -263,7 +263,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:20</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:19</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -300,8 +300,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="56"
-                            class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:56</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="55"
+                            class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:55</a></div>
                 </td>
             </tr>
 
@@ -423,8 +423,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="47"
-                            class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:47</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="46"
+                            class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:46</a></div>
                 </td>
             </tr>
 
@@ -502,7 +502,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:17</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:16</a></div>
                             </td>
                         </tr>
 
@@ -530,7 +530,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:14</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/modules/main-toolbar/search-box.component.ts:20</a></div>
                             </td>
                         </tr>
 
@@ -556,13 +556,13 @@ import { debounceTime, filter, startWith } from &#x27;rxjs/operators&#x27;;
 export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     searchControl &#x3D; new FormControl();
-    private updateSubscription: Subscription;
 
     @ViewChild(&#x27;searchInput&#x27;)
     public searchInput: ElementRef;
 
     @Output()
     public readonly focusSearch: EventEmitter&lt;boolean&gt; &#x3D; new EventEmitter();
+    private updateSubscription: Subscription;
     constructor(private router: Router) {
     }
 
@@ -574,9 +574,8 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
         this.updateSubscription &#x3D; this.searchControl.valueChanges
             .pipe(
                 startWith(&#x27;&#x27;),
-                filter((value: string): boolean &#x3D;&gt; {
-                    return value.length &gt; 0;
-                }),
+                filter((value: string): boolean &#x3D;&gt;
+                    value.length &gt; 0),
                 debounceTime(200),
             )
             .subscribe((value: string) &#x3D;&gt; {

@@ -173,7 +173,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:32</a></div>
                             </td>
                         </tr>
 
@@ -328,8 +328,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="154"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:154</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="150"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:150</a></div>
                 </td>
             </tr>
 
@@ -369,8 +369,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="142"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:142</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:139</a></div>
                 </td>
             </tr>
 
@@ -441,8 +441,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="136"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:136</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="133"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:133</a></div>
                 </td>
             </tr>
 
@@ -550,8 +550,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="191"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:191</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="187"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:187</a></div>
                 </td>
             </tr>
 
@@ -704,8 +704,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="184"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:184</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="180"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:180</a></div>
                 </td>
             </tr>
 
@@ -784,7 +784,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:40</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:30</a></div>
                             </td>
                         </tr>
 
@@ -817,7 +817,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:41</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:31</a></div>
                             </td>
                         </tr>
 
@@ -845,7 +845,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:42</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:32</a></div>
                             </td>
                         </tr>
 
@@ -887,6 +887,10 @@ export class VehicleLoadSubscriber extends Subscriber&lt;IVehicleLocationList&gt
     selector: &#x27;map[appMainMap]&#x27;,
 })
 export class MainMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
+
+    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
+    private vehicleMarkerLayer: L.FeatureGroup &#x3D; undefined;
+    private vehicleUpdateSubscription: Subscription;
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
@@ -897,10 +901,6 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
-
-    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
-    private vehicleMarkerLayer: L.FeatureGroup &#x3D; undefined;
-    private vehicleUpdateSubscription: Subscription;
 
     public setVehicles(vehicles: IVehicleLocationList): void {
         if (this.vehicleMarkerLayer !&#x3D;&#x3D; undefined) {
@@ -915,7 +915,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 if (veh.isDeleted &#x3D;&#x3D;&#x3D; true) {
                     continue;
                 }
-                this.addVehicleMarker(&lt;IVehicleLocation&gt;veh).addTo(this.vehicleMarkerLayer);
+                this.addVehicleMarker(veh as IVehicleLocation).addTo(this.vehicleMarkerLayer);
             }
         }
     }
@@ -968,17 +968,15 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     public startVehicleUpdater(): void {
         // as mapMove doesn&#x27;t emit on init this needs to be provided to load atleast once
         const primedMoveObservable: Observable&lt;MapMoveEvent&gt; &#x3D; this.mapMove.pipe(
-            startWith(&lt;MapMoveEvent&gt;{
+            startWith({
                 type: MapMoveEventType.END,
-            }));
+            } as MapMoveEvent));
         this.vehicleUpdateSubscription &#x3D; combineLatest([timer(0, 5000), primedMoveObservable])
             .pipe(
-                map((value: [number, MapMoveEvent]): MapMoveEvent &#x3D;&gt; {
-                    return value[1];
-                }),
-                filter((event: MapMoveEvent): boolean &#x3D;&gt; {
-                    return (event.type &#x3D;&#x3D;&#x3D; MapMoveEventType.END);
-                }),
+                map((value: [number, MapMoveEvent]): MapMoveEvent &#x3D;&gt;
+                    value[1]),
+                filter((event: MapMoveEvent): boolean &#x3D;&gt;
+                    (event.type &#x3D;&#x3D;&#x3D; MapMoveEventType.END)),
                 flatMap((moveEvent: MapMoveEvent) &#x3D;&gt; {
                     const bounds: IMapBounds &#x3D; {
                         bottom: this.mapBounds.getSouth(),
@@ -988,9 +986,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     };
                     return this.apiService.getVehicleLocations(bounds);
                 }),
-                catchError((err: Error) &#x3D;&gt; {
-                    return from([{}]);
-                }))
+                catchError((err: Error) &#x3D;&gt;
+                    from([{}])))
             .subscribe(new VehicleLoadSubscriber(this));
     }
 
@@ -1002,13 +999,12 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const vehicleIcon: L.DivIcon &#x3D; createVehicleIcon(vehicle.heading, vehicle.name.split(&#x27; &#x27;)[0], 40);
-        const markerT: any &#x3D; L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], &lt;any&gt;
-            {
+        const markerT: any &#x3D; L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
                 icon: vehicleIcon,
                 rotationAngle: vehicle.heading - 90,
                 title: vehicle.name,
                 zIndexOffset: 100,
-            });
+            } as any);
         markerT.data &#x3D; vehicle;
         return markerT;
     }
@@ -1030,7 +1026,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                             title: stop.name,
                             zIndexOffset: 10,
                         });
-                    (&lt;any&gt;markerT).data &#x3D; stop;
+                    (markerT as any).data &#x3D; stop;
                     stopList.push(markerT);
                 }
                 if (this.stopMarkerLayer !&#x3D;&#x3D; undefined) {

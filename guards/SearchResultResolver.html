@@ -252,14 +252,13 @@ export class SearchResultResolver implements Resolve&lt;any&gt; {
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable&lt;IStopLocation[]&gt; {
         return this.stopService.stopLocationsObservable
             .pipe(take(1),
-                map((stops: IStopLocation[]): IStopLocation[] &#x3D;&gt; {
-                    return stops
+                map((stops: IStopLocation[]): IStopLocation[] &#x3D;&gt;
+                    stops
                         /**
                          * Filter by search term
                          */
-                        .filter(option &#x3D;&gt; option.name.toLowerCase().includes(route.queryParams[&#x27;q&#x27;]))
-                        .sort((a, b) &#x3D;&gt; a.name.localeCompare(b.name));
-                }));
+                        .filter(option &#x3D;&gt; option.name.toLowerCase().includes(route.queryParams.q))
+                        .sort((a, b) &#x3D;&gt; a.name.localeCompare(b.name))));
     }
 }
 </code></pre>

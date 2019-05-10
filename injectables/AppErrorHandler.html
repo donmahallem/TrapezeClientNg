@@ -404,7 +404,7 @@ export class AppErrorHandler implements ErrorHandler {
      * @returns true if the navigator is offline
      */
     public isClientOffline(): boolean {
-        return (navigator.onLine &#x3D;&#x3D;&#x3D; false);
+        return (!navigator.onLine);
     }
 
     /**

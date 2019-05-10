@@ -268,6 +268,10 @@ export class VehicleLoadSubscriber extends Subscriber&lt;IVehicleLocationList&gt
     selector: &#x27;map[appMainMap]&#x27;,
 })
 export class MainMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
+
+    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
+    private vehicleMarkerLayer: L.FeatureGroup &#x3D; undefined;
+    private vehicleUpdateSubscription: Subscription;
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
@@ -278,10 +282,6 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
-
-    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
-    private vehicleMarkerLayer: L.FeatureGroup &#x3D; undefined;
-    private vehicleUpdateSubscription: Subscription;
 
     public setVehicles(vehicles: IVehicleLocationList): void {
         if (this.vehicleMarkerLayer !&#x3D;&#x3D; undefined) {
@@ -296,7 +296,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 if (veh.isDeleted &#x3D;&#x3D;&#x3D; true) {
                     continue;
                 }
-                this.addVehicleMarker(&lt;IVehicleLocation&gt;veh).addTo(this.vehicleMarkerLayer);
+                this.addVehicleMarker(veh as IVehicleLocation).addTo(this.vehicleMarkerLayer);
             }
         }
     }
@@ -349,17 +349,15 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     public startVehicleUpdater(): void {
         // as mapMove doesn&#x27;t emit on init this needs to be provided to load atleast once
         const primedMoveObservable: Observable&lt;MapMoveEvent&gt; &#x3D; this.mapMove.pipe(
-            startWith(&lt;MapMoveEvent&gt;{
+            startWith({
                 type: MapMoveEventType.END,
-            }));
+            } as MapMoveEvent));
         this.vehicleUpdateSubscription &#x3D; combineLatest([timer(0, 5000), primedMoveObservable])
             .pipe(
-                map((value: [number, MapMoveEvent]): MapMoveEvent &#x3D;&gt; {
-                    return value[1];
-                }),
-                filter((event: MapMoveEvent): boolean &#x3D;&gt; {
-                    return (event.type &#x3D;&#x3D;&#x3D; MapMoveEventType.END);
-                }),
+                map((value: [number, MapMoveEvent]): MapMoveEvent &#x3D;&gt;
+                    value[1]),
+                filter((event: MapMoveEvent): boolean &#x3D;&gt;
+                    (event.type &#x3D;&#x3D;&#x3D; MapMoveEventType.END)),
                 flatMap((moveEvent: MapMoveEvent) &#x3D;&gt; {
                     const bounds: IMapBounds &#x3D; {
                         bottom: this.mapBounds.getSouth(),
@@ -369,9 +367,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     };
                     return this.apiService.getVehicleLocations(bounds);
                 }),
-                catchError((err: Error) &#x3D;&gt; {
-                    return from([{}]);
-                }))
+                catchError((err: Error) &#x3D;&gt;
+                    from([{}])))
             .subscribe(new VehicleLoadSubscriber(this));
     }
 
@@ -383,13 +380,12 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const vehicleIcon: L.DivIcon &#x3D; createVehicleIcon(vehicle.heading, vehicle.name.split(&#x27; &#x27;)[0], 40);
-        const markerT: any &#x3D; L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], &lt;any&gt;
-            {
+        const markerT: any &#x3D; L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
                 icon: vehicleIcon,
                 rotationAngle: vehicle.heading - 90,
                 title: vehicle.name,
                 zIndexOffset: 100,
-            });
+            } as any);
         markerT.data &#x3D; vehicle;
         return markerT;
     }
@@ -411,7 +407,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                             title: stop.name,
                             zIndexOffset: 10,
                         });
-                    (&lt;any&gt;markerT).data &#x3D; stop;
+                    (markerT as any).data &#x3D; stop;
                     stopList.push(markerT);
                 }
                 if (this.stopMarkerLayer !&#x3D;&#x3D; undefined) {

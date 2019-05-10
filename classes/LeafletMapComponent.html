@@ -174,7 +174,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:42</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:54</a></div>
                             </td>
                         </tr>
 
@@ -274,7 +274,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:49</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:52</a></div>
                             </td>
                         </tr>
 
@@ -304,7 +304,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:48</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:50</a></div>
                             </td>
                         </tr>
 
@@ -338,7 +338,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:50</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:51</a></div>
                             </td>
                         </tr>
 
@@ -371,7 +371,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:51</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:53</a></div>
                             </td>
                         </tr>
 
@@ -399,7 +399,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:52</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:54</a></div>
                             </td>
                         </tr>
 
@@ -437,8 +437,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="112"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:112</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:119</a></div>
                 </td>
             </tr>
 
@@ -509,8 +509,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="108"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:108</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="115"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:115</a></div>
                 </td>
             </tr>
 
@@ -548,8 +548,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="53"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:53</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="60"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:60</a></div>
                 </td>
             </tr>
 
@@ -630,8 +630,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="84"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:84</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="91"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:91</a></div>
                 </td>
             </tr>
 
@@ -711,7 +711,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="119" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:119</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:47</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -774,16 +774,23 @@ export class UserLocationSubscriber extends Subscriber&lt;Position&gt; {
 }
 
 export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
+
+    /**
+     * wrapper for this.map.getBounds()
+     */
+    public get mapBounds(): L.LatLngBounds {
+        return this.map.getBounds();
+    }
+    @ViewChild(&#x27;mapcontainer&#x27;) mapContainer;
+    public readonly mapMove: Subject&lt;MapMoveEvent&gt; &#x3D; new Subject();
+    private map: L.Map;
+    private mUserLocationSubscription: Subscription &#x3D; undefined;
+    private userLocationLayer: L.FeatureGroup;
     constructor(private elRef: ElementRef,
         protected zone: NgZone,
         protected userLocationService: UserLocationService,
         protected settings: SettingsService) {
     }
-    @ViewChild(&#x27;mapcontainer&#x27;) mapContainer;
-    private map: L.Map;
-    public readonly mapMove: Subject&lt;MapMoveEvent&gt; &#x3D; new Subject();
-    private mUserLocationSubscription: Subscription &#x3D; undefined;
-    private userLocationLayer: L.FeatureGroup;
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() &#x3D;&gt; {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
@@ -845,13 +852,6 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
 
     public addLayer(layer: L.Layer): L.Layer {
         return layer.addTo(this.map);
-    }
-
-    /**
-     * wrapper for this.map.getBounds()
-     */
-    public get mapBounds(): L.LatLngBounds {
-        return this.map.getBounds();
     }
 
     public ngOnDestroy(): void {

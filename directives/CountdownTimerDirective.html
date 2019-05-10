@@ -208,7 +208,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:21</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:33</a></div>
                             </td>
                         </tr>
                 <tr>
@@ -235,7 +235,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:17</a></div>
                             </td>
                         </tr>
                 <tr>
@@ -263,7 +263,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:35</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:25</a></div>
                             </td>
                         </tr>
 
@@ -398,7 +398,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -431,7 +431,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:15</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -459,7 +459,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:14</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -489,7 +489,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/modules/common/countdown-timer/countdown-timer.directive.ts:17</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -551,16 +551,6 @@ import { distinctUntilChanged, map } from &#x27;rxjs/operators&#x27;;
 })
 export class CountdownTimerDirective implements OnInit, OnDestroy {
 
-    private timestamp &#x3D; &#x27;&#x27;;
-    private updateSubscription: Subscription;
-    private timestampSubject: BehaviorSubject&lt;number&gt; &#x3D; new BehaviorSubject(0);
-
-    /**
-     * Placeholder if time has run out
-     */
-    @Input()
-    public placeholder &#x3D; &#x27;-&#x27;;
-
     /**
      * Sets the targetTime
      */
@@ -576,6 +566,16 @@ export class CountdownTimerDirective implements OnInit, OnDestroy {
     public get text() {
         return this.timestamp;
     }
+
+    /**
+     * Placeholder if time has run out
+     */
+    @Input()
+    public placeholder &#x3D; &#x27;-&#x27;;
+
+    private timestamp &#x3D; &#x27;&#x27;;
+    private updateSubscription: Subscription;
+    private timestampSubject: BehaviorSubject&lt;number&gt; &#x3D; new BehaviorSubject(0);
 
     public ngOnInit(): void {
         this.updateSubscription &#x3D; combineLatest([timer(0, 200), this.timestampSubject])
