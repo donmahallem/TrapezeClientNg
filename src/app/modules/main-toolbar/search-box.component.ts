@@ -11,13 +11,13 @@ import { debounceTime, filter, startWith } from 'rxjs/operators';
 export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     searchControl = new FormControl();
-    private updateSubscription: Subscription;
 
     @ViewChild('searchInput')
     public searchInput: ElementRef;
 
     @Output()
     public readonly focusSearch: EventEmitter<boolean> = new EventEmitter();
+    private updateSubscription: Subscription;
     constructor(private router: Router) {
     }
 
@@ -29,9 +29,8 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
         this.updateSubscription = this.searchControl.valueChanges
             .pipe(
                 startWith(''),
-                filter((value: string): boolean => {
-                    return value.length > 0;
-                }),
+                filter((value: string): boolean =>
+                    value.length > 0),
                 debounceTime(200),
             )
             .subscribe((value: string) => {

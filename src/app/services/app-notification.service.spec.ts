@@ -15,7 +15,7 @@ describe('src/app/services/app-notification.service', () => {
                 providers: [AppNotificationService],
             });
             notificationService = TestBed.get(AppNotificationService);
-            subject = (<any>notificationService).notificationSubject;
+            subject = (notificationService as any).notificationSubject;
         }));
 
         afterEach(() => {

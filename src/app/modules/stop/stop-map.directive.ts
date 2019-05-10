@@ -14,12 +14,6 @@ import { LeafletMapComponent } from '../common/leaflet-map.component';
     selector: 'map[appStopLocation]',
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        settingsService: SettingsService) {
-        super(elRef, zone, userLocationService, settingsService);
-    }
     @Input('location')
     public set location(loc: IStopLocation) {
         this.stopLocationSubject.next(loc);
@@ -29,6 +23,12 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private stopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
+    constructor(elRef: ElementRef,
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        settingsService: SettingsService) {
+        super(elRef, zone, userLocationService, settingsService);
+    }
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();

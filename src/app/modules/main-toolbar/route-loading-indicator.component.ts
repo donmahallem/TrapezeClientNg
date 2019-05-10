@@ -34,9 +34,9 @@ export class RouteLoadingSubscriber extends Subscriber<Event> {
     templateUrl: './route-loading-indicator.component.pug',
 })
 export class RouteLoadingIndicatorComponent implements OnInit, OnDestroy {
-    private subscription: Subscription;
 
     public loading = false;
+    private subscription: Subscription;
     constructor(private router: Router) {
 
     }

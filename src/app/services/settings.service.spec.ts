@@ -37,7 +37,7 @@ describe('src/app/services/settings.service', () => {
                         test1: true,
                         test2: false,
                     };
-                    (<any>settingsService).mSettings = testValue;
+                    (settingsService as any).mSettings = testValue;
                     expect(settingsService.settings).toEqual(testValue);
                 });
             });
@@ -93,7 +93,7 @@ describe('src/app/services/settings.service', () => {
             }];
             testValues.forEach((testValue) => {
                 it('should return LatLon(' + testValue.out.lat + ',' + testValue.out.lon + ')', () => {
-                    (<any>settingsService).mSettings = testValue.settings;
+                    (settingsService as any).mSettings = testValue.settings;
                     expect(settingsService.getInitialMapCenter()).toEqual(new LatLng(testValue.out.lat, testValue.out.lon));
                 });
             });
@@ -105,13 +105,13 @@ describe('src/app/services/settings.service', () => {
             }[] = [];
             testValues.forEach((testValue) => {
                 it('should return zoom level ' + (testValue.value ? testValue.value : 20), () => {
-                    if (testValue.settings === true) {
-                        (<any>settingsService).mSettings = {
+                    if (testValue.settings) {
+                        (settingsService as any).mSettings = {
                             INITIAL_ZOOM: testValue.value,
                         };
                         expect(settingsService.getInitialMapZoom()).toEqual(testValue.value ? testValue.value : 20);
                     } else {
-                        (<any>settingsService).mSettings = undefined;
+                        (settingsService as any).mSettings = undefined;
                         expect(settingsService.getInitialMapZoom()).toEqual(20);
                     }
                 });
@@ -127,7 +127,7 @@ describe('src/app/services/settings.service', () => {
                         .then((result) => {
                             expect(getSettingsSpy.call.length).toEqual(1);
                             expect(result).toEqual(undefined);
-                            expect((<any>settingsService).mSettings).not.toBeDefined();
+                            expect((settingsService as any).mSettings).not.toBeDefined();
                             done();
                         })
                         .catch(done);
@@ -147,7 +147,7 @@ describe('src/app/services/settings.service', () => {
                         .then((result) => {
                             expect(getSettingsSpy.call.length).toEqual(1);
                             expect(result).toEqual(undefined);
-                            expect((<any>settingsService).mSettings).toEqual(testValue);
+                            expect((settingsService as any).mSettings).toEqual(testValue);
                             done();
                         })
                         .catch(done);

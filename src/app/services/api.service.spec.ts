@@ -13,9 +13,8 @@ describe('src/app/services/api.service', () => {
             getSpy = jasmine.createSpy();
         });
         beforeEach(async(() => {
-            getSpy.and.callFake((...args: any[]): Observable<any> => {
-                return from([args]);
-            });
+            getSpy.and.callFake((...args: any[]): Observable<any> =>
+                from([args]));
             TestBed.configureTestingModule({
                 providers: [ApiService,
                     {
@@ -36,7 +35,7 @@ describe('src/app/services/api.service', () => {
         describe('getTripPassages(tripId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getTripPassages(testId).subscribe((res) => {
-                    expect(<any>res)
+                    expect(res as any)
                         .toEqual([testEndpoint + 'api/trip/' + testId + '/passages?mode=departure']);
                 }, done, done);
             });
@@ -60,7 +59,7 @@ describe('src/app/services/api.service', () => {
         describe('getStopInfo(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getStopInfo(testId).subscribe((res) => {
-                    expect(<any>res)
+                    expect(res as any)
                         .toEqual([testEndpoint + 'api/stop/' + testId + '/info']);
                 }, done, done);
             });
@@ -68,7 +67,7 @@ describe('src/app/services/api.service', () => {
         describe('getStopDepartures(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getStopPassages(testId).subscribe((res) => {
-                    expect(<any>res)
+                    expect(res as any)
                         .toEqual([testEndpoint + 'api/stop/' + testId + '/departures']);
                 }, done, done);
             });
@@ -76,8 +75,8 @@ describe('src/app/services/api.service', () => {
         describe('getVehicleLocation(vehicleId)', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getVehicleLocation(testId).subscribe((res) => {
-                    expect(<any>res)
-                        .toEqual([<any>testEndpoint + 'api/geo/vehicle/testId1234']);
+                    expect(res as any)
+                        .toEqual([testEndpoint as any + 'api/geo/vehicle/testId1234']);
                 }, done, done);
             });
         });
@@ -85,7 +84,7 @@ describe('src/app/services/api.service', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getStations().subscribe((res) => {
                     expect(res)
-                        .toEqual(<any>[testEndpoint + 'api/geo/stops']);
+                        .toEqual([testEndpoint + 'api/geo/stops'] as any);
                 }, done, done);
             });
         });

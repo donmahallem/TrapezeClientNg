@@ -16,7 +16,7 @@ export class AppErrorHandler implements ErrorHandler {
      * @returns true if the navigator is offline
      */
     public isClientOffline(): boolean {
-        return (navigator.onLine === false);
+        return (!navigator.onLine);
     }
 
     /**

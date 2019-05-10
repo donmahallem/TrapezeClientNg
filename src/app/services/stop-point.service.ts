@@ -12,7 +12,7 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
     }
 
     public next(stops: IStopLocation[]): void {
-        (<any>this.service).mStopLocations = stops;
+        (this.service as any).mStopLocations = stops;
     }
 
     public error(err: any): void {
@@ -39,24 +39,21 @@ export class StopPointService {
         return this.retrySubject.pipe(delay(10 * 1000))
             .pipe(
                 startWith(undefined),
-                flatMap((): Observable<IStopLocation[]> => {
-                    return this.api.getStations()
+                flatMap((): Observable<IStopLocation[]> =>
+                    this.api.getStations()
                         .pipe(
-                            map((value): IStopLocation[] => {
-                                return value.stops;
-                            }),
+                            map((value): IStopLocation[] =>
+                                value.stops),
                             catchError((err: any, caught: Observable<IStopLocation[]>): Observable<IStopLocation[]> => {
                                 this.notificationService.report(err);
                                 this.retrySubject.next();
                                 return from([[]]);
-                            }));
-                }),
+                            }))),
                 tap((value: IStopLocation[]) => {
                     this.mStopLocations = value;
                 }),
-                catchError((err) => {
-                    return from([[]]);
-                }),
+                catchError((err) =>
+                    from([[]])),
                 shareReplay(1));
     }
 
@@ -84,9 +81,8 @@ export class StopPointService {
     public searchStop(stopShortName: string): Observable<IStopLocation> {
         return this.stopLocationsObservable
             .pipe(
-                flatMap((stops: IStopLocation[]): Observable<IStopLocation> => {
-                    return from(stops);
-                }),
+                flatMap((stops: IStopLocation[]): Observable<IStopLocation> =>
+                    from(stops)),
                 filter((stop: IStopLocation) => {
                     if (stop) {
                         return stop.shortName === stopShortName;

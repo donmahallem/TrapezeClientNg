@@ -18,11 +18,9 @@ import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
 
-export const SettingsInitializer = (appInitService: SettingsService) => {
-    return (): Promise<any> => {
-        return appInitService.load();
-    };
-};
+export const SettingsInitializer = (appInitService: SettingsService) =>
+    (): Promise<any> =>
+        appInitService.load();
 const moduleImports: any[] = [
     BrowserModule,
     HttpClientModule,
@@ -35,7 +33,7 @@ const moduleImports: any[] = [
     MainToolbarModule,
     SidebarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: environment.production && environment.pwa === true,
+        enabled: environment.production && environment.pwa,
     }),
 ];
 @NgModule({

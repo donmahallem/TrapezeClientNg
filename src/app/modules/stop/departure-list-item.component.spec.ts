@@ -61,7 +61,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
         describe('getter', () => {
           testPassages.forEach((testPassage) => {
             it('should get the correct value', () => {
-              (<any>cmp).mDeparture = testPassage;
+              (cmp as any).mDeparture = testPassage;
               expect(cmp.departure).toEqual(testPassage);
             });
           });
@@ -72,23 +72,21 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           beforeEach(() => {
             calculateDelaySpy = spyOn(cmp, 'calculateDelay');
             convertTimeSpy = spyOn(cmp, 'convertTime');
-            calculateDelaySpy.and.callFake((arg: any) => {
-              return { delay: arg };
-            });
-            convertTimeSpy.and.callFake((arg: any) => {
-              return { time: arg };
-            });
+            calculateDelaySpy.and.callFake((arg: any) =>
+              ({ delay: arg }));
+            convertTimeSpy.and.callFake((arg: any) =>
+              ({ time: arg }));
           });
           testPassages.forEach((testPassage) => {
             it('should set the correct value', () => {
               cmp.departure = testPassage;
-              expect((<any>cmp).mDeparture).toEqual(testPassage);
+              expect((cmp as any).mDeparture).toEqual(testPassage);
               expect(calculateDelaySpy).toHaveBeenCalledTimes(1);
               expect(convertTimeSpy).toHaveBeenCalledTimes(1);
               expect(calculateDelaySpy).toHaveBeenCalledWith(testPassage);
               expect(convertTimeSpy).toHaveBeenCalledWith(testPassage);
-              expect((<any>cmp).mTime).toEqual({ time: testPassage });
-              expect((<any>cmp).mDelay).toEqual({ delay: testPassage });
+              expect((cmp as any).mTime).toEqual({ time: testPassage });
+              expect((cmp as any).mDelay).toEqual({ delay: testPassage });
             });
           });
           afterEach(() => {
@@ -101,7 +99,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
         describe('getter', () => {
           testPassages.forEach((value) => {
             it('should convert the object to "' + value + '\'', () => {
-              (<any>cmp).mTime = value;
+              (cmp as any).mTime = value;
               expect(cmp.time).toEqual(value);
             });
           });
@@ -111,7 +109,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
         describe('getter', () => {
           testPassages.forEach((value) => {
             it('should convert the object to "' + value + '\'', () => {
-              (<any>cmp).mDelay = value;
+              (cmp as any).mDelay = value;
               expect(cmp.delay).toEqual(value);
             });
           });
@@ -195,7 +193,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           ];
         passages.forEach((value) => {
           it('should convert the "' + value.value + '" to "' + value.result + '\'', () => {
-            expect(cmp.calculateDelay(<any>value.value)).toEqual(value.result);
+            expect(cmp.calculateDelay(value.value as any)).toEqual(value.result);
           });
         });
       });

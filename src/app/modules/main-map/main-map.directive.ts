@@ -26,6 +26,10 @@ export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
     selector: 'map[appMainMap]',
 })
 export class MainMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
+
+    private stopMarkerLayer: L.FeatureGroup = undefined;
+    private vehicleMarkerLayer: L.FeatureGroup = undefined;
+    private vehicleUpdateSubscription: Subscription;
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
@@ -36,10 +40,6 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
-
-    private stopMarkerLayer: L.FeatureGroup = undefined;
-    private vehicleMarkerLayer: L.FeatureGroup = undefined;
-    private vehicleUpdateSubscription: Subscription;
 
     public setVehicles(vehicles: IVehicleLocationList): void {
         if (this.vehicleMarkerLayer !== undefined) {
@@ -54,7 +54,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 if (veh.isDeleted === true) {
                     continue;
                 }
-                this.addVehicleMarker(<IVehicleLocation>veh).addTo(this.vehicleMarkerLayer);
+                this.addVehicleMarker(veh as IVehicleLocation).addTo(this.vehicleMarkerLayer);
             }
         }
     }
@@ -107,17 +107,15 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     public startVehicleUpdater(): void {
         // as mapMove doesn't emit on init this needs to be provided to load atleast once
         const primedMoveObservable: Observable<MapMoveEvent> = this.mapMove.pipe(
-            startWith(<MapMoveEvent>{
+            startWith({
                 type: MapMoveEventType.END,
-            }));
+            } as MapMoveEvent));
         this.vehicleUpdateSubscription = combineLatest([timer(0, 5000), primedMoveObservable])
             .pipe(
-                map((value: [number, MapMoveEvent]): MapMoveEvent => {
-                    return value[1];
-                }),
-                filter((event: MapMoveEvent): boolean => {
-                    return (event.type === MapMoveEventType.END);
-                }),
+                map((value: [number, MapMoveEvent]): MapMoveEvent =>
+                    value[1]),
+                filter((event: MapMoveEvent): boolean =>
+                    (event.type === MapMoveEventType.END)),
                 flatMap((moveEvent: MapMoveEvent) => {
                     const bounds: IMapBounds = {
                         bottom: this.mapBounds.getSouth(),
@@ -127,9 +125,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     };
                     return this.apiService.getVehicleLocations(bounds);
                 }),
-                catchError((err: Error) => {
-                    return from([{}]);
-                }))
+                catchError((err: Error) =>
+                    from([{}])))
             .subscribe(new VehicleLoadSubscriber(this));
     }
 
@@ -141,13 +138,12 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     }
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const vehicleIcon: L.DivIcon = createVehicleIcon(vehicle.heading, vehicle.name.split(' ')[0], 40);
-        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], <any>
-            {
+        const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
                 icon: vehicleIcon,
                 rotationAngle: vehicle.heading - 90,
                 title: vehicle.name,
                 zIndexOffset: 100,
-            });
+            } as any);
         markerT.data = vehicle;
         return markerT;
     }
@@ -169,7 +165,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                             title: stop.name,
                             zIndexOffset: 10,
                         });
-                    (<any>markerT).data = stop;
+                    (markerT as any).data = stop;
                     stopList.push(markerT);
                 }
                 if (this.stopMarkerLayer !== undefined) {

@@ -94,9 +94,8 @@ describe('src/app/modules/stops/stops.resolver', () => {
                     beforeEach(() => {
                         getSpy.and.returnValue(throwError(testError));
                         openDialogSpy.and.returnValue({
-                            afterClosed: () => {
-                                return from([false]);
-                            },
+                            afterClosed: () =>
+                                from([false]),
                         });
                     });
                     afterEach(() => {
@@ -120,9 +119,8 @@ describe('src/app/modules/stops/stops.resolver', () => {
                         beforeEach(() => {
                             getSpy.and.returnValue(throwError(testError));
                             openDialogSpy.and.returnValue({
-                                afterClosed: () => {
-                                    return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
-                                },
+                                afterClosed: () =>
+                                    openDialogSpy.calls.count() < 2 ? from([true]) : from([false]),
                             });
                         });
                         afterEach(() => {
@@ -145,9 +143,8 @@ describe('src/app/modules/stops/stops.resolver', () => {
                         beforeEach(() => {
                             getSpy.and.returnValue(throwError(testError));
                             openDialogSpy.and.returnValue({
-                                afterClosed: () => {
-                                    return openDialogSpy.calls.count() < 2 ? from([true]) : from([false]);
-                                },
+                                afterClosed: () =>
+                                    openDialogSpy.calls.count() < 2 ? from([true]) : from([false]),
                             });
                         });
                         afterEach(() => {
