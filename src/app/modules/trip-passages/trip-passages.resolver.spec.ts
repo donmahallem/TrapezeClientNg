@@ -43,16 +43,15 @@ describe('src/app/modules/stop/trip-passages.resolver', () => {
         describe('resolve(route, state)', () => {
             describe('should succeed', () => {
                 beforeEach(() => {
-                    getSpy.and.callFake((...args: any[]): Observable<any> => {
-                        return from([args]);
-                    });
+                    getSpy.and.callFake((...args: any[]): Observable<any> =>
+                        from([args]));
                 });
                 it('should construct the request correctly', (done) => {
-                    resolver.resolve(<any>{ params: { tripId: testId } }, undefined).subscribe(nextSpy, done, done);
+                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(1);
-                    expect(<any>nextSpy.calls.first().args[0])
+                    expect(nextSpy.calls.first().args[0] as any)
                         .toEqual([testId]);
                     expect(navigateSpy.calls.count()).toEqual(0);
                 });
@@ -60,12 +59,11 @@ describe('src/app/modules/stop/trip-passages.resolver', () => {
             describe('should not navigate for generic error', () => {
                 const testError: Error = new Error('test error');
                 beforeEach(() => {
-                    getSpy.and.callFake((...args: any[]): Observable<any> => {
-                        return throwError(testError);
-                    });
+                    getSpy.and.callFake((...args: any[]): Observable<any> =>
+                        throwError(testError));
                 });
                 it('should construct the request correctly', (done) => {
-                    resolver.resolve(<any>{ params: { tripId: testId } }, undefined).subscribe(nextSpy, done, done);
+                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(0);
@@ -77,12 +75,11 @@ describe('src/app/modules/stop/trip-passages.resolver', () => {
                     status: 404,
                 };
                 beforeEach(() => {
-                    getSpy.and.callFake((...args: any[]): Observable<any> => {
-                        return throwError(testError);
-                    });
+                    getSpy.and.callFake((...args: any[]): Observable<any> =>
+                        throwError(testError));
                 });
                 it('should construct the request correctly', (done) => {
-                    resolver.resolve(<any>{ params: { tripId: testId } }, undefined).subscribe(nextSpy, done, done);
+                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(0);

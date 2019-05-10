@@ -37,9 +37,8 @@ describe('src/app/app-error-handler.ts', () => {
             let handleHttpErrorResponseSpy: jasmine.Spy<InferableFunction>;
             beforeEach(() => {
                 handleHttpErrorResponseSpy = spyOn(handler, 'handleHttpErrorResponse');
-                handleHttpErrorResponseSpy.and.callFake(() => {
-                    return false;
-                });
+                handleHttpErrorResponseSpy.and.callFake(() =>
+                    false);
             });
             afterEach(() => {
                 handleHttpErrorResponseSpy.calls.reset();
@@ -75,13 +74,12 @@ describe('src/app/app-error-handler.ts', () => {
             });
         });
         describe('handleHttpErrorResponse(err,notificationService)', () => {
-            const createError = (code: number) => {
-                return new HttpErrorResponse({
+            const createError = (code: number) =>
+                new HttpErrorResponse({
                     status: code,
                     statusText: 'Status ' + code,
                     url: 'http://test.com/' + code,
                 });
-            };
             const testHttpErrors: {
                 error: HttpErrorResponse,
                 message: {

@@ -21,14 +21,6 @@ export class RoutesSubscriber extends Subscriber<any> {
     selector: 'map[appTripPassages]',
 })
 export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    private vehicleLocationSubject: BehaviorSubject<ITimestampVehicleLocation> = new BehaviorSubject(undefined);
-    constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        private apiService: ApiService,
-        settingsService: SettingsService) {
-        super(elRef, zone, userLocationService, settingsService);
-    }
     @Input('location')
     public set location(loc: ITimestampVehicleLocation) {
         this.vehicleLocationSubject.next(loc);
@@ -37,11 +29,19 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     public get location(): ITimestampVehicleLocation {
         return this.vehicleLocationSubject.getValue();
     }
+    private vehicleLocationSubject: BehaviorSubject<ITimestampVehicleLocation> = new BehaviorSubject(undefined);
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private updateObservable: Subscription;
     private routePolyLines: L.Polyline[] = [];
+    constructor(elRef: ElementRef,
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        private apiService: ApiService,
+        settingsService: SettingsService) {
+        super(elRef, zone, userLocationService, settingsService);
+    }
 
     public setRoutePaths(paths: any[]): void {
         for (const path of paths) {
@@ -94,7 +94,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                             title: location.name,
                             zIndexOffset: 100,
                         });
-                    (<any>marker).setRotationAngle(location.heading - 90);
+                    (marker as any).setRotationAngle(location.heading - 90);
                     marker.addTo(this.stopMarkerLayer);
                     this.getMap().panTo({
                         alt: 2000,
@@ -108,9 +108,8 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
             .pipe(
                 filter(num => num !== null),
                 distinctUntilChanged(),
-                mergeMap(boundsa => {
-                    return this.apiService.getRouteByTripId(boundsa.vehicle.tripId);
-                }))
+                mergeMap(boundsa =>
+                    this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
             .subscribe(new RoutesSubscriber(this));
     }
 

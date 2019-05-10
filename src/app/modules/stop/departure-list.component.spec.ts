@@ -56,15 +56,15 @@ describe('src/app/modules/stop/departure-list.component', () => {
           result: [],
           value: [],
         }, {
-          result: <any>[1, 2],
-          value: <any>[1, 2],
+          result: [1, 2] as any,
+          value: [1, 2] as any,
         },
       ];
       describe('departures', () => {
         describe('getter', () => {
           testPassages.forEach((testPassage) => {
             it('should get the correct value for "' + testPassage.value + '"', () => {
-              (<any>cmp).mDepartures = testPassage.value;
+              (cmp as any).mDepartures = testPassage.value;
               expect(cmp.departures).toEqual(testPassage.result);
             });
           });
@@ -73,7 +73,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
           testPassages.forEach((testPassage) => {
             it('should set the correct value for "' + testPassage.value + '"', () => {
               cmp.departures = testPassage.value;
-              expect((<any>cmp).mDepartures).toEqual(testPassage.result);
+              expect((cmp as any).mDepartures).toEqual(testPassage.result);
             });
           });
         });
@@ -94,7 +94,7 @@ describe('src/app/modules/stop/departure-list.component', () => {
         }];
         data.forEach((testData) => {
           it('should return "' + testData.result + '" for ' + JSON.stringify(testData.value), () => {
-            (<any>cmp).mDepartures = testData.value;
+            (cmp as any).mDepartures = testData.value;
             expect(cmp.hasDepartures()).toEqual(testData.result);
           });
         });

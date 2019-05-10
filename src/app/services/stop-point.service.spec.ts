@@ -13,21 +13,21 @@ describe('src/app/services/stop-point.service', () => {
         let stopService: StopPointService;
         let nextSpy: jasmine.Spy<InferableFunction>;
         const testLocations: IStopLocation[] = [
-            <any>{
+            {
                 latitude: 1,
                 longitude: 2,
                 shortName: '1',
-            },
-            <any>{
+            } as any,
+            {
                 latitude: 2,
                 longitude: 2,
                 shortName: '2',
-            },
-            <any>{
+            } as any,
+            {
                 latitude: 3,
                 longitude: 45,
                 shortName: '3',
-            },
+            } as any,
         ];
         beforeAll(() => {
             nextSpy = jasmine.createSpy();
@@ -54,22 +54,22 @@ describe('src/app/services/stop-point.service', () => {
         describe('stopLocations', () => {
             describe('getter', () => {
                 it('should get an empty list if mStopLocations is set to undefined', () => {
-                    (<any>stopService).mStopLocations = undefined;
+                    (stopService as any).mStopLocations = undefined;
                     expect(stopService.stopLocations).toEqual([]);
                 });
                 it('should get an empty list if mStopLocations is a list', () => {
-                    (<any>stopService).mStopLocations = testLocations;
+                    (stopService as any).mStopLocations = testLocations;
                     expect(stopService.stopLocations).toEqual(testLocations);
                 });
             });
         });
         describe('getStopLocation(stopShortName)', () => {
             it('should return if the stopShortName is unknown', () => {
-                (<any>stopService).mStopLocations = [];
+                (stopService as any).mStopLocations = [];
                 expect(stopService.getStopLocation('1')).toBeUndefined();
             });
             it('should return the expected item', () => {
-                (<any>stopService).mStopLocations = testLocations;
+                (stopService as any).mStopLocations = testLocations;
                 expect(stopService.getStopLocation('1')).toEqual(testLocations[0]);
                 expect(stopService.getStopLocation('3')).toEqual(testLocations[2]);
             });
@@ -132,7 +132,7 @@ describe('src/app/services/stop-point.service', () => {
                 });
                 describe('sharedReplay observable was already created', () => {
                     it('createStopLoadObservable should not be called', (done) => {
-                        (<any>stopService).sharedReplay = from([true]);
+                        (stopService as any).sharedReplay = from([true]);
                         stopService.stopLocationsObservable
                             .subscribe(nextSpy, () => { }, () => {
                                 expect(createObservable).toHaveBeenCalledTimes(0);
