@@ -16,7 +16,7 @@ describe('src/app/services/sidebar.service', () => {
                 providers: [SidebarService],
             });
             sidebarService = TestBed.get(SidebarService);
-            subject = (sidebarService as any).sidebarStatusSubject;
+            subject = (sidebarService as any).mSidebarStatusSubject;
         }));
 
         afterEach(() => {
