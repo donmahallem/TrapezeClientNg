@@ -1,27 +1,27 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
-import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, mergeMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { createVehicleIcon } from 'src/app/leaflet';
+import { ITimestampVehicleLocation } from 'src/app/models';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
 export class RoutesSubscriber extends Subscriber<any> {
-    public constructor(private map: FollowBusMapDirective) {
+    public constructor(private followMapInstance: FollowBusMapDirective) {
         super();
     }
     public next(routes) {
-        this.map.setRoutePaths(routes.paths);
+        this.followMapInstance.setRoutePaths(routes.paths);
     }
 }
 @Directive({
     selector: 'map[appTripPassages]',
 })
 export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    private vehicleLocationSubject: BehaviorSubject<IVehicleLocation> = new BehaviorSubject(undefined);
+    private vehicleLocationSubject: BehaviorSubject<ITimestampVehicleLocation> = new BehaviorSubject(undefined);
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
         zone: NgZone,
@@ -30,11 +30,11 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
         super(elRef, zone, userLocationService, settingsService);
     }
     @Input('location')
-    public set location(id: IVehicleLocation) {
-        this.vehicleLocationSubject.next(id);
+    public set location(loc: ITimestampVehicleLocation) {
+        this.vehicleLocationSubject.next(loc);
     }
 
-    public get location(): IVehicleLocation {
+    public get location(): ITimestampVehicleLocation {
         return this.vehicleLocationSubject.getValue();
     }
 
@@ -75,6 +75,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     }
     public addMarker(): void {
         this.updateObservable = this.vehicleLocationSubject
+            .pipe(map((loc: ITimestampVehicleLocation) => loc.vehicle))
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -108,7 +109,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                 filter(num => num !== null),
                 distinctUntilChanged(),
                 mergeMap(boundsa => {
-                    return this.apiService.getRouteByTripId(boundsa.tripId);
+                    return this.apiService.getRouteByTripId(boundsa.vehicle.tripId);
                 }))
             .subscribe(new RoutesSubscriber(this));
     }
