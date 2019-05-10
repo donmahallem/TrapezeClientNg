@@ -9,9 +9,8 @@ import { IStopLocation } from '@donmahallem/trapeze-api-types';
 export class StopsInfoComponent {
     private mStops: IStopLocation[] = [];
     constructor(private activatedRoute: ActivatedRoute) {
-        const st: IStopLocation[] = this.activatedRoute.snapshot.data.stops.stops.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-        });
+        const st: IStopLocation[] = this.activatedRoute.snapshot.data.stops.stops.sort((a, b) =>
+            a.name.localeCompare(b.name));
         this.mStops = st;
 
     }

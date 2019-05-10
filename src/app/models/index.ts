@@ -8,5 +8,16 @@ export interface Bounds {
 }
 
 export type TripPassagesLocation = ITripPassages & {
-    location: IVehicleLocation,
+    location: ITimestampVehicleLocation,
 };
+
+export interface ITimestampVehicleLocation {
+    /**
+     * Timestamp of last checkup
+     */
+    timestamp: number;
+    /**
+     * Vehicle location
+     */
+    vehicle: IVehicleLocation;
+}

@@ -10,7 +10,7 @@ export class TripPassagesResolver implements Resolve<any> {
 
     public constructor(private api: ApiService, private router: Router) { }
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this.api.getTripPassages(route.params['tripId'])
+        return this.api.getTripPassages(route.params.tripId)
             .pipe(catchError((err: any | HttpErrorResponse) => {
                 if (err.status === 404) {
                     this.router.navigate(['not-found']);

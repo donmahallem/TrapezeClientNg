@@ -7,17 +7,28 @@ import { catchError, debounceTime, flatMap } from 'rxjs/operators';
 })
 export class UserLocationService {
 
+    public get featureAvailable(): boolean {
+        return (navigator.geolocation) ? true : false;
+    }
+
+    public get location(): Position {
+        return this.locationSubject.value;
+    }
+    public get locationErrorObservable(): Observable<PositionError> {
+        return this.locationErrorSubject.asObservable();
+    }
+    public get locationObservable(): Observable<Position> {
+        return this.locationSubject.asObservable();
+    }
+
     private locationErrorSubject: BehaviorSubject<PositionError> = new BehaviorSubject(undefined);
-    public readonly locationErrorObservable: Observable<PositionError> = this.locationErrorSubject.asObservable();
 
     private locationSubject: BehaviorSubject<Position> = new BehaviorSubject(undefined);
-    public readonly locationObservable: Observable<Position> = this.locationSubject.asObservable();
     public constructor() {
         this.locationErrorObservable
             .pipe(debounceTime(30000),
-                flatMap((val) => {
-                    return this.createPositionRequest();
-                }),
+                flatMap((val) =>
+                    this.createPositionRequest()),
                 catchError((err) => {
                     this.locationErrorSubject.next(err);
                     return EMPTY;
@@ -26,14 +37,6 @@ export class UserLocationService {
                 this.locationErrorSubject.next(undefined);
                 this.locationSubject.next(val);
             });
-    }
-
-    public get featureAvailable(): boolean {
-        return (navigator.geolocation) ? true : false;
-    }
-
-    public get location(): Position {
-        return this.locationSubject.value;
     }
 
     public createPositionRequest(timeout: number = 10000, highAccuracy: boolean = false) {

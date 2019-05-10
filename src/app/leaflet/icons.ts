@@ -4,8 +4,8 @@ import { STOP_ICON_SHADOW_URL, STOP_ICON_URL } from './constants';
  * Creates an StopIcon instance to be used for leaflet markers
  * @param iconSize icon size in pixels
  */
-export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number = 24): L.Icon => {
-    return L.icon({
+export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number = 24): L.Icon =>
+    L.icon({
         iconAnchor: [iconSize / 2, iconSize / 2], // point of the icon which will correspond to marker's location
         // shadowUrl: 'leaf-shadow.png',
         iconSize: [iconSize, iconSize], // size of the icon
@@ -15,7 +15,6 @@ export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number =
         shadowSize: [iconSize * 1.1, iconSize * 1.1], // size of the shadow
         shadowUrl: STOP_ICON_SHADOW_URL,
     });
-};
 
 /**
  * Creates an vehicle icon to be used for leaflet markers
@@ -24,8 +23,8 @@ export const createStopIcon: (iconSize?: number) => L.Icon = (iconSize: number =
  * @param iconSize icon size in pixels
  */
 export const createVehicleIcon: (heading: number, name: string, iconSize?: number) => L.DivIcon =
-    (heading: number, name: string, iconSize: number = 40) => {
-        return L.divIcon({
+    (heading: number, name: string, iconSize: number = 40) =>
+        L.divIcon({
             className: heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + name.split(' ')[0] + '</span>',
             iconAnchor: [iconSize / 2, Math.round(iconSize / 2 / 68 * 44)], // point of the icon which will correspond to marker's location
@@ -34,4 +33,3 @@ export const createVehicleIcon: (heading: number, name: string, iconSize?: numbe
             shadowAnchor: [32, 32],  // the same for the shadow
             shadowSize: [24, 24], // size of the shadow
         });
-    };

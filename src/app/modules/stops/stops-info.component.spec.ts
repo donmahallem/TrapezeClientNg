@@ -86,7 +86,7 @@ describe('src/modules/stops/stops-info.component.ts', () => {
         describe('Class', () => {
             describe('constructor', () => {
                 it('should sort the provided stops', () => {
-                    const stops = (<any>app).mStops;
+                    const stops = (app as any).mStops;
                     expect(stops[0].name).toEqual('aa');
                     expect(stops[1].name).toEqual('ab');
                     expect(stops[2].name).toEqual('b');
@@ -96,7 +96,7 @@ describe('src/modules/stops/stops-info.component.ts', () => {
             describe('stops', () => {
                 describe('getter', () => {
                     it('should return mStops', () => {
-                        const stops = (<any>app).mStops;
+                        const stops = (app as any).mStops;
                         expect(app.stops).toEqual(stops);
                     });
                 });
