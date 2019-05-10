@@ -47,6 +47,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
         for (const line of this.routePolyLines) {
             line.remove();
         }
+        this.routePolyLines = [];
         for (const path of paths) {
             const pointList: any[] = [];
             for (const wayPoint of path.wayPoints) {
