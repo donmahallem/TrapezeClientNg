@@ -9,8 +9,19 @@
       ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 100,
+        "maxSize": 10,
         "maxAge": "3d"
+      }
+    },
+    {
+      "name": "leaflet-cache",
+      "urls": [
+        "https://?.tile.openstreetmap.org/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 200,
+        "maxAge": "1d"
       }
     }
   ],
@@ -23,7 +34,8 @@
           "/favicon.ico",
           "/index.html",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/"
         ]
       }
     },
