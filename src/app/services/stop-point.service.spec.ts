@@ -2,9 +2,13 @@ import { async, TestBed } from '@angular/core/testing';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { from, EMPTY } from 'rxjs';
 import { ApiService } from './api.service';
+import { AppNotificationService } from './app-notification.service';
 import { StopPointService } from './stop-point.service';
 
 class TestApiService {
+
+}
+class TestAppNotificationService {
 
 }
 
@@ -39,6 +43,10 @@ describe('src/app/services/stop-point.service', () => {
                     {
                         provide: ApiService,
                         useValue: new TestApiService(),
+                    },
+                    {
+                        provide: AppNotificationService,
+                        useValue: new TestAppNotificationService(),
                     }],
             });
             stopService = TestBed.get(StopPointService);

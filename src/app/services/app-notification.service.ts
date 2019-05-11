@@ -57,7 +57,7 @@ export class AppNotificationService {
     private notificationClosedSubject: Subject<void> = new Subject();
     constructor(private matSnackBar: MatSnackBar) {
         this.createNotificationQueueObservable()
-            .subscribe((value) => {
+            .subscribe((value): void => {
                 this.notificationClosedSubject.next();
             });
     }
@@ -69,15 +69,15 @@ export class AppNotificationService {
         return zip(this.notificationSubject, this.notificationClosedSubject.pipe(startWith(undefined)))
             .pipe(
                 map((value: [IAppNotification, void]) => value[0]),
-                flatMap((val: IAppNotification): Observable<IAppNotificationDismiss> =>
-                    this.matSnackBar.open(val.title, '' + val, {
-                        announcementMessage: '',
+                flatMap((noti: IAppNotification): Observable<IAppNotificationDismiss> =>
+                    this.matSnackBar.open(noti.title, undefined, {
+                        announcementMessage: noti.title,
                         duration: 2000,
                     }).afterDismissed()
                         .pipe(map((dismissNotice: MatSnackBarDismiss): IAppNotificationDismiss =>
                             ({
                                 dismissedByAction: dismissNotice.dismissedByAction,
-                                notification: val,
+                                notification: noti,
                             })))));
     }
 
