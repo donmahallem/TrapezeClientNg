@@ -6,8 +6,9 @@ env:
   - TEST_SUITE=lint
   - TEST_SUITE=build
   - TEST_SUITE=unit
+  - TEST_SUITE=docs
 node_js:
-- 11
+- stable
 cache:
   directories:
   - node_modules
@@ -23,7 +24,7 @@ after_success:
 jobs:
   include:
   - stage: npm release
-    node_js: '10'
+    node_js: stable
     script: 
     - npm run build
     - cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
@@ -43,7 +44,7 @@ jobs:
         tags: true
         repo: donmahallem/TrapezeClientNg
   - stage: npm release pwa
-    node_js: '10'
+    node_js: stable
     script: 
     - npm run build
     - cp ./src/environments/environment.example.pwa.ts ./src/environments/environment.prod.ts
@@ -63,7 +64,7 @@ jobs:
         tags: true
         repo: donmahallem/TrapezeClientNg
   - stage: Publish docs on github
-    node_js: '10'
+    node_js: stable
     script:
     - npm run compodoc
     if: branch = master

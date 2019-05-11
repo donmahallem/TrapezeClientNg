@@ -8,6 +8,10 @@ import { SidebarService } from './services/sidebar.service';
     templateUrl: './app.component.pug',
 })
 export class AppComponent implements OnInit {
+
+    public get isSidenavOpen(): boolean {
+        return this.sidenav.opened;
+    }
     title = 'app';
     prediction: any;
 
@@ -17,9 +21,9 @@ export class AppComponent implements OnInit {
     sidenav: MatSidenav;
     predictions: any;
     tripId: string;
+    @ViewChild(DrawableDirective) canvas;
     constructor(private sidebarService: SidebarService) {
     }
-    @ViewChild(DrawableDirective) canvas;
     ngOnInit() {
         this.sidebarService.sidebarObservable
             .subscribe((open) => {
@@ -43,10 +47,6 @@ export class AppComponent implements OnInit {
 
     public toggleSidebar(): void {
         this.sidenav.toggle();
-    }
-
-    public get isSidenavOpen(): boolean {
-        return this.sidenav.opened;
     }
 
 }

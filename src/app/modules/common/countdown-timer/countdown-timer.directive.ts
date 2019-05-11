@@ -10,16 +10,6 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 })
 export class CountdownTimerDirective implements OnInit, OnDestroy {
 
-    private timestamp = '';
-    private updateSubscription: Subscription;
-    private timestampSubject: BehaviorSubject<number> = new BehaviorSubject(0);
-
-    /**
-     * Placeholder if time has run out
-     */
-    @Input()
-    public placeholder = '-';
-
     /**
      * Sets the targetTime
      */
@@ -35,6 +25,16 @@ export class CountdownTimerDirective implements OnInit, OnDestroy {
     public get text() {
         return this.timestamp;
     }
+
+    /**
+     * Placeholder if time has run out
+     */
+    @Input()
+    public placeholder = '-';
+
+    private timestamp = '';
+    private updateSubscription: Subscription;
+    private timestampSubject: BehaviorSubject<number> = new BehaviorSubject(0);
 
     public ngOnInit(): void {
         this.updateSubscription = combineLatest([timer(0, 200), this.timestampSubject])

@@ -52,18 +52,16 @@ export class SettingsService {
     }
 
     public load(): Promise<void> {
-        return new Promise((resolve: (arg: void) => void, reject: (err: any) => void) => {
-            return this.apiService.getSettings()
+        return new Promise((resolve: (arg: void) => void, reject: (err: any) => void) =>
+            this.apiService.getSettings()
                 .pipe(tap((value: ISettings): void => {
                     this.mSettings = value;
                 }),
                     map((value: ISettings): void => {
                         return;
                     }),
-                    catchError((err: any): Observable<any> => {
-                        return from([undefined]);
-                    }))
-                .subscribe(new SettingsLoadSubscriber(resolve));
-        });
+                    catchError((err: any): Observable<any> =>
+                        from([undefined])))
+                .subscribe(new SettingsLoadSubscriber(resolve)));
     }
 }

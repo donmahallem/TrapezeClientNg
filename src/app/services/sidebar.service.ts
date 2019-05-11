@@ -5,26 +5,25 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SidebarService {
 
-    private sidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public readonly sidebarObservable: Observable<boolean> = this.sidebarStatusSubject.asObservable();
-
-    public constructor() {
-    }
-
     public get sidebarOpen(): boolean {
-        return this.sidebarStatusSubject.value;
+        return this.mSidebarStatusSubject.value;
     }
+    public get sidebarObservable(): Observable<boolean> {
+        return this.mSidebarStatusSubject.asObservable();
+    }
+    private mSidebarStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public constructor() { }
 
     public toggleSidebar(): void {
-        this.sidebarStatusSubject.next(!this.sidebarStatusSubject.getValue());
+        this.mSidebarStatusSubject.next(!this.mSidebarStatusSubject.getValue());
     }
 
     public openSidebar(): void {
-        this.sidebarStatusSubject.next(true);
+        this.mSidebarStatusSubject.next(true);
     }
 
     public closeSidebar(): void {
-        this.sidebarStatusSubject.next(false);
+        this.mSidebarStatusSubject.next(false);
     }
 
 }

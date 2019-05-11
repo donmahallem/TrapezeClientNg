@@ -24,12 +24,6 @@ export class NavigationSubscriber extends Subscriber<RouterEvent> {
     templateUrl: './main-toolbar.component.pug',
 })
 export class MainToolbarComponent implements OnInit {
-    public closeable = false;
-
-    constructor(private sidebarService: SidebarService,
-        private router: Router) {
-        this.router.events.subscribe(new NavigationSubscriber(this));
-    }
 
     public get searchOpen(): boolean {
         return this.mSearchOpen;
@@ -38,10 +32,16 @@ export class MainToolbarComponent implements OnInit {
     public set searchOpen(open: boolean) {
         this.mSearchOpen = open;
     }
+    public closeable = false;
     @ViewChild(ToolbarSearchBoxComponent)
     private searchBoxComponent: ToolbarSearchBoxComponent;
 
     private mSearchOpen = false;
+
+    constructor(private sidebarService: SidebarService,
+        private router: Router) {
+        this.router.events.subscribe(new NavigationSubscriber(this));
+    }
 
     ngOnInit() {
     }
@@ -55,7 +55,7 @@ export class MainToolbarComponent implements OnInit {
     }
     public toggleSearch(): void {
         if (this.searchBoxComponent) {
-            this.searchBoxComponent.doFocusSearch();
+            // this.searchBoxComponent.doFocusSearch();
         }
     }
 

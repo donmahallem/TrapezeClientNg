@@ -40,13 +40,12 @@ export class StopsResolver implements Resolve<IStopLocations> {
                     return throwError(err);
                 }
             }),
-                retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) => {
-                    return this.dialog.open(RetryDialogComponent, {
+                retryWhen(retryDialogStrategy((error: any | HttpErrorResponse) =>
+                    this.dialog.open(RetryDialogComponent, {
                         data: {
                             code: error.status ? error.status : undefined,
                             message: 'test',
                         },
-                    });
-                })));
+                    }))));
     }
 }

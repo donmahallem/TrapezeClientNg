@@ -40,16 +40,23 @@ export class UserLocationSubscriber extends Subscriber<Position> {
 }
 
 export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
+
+    /**
+     * wrapper for this.map.getBounds()
+     */
+    public get mapBounds(): L.LatLngBounds {
+        return this.map.getBounds();
+    }
+    @ViewChild('mapcontainer') mapContainer;
+    public readonly mapMove: Subject<MapMoveEvent> = new Subject();
+    private map: L.Map;
+    private mUserLocationSubscription: Subscription = undefined;
+    private userLocationLayer: L.FeatureGroup;
     constructor(private elRef: ElementRef,
         protected zone: NgZone,
         protected userLocationService: UserLocationService,
         protected settings: SettingsService) {
     }
-    @ViewChild('mapcontainer') mapContainer;
-    private map: L.Map;
-    public readonly mapMove: Subject<MapMoveEvent> = new Subject();
-    private mUserLocationSubscription: Subscription = undefined;
-    private userLocationLayer: L.FeatureGroup;
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
@@ -100,7 +107,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             color: '#0000FF',
             fillColor: '#0000FF',
             fillOpacity: 0.9,
-            opacity: 0.2,
+            opacity: 0.1,
             radius: 5,
         }).addTo(this.userLocationLayer);
     }
@@ -111,13 +118,6 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
 
     public addLayer(layer: L.Layer): L.Layer {
         return layer.addTo(this.map);
-    }
-
-    /**
-     * wrapper for this.map.getBounds()
-     */
-    public get mapBounds(): L.LatLngBounds {
-        return this.map.getBounds();
     }
 
     public ngOnDestroy(): void {

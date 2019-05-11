@@ -41,11 +41,10 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
             const testError: Error = new Error('testError');
             const afterClosedSubject: Subject<boolean> = new Subject();
             beforeEach(() => {
-                createDialogSpy.and.callFake(() => {
-                    return {
+                createDialogSpy.and.callFake(() =>
+                    ({
                         afterClosed: () => afterClosedSubject.pipe(delay(100)),
-                    };
-                });
+                    }));
             });
             describe('Should be retried', () => {
                 it('should open the dialog and succeed after first retry', (done) => {

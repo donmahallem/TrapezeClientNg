@@ -15,8 +15,8 @@ export type RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) => RetryD
  * If the result equals true the stream will be retried
  * @param createDialog a method that returns valid Dialog
  */
-export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) => {
-    return (errors: Observable<ErrorItem>): Observable<true> => {
+export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: CreateDialogFunc) =>
+    (errors: Observable<ErrorItem>): Observable<true> => {
         let dialogOpen = false;
         return errors.pipe(skipWhile((): boolean => dialogOpen),
             flatMap((error: ErrorItem): Observable<true> => {
@@ -25,7 +25,7 @@ export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: Creat
                 return dialogRef.afterClosed()
                     .pipe(map((tapedValue: boolean): true => {
                         dialogOpen = false;
-                        if (tapedValue !== true) {
+                        if (!tapedValue) {
                             /**
                              * Rethrow error if dialog was dismissed
                              */
@@ -38,4 +38,3 @@ export const retryDialogStrategy: RetryDialogStrategyFunc = (createDialog: Creat
                     }));
             }));
     };
-};
