@@ -16,7 +16,9 @@
     {
       "name": "leaflet-cache",
       "urls": [
-        "https://?.tile.openstreetmap.org/**"
+        "https://a.tile.openstreetmap.org/**",
+        "https://b.tile.openstreetmap.org/**",
+        "https://c.tile.openstreetmap.org/**"
       ],
       "cacheConfig": {
         "strategy": "performance",
