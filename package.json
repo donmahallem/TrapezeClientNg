@@ -17,7 +17,8 @@
     "test:docs": "npm run compodoc",
     "create-publish-package": "node ./npm-publish-package.js",
     "extract-i18n": "ng xi18n --outputPath locale && xliffmerge --profile xliffmerge.json en fr de",
-    "compodoc": "npx compodoc -p src/tsconfig.app.json -d ./docs"
+    "compodoc": "npx compodoc -p src/tsconfig.app.json -d ./docs",
+    "build:prerender": "node prerender.js"
   },
   "publishConfig": {
     "access": "public"
@@ -74,6 +75,7 @@
     "@types/node": "^12.0.0",
     "apply-loader": "^2.0.0",
     "codelyzer": "^5.0.1",
+    "express": "^4.16.4",
     "jasmine-core": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^4.1.0",
@@ -81,10 +83,12 @@
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "lodash": "^4.17.11",
     "ngx-i18nsupport": "^0.17.1",
     "protractor": "^6.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
+    "puppeteer": "^1.15.0",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",
     "typescript": "<3.3.0"
