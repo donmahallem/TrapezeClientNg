@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
@@ -26,7 +27,8 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
         zone: NgZone,
-        settingsService: SettingsService) {
+        settingsService: SettingsService,
+        private locationService: Location) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
@@ -61,7 +63,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     this.stopMarkerLayer.addTo(this.getMap());
                 }
                 if (location) {
-                    const stopIcon: L.Icon = createStopIcon();
+                    const stopIcon: L.Icon = createStopIcon(this.locationService);
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
                             clickable: false,

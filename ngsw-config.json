@@ -9,7 +9,7 @@
       ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 100,
+        "maxSize": 10,
         "maxAge": "3d"
       }
     }
@@ -23,7 +23,8 @@
           "/favicon.ico",
           "/index.html",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/"
         ]
       }
     },
@@ -34,8 +35,20 @@
       "resources": {
         "files": [
           "/assets/**"
+        ],
+        "urls": [
+          "https://a.tile.openstreetmap.org/**",
+          "https://b.tile.openstreetmap.org/**",
+          "https://c.tile.openstreetmap.org/**"
         ]
       }
     }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/api/**",
+    "!/**/*.*",
+    "!/**/*__*",
+    "!/**/*__*/**"
   ]
 }

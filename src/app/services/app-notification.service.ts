@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { MatSnackBar, MatSnackBarDismiss } from '@angular/material';
+import { zip, Observable, Subject } from 'rxjs';
+import { flatMap, map, startWith } from 'rxjs/operators';
 
 /**
  * Notification Type
@@ -38,6 +40,11 @@ export interface IAppNotification {
     reportable?: boolean;
 }
 
+export interface IAppNotificationDismiss {
+    dismissedByAction: boolean;
+    notification: IAppNotification;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -47,7 +54,32 @@ export class AppNotificationService {
      * Subject for replaying notifcations
      */
     private notificationSubject: Subject<IAppNotification> = new Subject();
-    constructor() { }
+    private notificationClosedSubject: Subject<void> = new Subject();
+    constructor(private matSnackBar: MatSnackBar) {
+        this.createNotificationQueueObservable()
+            .subscribe((value): void => {
+                this.notificationClosedSubject.next();
+            });
+    }
+
+    /**
+     * Creates an observable that returns the displayed Notification after it was viewed
+     */
+    public createNotificationQueueObservable(): Observable<IAppNotificationDismiss> {
+        return zip(this.notificationSubject, this.notificationClosedSubject.pipe(startWith(undefined)))
+            .pipe(
+                map((value: [IAppNotification, void]) => value[0]),
+                flatMap((noti: IAppNotification): Observable<IAppNotificationDismiss> =>
+                    this.matSnackBar.open(noti.title, undefined, {
+                        announcementMessage: noti.title,
+                        duration: 2000,
+                    }).afterDismissed()
+                        .pipe(map((dismissNotice: MatSnackBarDismiss): IAppNotificationDismiss =>
+                            ({
+                                dismissedByAction: dismissNotice.dismissedByAction,
+                                notification: noti,
+                            })))));
+    }
 
     /**
      * Will publish the notification

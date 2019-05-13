@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -35,6 +36,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         private router: Router,
         private stopService: StopPointService,
         userLocationService: UserLocationService,
+        private location: Location,
         private snackBar: MatSnackBar,
         settings: SettingsService,
         zone: NgZone) {
@@ -139,11 +141,11 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const vehicleIcon: L.DivIcon = createVehicleIcon(vehicle.heading, vehicle.name.split(' ')[0], 40);
         const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
-                icon: vehicleIcon,
-                rotationAngle: vehicle.heading - 90,
-                title: vehicle.name,
-                zIndexOffset: 100,
-            } as any);
+            icon: vehicleIcon,
+            rotationAngle: vehicle.heading - 90,
+            title: vehicle.name,
+            zIndexOffset: 100,
+        } as any);
         markerT.data = vehicle;
         return markerT;
     }
@@ -155,7 +157,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     if (stop === null) {
                         continue;
                     }
-                    const greenIcon = createStopIcon();
+                    const greenIcon = createStopIcon(this.location);
                     const markerT: L.Marker = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
                         {
                             clickable: true,
