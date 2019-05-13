@@ -479,6 +479,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="interfaces/IAppNotification.html" data-type="entity-link">IAppNotification</a>
                             </li>
                             <li class="link">
+                                <a href="interfaces/IAppNotificationDismiss.html" data-type="entity-link">IAppNotificationDismiss</a>
+                            </li>
+                            <li class="link">
                                 <a href="interfaces/IEnvironmentBase.html" data-type="entity-link">IEnvironmentBase</a>
                             </li>
                             <li class="link">
