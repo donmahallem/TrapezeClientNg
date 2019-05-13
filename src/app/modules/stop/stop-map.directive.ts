@@ -6,6 +6,7 @@ import { createStopIcon } from 'src/app/leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
+import { Location } from '@angular/common';
 
 /**
  * Directive displaying a map with the StopLocation
@@ -26,7 +27,8 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     constructor(elRef: ElementRef,
         userLocationService: UserLocationService,
         zone: NgZone,
-        settingsService: SettingsService) {
+        settingsService: SettingsService,
+        private locationService: Location) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
@@ -61,7 +63,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     this.stopMarkerLayer.addTo(this.getMap());
                 }
                 if (location) {
-                    const stopIcon: L.Icon = createStopIcon();
+                    const stopIcon: L.Icon = createStopIcon(this.locationService);
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
                             clickable: false,
