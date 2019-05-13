@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
@@ -6,7 +7,6 @@ import { createStopIcon } from 'src/app/leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
-import { Location } from '@angular/common';
 
 /**
  * Directive displaying a map with the StopLocation

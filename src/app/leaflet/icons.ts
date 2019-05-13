@@ -1,6 +1,6 @@
+import { Location } from '@angular/common';
 import * as L from 'leaflet';
 import { STOP_ICON_SHADOW_URL, STOP_ICON_URL } from './constants';
-import { Location } from '@angular/common';
 /**
  * Creates an StopIcon instance to be used for leaflet markers
  * @param iconSize icon size in pixels

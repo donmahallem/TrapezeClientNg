@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -11,7 +12,6 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
-import { Location } from '@angular/common';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
