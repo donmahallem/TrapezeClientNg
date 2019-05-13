@@ -12,19 +12,6 @@
         "maxSize": 10,
         "maxAge": "3d"
       }
-    },
-    {
-      "name": "leaflet-cache",
-      "urls": [
-        "https://a.tile.openstreetmap.org/**",
-        "https://b.tile.openstreetmap.org/**",
-        "https://c.tile.openstreetmap.org/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 200,
-        "maxAge": "1d"
-      }
     }
   ],
   "assetGroups": [
@@ -48,8 +35,20 @@
       "resources": {
         "files": [
           "/assets/**"
+        ],
+        "urls": [
+          "https://a.tile.openstreetmap.org/**",
+          "https://b.tile.openstreetmap.org/**",
+          "https://c.tile.openstreetmap.org/**"
         ]
       }
     }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/api/**",
+    "!/**/*.*",
+    "!/**/*__*",
+    "!/**/*__*/**"
   ]
 }
