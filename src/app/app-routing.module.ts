@@ -4,23 +4,23 @@ import { AppPreloadingStrategy } from './app-preloading-strategy';
 
 const appRoutes: Routes = [
     {
-        loadChildren: './modules/trip-passages/trip-passages.module#TripPassagesModule',
+        loadChildren: () => import('./modules/trip-passages/trip-passages.module').then(m => m.TripPassagesModule),
         path: 'passages',
     },
     {
-        loadChildren: './modules/stop/stop.module#StopModule',
+        loadChildren: () => import('./modules/stop/stop.module').then(m => m.StopModule),
         path: 'stop',
     },
     {
-        loadChildren: './modules/stops/stops.module#StopsModule',
+        loadChildren: () => import('./modules/stops/stops.module').then(m => m.StopsModule),
         path: 'stops',
     },
     {
-        loadChildren: './modules/error/error.module#ErrorModule',
+        loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule),
         path: 'error',
     },
     {
-        loadChildren: './modules/routing/search/search.module#SearchModule',
+        loadChildren: () => import('./modules/routing/search/search.module').then(m => m.SearchModule),
         path: 'search',
     },
     {

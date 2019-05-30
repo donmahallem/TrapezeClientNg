@@ -25,7 +25,7 @@ export class DepartureListItemComponent {
     /**
      * The time of arrival
      */
-    private mTime = '';
+    private mTime: string = '';
 
     /**
      * Sets the departure

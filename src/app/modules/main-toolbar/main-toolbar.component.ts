@@ -33,7 +33,7 @@ export class MainToolbarComponent implements OnInit {
         this.mSearchOpen = open;
     }
     public closeable = false;
-    @ViewChild(ToolbarSearchBoxComponent)
+    @ViewChild(ToolbarSearchBoxComponent, { static: false })
     private searchBoxComponent: ToolbarSearchBoxComponent;
 
     private mSearchOpen = false;
