@@ -15,13 +15,13 @@ export class AppComponent implements OnInit {
     title = 'app';
     prediction: any;
 
-    @ViewChild(MatSidenavContainer)
+    @ViewChild(MatSidenavContainer, { static: true })
     sidenavContainer: MatSidenavContainer;
-    @ViewChild(MatSidenav)
+    @ViewChild(MatSidenav, { static: true })
     sidenav: MatSidenav;
     predictions: any;
     tripId: string;
-    @ViewChild(DrawableDirective) canvas;
+    @ViewChild(DrawableDirective, { static: false }) canvas;
     constructor(private sidebarService: SidebarService) {
     }
     ngOnInit() {
