@@ -275,7 +275,7 @@ export class MainToolbarComponent implements OnInit {
         this.mSearchOpen &#x3D; open;
     }
     public closeable &#x3D; false;
-    @ViewChild(ToolbarSearchBoxComponent)
+    @ViewChild(ToolbarSearchBoxComponent, { static: false })
     private searchBoxComponent: ToolbarSearchBoxComponent;
 
     private mSearchOpen &#x3D; false;

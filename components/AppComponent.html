@@ -429,7 +429,7 @@
                             <b>Decorators : </b>
                             <br />
                             <code>
-                                @ViewChild(DrawableDirective)<br />
+                                @ViewChild(DrawableDirective, {static: false})<br />
                             </code>
                         </td>
                     </tr>
@@ -519,7 +519,7 @@
                             <b>Decorators : </b>
                             <br />
                             <code>
-                                @ViewChild(MatSidenav)<br />
+                                @ViewChild(MatSidenav, {static: true})<br />
                             </code>
                         </td>
                     </tr>
@@ -555,7 +555,7 @@
                             <b>Decorators : </b>
                             <br />
                             <code>
-                                @ViewChild(MatSidenavContainer)<br />
+                                @ViewChild(MatSidenavContainer, {static: true})<br />
                             </code>
                         </td>
                     </tr>
@@ -677,13 +677,13 @@ export class AppComponent implements OnInit {
     title &#x3D; &#x27;app&#x27;;
     prediction: any;
 
-    @ViewChild(MatSidenavContainer)
+    @ViewChild(MatSidenavContainer, { static: true })
     sidenavContainer: MatSidenavContainer;
-    @ViewChild(MatSidenav)
+    @ViewChild(MatSidenav, { static: true })
     sidenav: MatSidenav;
     predictions: any;
     tripId: string;
-    @ViewChild(DrawableDirective) canvas;
+    @ViewChild(DrawableDirective, { static: false }) canvas;
     constructor(private sidebarService: SidebarService) {
     }
     ngOnInit() {

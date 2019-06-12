@@ -298,7 +298,7 @@
                             <b>Decorators : </b>
                             <br />
                             <code>
-                                @ViewChild(&#x27;mapcontainer&#x27;)<br />
+                                @ViewChild(&#x27;mapcontainer&#x27;, {static: false})<br />
                             </code>
                         </td>
                     </tr>
@@ -781,7 +781,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     public get mapBounds(): L.LatLngBounds {
         return this.map.getBounds();
     }
-    @ViewChild(&#x27;mapcontainer&#x27;) mapContainer;
+    @ViewChild(&#x27;mapcontainer&#x27;, { static: false }) mapContainer;
     public readonly mapMove: Subject&lt;MapMoveEvent&gt; &#x3D; new Subject();
     private map: L.Map;
     private mUserLocationSubscription: Subscription &#x3D; undefined;

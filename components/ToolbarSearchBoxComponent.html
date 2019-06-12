@@ -496,7 +496,7 @@
                             <b>Decorators : </b>
                             <br />
                             <code>
-                                @ViewChild(&#x27;searchInput&#x27;)<br />
+                                @ViewChild(&#x27;searchInput&#x27;, {static: false})<br />
                             </code>
                         </td>
                     </tr>
@@ -557,7 +557,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     searchControl &#x3D; new FormControl();
 
-    @ViewChild(&#x27;searchInput&#x27;)
+    @ViewChild(&#x27;searchInput&#x27;, { static: false })
     public searchInput: ElementRef;
 
     @Output()
