@@ -12,7 +12,7 @@ export class ToolbarSearchBoxComponent implements OnInit, OnDestroy {
 
     searchControl = new FormControl();
 
-    @ViewChild('searchInput')
+    @ViewChild('searchInput', { static: false })
     public searchInput: ElementRef;
 
     @Output()

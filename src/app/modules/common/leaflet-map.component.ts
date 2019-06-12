@@ -47,7 +47,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     public get mapBounds(): L.LatLngBounds {
         return this.map.getBounds();
     }
-    @ViewChild('mapcontainer') mapContainer;
+    @ViewChild('mapcontainer', { static: false }) mapContainer;
     public readonly mapMove: Subject<MapMoveEvent> = new Subject();
     private map: L.Map;
     private mUserLocationSubscription: Subscription = undefined;
