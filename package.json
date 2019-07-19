@@ -69,7 +69,7 @@
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "8.1.2",
     "@compodoc/compodoc": "^1.1.10",
-    "@types/jasmine": "^3.3.13",
+    "@types/jasmine": "^3.3.14",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.6.8",
     "apply-loader": "^2.0.0",
