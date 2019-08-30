@@ -59,7 +59,7 @@
     "leaflet-rotatedmarker": "^0.2.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
-    "ng-cli-pug-loader": "^0.1.7",
+    "ng-cli-pug-loader": "^0.2.0",
     "rxjs": "^6.5.2",
     "zone.js": "^0.9.1"
   },
