@@ -160,8 +160,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                     const greenIcon = createStopIcon(this.location);
                     const markerT: L.Marker = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
                         {
-                            clickable: true,
                             icon: greenIcon,
+                            interactive: true,
                             riseOffset: 10,
                             riseOnHover: true,
                             title: stop.name,
