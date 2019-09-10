@@ -66,7 +66,6 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     const stopIcon: L.Icon = createStopIcon(this.locationService);
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
-                            clickable: false,
                             icon: stopIcon,
                             interactive: false,
                             title: location.name,
