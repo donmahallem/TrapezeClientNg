@@ -92,7 +92,6 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                     const vehicleIcon: L.DivIcon = createVehicleIcon(location.heading, location.name.split(' ')[0], 40);
                     const marker: L.Marker = L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
-                            clickable: false,
                             icon: vehicleIcon,
                             interactive: false,
                             title: location.name,
