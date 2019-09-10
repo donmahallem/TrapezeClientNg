@@ -365,8 +365,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="86"
-                            class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:86</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/modules/stop/stop-map.directive.ts:85</a></div>
                 </td>
             </tr>
 
@@ -660,7 +660,6 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                     const stopIcon: L.Icon &#x3D; createStopIcon(this.locationService);
                     const marker: L.Marker &#x3D; L.marker([location.latitude / 3600000, location.longitude / 3600000],
                         {
-                            clickable: false,
                             icon: stopIcon,
                             interactive: false,
                             title: location.name,
@@ -697,6 +696,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
 
 
+                   
 
 
 
