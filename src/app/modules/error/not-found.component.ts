@@ -4,8 +4,15 @@ import { Component } from '@angular/core';
     styleUrls: ['./not-found.component.scss'],
     templateUrl: './not-found.component.pug',
 })
+/**
+ * Component to be displayed for Errors with non found resources.
+ * Offers links to common entry points
+ */
 export class NotFoundComponent {
 
+    /**
+     * List of entry points
+     */
     public readonly endpoints: {
         icon: string;
         path: string;
