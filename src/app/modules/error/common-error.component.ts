@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
     styleUrls: ['./common-error.component.scss'],
     templateUrl: './common-error.component.pug',
 })
+/**
+ * Common Error component
+ */
 export class CommonErrorComponent {
 
     constructor() {

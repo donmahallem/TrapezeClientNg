@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { IStopLocation, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, ITripPassages, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, from, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
@@ -26,11 +26,35 @@ export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 @Directive({
     selector: 'map[appMainMap]',
 })
+/**
+ * Directive for the main background map
+ */
 export class MainMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
 
+    /**
+     * Layer for the stop markers to be displayed on the map
+     */
     private stopMarkerLayer: L.FeatureGroup = undefined;
+    /**
+     * Layer for the vehicle markers to be displayed on the map
+     */
     private vehicleMarkerLayer: L.FeatureGroup = undefined;
+    /**
+     * Subscription for the update cycle for the vehicles
+     */
     private vehicleUpdateSubscription: Subscription;
+    /**
+     * Constructor
+     * @param elRef injected elementRef of the component root
+     * @param apiService ApiService instance
+     * @param router Router Instance
+     * @param stopService Stop Service Instance for retrievel of stops
+     * @param userLocationService UserLocationService Instance
+     * @param location Browser Location
+     * @param snackBar SnackbarService Instance
+     * @param settings Settings Service
+     * @param zone ngZone Instance
+     */
     constructor(elRef: ElementRef,
         private apiService: ApiService,
         private router: Router,
@@ -43,6 +67,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         super(elRef, zone, userLocationService, settings);
     }
 
+    /**
+     * Replaces all current vehicles on the map
+     * @param vehicles vehicles to be displayed
+     */
     public setVehicles(vehicles: IVehicleLocationList): void {
         if (this.vehicleMarkerLayer !== undefined) {
             this.vehicleMarkerLayer.clearLayers();
@@ -106,6 +134,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
     }
 
+    /**
+     * Does start the vehicle location update cycle
+     */
     public startVehicleUpdater(): void {
         // as mapMove doesn't emit on init this needs to be provided to load atleast once
         const primedMoveObservable: Observable<MapMoveEvent> = this.mapMove.pipe(
@@ -132,12 +163,21 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             .subscribe(new VehicleLoadSubscriber(this));
     }
 
-    public markerOnClick(event) {
+    /**
+     * Triggered by marker clicks on stops and returns the event into the ngZone
+     * @param event mouse event
+     */
+    public markerOnClick(event: { sourceTarget: { data: ITripPassages } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {
             this.router.navigate(['passages', event.sourceTarget.data.tripId]);
         });
     }
+
+    /**
+     * Adds a vehicle marker to the map
+     * @param vehicle Vehicle to be added
+     */
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         const vehicleIcon: L.DivIcon = createVehicleIcon(vehicle.heading, vehicle.name.split(' ')[0], 40);
         const markerT: any = L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
@@ -149,6 +189,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         markerT.data = vehicle;
         return markerT;
     }
+
+    /**
+     * Does add all stop location markers to the map
+     */
     public addMarker() {
         this.stopService.stopLocationsObservable
             .subscribe((stops: IStopLocation[]) => {
@@ -179,6 +223,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             });
     }
 
+    /**
+     * Triggered by stop marker clicks
+     * @param event click event
+     */
     public stopMarkerOnClick(event: { sourceTarget: { data: IStopLocation } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {

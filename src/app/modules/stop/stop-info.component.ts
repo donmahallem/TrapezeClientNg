@@ -94,7 +94,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
         /**
          * combine observables
          */
-        this.updateSubscription = merge(refreshObservable, this.route.data.pipe(map((value) =>
+        this.updateSubscription = merge<IStopPassage, IStopPassage>(refreshObservable, this.route.data.pipe(map((value) =>
             value.stopInfo)))
             .subscribe(this.updateData.bind(this));
     }

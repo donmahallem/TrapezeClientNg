@@ -66,7 +66,9 @@ export class AppNotificationService {
      * Creates an observable that returns the displayed Notification after it was viewed
      */
     public createNotificationQueueObservable(): Observable<IAppNotificationDismiss> {
-        return zip(this.notificationSubject, this.notificationClosedSubject.pipe(startWith(undefined)))
+        return zip(this.notificationSubject, this.notificationClosedSubject
+            // tslint:disable-next-line:deprecation
+            .pipe(startWith<undefined>(undefined)))
             .pipe(
                 map((value: [IAppNotification, void]) => value[0]),
                 flatMap((noti: IAppNotification): Observable<IAppNotificationDismiss> =>
