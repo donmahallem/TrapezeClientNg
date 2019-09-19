@@ -401,7 +401,8 @@ export class StopPointService {
     public createStopLoadObservable(): Observable&lt;IStopLocation[]&gt; {
         return this.retrySubject.pipe(delay(10 * 1000))
             .pipe(
-                startWith(undefined),
+                // tslint:disable-next-line:deprecation
+                startWith&lt;void&gt;(undefined),
                 flatMap((): Observable&lt;IStopLocation[]&gt; &#x3D;&gt;
                     this.api.getStations()
                         .pipe(

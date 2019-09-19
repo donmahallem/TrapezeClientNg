@@ -64,6 +64,13 @@
             <code>src/app/modules/common/leaflet-map.component.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Current viewing map bounds</p>
+
+            </p>
 
 
         <section>
@@ -229,22 +236,36 @@ import { SettingsService } from &#x27;src/app/services/settings.service&#x27;;
 import { UserLocationService } from &#x27;src/app/services/user-location.service&#x27;;
 import &#x27;./rotating-marker.patch&#x27;;
 
+/**
+ * Map Move Event Type
+ */
 export enum MapMoveEventType {
     NONE &#x3D; 0,
     START &#x3D; 1,
     END &#x3D; 2,
 }
 
+/**
+ * Map Move Event with type start
+ */
 export interface IMapMoveStartEvent {
     type: MapMoveEventType.START;
 }
 
+/**
+ * Map Move Event with type end
+ */
 export interface IMapMoveEndEvent {
     type: MapMoveEventType.END;
 }
-
+/**
+ * Move Event
+ */
 export type MapMoveEvent &#x3D; IMapMoveStartEvent | IMapMoveEndEvent;
 
+/**
+ * Current viewing map bounds
+ */
 export interface IMapBounds {
     left: number;
     right: number;

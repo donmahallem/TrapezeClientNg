@@ -277,8 +277,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="68"
-                            class="link-to-prism">src/app/services/stop-point.service.ts:68</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/services/stop-point.service.ts:69</a></div>
                 </td>
             </tr>
 
@@ -356,8 +356,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="81"
-                            class="link-to-prism">src/app/services/stop-point.service.ts:81</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="82"
+                            class="link-to-prism">src/app/services/stop-point.service.ts:82</a></div>
                 </td>
             </tr>
 
@@ -533,7 +533,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/services/stop-point.service.ts:60</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/services/stop-point.service.ts:61</a></div>
                                 </td>
                             </tr>
 
@@ -555,7 +555,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/services/stop-point.service.ts:97</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/services/stop-point.service.ts:98</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -617,7 +617,8 @@ export class StopPointService {
     public createStopLoadObservable(): Observable&lt;IStopLocation[]&gt; {
         return this.retrySubject.pipe(delay(10 * 1000))
             .pipe(
-                startWith(undefined),
+                // tslint:disable-next-line:deprecation
+                startWith&lt;void&gt;(undefined),
                 flatMap((): Observable&lt;IStopLocation[]&gt; &#x3D;&gt;
                     this.api.getStations()
                         .pipe(

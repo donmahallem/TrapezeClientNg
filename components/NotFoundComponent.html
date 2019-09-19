@@ -152,7 +152,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/modules/error/not-found.component.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/error/not-found.component.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -205,10 +205,16 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/app/modules/error/not-found.component.ts:9</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/error/not-found.component.ts:16</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>List of entry points</p>
+</div>
+                    </td>
+                </tr>
 
             </tbody>
         </table>
@@ -224,8 +230,15 @@
     styleUrls: [&#x27;./not-found.component.scss&#x27;],
     templateUrl: &#x27;./not-found.component.pug&#x27;,
 })
+/**
+ * Component to be displayed for Errors with non found resources.
+ * Offers links to common entry points
+ */
 export class NotFoundComponent {
 
+    /**
+     * List of entry points
+     */
     public readonly endpoints: {
         icon: string;
         path: string;

@@ -170,12 +170,14 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:14</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:17</a></div>
                             </td>
                         </tr>
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>Constructor</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -184,6 +186,7 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
+                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -198,6 +201,10 @@
                                                             No
                                                     </td>
                                                     
+                                                        <td>
+                                                                <code><p>Reference to the Dialog Component</p>
+</code>
+                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>data</td>
@@ -210,6 +217,10 @@
                                                             No
                                                     </td>
                                                     
+                                                        <td>
+                                                                <code><p>Additional data that can be provided to the Dialog</p>
+</code>
+                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -253,14 +264,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="18"
-                            class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:18</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:29</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>OnClick Event</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -306,10 +319,15 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:16</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:24</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description">Additional data that can be provided to the Dialog</div>
+                    </td>
+                </tr>
 
             </tbody>
         </table>
@@ -334,10 +352,15 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:15</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/modules/common/retry-dialog/retry-dialog.component.ts:23</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description">Reference to the Dialog Component</div>
+                    </td>
+                </tr>
 
             </tbody>
         </table>
@@ -350,6 +373,9 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Inject } from &#x27;@angular/core&#x27;;
 import { MatDialogRef, MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
 
+/**
+ * Additional Data that can be provided to the dialog
+ */
 export class RetryDialogData {
     message?: string;
     code?: number;
@@ -361,9 +387,17 @@ export class RetryDialogData {
     templateUrl: &#x27;./retry-dialog.component.pug&#x27;,
 })
 export class RetryDialogComponent {
+    /**
+     * Constructor
+     * @param dialogRef Reference to the Dialog Component
+     * @param data Additional data that can be provided to the Dialog
+     */
     constructor(public dialogRef: MatDialogRef&lt;RetryDialogComponent, boolean&gt;,
         @Inject(MAT_DIALOG_DATA) public data: RetryDialogData) { }
 
+    /**
+     * OnClick Event
+     */
     public onNoClick(): void {
         this.dialogRef.close(false);
     }

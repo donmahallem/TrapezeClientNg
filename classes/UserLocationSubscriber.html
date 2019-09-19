@@ -114,7 +114,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:46</a></div>
                             </td>
                         </tr>
 
@@ -182,8 +182,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="37"
-                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:37</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="51"
+                            class="link-to-prism">src/app/modules/common/leaflet-map.component.ts:51</a></div>
                 </td>
             </tr>
 
@@ -247,22 +247,36 @@ import { SettingsService } from &#x27;src/app/services/settings.service&#x27;;
 import { UserLocationService } from &#x27;src/app/services/user-location.service&#x27;;
 import &#x27;./rotating-marker.patch&#x27;;
 
+/**
+ * Map Move Event Type
+ */
 export enum MapMoveEventType {
     NONE &#x3D; 0,
     START &#x3D; 1,
     END &#x3D; 2,
 }
 
+/**
+ * Map Move Event with type start
+ */
 export interface IMapMoveStartEvent {
     type: MapMoveEventType.START;
 }
 
+/**
+ * Map Move Event with type end
+ */
 export interface IMapMoveEndEvent {
     type: MapMoveEventType.END;
 }
-
+/**
+ * Move Event
+ */
 export type MapMoveEvent &#x3D; IMapMoveStartEvent | IMapMoveEndEvent;
 
+/**
+ * Current viewing map bounds
+ */
 export interface IMapBounds {
     left: number;
     right: number;
