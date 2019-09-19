@@ -1,0 +1,14 @@
+{
+    "groupBy": {
+        "Enhancements:": [
+            "enhancement",
+            "internal"
+        ],
+        "Bug Fixes:": [
+            "bug"
+        ],
+        "Dependency Updates": [
+            "dependency"
+        ]
+    }
+}
