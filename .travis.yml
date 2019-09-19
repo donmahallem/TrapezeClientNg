@@ -76,10 +76,3 @@ jobs:
       keep-history: true
       on:
         branch: master
-  - stage: Update release notes
-    node_js: stable
-    before_script:
-    - npm install github-release-notes -g
-    script:
-    - gren release --token=$GITHUB_TOKEN
-    #if: branch = master
