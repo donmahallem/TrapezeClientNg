@@ -10,6 +10,9 @@
         "Dependency Updates": [
             "dependency"
         ],
+        "Feature": [
+            "feature"
+        ],
         "Security": [
             "security"
         ],

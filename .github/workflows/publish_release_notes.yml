@@ -1,7 +1,7 @@
 on: [release]
 
 jobs:
-  hello_world_job:
+  create_release_notes:
     runs-on: ubuntu-latest
     name: Update Release Notes via GREN
     steps:
