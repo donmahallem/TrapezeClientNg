@@ -15,6 +15,6 @@ jobs:
           npm install github-release-notes -g
       - name: Run Gren
         run: |
-          gren release --override --token=$GITHUB_TOKEN --data-source=issues|prs
+          gren release --override --token=$GITHUB_TOKEN --data-source=issues Wprs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
