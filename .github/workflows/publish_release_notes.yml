@@ -1,0 +1,20 @@
+on: [release]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Update Release Notes via GREN
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1 
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Install GREN
+        run: |
+          npm install github-release-notes -g
+      - name: Run Gren
+        run: |
+          gren release --override --token=$GITHUB_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
