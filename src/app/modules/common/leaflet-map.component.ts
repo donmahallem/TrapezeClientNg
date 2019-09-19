@@ -6,22 +6,36 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
 
+/**
+ * Map Move Event Type
+ */
 export enum MapMoveEventType {
     NONE = 0,
     START = 1,
     END = 2,
 }
 
+/**
+ * Map Move Event with type start
+ */
 export interface IMapMoveStartEvent {
     type: MapMoveEventType.START;
 }
 
+/**
+ * Map Move Event with type end
+ */
 export interface IMapMoveEndEvent {
     type: MapMoveEventType.END;
 }
-
+/**
+ * Move Event
+ */
 export type MapMoveEvent = IMapMoveStartEvent | IMapMoveEndEvent;
 
+/**
+ * Current viewing map bounds
+ */
 export interface IMapBounds {
     left: number;
     right: number;
