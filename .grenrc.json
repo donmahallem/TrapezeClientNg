@@ -2,7 +2,8 @@
     "groupBy": {
         "Enhancements:": [
             "enhancement",
-            "internal"
+            "internal",
+            ""
         ],
         "Bug Fixes:": [
             "bug"
