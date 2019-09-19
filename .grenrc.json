@@ -2,14 +2,16 @@
     "groupBy": {
         "Enhancements:": [
             "enhancement",
-            "internal",
-            ""
+            "internal"
         ],
         "Bug Fixes:": [
             "bug"
         ],
         "Dependency Updates": [
             "dependency"
+        ],
+        "Security": [
+            "security"
         ],
         "Others": [
             "Closed"
