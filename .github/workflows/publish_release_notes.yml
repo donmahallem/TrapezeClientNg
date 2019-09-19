@@ -1,4 +1,4 @@
-on: [push]
+on: [release]
 
 jobs:
   hello_world_job:
@@ -7,7 +7,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1 
-      - uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
           node-version: '10.x'
       - name: Install GREN
