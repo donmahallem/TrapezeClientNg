@@ -113,6 +113,7 @@
     ],
     "unified-signatures": true,
     "variable-name": true,
+    "max-classes-per-file": false,
     "whitespace": [
       true,
       "check-branch",

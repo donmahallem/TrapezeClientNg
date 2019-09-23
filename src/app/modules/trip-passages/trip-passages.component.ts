@@ -86,7 +86,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !== undefined) ? this.tripData.actual : [];
     }
     public readonly DEBOUNCE_TIME: number = 5000;
-    public readonly StatusOps: typeof UpdateStatus = UpdateStatus;
+    public readonly STATUS_OPS: typeof UpdateStatus = UpdateStatus;
     private status: BehaviorSubject<IPassageStatus> = new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;

@@ -2,8 +2,8 @@ import { DomUtil, Marker } from 'leaflet';
 
 (() => {
     // save these original methods before they are overwritten
-    const proto_initIcon = (Marker.prototype as any)._initIcon;
-    const proto_setPos = (Marker.prototype as any)._setPos;
+    const protoInitIcon = (Marker.prototype as any)._initIcon;
+    const protoSetPos = (Marker.prototype as any)._setPos;
 
     const oldIE = (DomUtil.TRANSFORM === 'msTransform');
 
@@ -37,13 +37,13 @@ import { DomUtil, Marker } from 'leaflet';
         },
 
         _initIcon() {
-            proto_initIcon.call(this);
+            protoInitIcon.call(this);
         },
 
         _key: undefined,
 
         _setPos(pos) {
-            proto_setPos.call(this, pos);
+            protoSetPos.call(this, pos);
             this._applyRotation();
         },
 
