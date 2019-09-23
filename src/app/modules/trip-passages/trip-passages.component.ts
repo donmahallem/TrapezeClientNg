@@ -91,8 +91,8 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService,
-        private router: Router) {
+                private apiService: ApiService,
+                private router: Router) {
         this.snapshotDataSubscription = this.route.data.subscribe((data) => {
             this.status.next({
                 passages: data.tripPassages,
@@ -121,7 +121,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 this.apiService.getTripPassages(tripId)),
             map((passages: TripPassagesLocation): IPassageStatus =>
                 ({
-                    passages: passages,
+                    passages,
                     status: UpdateStatus.LOADED,
                     timestamp: Date.now(),
                 })),
