@@ -57,7 +57,7 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      script: deploy_github_package.sh
+      script: ./deploy_github_package.sh
       on:
         all_branches: true
   - stage: npm release pwa
