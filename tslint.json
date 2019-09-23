@@ -79,6 +79,22 @@
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
     "no-var-keyword": true,
+    "contextual-lifecycle": true,
+    "no-conflicting-lifecycle": true,
+    "no-consecutive-blank-lines": [
+      true,
+      1
+    ],
+    "no-output-native": true,
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
+    "use-lifecycle-interface": true,
+    "directive-selector": [
+      true,
+      "attribute",
+      "app",
+      "camelCase"
+    ],
     "object-literal-sort-keys": false,
     "one-line": [
       true,
