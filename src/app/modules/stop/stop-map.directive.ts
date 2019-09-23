@@ -25,10 +25,10 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
     private stopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        settingsService: SettingsService,
-        private locationService: Location) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                settingsService: SettingsService,
+                private locationService: Location) {
         super(elRef, zone, userLocationService, settingsService);
     }
 

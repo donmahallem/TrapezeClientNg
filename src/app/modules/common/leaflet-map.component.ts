@@ -67,9 +67,9 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     private mUserLocationSubscription: Subscription = undefined;
     private userLocationLayer: L.FeatureGroup;
     constructor(private elRef: ElementRef,
-        protected zone: NgZone,
-        protected userLocationService: UserLocationService,
-        protected settings: SettingsService) {
+                protected zone: NgZone,
+                protected userLocationService: UserLocationService,
+                protected settings: SettingsService) {
     }
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
