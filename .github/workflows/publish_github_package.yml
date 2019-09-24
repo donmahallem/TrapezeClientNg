@@ -30,4 +30,3 @@ jobs:
           ./deploy_github_package.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN2: testtoken
