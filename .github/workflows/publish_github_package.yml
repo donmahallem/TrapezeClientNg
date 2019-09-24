@@ -23,7 +23,7 @@ jobs:
           npm run build
       - name: Prepare Package
         run: |
-          npm run create-publish-package2
+          npm run create-publish-package -- github-repository
           cp -rf ./publish-package.json package.json
       - name: Upload Package
         run: |
