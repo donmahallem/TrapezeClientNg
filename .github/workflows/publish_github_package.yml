@@ -1,0 +1,30 @@
+name: Publish to Github Package Registry
+on: [push]
+
+jobs:
+  create_release_notes:
+    runs-on: ubuntu-latest
+    name: Update Release Notes via GREN
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1 
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Build Package
+        run: |
+          npm run build
+          cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+          cp ./src/environments/environment.example.ts ./src/environments/environment.ts
+          cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
+          ng build --aot --prod --base-href=/
+      - name: Prepare Package
+        run: |
+          npm run create-publish-package
+          cp -rf ./publish-package.json package.json
+      - name: Upload Package
+        run: |
+          ./deploy_github_package.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
