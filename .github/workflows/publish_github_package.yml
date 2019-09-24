@@ -12,10 +12,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Build Package
+      - name: Install Packages
         run: |
           npm ci
-          npm run build
+      - name: Build Package
+        run: |
           cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
           cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.ts
           cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
