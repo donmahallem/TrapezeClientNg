@@ -5,3 +5,4 @@ registry=https://npm.pkg.github.com/$GITHUB_ACTOR" > './.npmrc'
 ls
 cat ./npmrc
 npm publish
+rm -rf './.npmrc'
