@@ -16,9 +16,9 @@ jobs:
         run: |
           npm ci
           npm run build
-          cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
-          cp ./src/environments/environment.example.ts ./src/environments/environment.ts
-          cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
+          cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+          cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.ts
+          cp --verbose ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
           ng build --aot --prod --base-href=/
       - name: Prepare Package
         run: |
