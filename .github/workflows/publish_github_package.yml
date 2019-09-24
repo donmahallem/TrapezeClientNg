@@ -1,5 +1,7 @@
 name: Publish to Github Package Registry
-on: [push]
+on:
+  release:
+    types: [published]
 
 jobs:
   create_release_notes:
