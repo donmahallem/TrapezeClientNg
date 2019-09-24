@@ -1,5 +1,7 @@
 name: Create Release Notes
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
   create_release_notes:
