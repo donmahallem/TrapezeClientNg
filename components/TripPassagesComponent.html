@@ -157,7 +157,7 @@
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Readonly</span>
-                                <a href="#StatusOps">StatusOps</a>
+                                <a href="#STATUS_OPS">STATUS_OPS</a>
                             </li>
                         </ul>
                     </td>
@@ -650,13 +650,13 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="StatusOps"></a>
+                        <a name="STATUS_OPS"></a>
                         <span class="name">
                             <b>
                                 <span class="modifier">Public</span>
                                 <span class="modifier">Readonly</span>
-                            StatusOps</b>
-                            <a href="#StatusOps"><span class="icon ion-ios-link"></span></a>
+                            STATUS_OPS</b>
+                            <a href="#STATUS_OPS"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
@@ -977,13 +977,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !&#x3D;&#x3D; undefined) ? this.tripData.actual : [];
     }
     public readonly DEBOUNCE_TIME: number &#x3D; 5000;
-    public readonly StatusOps: typeof UpdateStatus &#x3D; UpdateStatus;
+    public readonly STATUS_OPS: typeof UpdateStatus &#x3D; UpdateStatus;
     private status: BehaviorSubject&lt;IPassageStatus&gt; &#x3D; new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService,
-        private router: Router) {
+                private apiService: ApiService,
+                private router: Router) {
         this.snapshotDataSubscription &#x3D; this.route.data.subscribe((data) &#x3D;&gt; {
             this.status.next({
                 passages: data.tripPassages,
@@ -1012,7 +1012,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 this.apiService.getTripPassages(tripId)),
             map((passages: TripPassagesLocation): IPassageStatus &#x3D;&gt;
                 ({
-                    passages: passages,
+                    passages,
                     status: UpdateStatus.LOADED,
                     timestamp: Date.now(),
                 })),

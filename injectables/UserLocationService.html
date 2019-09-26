@@ -474,7 +474,7 @@ export class UserLocationService {
             navigator.geolocation.getCurrentPosition(geoSuccess, geoError, {
                 enableHighAccuracy: highAccuracy,
                 maximumAge: 5 * 60 * 1000, // Cache 5 minutes
-                timeout: timeout,
+                timeout,
             });
         });
     }

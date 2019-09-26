@@ -342,7 +342,7 @@ import { SettingsService } from &#x27;./services/settings.service&#x27;;
 import { StopPointService } from &#x27;./services/stop-point.service&#x27;;
 import { UserLocationService } from &#x27;./services/user-location.service&#x27;;
 
-export const SettingsInitializer &#x3D; (appInitService: SettingsService) &#x3D;&gt;
+export const SETTINGS_INITIALIZER &#x3D; (appInitService: SettingsService) &#x3D;&gt;
     (): Promise&lt;any&gt; &#x3D;&gt;
         appInitService.load();
 const moduleImports: any[] &#x3D; [
@@ -376,7 +376,7 @@ const moduleImports: any[] &#x3D; [
             deps: [SettingsService],
             multi: true,
             provide: APP_INITIALIZER,
-            useFactory: SettingsInitializer,
+            useFactory: SETTINGS_INITIALIZER,
         },
         {
             provide: ErrorHandler,

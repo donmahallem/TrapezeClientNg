@@ -123,7 +123,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>preload(route: <a href="https://angular.io/api/router/Route" target="_blank">Route</a>, load: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank">Function</a>)</code>
+<code>preload(route: <a href="https://angular.io/api/router/Route" target="_blank">Route</a>, load: () => void)</code>
                 </td>
             </tr>
 
@@ -165,7 +165,7 @@
                                 <tr>
                                     <td>load</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank" >Function</a></code>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
                                     </td>
 
                                     <td>
@@ -204,7 +204,7 @@
 import { EMPTY, Observable } from &#x27;rxjs&#x27;;
 
 export class AppPreloadingStrategy implements PreloadingStrategy {
-  preload(route: Route, load: Function): Observable&lt;any&gt; {
+  preload(route: Route, load: () &#x3D;&gt; Observable&lt;any&gt;): Observable&lt;any&gt; {
     return route.path.startsWith(&#x27;error&#x27;) ? load() : EMPTY;
   }
 }

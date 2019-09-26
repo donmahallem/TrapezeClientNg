@@ -257,7 +257,7 @@ export class SearchResultResolver implements Resolve&lt;any&gt; {
                         /**
                          * Filter by search term
                          */
-                        .filter(option &#x3D;&gt; option.name.toLowerCase().includes(route.queryParams.q))
+                        .filter((option) &#x3D;&gt; option.name.toLowerCase().includes(route.queryParams.q))
                         .sort((a, b) &#x3D;&gt; a.name.localeCompare(b.name))));
     }
 }

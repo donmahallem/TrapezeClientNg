@@ -316,13 +316,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         return (this.tripData !&#x3D;&#x3D; undefined) ? this.tripData.actual : [];
     }
     public readonly DEBOUNCE_TIME: number &#x3D; 5000;
-    public readonly StatusOps: typeof UpdateStatus &#x3D; UpdateStatus;
+    public readonly STATUS_OPS: typeof UpdateStatus &#x3D; UpdateStatus;
     private status: BehaviorSubject&lt;IPassageStatus&gt; &#x3D; new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService,
-        private router: Router) {
+                private apiService: ApiService,
+                private router: Router) {
         this.snapshotDataSubscription &#x3D; this.route.data.subscribe((data) &#x3D;&gt; {
             this.status.next({
                 passages: data.tripPassages,
@@ -351,7 +351,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 this.apiService.getTripPassages(tripId)),
             map((passages: TripPassagesLocation): IPassageStatus &#x3D;&gt;
                 ({
-                    passages: passages,
+                    passages,
                     status: UpdateStatus.LOADED,
                     timestamp: Date.now(),
                 })),
