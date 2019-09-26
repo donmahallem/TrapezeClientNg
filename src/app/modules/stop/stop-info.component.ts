@@ -47,7 +47,7 @@ export class StopInfoComponent implements AfterViewInit, OnDestroy {
     private mStopInfo: IStopPassage;
 
     constructor(private route: ActivatedRoute, private apiService: ApiService,
-        private stopService: StopPointService) {
+                private stopService: StopPointService) {
         this.mStopInfo = this.route.snapshot.data.stopInfo;
     }
 

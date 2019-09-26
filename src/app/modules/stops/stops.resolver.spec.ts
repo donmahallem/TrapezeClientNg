@@ -80,7 +80,7 @@ describe('src/app/modules/stops/stops.resolver', () => {
                     resolver.resolve(undefined, undefined)
                         .subscribe(nextSpy, errorSpy, () => {
                             expect(nextSpy).toHaveBeenCalledTimes(3);
-                            expect(nextSpy.calls.allArgs()).toEqual(testValues.map(value => [value]));
+                            expect(nextSpy.calls.allArgs()).toEqual(testValues.map((value) => [value]));
                             expect(errorSpy).toHaveBeenCalledTimes(0);
                             expect(openDialogSpy).toHaveBeenCalledTimes(0);
                             expect(navigateSpy).toHaveBeenCalledTimes(0);

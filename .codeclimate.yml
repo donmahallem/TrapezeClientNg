@@ -33,6 +33,6 @@ checks:
 plugins:
   tslint:
     enabled: true
-    config: ./src/tslint.json
+    config: ./tslint.json
 exclude_patterns:
 - ./src/**/*.spec.ts

@@ -1,4 +1,7 @@
-on: [release]
+name: Create Release Notes
+on:
+  release:
+    types: [created]
 
 jobs:
   create_release_notes:
@@ -10,12 +13,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '12.x'
       - name: Install GREN
         run: |
           npm install github-release-notes -g
       - name: Run Gren
         run: |
-          gren release --override --token=$GITHUB_TOKEN --data-source=prs --config=.grenrc.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gren release --override --token=${{ secrets.GITHUB_TOKEN }} --data-source=prs --config=./.github/.grenrc.json

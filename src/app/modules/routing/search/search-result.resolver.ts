@@ -17,7 +17,7 @@ export class SearchResultResolver implements Resolve<any> {
                         /**
                          * Filter by search term
                          */
-                        .filter(option => option.name.toLowerCase().includes(route.queryParams.q))
+                        .filter((option) => option.name.toLowerCase().includes(route.queryParams.q))
                         .sort((a, b) => a.name.localeCompare(b.name))));
     }
 }

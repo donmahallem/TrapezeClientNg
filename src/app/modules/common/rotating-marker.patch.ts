@@ -2,12 +2,12 @@ import { DomUtil, Marker } from 'leaflet';
 
 (() => {
     // save these original methods before they are overwritten
-    const proto_initIcon = (Marker.prototype as any)._initIcon;
-    const proto_setPos = (Marker.prototype as any)._setPos;
+    const protoInitIcon = (Marker.prototype as any)._initIcon;
+    const protoSetPos = (Marker.prototype as any)._setPos;
 
     const oldIE = (DomUtil.TRANSFORM === 'msTransform');
 
-    Marker.addInitHook(function () {
+    Marker.addInitHook(function() {
         const iconOptions = this.options.icon && this.options.icon.options;
         let iconAnchor = iconOptions && this.options.icon.options.iconAnchor;
         if (iconAnchor) {
@@ -22,7 +22,7 @@ import { DomUtil, Marker } from 'leaflet';
 
     Marker.include({
 
-        _applyRotation: function () {
+        _applyRotation() {
             if (this.options.rotationAngle) {
                 this._icon.style[DomUtil.TRANSFORM + 'Origin'] = this.options.rotationOrigin;
 
@@ -36,30 +36,30 @@ import { DomUtil, Marker } from 'leaflet';
             }
         },
 
-        _initIcon: function () {
-            proto_initIcon.call(this);
+        _initIcon() {
+            protoInitIcon.call(this);
         },
 
         _key: undefined,
 
-        _setPos: function (pos) {
-            proto_setPos.call(this, pos);
+        _setPos(pos) {
+            protoSetPos.call(this, pos);
             this._applyRotation();
         },
 
-        getKey: function () {
+        getKey() {
             return this._key;
         },
-        setKey: function (key) {
+        setKey(key) {
             this._key = key;
         },
-        setRotationAngle: function (angle) {
+        setRotationAngle(angle) {
             this.options.rotationAngle = angle;
             this.update();
             return this;
         },
 
-        setRotationOrigin: function (origin) {
+        setRotationOrigin(origin) {
             this.options.rotationOrigin = origin;
             this.update();
             return this;

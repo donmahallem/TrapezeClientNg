@@ -18,7 +18,7 @@ import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
 
-export const SettingsInitializer = (appInitService: SettingsService) =>
+export const SETTINGS_INITIALIZER = (appInitService: SettingsService) =>
     (): Promise<any> =>
         appInitService.load();
 const moduleImports: any[] = [
@@ -52,7 +52,7 @@ const moduleImports: any[] = [
             deps: [SettingsService],
             multi: true,
             provide: APP_INITIALIZER,
-            useFactory: SettingsInitializer,
+            useFactory: SETTINGS_INITIALIZER,
         },
         {
             provide: ErrorHandler,

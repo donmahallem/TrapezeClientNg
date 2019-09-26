@@ -36,10 +36,10 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routePolyLines: L.Polyline[] = [];
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        private apiService: ApiService,
-        settingsService: SettingsService) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                private apiService: ApiService,
+                settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
@@ -109,9 +109,9 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
             });
         this.vehicleLocationSubject
             .pipe(
-                filter(num => num !== null),
+                filter((num) => num !== null),
                 distinctUntilChanged(),
-                mergeMap(boundsa =>
+                mergeMap((boundsa) =>
                     this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
             .subscribe(new RoutesSubscriber(this));
     }
