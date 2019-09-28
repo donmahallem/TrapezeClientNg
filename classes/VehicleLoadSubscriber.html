@@ -326,7 +326,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                 if (veh.isDeleted &#x3D;&#x3D;&#x3D; true) {
                     continue;
                 }
-                this.addVehicleMarker(veh as IVehicleLocation).addTo(this.vehicleMarkerLayer);
+                const newMarker: L.Marker&lt;any&gt; &#x3D; this.addVehicleMarker(veh as IVehicleLocation);
+                if (newMarker) {
+                    newMarker.addTo(this.vehicleMarkerLayer);
+                }
             }
         }
     }
@@ -421,6 +424,11 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * @param vehicle Vehicle to be added
      */
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
+        if (vehicle.latitude &#x3D;&#x3D;&#x3D; undefined || vehicle.longitude &#x3D;&#x3D;&#x3D; undefined) {
+            // tslint:disable-next-line:no-console
+            console.log(&#x27;Vehicle has no known location:&#x27;, vehicle);
+            return;
+        }
         const vehicleIcon: L.DivIcon &#x3D; createVehicleIcon(vehicle.heading, vehicle.name.split(&#x27; &#x27;)[0], 40);
         const markerT: any &#x3D; L.marker([vehicle.latitude / 3600000, vehicle.longitude / 3600000], {
             icon: vehicleIcon,
