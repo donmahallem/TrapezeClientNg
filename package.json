@@ -1,6 +1,6 @@
 {
   "name": "@donmahallem/trapeze-client-ng",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -72,10 +72,10 @@
     "@angular/language-service": "~8.2.8",
     "@compodoc/compodoc": "~1.1.10",
     "@types/jasmine": "~3.4.0",
-    "@types/jasminewd2": "~2.0.6",
+    "@types/jasminewd2": "~2.0.7",
     "@types/node": "~12.7.8",
     "apply-loader": "~2.0.0",
-    "codelyzer": "~5.1.1",
+    "codelyzer": "~5.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.3.0",
