@@ -73,7 +73,7 @@
     "@compodoc/compodoc": "~1.1.10",
     "@types/jasmine": "~3.4.0",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "~12.7.11",
+    "@types/node": "~12.7.12",
     "apply-loader": "~2.0.0",
     "codelyzer": "~5.1.2",
     "jasmine-core": "~3.5.0",
