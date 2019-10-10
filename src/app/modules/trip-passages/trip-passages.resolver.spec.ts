@@ -7,9 +7,9 @@ import { TripPassagesResolver } from './trip-passages.resolver';
 describe('src/app/modules/stop/trip-passages.resolver', () => {
     describe('TripPassagesResolver', () => {
         let resolver: TripPassagesResolver;
-        let getSpy: jasmine.Spy<InferableFunction>;
-        let navigateSpy: jasmine.Spy<InferableFunction>;
-        let nextSpy: jasmine.Spy<InferableFunction>;
+        let getSpy: jasmine.Spy<jasmine.Func>;
+        let navigateSpy: jasmine.Spy<jasmine.Func>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
         const testId = '239jmcntest';
         beforeAll(() => {
             getSpy = jasmine.createSpy();

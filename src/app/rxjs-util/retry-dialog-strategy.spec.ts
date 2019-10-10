@@ -4,10 +4,10 @@ import { retryDialogStrategy, RetryDialogStrategyFuncResponse } from './retry-di
 
 describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
     describe('retryDialogStrategy', () => {
-        let createDialogSpy: jasmine.Spy<InferableFunction>;
+        let createDialogSpy: jasmine.Spy<jasmine.Func>;
         let strategy: RetryDialogStrategyFuncResponse;
-        let nextSpy: jasmine.Spy<InferableFunction>;
-        let errorSpy: jasmine.Spy<InferableFunction>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
+        let errorSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
             createDialogSpy = jasmine.createSpy();
             nextSpy = jasmine.createSpy('nextSpy');

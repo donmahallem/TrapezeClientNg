@@ -6,7 +6,7 @@ import { SidebarService } from './sidebar.service';
 describe('src/app/services/sidebar.service', () => {
     describe('SidebarService', () => {
         let sidebarService: SidebarService;
-        let nextSpy: jasmine.Spy<InferableFunction>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
         let subject: BehaviorSubject<boolean>;
         beforeAll(() => {
             nextSpy = jasmine.createSpy();

@@ -5,7 +5,7 @@ import { AppNotificationService } from './app-notification.service';
 describe('src/app/services/app-notification.service', () => {
     describe('AppNotificationService', () => {
         let notificationService: AppNotificationService;
-        let nextSpy: jasmine.Spy<InferableFunction>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
         let subject: BehaviorSubject<boolean>;
         beforeAll(() => {
             nextSpy = jasmine.createSpy();

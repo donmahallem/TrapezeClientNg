@@ -10,11 +10,11 @@ import { StopsResolver } from './stops.resolver';
 describe('src/app/modules/stops/stops.resolver', () => {
     describe('StopsResolver', () => {
         let resolver: StopsResolver;
-        let getSpy: jasmine.Spy<InferableFunction>;
-        let navigateSpy: jasmine.Spy<InferableFunction>;
-        let nextSpy: jasmine.Spy<InferableFunction>;
-        let errorSpy: jasmine.Spy<InferableFunction>;
-        let openDialogSpy: jasmine.Spy<InferableFunction>;
+        let getSpy: jasmine.Spy<jasmine.Func>;
+        let navigateSpy: jasmine.Spy<jasmine.Func>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
+        let errorSpy: jasmine.Spy<jasmine.Func>;
+        let openDialogSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
             getSpy = jasmine.createSpy();
             navigateSpy = jasmine.createSpy();
