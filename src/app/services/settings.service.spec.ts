@@ -8,7 +8,7 @@ import { SettingsService } from './settings.service';
 describe('src/app/services/settings.service', () => {
     describe('SettingsService', () => {
         let settingsService: SettingsService;
-        let getSettingsSpy: jasmine.Spy<InferableFunction>;
+        let getSettingsSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
             getSettingsSpy = jasmine.createSpy();
         });

@@ -15,7 +15,7 @@ class TestAppNotificationService {
 describe('src/app/services/stop-point.service', () => {
     describe('StopPointService', () => {
         let stopService: StopPointService;
-        let nextSpy: jasmine.Spy<InferableFunction>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
         const testLocations: IStopLocation[] = [
             {
                 latitude: 1,
@@ -85,7 +85,7 @@ describe('src/app/services/stop-point.service', () => {
         });
         describe('searchStop(stopShortName)', () => {
             describe('no stops available', () => {
-                let observableSpy: jasmine.Spy<InferableFunction>;
+                let observableSpy: jasmine.Spy<jasmine.Func>;
                 beforeEach(() => {
                     observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
                     observableSpy.and.returnValue(EMPTY);
@@ -100,7 +100,7 @@ describe('src/app/services/stop-point.service', () => {
                 });
             });
             describe('a stop list was loaded', () => {
-                let observableSpy: jasmine.Spy<InferableFunction>;
+                let observableSpy: jasmine.Spy<jasmine.Func>;
                 beforeEach(() => {
                     observableSpy = spyOnProperty(stopService, 'stopLocationsObservable');
                     observableSpy.and.returnValue(from([testLocations, testLocations]));
@@ -131,7 +131,7 @@ describe('src/app/services/stop-point.service', () => {
         });
         describe('stopLocationsObservable', () => {
             describe('getter', () => {
-                let createObservable: jasmine.Spy<InferableFunction>;
+                let createObservable: jasmine.Spy<jasmine.Func>;
                 beforeEach(() => {
                     createObservable = spyOn(stopService, 'createStopLoadObservable');
                     createObservable.and.returnValue(from([false]));

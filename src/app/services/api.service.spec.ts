@@ -6,7 +6,7 @@ import { ApiService } from './api.service';
 describe('src/app/services/api.service', () => {
     describe('ApiService', () => {
         let apiService: ApiService;
-        let getSpy: jasmine.Spy<InferableFunction>;
+        let getSpy: jasmine.Spy<jasmine.Func>;
         const testEndpoint = 'https://test.com/';
         const testId: any = 'testId1234';
         beforeAll(() => {

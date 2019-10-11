@@ -7,8 +7,8 @@ import { AppNotificationService, AppNotificationType } from './services/app-noti
 describe('src/app/app-error-handler.ts', () => {
     describe('AppErrorHandler', () => {
         let handler: AppErrorHandler;
-        const notifySpy: jasmine.Spy<InferableFunction> = jasmine.createSpy('notifySpy');
-        let isClientOfflineSpy: jasmine.Spy<InferableFunction>;
+        const notifySpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('notifySpy');
+        let isClientOfflineSpy: jasmine.Spy<jasmine.Func>;
         let notificationService: AppNotificationService;
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -34,7 +34,7 @@ describe('src/app/app-error-handler.ts', () => {
             expect(handler).toBeTruthy();
         });
         describe('handleError()', () => {
-            let handleHttpErrorResponseSpy: jasmine.Spy<InferableFunction>;
+            let handleHttpErrorResponseSpy: jasmine.Spy<jasmine.Func>;
             beforeEach(() => {
                 handleHttpErrorResponseSpy = spyOn(handler, 'handleHttpErrorResponse');
                 handleHttpErrorResponseSpy.and.callFake(() =>

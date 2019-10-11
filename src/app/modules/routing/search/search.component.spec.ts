@@ -38,7 +38,7 @@ describe('src/modules/routing/search/search.component.ts', () => {
     describe('SearchComponent', () => {
         let cmp: SearchComponent;
         let fixture: ComponentFixture<SearchComponent>;
-        let getTitleSpy: jasmine.Spy<InferableFunction>;
+        let getTitleSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
             getTitleSpy = jasmine.createSpy();
         });

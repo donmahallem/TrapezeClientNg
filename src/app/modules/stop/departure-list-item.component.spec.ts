@@ -67,8 +67,8 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
           });
         });
         describe('setter', () => {
-          let calculateDelaySpy: jasmine.Spy<InferableFunction>;
-          let convertTimeSpy: jasmine.Spy<InferableFunction>;
+          let calculateDelaySpy: jasmine.Spy<jasmine.Func>;
+          let convertTimeSpy: jasmine.Spy<jasmine.Func>;
           beforeEach(() => {
             calculateDelaySpy = spyOn(cmp, 'calculateDelay');
             convertTimeSpy = spyOn(cmp, 'convertTime');
