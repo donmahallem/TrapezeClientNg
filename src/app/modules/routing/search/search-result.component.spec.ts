@@ -37,7 +37,7 @@ class TestMatIconComponent {
 
 describe('src/modules/routing/search/search-result.resolver.ts', () => {
     describe('SearchResultResolver', () => {
-        let stopLocationSpy: jasmine.Spy<InferableFunction>;
+        let stopLocationSpy: jasmine.Spy<jasmine.Func>;
         let testResolver: SearchResultResolver;
         beforeAll(() => {
             stopLocationSpy = jasmine.createSpy();

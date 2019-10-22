@@ -8,9 +8,9 @@ import { StopInfoResolver } from './stop-info.resolver';
 describe('src/app/modules/stop/stop-info.resolver', () => {
     describe('StopInfoResolver', () => {
         let resolver: StopInfoResolver;
-        let getSpy: jasmine.Spy<InferableFunction>;
-        let nextSpy: jasmine.Spy<InferableFunction>;
-        let navigateSpy: jasmine.Spy<InferableFunction>;
+        let getSpy: jasmine.Spy<jasmine.Func>;
+        let nextSpy: jasmine.Spy<jasmine.Func>;
+        let navigateSpy: jasmine.Spy<jasmine.Func>;
         const testId = '239jmcntest';
         beforeAll(() => {
             getSpy = jasmine.createSpy();
