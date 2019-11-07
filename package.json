@@ -55,7 +55,7 @@
     "@angular/service-worker": "~8.2.0",
     "@donmahallem/trapeze-api-types": "~1.5.0",
     "@types/leaflet": "~1.5.5",
-    "core-js": "~3.3.6",
+    "core-js": "~3.4.0",
     "leaflet": "~1.5.1",
     "leaflet-rotatedmarker": "~0.2.0",
     "material-design-icons": "~3.0.1",
