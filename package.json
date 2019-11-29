@@ -1,6 +1,6 @@
 {
   "name": "@donmahallem/trapeze-client-ng",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -50,12 +50,12 @@
     "@angular/material": "~8.2.0",
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
-    "@angular/pwa": "~0.803.19",
+    "@angular/pwa": "~0.803.20",
     "@angular/router": "~8.2.0",
     "@angular/service-worker": "~8.2.0",
-    "@donmahallem/trapeze-api-types": "~1.5.1",
+    "@donmahallem/trapeze-api-types": "~1.6.1",
     "@types/leaflet": "~1.5.5",
-    "core-js": "~3.4.2",
+    "core-js": "~3.4.5",
     "leaflet": "~1.6.0",
     "leaflet-rotatedmarker": "~0.2.0",
     "material-design-icons": "~3.0.1",
@@ -66,14 +66,14 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.19",
-    "@angular/cli": "~8.3.19",
+    "@angular-devkit/build-angular": "~0.803.20",
+    "@angular/cli": "~8.3.20",
     "@angular/compiler-cli": "~8.2.0",
     "@angular/language-service": "~8.2.14",
     "@compodoc/compodoc": "~1.1.11",
-    "@types/jasmine": "~3.4.6",
+    "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "~12.12.11",
+    "@types/node": "~12.12.14",
     "apply-loader": "~2.0.0",
     "codelyzer": "~5.2.0",
     "jasmine-core": "~3.5.0",
@@ -87,7 +87,7 @@
     "protractor": "~6.0.0",
     "pug": "~2.0.4",
     "pug-loader": "~2.4.0",
-    "ts-node": "~8.5.2",
+    "ts-node": "~8.5.4",
     "tslint": "~5.20.1",
     "typescript": ">=3.4.0 <3.6.0"
   }
