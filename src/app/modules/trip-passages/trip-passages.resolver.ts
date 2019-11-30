@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from '../../services';
+import { ErrorType } from '../error';
 
 @Injectable()
 export class TripPassagesResolver implements Resolve<any> {
@@ -13,7 +14,11 @@ export class TripPassagesResolver implements Resolve<any> {
         return this.api.getTripPassages(route.params.tripId)
             .pipe(catchError((err: any | HttpErrorResponse) => {
                 if (err.status === 404) {
-                    this.router.navigate(['not-found']);
+                    this.router.navigate(['not-found'], {
+                        queryParams: {
+                            type: ErrorType.NotFoundPassage
+                        }
+                    });
                 }
                 return EMPTY;
             }));
