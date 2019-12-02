@@ -1,1 +1,1 @@
-export { ErrorType } from "./error-type";
+export { ErrorType } from './error-type';

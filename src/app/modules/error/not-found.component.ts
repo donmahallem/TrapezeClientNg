@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { ErrorType } from './error-type';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ErrorType } from './error-type';
 @Component({
     selector: 'app-not-found',
     styleUrls: ['./not-found.component.scss'],
