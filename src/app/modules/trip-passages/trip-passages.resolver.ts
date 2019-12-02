@@ -13,8 +13,10 @@ export class TripPassagesResolver implements Resolve<any> {
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.api.getTripPassages(route.params.tripId)
             .pipe(catchError((err: any | HttpErrorResponse) => {
+                console.log("JJ", err.status, err)
+
                 if (err.status === 404) {
-                    this.router.navigate(['not-found'], {
+                    this.router.navigate(['error', 'not-found'], {
                         queryParams: {
                             type: ErrorType.NotFoundPassage
                         }

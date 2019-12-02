@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ErrorType } from './error-type';
 @Component({
     selector: 'app-common-error',
     styleUrls: ['./common-error.component.scss'],
@@ -8,8 +12,5 @@ import { Component } from '@angular/core';
  * Common Error component
  */
 export class CommonErrorComponent {
-
-    constructor() {
-    }
 
 }
