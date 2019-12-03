@@ -5,11 +5,13 @@ import {
 } from '@angular/material';
 import { CommonErrorComponent } from './common-error.component';
 import { ErrorRoutingModule } from './error-routing.module';
+import { NotFoundMessageSwitchComponent } from './not-found-msg-switch.component';
 import { NotFoundComponent } from './not-found.component';
 @NgModule({
     declarations: [
         NotFoundComponent,
         CommonErrorComponent,
+        NotFoundMessageSwitchComponent,
     ],
     imports: [
         ErrorRoutingModule,

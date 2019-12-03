@@ -1,8 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ErrorType } from './error-type';
 @Component({
     selector: 'app-not-found',
     styleUrls: ['./not-found.component.scss'],
@@ -30,14 +26,6 @@ export class NotFoundComponent {
         path: '/stops',
         title: 'Stops',
     }];
-    public errorTypeObservable: Observable<string>;
-    constructor(private route: ActivatedRoute) {
-        this.errorTypeObservable = this.route.queryParams
-            .pipe(map((value) => {
-                if (value.type) {
-                    return value.type;
-                }
-                return ErrorType.UNKNOWN;
-            }));
+    constructor() {
     }
 }
