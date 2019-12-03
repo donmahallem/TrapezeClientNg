@@ -49,10 +49,10 @@ describe('src/modules/error/not-found-msg-switch.component.ts', () => {
             expect(infoBoxDebugElement.componentInstance).toBeTruthy();
         }));
         describe('error type is provided', () => {
-            describe('error type is ' + ErrorType.NotFoundPassage, () => {
+            describe('error type is ' + ErrorType.PASSAGE_NOT_FOUND, () => {
                 beforeEach(() => {
                     testActivatedRoute.queryParams.next({
-                        type: ErrorType.NotFoundPassage,
+                        type: ErrorType.PASSAGE_NOT_FOUND,
                     });
                     cmpFixture.detectChanges();
                 });
@@ -60,10 +60,10 @@ describe('src/modules/error/not-found-msg-switch.component.ts', () => {
                     expect(infoBoxDebugElement.nativeElement.textContent).toEqual('The passage could not be found. It either expired or has yet to start.Please select another passage.');
                 });
             });
-            describe('error type is ' + ErrorType.NotFoundVehicle, () => {
+            describe('error type is ' + ErrorType.VEHICLE_NOT_FOUND, () => {
                 beforeEach(() => {
                     testActivatedRoute.queryParams.next({
-                        type: ErrorType.NotFoundVehicle,
+                        type: ErrorType.VEHICLE_NOT_FOUND,
                     });
                     cmpFixture.detectChanges();
                 });

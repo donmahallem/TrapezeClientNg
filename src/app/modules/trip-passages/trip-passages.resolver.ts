@@ -16,7 +16,7 @@ export class TripPassagesResolver implements Resolve<any> {
                 if (err.status === 404) {
                     this.router.navigate(['error', 'not-found'], {
                         queryParams: {
-                            type: ErrorType.NotFoundPassage,
+                            type: ErrorType.PASSAGE_NOT_FOUND,
                         },
                     });
                 }

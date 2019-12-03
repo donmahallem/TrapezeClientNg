@@ -1,6 +1,6 @@
 export enum ErrorType {
-    NotFoundPassage = 1,
-    NotFoundVehicle = 2,
-    NotFoundStop = 3,
+    PASSAGE_NOT_FOUND = 1,
+    VEHICLE_NOT_FOUND = 2,
+    STOP_NOT_FOUND = 3,
     UNKNOWN = 0,
 }
