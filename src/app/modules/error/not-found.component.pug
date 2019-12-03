@@ -3,6 +3,7 @@
 div.content
     h3 Not Found
     app-not-found-msg-switch
+    h5 Try any of those places.
     mat-nav-list(role="list")
         mat-list-item(*ngFor="let endpoint of endpoints",role="listitem"[routerLink]="[endpoint.path]")
             mat-icon(matListIcon) {{endpoint.icon}}
