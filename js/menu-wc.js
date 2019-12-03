@@ -136,13 +136,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/ErrorModule.html" data-type="entity-link">ErrorModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' : 'data-target="#xs-components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' }>
+                                            'data-target="#components-links-module-ErrorModule-faa9d6d750303339320f750b67bb9697"' : 'data-target="#xs-components-links-module-ErrorModule-faa9d6d750303339320f750b67bb9697"' }>
                                             <span class="icon ion-md-cog"></span>
                                             <span>Components</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' :
-                                            'id="xs-components-links-module-ErrorModule-4022bd8fefbf39ecb2805a9fb4d3132f"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-ErrorModule-faa9d6d750303339320f750b67bb9697"' :
+                                            'id="xs-components-links-module-ErrorModule-faa9d6d750303339320f750b67bb9697"' }>
                                             <li class="link">
                                                 <a href="components/CommonErrorComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">CommonErrorComponent</a>
@@ -150,6 +150,10 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                             <li class="link">
                                                 <a href="components/NotFoundComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">NotFoundComponent</a>
+                                            </li>
+                                            <li class="link">
+                                                <a href="components/NotFoundMessageSwitchComponent.html"
+                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">NotFoundMessageSwitchComponent</a>
                                             </li>
                                         </ul>
                                     </li>
