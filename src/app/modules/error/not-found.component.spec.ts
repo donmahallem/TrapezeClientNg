@@ -13,6 +13,12 @@ import { NotFoundComponent } from './not-found.component';
 class TestMatIconComponent {
 }
 @Component({
+    selector: 'mat-divider',
+    template: '<div></div>',
+})
+class TestMatDividerComponent {
+}
+@Component({
     selector: 'mat-list-item',
     template: '<div></div>',
 })
@@ -47,6 +53,7 @@ describe('src/modules/error/not-found.component.ts', () => {
                     TestMatListItemComponent,
                     TestMatNavListComponent,
                     TestNotFoundMessageSwitchComponent,
+                    TestMatDividerComponent,
                 ],
                 imports: [
                     RouterTestingModule,
