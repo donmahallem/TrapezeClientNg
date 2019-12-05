@@ -46,7 +46,7 @@ describe('src/app/services/api.service', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getRouteByVehicleId(testId).subscribe((res: IVehiclePathInfo) => {
                     expect(res)
-                        .toEqual([testEndpoint + 'api/vehicle/' + testId + '/route']);
+                        .toEqual([testEndpoint + 'api/vehicle/' + testId + '/route'] as any);
                 }, done, done);
             });
         });
@@ -54,7 +54,7 @@ describe('src/app/services/api.service', () => {
             it('should construct the request correctly', (done) => {
                 apiService.getRouteByTripId(testId).subscribe((res: IVehiclePathInfo) => {
                     expect(res)
-                        .toEqual([testEndpoint + 'api/trip/' + testId + '/route']);
+                        .toEqual([testEndpoint + 'api/trip/' + testId + '/route'] as any);
                 }, done, done);
             });
         });
