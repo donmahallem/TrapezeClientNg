@@ -10,6 +10,7 @@ import {
     StopId,
     TripId,
     VehicleId,
+    IVehiclePathInfo,
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
@@ -29,11 +30,11 @@ export class ApiService {
     public getTripPassages(tripId: TripId): Observable<TripPassagesLocation> {
         return this.http.get<TripPassagesLocation>(this.baseUrl() + 'api/trip/' + tripId + '/passages?mode=departure');
     }
-    public getRouteByVehicleId(vehicleId: VehicleId): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/vehicle/' + vehicleId + '/route');
+    public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {
+        return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'api/vehicle/' + vehicleId + '/route');
     }
-    public getRouteByTripId(tripId: TripId): Observable<any> {
-        return this.http.get(this.baseUrl() + 'api/trip/' + tripId + '/route');
+    public getRouteByTripId(tripId: TripId): Observable<IVehiclePathInfo> {
+        return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'api/trip/' + tripId + '/route');
     }
     public getStopInfo(stopId: StopId): Observable<IStopInfo> {
         return this.http.get<IStopInfo>(this.baseUrl() + 'api/stop/' + stopId + '/info');
