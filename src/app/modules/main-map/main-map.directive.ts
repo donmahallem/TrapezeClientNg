@@ -12,6 +12,7 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
+import { MainMapRouteDisplay } from './main-map-route-display';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -44,6 +45,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      */
     private vehicleUpdateSubscription: Subscription;
     /**
+     * Handles display and requesting of routes being displayed on the main map
+     */
+    private mainMapRouteDisplay: MainMapRouteDisplay;
+    /**
      * Constructor
      * @param elRef injected elementRef of the component root
      * @param apiService ApiService instance
@@ -56,14 +61,14 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * @param zone ngZone Instance
      */
     constructor(elRef: ElementRef,
-                private apiService: ApiService,
-                private router: Router,
-                private stopService: StopPointService,
-                userLocationService: UserLocationService,
-                private location: Location,
-                private snackBar: MatSnackBar,
-                settings: SettingsService,
-                zone: NgZone) {
+        private apiService: ApiService,
+        private router: Router,
+        private stopService: StopPointService,
+        userLocationService: UserLocationService,
+        private location: Location,
+        private snackBar: MatSnackBar,
+        settings: SettingsService,
+        zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
 
@@ -77,7 +82,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         } else {
             this.vehicleMarkerLayer = L.featureGroup();
             this.vehicleMarkerLayer.addTo(this.getMap());
-            this.vehicleMarkerLayer.on('click', this.markerOnClick.bind(this));
+            this.vehicleMarkerLayer.on('click', this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on('mouseover', this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on('mouseout', this.vehicleMarkerEventHandler.bind(this));
         }
         if (vehicles && Array.isArray(vehicles.vehicles)) {
             for (const veh of vehicles.vehicles) {
@@ -134,7 +141,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
-        // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
+        this.mainMapRouteDisplay = new MainMapRouteDisplay(this.getMap(), this.apiService);
     }
 
     /**
@@ -170,11 +177,35 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Triggered by marker clicks on stops and returns the event into the ngZone
      * @param event mouse event
      */
-    public markerOnClick(event: { sourceTarget: { data: ITripPassages } }) {
+    public onClickMarker(event: L.LeafletEvent & { sourceTarget: { data: ITripPassages } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {
             this.router.navigate(['passages', event.sourceTarget.data.tripId]);
         });
+    }
+    public vehicleMarkerEventHandler(event: L.LeafletMouseEvent & { sourceTarget: { data: ITripPassages } }) {
+        // needs to be taken back into the ng zone
+        this.zone.run(() => {
+            switch (event.type) {
+                case "mouseover":
+                case "mouseout":
+                    this.onMouseOverEvent(event);
+                    break;
+                case "click":
+                    this.onClickMarker(event);
+                    break;
+
+            }
+        });
+    }
+
+    /**
+     * Triggered by moving the mouse over the marker and returns the event into the ngZone
+     * @param event mouse event
+     */
+    public onMouseOverEvent(event: L.LeafletMouseEvent & { sourceTarget: { data: ITripPassages } }) {
+        const mouseOver: boolean = (event.type === "mouseover");
+        this.mainMapRouteDisplay.setMouseHovering(mouseOver, mouseOver ? event.sourceTarget.data.tripId : undefined);
     }
 
     /**
