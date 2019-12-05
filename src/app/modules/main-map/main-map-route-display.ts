@@ -1,12 +1,15 @@
 import * as L from "leaflet";
 import { ApiService } from 'src/app/services';
-import { BehaviorSubject, Subscription, Subscriber, from } from 'rxjs';
+import { BehaviorSubject, Subscription, Subscriber, from, Observable } from 'rxjs';
 import { debounce, switchMap, debounceTime, flatMap, catchError } from 'rxjs/operators';
-import { TripId } from '@donmahallem/trapeze-api-types';
+import { TripId, IVehiclePathInfo, IVehiclePath } from '@donmahallem/trapeze-api-types';
 interface IData {
     hovering: boolean;
     tripId?: TripId;
 }
+/**
+ * Handles polling and displaying of route data on the map
+ */
 export class MainMapRouteDisplay {
     private updateSubject: BehaviorSubject<IData> = new BehaviorSubject({
         hovering: false
@@ -22,7 +25,7 @@ export class MainMapRouteDisplay {
         this.routeLayer.addTo(this.map);
         this.subscription = this.updateSubject
             .pipe(debounceTime(200))
-            .pipe(flatMap((value) => {
+            .pipe(flatMap((value: IData): Observable<IVehiclePathInfo> => {
                 if (value.hovering) {
                     return this.api.getRouteByTripId(value.tripId)
                         .pipe(catchError(() => from([undefined])));
@@ -40,10 +43,14 @@ export class MainMapRouteDisplay {
                 this.routeLayer.clearLayers();
             }))
     }
-    public setRoutePaths(paths: any[]): void {
+    /**
+     * Adds the vehicle path to the map
+     * @param paths Path to add
+     */
+    private setRoutePaths(paths: IVehiclePath[]): void {
         this.routeLayer.clearLayers();
         for (const path of paths) {
-            const pointList: any[] = [];
+            const pointList: L.LatLng[] = [];
             for (const wayPoint of path.wayPoints) {
                 pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
             }
@@ -57,10 +64,22 @@ export class MainMapRouteDisplay {
         }
     }
 
+    /**
+     * 
+     * @param isHovering indicates if the mouse is hovering
+     * @param tripId optional TripId
+     */
     public setMouseHovering(isHovering: boolean, tripId?: TripId): void {
         this.updateSubject.next({
             hovering: isHovering,
             tripId
         });
+    }
+
+    /**
+     * Has to be called to stop the underlying observable
+     */
+    public stop(): void {
+        this.subscription.unsubscribe();
     }
 }
