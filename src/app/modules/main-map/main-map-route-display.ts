@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services';
+import { LeafletUtil } from 'src/app/leaflet';
 interface IData {
     hovering: boolean;
     tripId?: TripId;
@@ -19,6 +20,11 @@ export class MainMapRouteDisplay {
      * Layer for the route data
      */
     private routeLayer: L.FeatureGroup = undefined;
+    /**
+     * 
+     * @param map The map to display the route on
+     * @param api the api service to be used
+     */
     constructor(private map: L.Map, private api: ApiService) {
 
         this.routeLayer = L.featureGroup();
@@ -69,10 +75,7 @@ export class MainMapRouteDisplay {
     private setRoutePaths(paths: IVehiclePath[]): void {
         this.routeLayer.clearLayers();
         for (const path of paths) {
-            const pointList: L.LatLng[] = [];
-            for (const wayPoint of path.wayPoints) {
-                pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
-            }
+            const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
             const firstpolyline = L.polyline(pointList, {
                 color: path.color,
                 opacity: 0.5,
