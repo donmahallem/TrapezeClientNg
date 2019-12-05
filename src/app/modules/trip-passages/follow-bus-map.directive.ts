@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
+import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 
 export class RoutesSubscriber extends Subscriber<any> {
     public constructor(private followMapInstance: FollowBusMapDirective) {
@@ -36,20 +37,20 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routePolyLines: L.Polyline[] = [];
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
-                zone: NgZone,
-                private apiService: ApiService,
-                settingsService: SettingsService) {
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        private apiService: ApiService,
+        settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
-    public setRoutePaths(paths: any[]): void {
+    public setRoutePaths(paths: IVehiclePath[]): void {
         for (const line of this.routePolyLines) {
             line.remove();
         }
         this.routePolyLines = [];
         for (const path of paths) {
-            const pointList: any[] = [];
+            const pointList: L.LatLng[] = [];
             for (const wayPoint of path.wayPoints) {
                 pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
             }
