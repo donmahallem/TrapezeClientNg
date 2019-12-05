@@ -7,10 +7,10 @@ import {
     IStopPassage,
     IVehicleLocation,
     IVehicleLocationList,
+    IVehiclePathInfo,
     StopId,
     TripId,
     VehicleId,
-    IVehiclePathInfo,
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';

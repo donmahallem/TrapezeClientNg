@@ -61,14 +61,14 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * @param zone ngZone Instance
      */
     constructor(elRef: ElementRef,
-        private apiService: ApiService,
-        private router: Router,
-        private stopService: StopPointService,
-        userLocationService: UserLocationService,
-        private location: Location,
-        private snackBar: MatSnackBar,
-        settings: SettingsService,
-        zone: NgZone) {
+                private apiService: ApiService,
+                private router: Router,
+                private stopService: StopPointService,
+                userLocationService: UserLocationService,
+                private location: Location,
+                private snackBar: MatSnackBar,
+                settings: SettingsService,
+                zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
 
@@ -187,11 +187,11 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         // needs to be taken back into the ng zone
         this.zone.run(() => {
             switch (event.type) {
-                case "mouseover":
-                case "mouseout":
+                case 'mouseover':
+                case 'mouseout':
                     this.onMouseOverEvent(event);
                     break;
-                case "click":
+                case 'click':
                     this.onClickMarker(event);
                     break;
 
@@ -204,7 +204,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * @param event mouse event
      */
     public onMouseOverEvent(event: L.LeafletMouseEvent & { sourceTarget: { data: ITripPassages } }) {
-        const mouseOver: boolean = (event.type === "mouseover");
+        const mouseOver: boolean = (event.type === 'mouseover');
         this.mainMapRouteDisplay.setMouseHovering(mouseOver, mouseOver ? event.sourceTarget.data.tripId : undefined);
     }
 

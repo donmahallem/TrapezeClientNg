@@ -1,4 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
@@ -8,7 +9,6 @@ import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
-import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 
 export class RoutesSubscriber extends Subscriber<any> {
     public constructor(private followMapInstance: FollowBusMapDirective) {
@@ -37,10 +37,10 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routePolyLines: L.Polyline[] = [];
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        private apiService: ApiService,
-        settingsService: SettingsService) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                private apiService: ApiService,
+                settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
