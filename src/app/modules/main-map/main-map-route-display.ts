@@ -29,6 +29,12 @@ export class MainMapRouteDisplay {
 
         this.routeLayer = L.featureGroup();
         this.routeLayer.addTo(this.map);
+    }
+
+    /**
+     * Does start the updating loop
+     */
+    public start(): void {
         this.subscription = this.updateSubject
             .pipe(debounceTime(200))
             .pipe(flatMap((value: IData): Observable<IVehiclePathInfo> => {
@@ -51,7 +57,8 @@ export class MainMapRouteDisplay {
     }
 
     /**
-     *
+     * Does update the interal state. For display purposese calling start is required but doesn't require
+     * to be called before.
      * @param isHovering indicates if the mouse is hovering
      * @param tripId optional TripId
      */
@@ -66,7 +73,9 @@ export class MainMapRouteDisplay {
      * Has to be called to stop the underlying observable
      */
     public stop(): void {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
     /**
      * Adds the vehicle path to the map

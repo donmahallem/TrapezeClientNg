@@ -142,6 +142,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         });
         this.getMap().addControl(new ourCustomControl());
         this.mainMapRouteDisplay = new MainMapRouteDisplay(this.getMap(), this.apiService);
+        this.mainMapRouteDisplay.start();
     }
 
     /**
