@@ -35,6 +35,9 @@ export class MainMapRouteDisplay {
      * Does start the updating loop
      */
     public start(): void {
+        if (this.subscription && !this.subscription.closed) {
+            return;
+        }
         this.subscription = this.updateSubject
             .pipe(debounceTime(200))
             .pipe(flatMap((value: IData): Observable<IVehiclePathInfo> => {
