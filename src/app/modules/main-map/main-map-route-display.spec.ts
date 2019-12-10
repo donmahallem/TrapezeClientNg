@@ -22,6 +22,8 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
         });
         describe('constructor()', () => {
             it('should add the route layer', () => {
+                // for some reason this fluctuates in calls
+                // TODO: investigate and fix
                 expect(mapSpy.addLayer.calls.count()).toBeGreaterThanOrEqual(1);
                 expect(mapSpy.addLayer.calls.mostRecent().args).toEqual([(testInstance as any).routeLayer]);
             });
