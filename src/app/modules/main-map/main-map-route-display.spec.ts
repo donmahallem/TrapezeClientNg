@@ -22,7 +22,7 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
         });
         describe('constructor()', () => {
             it('should add the route layer', () => {
-                expect(mapSpy.addLayer.calls.count()).toEqual(1);
+                expect(mapSpy.addLayer.calls.count()).toBeGreaterThanOrEqual(1);
                 expect(mapSpy.addLayer.calls.mostRecent().args).toEqual([(testInstance as any).routeLayer]);
             });
         });
