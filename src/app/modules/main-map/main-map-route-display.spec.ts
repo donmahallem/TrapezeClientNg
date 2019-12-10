@@ -33,26 +33,30 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
             beforeEach(() => {
                 subscriptionSpy = jasmine.createSpyObj<Subscription>('Subscription', ['unsubscribe'], ['closed']);
             });
-            it('should do start the observable if not started before', () => {
-                let subscription: Subscription = (testInstance as any).subscription;
-                expect(subscription).toBeUndefined();
-                testInstance.start();
-                subscription = (testInstance as any).subscription;
-                expect(subscription).toBeDefined();
+            describe('no observable started', () => {
+                it('should do start the observable if not started before', () => {
+                    let subscription: Subscription = (testInstance as any).subscription;
+                    expect(subscription).toBeUndefined();
+                    testInstance.start();
+                    subscription = (testInstance as any).subscription;
+                    expect(subscription).toBeDefined();
+                });
+                it('should subscribe the internal observable if not started before or stopped before', () => {
+                    (testInstance as any).subscription = subscriptionSpy;
+                    subscriptionSpy.closed = true;
+                    testInstance.start();
+                    const subscription: Subscription = (testInstance as any).subscription;
+                    expect(subscription).toEqual(subscriptionSpy);
+                });
             });
-            it('should not subscribe the internal observable if started before', () => {
-                (testInstance as any).subscription = subscriptionSpy;
-                subscriptionSpy.closed = false;
-                testInstance.start();
-                const subscription: Subscription = (testInstance as any).subscription;
-                expect(subscription).toEqual(subscriptionSpy);
-            });
-            it('should subscribe the internal observable if not started before or stopped before', () => {
-                (testInstance as any).subscription = subscriptionSpy;
-                subscriptionSpy.closed = true;
-                testInstance.start();
-                const subscription: Subscription = (testInstance as any).subscription;
-                expect(subscription).toEqual(subscriptionSpy);
+            describe('observable started', () => {
+                it('should not subscribe the internal observable if started before', () => {
+                    (testInstance as any).subscription = subscriptionSpy;
+                    subscriptionSpy.closed = false;
+                    testInstance.start();
+                    const subscription: Subscription = (testInstance as any).subscription;
+                    expect(subscription).toEqual(subscriptionSpy);
+                });
             });
         });
         describe('stop()', () => {
