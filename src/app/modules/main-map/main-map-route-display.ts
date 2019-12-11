@@ -4,7 +4,7 @@ import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxj
 import { catchError, debounceTime, flatMap } from 'rxjs/operators';
 import { LeafletUtil } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
-interface IData {
+export interface IData {
     hovering: boolean;
     tripId?: TripId;
 }
