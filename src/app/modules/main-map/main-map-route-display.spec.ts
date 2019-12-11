@@ -1,3 +1,4 @@
+import { fakeAsync, tick } from '@angular/core/testing';
 import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { from, BehaviorSubject, Subscription } from 'rxjs';
@@ -8,14 +9,14 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
     describe('MainMapRouteDisplay', () => {
         let apiSpyObject: jasmine.SpyObj<ApiService>;
         const mapSpy: jasmine.SpyObj<L.Map> = jasmine.createSpyObj(L.Map, ['addLayer']);
-        const routeLayerSpy: jasmine.SpyObj<L.FeatureGroup> = jasmine.createSpyObj(L.FeatureGroup, ['clearLayers']);
+        const routeLayerSpyObj: jasmine.SpyObj<L.FeatureGroup> = jasmine.createSpyObj(L.FeatureGroup, ['clearLayers']);
         let testInstance: MainMapRouteDisplay;
         beforeAll(() => {
             apiSpyObject = jasmine.createSpyObj(ApiService, ['getRouteByTripId']);
         });
         beforeEach(() => {
             testInstance = new MainMapRouteDisplay(mapSpy, apiSpyObject);
-            (testInstance as any).routeLayer = routeLayerSpy;
+            (testInstance as any).routeLayer = routeLayerSpyObj;
         });
         afterEach(() => {
             const subscription: Subscription = (testInstance as any).subscription;
@@ -23,6 +24,7 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
                 subscription.unsubscribe();
             }
             apiSpyObject.getRouteByTripId.calls.reset();
+            routeLayerSpyObj.clearLayers.calls.reset();
         });
         describe('constructor()', () => {
             it('should add the route layer', () => {
@@ -57,7 +59,7 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
                 const testVehiclePathInfo: IVehiclePathInfo = {
                     paths: testVehiclePath,
                 } as any;
-                beforeEach(function() {
+                beforeEach(() => {
                     valueSubject = (testInstance as any).updateSubject;
                     setRoutePathsSpy = spyOn(testInstance as any, 'setRoutePaths').and.callFake(() => { });
                     jasmine.clock().install();
@@ -65,37 +67,33 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
                         from([testVehiclePathInfo]));
                 });
 
-                afterEach(function() {
+                afterEach(() => {
                     jasmine.clock().uninstall();
                 });
-                it('should propagate the event correctly debounced', (done) => {
+                it('should propagate the event correctly debounced', () => {
                     testInstance.start();
                     valueSubject.next({ hovering: true, tripId: testTripId });
                     jasmine.clock().tick(50);
                     valueSubject.next({ hovering: false });
                     jasmine.clock().tick(400);
                     expect(setRoutePathsSpy).not.toHaveBeenCalled();
-                    expect(routeLayerSpy.clearLayers).toHaveBeenCalledTimes(1);
-                    done();
+                    expect(routeLayerSpyObj.clearLayers).toHaveBeenCalledTimes(1);
                 });
-                it('should propagate the event correctly and set the route', (done) => {
+                it('should propagate the event correctly and set the route', fakeAsync(() => {
                     testInstance.start();
                     valueSubject.next({ hovering: true, tripId: testTripId });
-                    jasmine.clock().tick(500);
-                    jasmine.clock().tick(500);
+                    tick(500);
                     expect(setRoutePathsSpy).toHaveBeenCalledTimes(1);
-                    expect(routeLayerSpy.clearLayers).toHaveBeenCalledTimes(0);
+                    expect(routeLayerSpyObj.clearLayers).toHaveBeenCalledTimes(0);
                     expect(setRoutePathsSpy.calls.mostRecent().args).toEqual([testVehiclePath]);
-                    done();
-                });
-                it('should propagate the event correctly and not set the route', (done) => {
+                }));
+                it('should propagate the event correctly and not set the route', fakeAsync(() => {
                     testInstance.start();
                     valueSubject.next({ hovering: false, tripId: testTripId });
-                    jasmine.clock().tick(1000);
+                    tick(500);
                     expect(setRoutePathsSpy).not.toHaveBeenCalled();
-                    expect(routeLayerSpy.clearLayers).toHaveBeenCalledTimes(1);
-                    done();
-                });
+                    expect(routeLayerSpyObj.clearLayers).toHaveBeenCalledTimes(1);
+                }));
                 it('should do start the observable if not started before', () => {
                     let subscription: Subscription = (testInstance as any).subscription;
                     expect(subscription).toBeUndefined();
