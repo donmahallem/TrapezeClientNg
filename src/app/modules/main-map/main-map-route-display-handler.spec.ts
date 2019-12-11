@@ -3,7 +3,7 @@ import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { from, BehaviorSubject, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services';
-import { MainMapRouteDisplayHandler, IData } from './main-map-route-display-handler';
+import { IData, MainMapRouteDisplayHandler } from './main-map-route-display-handler';
 
 const testVehiclePath: IVehiclePath[] = [
     {

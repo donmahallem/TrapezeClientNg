@@ -37,10 +37,10 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routeLayerGroup: L.FeatureGroup;
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        private apiService: ApiService,
-        settingsService: SettingsService) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                private apiService: ApiService,
+                settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
 

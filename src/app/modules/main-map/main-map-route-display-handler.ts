@@ -1,8 +1,8 @@
-import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api-types';
+import { IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap } from 'rxjs/operators';
-import { LeafletUtil, RouteDisplayHandler } from 'src/app/leaflet';
+import { RouteDisplayHandler } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 export interface IData {
     hovering: boolean;

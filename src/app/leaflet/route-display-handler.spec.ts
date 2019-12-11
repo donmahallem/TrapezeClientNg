@@ -1,9 +1,7 @@
-import { fakeAsync, tick } from '@angular/core/testing';
-import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api-types';
+import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { from, BehaviorSubject, Subscription } from 'rxjs';
-import { ApiService } from 'src/app/services';
-import { IData, RouteDisplayHandler } from './route-display-handler';
+import { Subscription } from 'rxjs';
+import { RouteDisplayHandler } from './route-display-handler';
 
 const testVehiclePath: IVehiclePath[] = [
     {
