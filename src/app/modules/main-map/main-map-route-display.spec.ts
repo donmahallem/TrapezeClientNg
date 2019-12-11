@@ -5,11 +5,25 @@ import { from, BehaviorSubject, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services';
 import { IData, MainMapRouteDisplay } from './main-map-route-display';
 
+const testVehiclePath: IVehiclePath[] = [
+    {
+        color: '#FFFFFF',
+        wayPoints: [{
+            lat: 1,
+            lon: 2,
+            seq: '1',
+        }, {
+            lat: 3,
+            lon: 4,
+            seq: '2',
+        }],
+    },
+];
 describe('src/app/modules/main-map/main-map-route-display', () => {
     describe('MainMapRouteDisplay', () => {
         let apiSpyObject: jasmine.SpyObj<ApiService>;
         const mapSpy: jasmine.SpyObj<L.Map> = jasmine.createSpyObj(L.Map, ['addLayer']);
-        const routeLayerSpyObj: jasmine.SpyObj<L.FeatureGroup> = jasmine.createSpyObj(L.FeatureGroup, ['clearLayers']);
+        const routeLayerSpyObj: jasmine.SpyObj<L.FeatureGroup> = jasmine.createSpyObj(L.FeatureGroup, ['clearLayers', 'addLayer']);
         let testInstance: MainMapRouteDisplay;
         beforeAll(() => {
             apiSpyObject = jasmine.createSpyObj(ApiService, ['getRouteByTripId']);
@@ -25,12 +39,14 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
             }
             apiSpyObject.getRouteByTripId.calls.reset();
             routeLayerSpyObj.clearLayers.calls.reset();
+            mapSpy.addLayer.calls.reset();
+            routeLayerSpyObj.addLayer.calls.reset();
         });
         describe('constructor()', () => {
             it('should add the route layer', () => {
                 // for some reason this fluctuates in calls
                 // TODO: investigate and fix
-                expect(mapSpy.addLayer.calls.count()).toBeGreaterThanOrEqual(1);
+                expect(mapSpy.addLayer.calls.count()).toEqual(1);
             });
         });
         describe('start()', () => {
@@ -42,20 +58,6 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
                 let valueSubject: BehaviorSubject<IData>;
                 let setRoutePathsSpy: jasmine.Spy;
                 const testTripId: TripId = 'testid' as TripId;
-                const testVehiclePath: IVehiclePath[] = [
-                    {
-                        color: '#FFFFFF',
-                        wayPoints: [{
-                            lat: 1,
-                            lon: 2,
-                            seq: '1',
-                        }, {
-                            lat: 3,
-                            lon: 4,
-                            seq: '2',
-                        }],
-                    },
-                ];
                 const testVehiclePathInfo: IVehiclePathInfo = {
                     paths: testVehiclePath,
                 } as any;
@@ -157,6 +159,30 @@ describe('src/app/modules/main-map/main-map-route-display', () => {
                     });
                 });
             });
+        });
+        describe('setRoutePaths()', () => {
+            afterEach(() => {
+                expect(routeLayerSpyObj.clearLayers.calls.count()).toEqual(1);
+            });
+            it('should not call addLayer if no paths are defined', () => {
+                (testInstance as any).setRoutePaths(undefined);
+                expect(routeLayerSpyObj.addLayer.calls.count()).toEqual(0);
+            });
+            it('should not call addLayer if an empty path list is provided', () => {
+                (testInstance as any).setRoutePaths([]);
+                expect(routeLayerSpyObj.addLayer.calls.count()).toEqual(0);
+            });
+            it('should call addLayer as often as paths are provided (1)', () => {
+                (testInstance as any).setRoutePaths(testVehiclePath);
+                expect(routeLayerSpyObj.addLayer.calls.count()).toEqual(1);
+                expect(routeLayerSpyObj.clearLayers).toHaveBeenCalledBefore(routeLayerSpyObj.addLayer);
+            });
+            it('should call addLayer as often as paths are provided (2)', () => {
+                (testInstance as any).setRoutePaths(testVehiclePath.concat(testVehiclePath));
+                expect(routeLayerSpyObj.addLayer.calls.count()).toEqual(2);
+                expect(routeLayerSpyObj.clearLayers).toHaveBeenCalledBefore(routeLayerSpyObj.addLayer);
+            });
+
         });
     });
 });

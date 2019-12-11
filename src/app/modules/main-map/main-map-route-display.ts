@@ -86,15 +86,17 @@ export class MainMapRouteDisplay {
      */
     private setRoutePaths(paths: IVehiclePath[]): void {
         this.routeLayer.clearLayers();
-        for (const path of paths) {
-            const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
-            const firstpolyline = L.polyline(pointList, {
-                color: path.color,
-                opacity: 0.5,
-                smoothFactor: 1,
-                weight: 3,
-            });
-            firstpolyline.addTo(this.routeLayer);
+        if (paths) {
+            for (const path of paths) {
+                const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
+                const firstpolyline = L.polyline(pointList, {
+                    color: path.color,
+                    opacity: 0.5,
+                    smoothFactor: 1,
+                    weight: 3,
+                });
+                firstpolyline.addTo(this.routeLayer);
+            }
         }
     }
 }
