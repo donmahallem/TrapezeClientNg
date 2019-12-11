@@ -1,4 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
@@ -43,13 +44,13 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
         super(elRef, zone, userLocationService, settingsService);
     }
 
-    public setRoutePaths(paths: any[]): void {
+    public setRoutePaths(paths: IVehiclePath[]): void {
         for (const line of this.routePolyLines) {
             line.remove();
         }
         this.routePolyLines = [];
         for (const path of paths) {
-            const pointList: any[] = [];
+            const pointList: L.LatLng[] = [];
             for (const wayPoint of path.wayPoints) {
                 pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
             }
