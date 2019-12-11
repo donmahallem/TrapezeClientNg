@@ -3,7 +3,7 @@ import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
-import { createVehicleIcon } from 'src/app/leaflet';
+import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
 import { ITimestampVehicleLocation } from 'src/app/models';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -35,33 +35,26 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private updateObservable: Subscription;
-    private routePolyLines: L.Polyline[] = [];
+    private routeLayerGroup: L.FeatureGroup;
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
-                zone: NgZone,
-                private apiService: ApiService,
-                settingsService: SettingsService) {
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        private apiService: ApiService,
+        settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
     public setRoutePaths(paths: IVehiclePath[]): void {
-        for (const line of this.routePolyLines) {
-            line.remove();
-        }
-        this.routePolyLines = [];
+        this.routeLayerGroup.clearLayers();
         for (const path of paths) {
-            const pointList: L.LatLng[] = [];
-            for (const wayPoint of path.wayPoints) {
-                pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
-            }
+            const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
             const firstpolyline = L.polyline(pointList, {
                 color: path.color,
                 opacity: 0.5,
                 smoothFactor: 1,
                 weight: 3,
             });
-            firstpolyline.addTo(this.getMap());
-            this.routePolyLines.push(firstpolyline);
+            firstpolyline.addTo(this.routeLayerGroup);
         }
     }
     public ngAfterViewInit() {
@@ -71,7 +64,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
         this.getMap().touchZoom.disable();
         this.getMap().doubleClickZoom.disable();
         this.getMap().scrollWheelZoom.disable();
-        this.getMap().eachLayer((layer: L.Layer) => {
+        this.getMap().eachLayer((layer: L.Layer): void => {
             if (layer instanceof L.TileLayer) {
                 layer.options.attribution = '';
                 layer.redraw();

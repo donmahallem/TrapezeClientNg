@@ -2,7 +2,7 @@ import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, flatMap } from 'rxjs/operators';
-import { LeafletUtil } from 'src/app/leaflet';
+import { LeafletUtil, RouteDisplayHandler } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 export interface IData {
     hovering: boolean;
@@ -11,24 +11,18 @@ export interface IData {
 /**
  * Handles polling and displaying of route data on the map
  */
-export class MainMapRouteDisplay {
+export class MainMapRouteDisplayHandler extends RouteDisplayHandler {
     private updateSubject: BehaviorSubject<IData> = new BehaviorSubject({
         hovering: false,
     });
     private subscription: Subscription;
     /**
-     * Layer for the route data
-     */
-    private routeLayer: L.FeatureGroup = undefined;
-    /**
      *
      * @param map The map to display the route on
      * @param api the api service to be used
      */
-    constructor(private map: L.Map, private api: ApiService) {
-
-        this.routeLayer = L.featureGroup();
-        this.routeLayer.addTo(this.map);
+    constructor(map: L.Map, private api: ApiService) {
+        super(map);
     }
 
     /**
@@ -55,7 +49,7 @@ export class MainMapRouteDisplay {
                         return;
                     }
                 }
-                this.routeLayer.clearLayers();
+                this.clear();
             }));
     }
 
@@ -78,25 +72,6 @@ export class MainMapRouteDisplay {
     public stop(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
-        }
-    }
-    /**
-     * Adds the vehicle path to the map
-     * @param paths Path to add
-     */
-    private setRoutePaths(paths: IVehiclePath[]): void {
-        this.routeLayer.clearLayers();
-        if (paths) {
-            for (const path of paths) {
-                const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
-                const firstpolyline = L.polyline(pointList, {
-                    color: path.color,
-                    opacity: 0.5,
-                    smoothFactor: 1,
-                    weight: 3,
-                });
-                firstpolyline.addTo(this.routeLayer);
-            }
         }
     }
 }

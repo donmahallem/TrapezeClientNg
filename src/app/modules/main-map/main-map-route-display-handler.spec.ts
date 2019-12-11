@@ -3,7 +3,7 @@ import { IVehiclePath, IVehiclePathInfo, TripId } from '@donmahallem/trapeze-api
 import * as L from 'leaflet';
 import { from, BehaviorSubject, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services';
-import { IData, MainMapRouteDisplay } from './main-map-route-display';
+import { MainMapRouteDisplayHandler, IData } from './main-map-route-display-handler';
 
 const testVehiclePath: IVehiclePath[] = [
     {
@@ -19,17 +19,17 @@ const testVehiclePath: IVehiclePath[] = [
         }],
     },
 ];
-describe('src/app/modules/main-map/main-map-route-display', () => {
-    describe('MainMapRouteDisplay', () => {
+describe('src/app/modules/main-map/main-map-route-display-handler', () => {
+    describe('MainMapRouteDisplayHandler', () => {
         let apiSpyObject: jasmine.SpyObj<ApiService>;
         const mapSpy: jasmine.SpyObj<L.Map> = jasmine.createSpyObj(L.Map, ['addLayer']);
         const routeLayerSpyObj: jasmine.SpyObj<L.FeatureGroup> = jasmine.createSpyObj(L.FeatureGroup, ['clearLayers', 'addLayer']);
-        let testInstance: MainMapRouteDisplay;
+        let testInstance: MainMapRouteDisplayHandler;
         beforeAll(() => {
             apiSpyObject = jasmine.createSpyObj(ApiService, ['getRouteByTripId']);
         });
         beforeEach(() => {
-            testInstance = new MainMapRouteDisplay(mapSpy, apiSpyObject);
+            testInstance = new MainMapRouteDisplayHandler(mapSpy, apiSpyObject);
             (testInstance as any).routeLayer = routeLayerSpyObj;
         });
         afterEach(() => {
