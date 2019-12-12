@@ -42,7 +42,7 @@
 
 <ol class="breadcrumb">
   <li>Classes</li>
-  <li>RoutesSubscriber</li>
+  <li>RouteDisplayHandler</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -60,16 +60,17 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/modules/trip-passages/follow-bus-map.directive.ts</code>
+            <code>src/app/leaflet/route-display-handler.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Handles polling and displaying of route data on the map</p>
 
-            <p class="comment">
-                <h3>Extends</h3>
             </p>
-            <p class="comment">
-                    <code>Subscriber</code>
-            </p>
+
 
 
 
@@ -77,6 +78,21 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#routeLayer">routeLayer</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -88,7 +104,11 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#next">next</a>
+                                <a href="#clear">clear</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#setRoutePaths">setRoutePaths</a>
                             </li>
                         </ul>
                     </td>
@@ -108,13 +128,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                                <span class="modifier">Public</span>
-                        <code>constructor(followMapInstance: FollowBusMapDirective)</code>
+<code>constructor(map: L.Map)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/modules/trip-passages/follow-bus-map.directive.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/leaflet/route-display-handler.ts:11</a></div>
                             </td>
                         </tr>
 
@@ -128,20 +147,25 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
+                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>followMapInstance</td>
+                                                        <td>map</td>
                                                   
                                                         <td>
-                                                                    <code>FollowBusMapDirective</code>
+                                                                    <code>L.Map</code>
                                                         </td>
                                                   
                                                     <td>
                                                             No
                                                     </td>
                                                     
+                                                        <td>
+                                                                <code><p>The map to display the route on</p>
+</code>
+                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -152,6 +176,51 @@
         </table>
 </section>
 
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="routeLayer"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            routeLayer</b>
+                            <a href="#routeLayer"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>L.FeatureGroup</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>undefined</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/leaflet/route-display-handler.ts:11</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Layer for the route data</p>
+</div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+</section>
 
             <section>
     
@@ -162,34 +231,79 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="next"></a>
+                    <a name="clear"></a>
                     <span class="name">
                         <b>
                             <span class="modifier">Public</span>
-                            next
+                            clear
                         </b>
-                        <a href="#next"><span class="icon ion-ios-link"></span></a>
+                        <a href="#clear"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>next(routes)</code>
+                    <code>clear()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/app/modules/trip-passages/follow-bus-map.directive.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="44"
+                            class="link-to-prism">src/app/leaflet/route-display-handler.ts:44</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Clears displayed routes</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setRoutePaths"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            setRoutePaths
+                        </b>
+                        <a href="#setRoutePaths"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>setRoutePaths(paths: IVehiclePath[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="25"
+                            class="link-to-prism">src/app/leaflet/route-display-handler.ts:25</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Adds the vehicle path to the map</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -197,18 +311,27 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
+                                    <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>routes</td>
+                                    <td>paths</td>
+                                    <td>
+                                            <code>IVehiclePath[]</code>
+                                    </td>
 
                                     <td>
                                         No
                                     </td>
 
 
+                                    <td>
+                                        <p>Path to add</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -236,129 +359,52 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IVehiclePath } from &#x27;@donmahallem/trapeze-api-types&#x27;;
 import * as L from &#x27;leaflet&#x27;;
-import { BehaviorSubject, Subscriber, Subscription } from &#x27;rxjs&#x27;;
-import { distinctUntilChanged, filter, map, mergeMap } from &#x27;rxjs/operators&#x27;;
-import { createVehicleIcon } from &#x27;src/app/leaflet&#x27;;
-import { ITimestampVehicleLocation } from &#x27;src/app/models&#x27;;
-import { ApiService } from &#x27;src/app/services&#x27;;
-import { SettingsService } from &#x27;src/app/services/settings.service&#x27;;
-import { UserLocationService } from &#x27;src/app/services/user-location.service&#x27;;
-import { LeafletMapComponent } from &#x27;../common/leaflet-map.component&#x27;;
-
-export class RoutesSubscriber extends Subscriber&lt;any&gt; {
-    public constructor(private followMapInstance: FollowBusMapDirective) {
-        super();
+import { LeafletUtil } from &#x27;./leaflet-util&#x27;;
+/**
+ * Handles polling and displaying of route data on the map
+ */
+export class RouteDisplayHandler {
+    /**
+     * Layer for the route data
+     */
+    private routeLayer: L.FeatureGroup &#x3D; undefined;
+    /**
+     *
+     * @param map The map to display the route on
+     * @param api the api service to be used
+     */
+    constructor(private map: L.Map) {
+        this.routeLayer &#x3D; L.featureGroup();
+        this.routeLayer.addTo(this.map);
     }
-    public next(routes) {
-        this.followMapInstance.setRoutePaths(routes.paths);
-    }
-}
-@Directive({
-    selector: &#x27;map[appTripPassages]&#x27;,
-})
-export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    @Input(&#x27;location&#x27;)
-    public set location(loc: ITimestampVehicleLocation) {
-        this.vehicleLocationSubject.next(loc);
-    }
-
-    public get location(): ITimestampVehicleLocation {
-        return this.vehicleLocationSubject.getValue();
-    }
-    private vehicleLocationSubject: BehaviorSubject&lt;ITimestampVehicleLocation&gt; &#x3D; new BehaviorSubject(undefined);
-
-    private stopMarkerLayer: L.FeatureGroup &#x3D; undefined;
-
-    private updateObservable: Subscription;
-    private routePolyLines: L.Polyline[] &#x3D; [];
-    constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
-                zone: NgZone,
-                private apiService: ApiService,
-                settingsService: SettingsService) {
-        super(elRef, zone, userLocationService, settingsService);
-    }
-
-    public setRoutePaths(paths: any[]): void {
-        for (const line of this.routePolyLines) {
-            line.remove();
-        }
-        this.routePolyLines &#x3D; [];
-        for (const path of paths) {
-            const pointList: any[] &#x3D; [];
-            for (const wayPoint of path.wayPoints) {
-                pointList.push(new L.LatLng(wayPoint.lat / 3600000, wayPoint.lon / 3600000));
+    /**
+     * Adds the vehicle path to the map
+     * @param paths Path to add
+     */
+    public setRoutePaths(paths: IVehiclePath[]): void {
+        this.routeLayer.clearLayers();
+        if (paths) {
+            for (const path of paths) {
+                const pointList: L.LatLng[] &#x3D; LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
+                const firstpolyline &#x3D; L.polyline(pointList, {
+                    color: path.color,
+                    opacity: 0.5,
+                    smoothFactor: 1,
+                    weight: 3,
+                });
+                firstpolyline.addTo(this.routeLayer);
             }
-            const firstpolyline &#x3D; L.polyline(pointList, {
-                color: path.color,
-                opacity: 0.5,
-                smoothFactor: 1,
-                weight: 3,
-            });
-            firstpolyline.addTo(this.getMap());
-            this.routePolyLines.push(firstpolyline);
         }
     }
-    public ngAfterViewInit() {
-        super.ngAfterViewInit();
-        this.addMarker();
-        this.getMap().dragging.disable();
-        this.getMap().touchZoom.disable();
-        this.getMap().doubleClickZoom.disable();
-        this.getMap().scrollWheelZoom.disable();
-        this.getMap().eachLayer((layer: L.Layer) &#x3D;&gt; {
-            if (layer instanceof L.TileLayer) {
-                layer.options.attribution &#x3D; &#x27;&#x27;;
-                layer.redraw();
-            }
-        });
-    }
-    public addMarker(): void {
-        this.updateObservable &#x3D; this.vehicleLocationSubject
-            .pipe(map((loc: ITimestampVehicleLocation) &#x3D;&gt; loc.vehicle))
-            .subscribe((location) &#x3D;&gt; {
-                if (this.stopMarkerLayer) {
-                    this.stopMarkerLayer.clearLayers();
-                } else {
-                    this.stopMarkerLayer &#x3D; new L.FeatureGroup();
-                    this.stopMarkerLayer.addTo(this.getMap());
-                }
-                if (location) {
 
-                    const vehicleIcon: L.DivIcon &#x3D; createVehicleIcon(location.heading, location.name.split(&#x27; &#x27;)[0], 40);
-                    const marker: L.Marker &#x3D; L.marker([location.latitude / 3600000, location.longitude / 3600000],
-                        {
-                            icon: vehicleIcon,
-                            interactive: false,
-                            title: location.name,
-                            zIndexOffset: 100,
-                        });
-                    (marker as any).setRotationAngle(location.heading - 90);
-                    marker.addTo(this.stopMarkerLayer);
-                    this.getMap().panTo({
-                        alt: 2000,
-                        lat: location.latitude / 3600000,
-                        lng: location.longitude / 3600000,
-                    },
-                        { animate: true });
-                }
-            });
-        this.vehicleLocationSubject
-            .pipe(
-                filter((num) &#x3D;&gt; num !&#x3D;&#x3D; null),
-                distinctUntilChanged(),
-                mergeMap((boundsa) &#x3D;&gt;
-                    this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
-            .subscribe(new RoutesSubscriber(this));
+    /**
+     * Clears displayed routes
+     */
+    public clear(): void {
+        this.routeLayer.clearLayers();
     }
-
-    public ngOnDestroy(): void {
-        super.ngOnDestroy();
-        this.updateObservable.unsubscribe();
-    }
-
 }
 </code></pre>
     </div>
@@ -388,7 +434,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'RoutesSubscriber.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'RouteDisplayHandler.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

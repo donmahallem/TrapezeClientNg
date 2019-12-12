@@ -402,16 +402,22 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/LeafletMapComponent.html" data-type="entity-link">LeafletMapComponent</a>
                             </li>
                             <li class="link">
+                                <a href="classes/LeafletUtil.html" data-type="entity-link">LeafletUtil</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/MainMapRouteDisplayHandler.html" data-type="entity-link">MainMapRouteDisplayHandler</a>
+                            </li>
+                            <li class="link">
                                 <a href="classes/NavigationSubscriber.html" data-type="entity-link">NavigationSubscriber</a>
                             </li>
                             <li class="link">
                                 <a href="classes/RetryDialogData.html" data-type="entity-link">RetryDialogData</a>
                             </li>
                             <li class="link">
-                                <a href="classes/RouteLoadingSubscriber.html" data-type="entity-link">RouteLoadingSubscriber</a>
+                                <a href="classes/RouteDisplayHandler.html" data-type="entity-link">RouteDisplayHandler</a>
                             </li>
                             <li class="link">
-                                <a href="classes/RoutesSubscriber.html" data-type="entity-link">RoutesSubscriber</a>
+                                <a href="classes/RouteLoadingSubscriber.html" data-type="entity-link">RouteLoadingSubscriber</a>
                             </li>
                             <li class="link">
                                 <a href="classes/SettingsLoadSubscriber.html" data-type="entity-link">SettingsLoadSubscriber</a>
@@ -481,6 +487,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/IAppNotificationDismiss.html" data-type="entity-link">IAppNotificationDismiss</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/IData.html" data-type="entity-link">IData</a>
                             </li>
                             <li class="link">
                                 <a href="interfaces/IEnvironmentBase.html" data-type="entity-link">IEnvironmentBase</a>

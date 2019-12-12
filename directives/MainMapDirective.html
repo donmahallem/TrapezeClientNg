@@ -96,6 +96,10 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Private</span>
+                                <a href="#mainMapRouteDisplay">mainMapRouteDisplay</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
                                 <a href="#stopMarkerLayer">stopMarkerLayer</a>
                             </li>
                             <li>
@@ -128,15 +132,19 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#markerOnClick">markerOnClick</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Public</span>
                                 <a href="#ngAfterViewInit">ngAfterViewInit</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
                                 <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#onClickMarker">onClickMarker</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#onMouseOverEvent">onMouseOverEvent</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
@@ -149,6 +157,10 @@
                             <li>
                                     <span class="modifier">Public</span>
                                 <a href="#stopMarkerOnClick">stopMarkerOnClick</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#vehicleMarkerEventHandler">vehicleMarkerEventHandler</a>
                             </li>
                         </ul>
                     </td>
@@ -173,7 +185,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:45</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:50</a></div>
                             </td>
                         </tr>
 
@@ -379,8 +391,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="204"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:204</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="236"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:236</a></div>
                 </td>
             </tr>
 
@@ -422,8 +434,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="184"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:184</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:216</a></div>
                 </td>
             </tr>
 
@@ -481,85 +493,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="markerOnClick"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            markerOnClick
-                        </b>
-                        <a href="#markerOnClick"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>markerOnClick(event: literal type)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="173"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:173</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Triggered by marker clicks on stops and returns the event into the ngZone</p>
-</div>
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>event</td>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                    <td>
-                                        <p>mouse event</p>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="ngAfterViewInit"></a>
                     <span class="name">
                         <b>
@@ -580,8 +513,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="95"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:95</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="102"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:102</a></div>
                 </td>
             </tr>
 
@@ -621,8 +554,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="245"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:245</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:277</a></div>
                 </td>
             </tr>
 
@@ -633,6 +566,156 @@
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onClickMarker"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            onClickMarker
+                        </b>
+                        <a href="#onClickMarker"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onClickMarker(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="181"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:181</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Triggered by marker clicks on stops and returns the event into the ngZone</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>mouse event</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onMouseOverEvent"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            onMouseOverEvent
+                        </b>
+                        <a href="#onMouseOverEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onMouseOverEvent(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="207"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:207</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Triggered by moving the mouse over the marker and returns the event into the ngZone</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>mouse event</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -662,8 +745,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="74"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:74</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="79"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:79</a></div>
                 </td>
             </tr>
 
@@ -741,8 +824,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="143"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:143</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:151</a></div>
                 </td>
             </tr>
 
@@ -784,8 +867,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="238"
-                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:238</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:270</a></div>
                 </td>
             </tr>
 
@@ -839,12 +922,114 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="vehicleMarkerEventHandler"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            vehicleMarkerEventHandler
+                        </b>
+                        <a href="#vehicleMarkerEventHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>vehicleMarkerEventHandler(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="187"
+                            class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:187</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
             <section>
     
         <h3 id="inputs">
             Properties
         </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mainMapRouteDisplay"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mainMapRouteDisplay</b>
+                            <a href="#mainMapRouteDisplay"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/MainMapRouteDisplayHandler.html" target="_self" >MainMapRouteDisplayHandler</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:50</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Handles display and requesting of routes being displayed on the main map</p>
+</div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -871,7 +1056,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:37</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:38</a></div>
                             </td>
                         </tr>
 
@@ -910,7 +1095,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:41</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:42</a></div>
                             </td>
                         </tr>
 
@@ -944,7 +1129,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:45</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/modules/main-map/main-map.directive.ts:46</a></div>
                             </td>
                         </tr>
 
@@ -978,6 +1163,7 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from &#x27;../../services/stop-point.service&#x27;;
 import { UserLocationService } from &#x27;../../services/user-location.service&#x27;;
 import { ApiService } from &#x27;./../../services&#x27;;
+import { MainMapRouteDisplayHandler } from &#x27;./main-map-route-display-handler&#x27;;
 
 export class VehicleLoadSubscriber extends Subscriber&lt;IVehicleLocationList&gt; {
 
@@ -1009,6 +1195,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Subscription for the update cycle for the vehicles
      */
     private vehicleUpdateSubscription: Subscription;
+    /**
+     * Handles display and requesting of routes being displayed on the main map
+     */
+    private mainMapRouteDisplay: MainMapRouteDisplayHandler;
     /**
      * Constructor
      * @param elRef injected elementRef of the component root
@@ -1043,7 +1233,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         } else {
             this.vehicleMarkerLayer &#x3D; L.featureGroup();
             this.vehicleMarkerLayer.addTo(this.getMap());
-            this.vehicleMarkerLayer.on(&#x27;click&#x27;, this.markerOnClick.bind(this));
+            this.vehicleMarkerLayer.on(&#x27;click&#x27;, this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on(&#x27;mouseover&#x27;, this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on(&#x27;mouseout&#x27;, this.vehicleMarkerEventHandler.bind(this));
         }
         if (vehicles &amp;&amp; Array.isArray(vehicles.vehicles)) {
             for (const veh of vehicles.vehicles) {
@@ -1100,7 +1292,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
-        // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
+        this.mainMapRouteDisplay &#x3D; new MainMapRouteDisplayHandler(this.getMap(), this.apiService);
+        this.mainMapRouteDisplay.start();
     }
 
     /**
@@ -1136,11 +1329,35 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Triggered by marker clicks on stops and returns the event into the ngZone
      * @param event mouse event
      */
-    public markerOnClick(event: { sourceTarget: { data: ITripPassages } }) {
+    public onClickMarker(event: L.LeafletEvent &amp; { sourceTarget: { data: ITripPassages } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() &#x3D;&gt; {
             this.router.navigate([&#x27;passages&#x27;, event.sourceTarget.data.tripId]);
         });
+    }
+    public vehicleMarkerEventHandler(event: L.LeafletMouseEvent &amp; { sourceTarget: { data: ITripPassages } }) {
+        // needs to be taken back into the ng zone
+        this.zone.run(() &#x3D;&gt; {
+            switch (event.type) {
+                case &#x27;mouseover&#x27;:
+                case &#x27;mouseout&#x27;:
+                    this.onMouseOverEvent(event);
+                    break;
+                case &#x27;click&#x27;:
+                    this.onClickMarker(event);
+                    break;
+
+            }
+        });
+    }
+
+    /**
+     * Triggered by moving the mouse over the marker and returns the event into the ngZone
+     * @param event mouse event
+     */
+    public onMouseOverEvent(event: L.LeafletMouseEvent &amp; { sourceTarget: { data: ITripPassages } }) {
+        const mouseOver: boolean &#x3D; (event.type &#x3D;&#x3D;&#x3D; &#x27;mouseover&#x27;);
+        this.mainMapRouteDisplay.setMouseHovering(mouseOver, mouseOver ? event.sourceTarget.data.tripId : undefined);
     }
 
     /**
@@ -1213,6 +1430,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         if (this.vehicleUpdateSubscription) {
             this.vehicleUpdateSubscription.unsubscribe();
         }
+        this.mainMapRouteDisplay.stop();
     }
 
 }
