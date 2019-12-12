@@ -1,9 +1,9 @@
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
-import { IVehiclePath, ITripPassages, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
+import { IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
-import { createVehicleIcon, LeafletUtil, RouteDisplayHandler } from 'src/app/leaflet';
+import { createVehicleIcon, RouteDisplayHandler } from 'src/app/leaflet';
 import { ITimestampVehicleLocation } from 'src/app/models';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -29,10 +29,10 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routeDisplayHandler: RouteDisplayHandler;
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        private apiService: ApiService,
-        settingsService: SettingsService) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                private apiService: ApiService,
+                settingsService: SettingsService) {
         super(elRef, zone, userLocationService, settingsService);
     }
     public ngAfterViewInit() {
@@ -87,7 +87,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                 mergeMap((boundsa) =>
                     this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
             .subscribe(new Subscriber<IVehiclePathInfo>((routes: IVehiclePathInfo) => {
-                this.routeDisplayHandler.setRoutePaths(<any>routes.paths);
+                this.routeDisplayHandler.setRoutePaths(routes.paths);
             }));
     }
 

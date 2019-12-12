@@ -1,6 +1,6 @@
 import { IVehiclePath } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { LeafletUtil } from 'src/app/leaflet';
+import { LeafletUtil } from './leaflet-util';
 /**
  * Handles polling and displaying of route data on the map
  */
