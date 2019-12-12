@@ -12,6 +12,7 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
+import { MainMapRouteDisplayHandler } from './main-map-route-display-handler';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -43,6 +44,10 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Subscription for the update cycle for the vehicles
      */
     private vehicleUpdateSubscription: Subscription;
+    /**
+     * Handles display and requesting of routes being displayed on the main map
+     */
+    private mainMapRouteDisplay: MainMapRouteDisplayHandler;
     /**
      * Constructor
      * @param elRef injected elementRef of the component root
@@ -77,7 +82,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         } else {
             this.vehicleMarkerLayer = L.featureGroup();
             this.vehicleMarkerLayer.addTo(this.getMap());
-            this.vehicleMarkerLayer.on('click', this.markerOnClick.bind(this));
+            this.vehicleMarkerLayer.on('click', this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on('mouseover', this.vehicleMarkerEventHandler.bind(this));
+            this.vehicleMarkerLayer.on('mouseout', this.vehicleMarkerEventHandler.bind(this));
         }
         if (vehicles && Array.isArray(vehicles.vehicles)) {
             for (const veh of vehicles.vehicles) {
@@ -134,7 +141,8 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
-        // this.getMap().flyTo(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
+        this.mainMapRouteDisplay = new MainMapRouteDisplayHandler(this.getMap(), this.apiService);
+        this.mainMapRouteDisplay.start();
     }
 
     /**
@@ -170,11 +178,35 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Triggered by marker clicks on stops and returns the event into the ngZone
      * @param event mouse event
      */
-    public markerOnClick(event: { sourceTarget: { data: ITripPassages } }) {
+    public onClickMarker(event: L.LeafletEvent & { sourceTarget: { data: ITripPassages } }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {
             this.router.navigate(['passages', event.sourceTarget.data.tripId]);
         });
+    }
+    public vehicleMarkerEventHandler(event: L.LeafletMouseEvent & { sourceTarget: { data: ITripPassages } }) {
+        // needs to be taken back into the ng zone
+        this.zone.run(() => {
+            switch (event.type) {
+                case 'mouseover':
+                case 'mouseout':
+                    this.onMouseOverEvent(event);
+                    break;
+                case 'click':
+                    this.onClickMarker(event);
+                    break;
+
+            }
+        });
+    }
+
+    /**
+     * Triggered by moving the mouse over the marker and returns the event into the ngZone
+     * @param event mouse event
+     */
+    public onMouseOverEvent(event: L.LeafletMouseEvent & { sourceTarget: { data: ITripPassages } }) {
+        const mouseOver: boolean = (event.type === 'mouseover');
+        this.mainMapRouteDisplay.setMouseHovering(mouseOver, mouseOver ? event.sourceTarget.data.tripId : undefined);
     }
 
     /**
@@ -247,6 +279,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
         if (this.vehicleUpdateSubscription) {
             this.vehicleUpdateSubscription.unsubscribe();
         }
+        this.mainMapRouteDisplay.stop();
     }
 
 }
