@@ -12,7 +12,7 @@ import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from 
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
-import { MainMapRouteDisplay } from './main-map-route-display';
+import { MainMapRouteDisplayHandler } from './main-map-route-display-handler';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -47,7 +47,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     /**
      * Handles display and requesting of routes being displayed on the main map
      */
-    private mainMapRouteDisplay: MainMapRouteDisplay;
+    private mainMapRouteDisplay: MainMapRouteDisplayHandler;
     /**
      * Constructor
      * @param elRef injected elementRef of the component root
@@ -141,7 +141,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
             },
         });
         this.getMap().addControl(new ourCustomControl());
-        this.mainMapRouteDisplay = new MainMapRouteDisplay(this.getMap(), this.apiService);
+        this.mainMapRouteDisplay = new MainMapRouteDisplayHandler(this.getMap(), this.apiService);
         this.mainMapRouteDisplay.start();
     }
 
