@@ -53,7 +53,7 @@
     "@angular/pwa": "~0.803.21",
     "@angular/router": "~8.2.0",
     "@angular/service-worker": "~8.2.0",
-    "@donmahallem/trapeze-api-types": "~1.7.0",
+    "@donmahallem/trapeze-api-types": "~1.7.1",
     "@types/leaflet": "~1.5.7",
     "core-js": "~3.6.1",
     "leaflet": "~1.6.0",
