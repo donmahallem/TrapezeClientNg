@@ -40,24 +40,36 @@ export class ApiService {
         return this.http.get<IStopInfo>(this.baseUrl() + 'stop/' + stopId + '/info');
     }
     public getStopPassages(stopId: StopId): Observable<IStopPassage> {
-        return this.http.get<IStopPassage>(this.baseUrl() + 'stop/' + stopId + '/departures');
+        return this.http.get<IStopPassage>(this.baseUrl() + 'stop/' + stopId + '/passages');
     }
-    public getVehicleLocations(bounds: IMapBounds): Observable<IVehicleLocationList> {
+    public getVehicleLocations(lastUpdate: number = 0): Observable<IVehicleLocationList> {
         return this.http.get<IVehicleLocationList>(this.baseUrl() + 'geo/vehicles', {
             params: {
-                bottom: '' + Math.round(bounds.bottom * 3600000),
-                left: '' + Math.round(bounds.left * 3600000),
-                right: '' + Math.round(bounds.right * 3600000),
-                top: '' + Math.round(bounds.top * 3600000),
+                lastUpdate: "" + lastUpdate
             },
         });
     }
-    public getVehicleLocation(vehicleId: VehicleId): Observable<IVehicleLocation> {
-        return this.http.get<IVehicleLocation>(this.baseUrl() + 'geo/vehicle/' + vehicleId);
+    public getVehicleLocation(vehicleId: VehicleId, lastUpdate: number = 0): Observable<IVehicleLocation> {
+        return this.http.get<IVehicleLocation>(this.baseUrl() + 'geo/vehicle/' + vehicleId, {
+            params: {
+                "lastUpdate": "" + lastUpdate
+            }
+        });
     }
 
-    public getStations(): Observable<IStopLocations> {
-        return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops');
+    public getStations(bounds?: IMapBounds): Observable<IStopLocations> {
+        if (bounds) {
+            return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
+                params: {
+                    bottom: '' + Math.round(bounds.bottom * 3600000),
+                    left: '' + Math.round(bounds.left * 3600000),
+                    right: '' + Math.round(bounds.right * 3600000),
+                    top: '' + Math.round(bounds.top * 3600000),
+                },
+            });
+        }
+        return this.http.get<IStopLocations>(this.baseUrl() +
+            'geo/stops?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
     }
 
     public getSettings(): Observable<ISettings> {

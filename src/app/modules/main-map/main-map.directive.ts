@@ -13,6 +13,7 @@ import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
 import { MainMapRouteDisplayHandler } from './main-map-route-display-handler';
+import { VehicleService } from 'src/app/services/vehicle.service';
 
 export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
 
@@ -61,14 +62,15 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * @param zone ngZone Instance
      */
     constructor(elRef: ElementRef,
-                private apiService: ApiService,
-                private router: Router,
-                private stopService: StopPointService,
-                userLocationService: UserLocationService,
-                private location: Location,
-                private snackBar: MatSnackBar,
-                settings: SettingsService,
-                zone: NgZone) {
+        private apiService: ApiService,
+        private router: Router,
+        private stopService: StopPointService,
+        userLocationService: UserLocationService,
+        private location: Location,
+        private snackBar: MatSnackBar,
+        settings: SettingsService,
+        private vehicleSerivce: VehicleService,
+        zone: NgZone) {
         super(elRef, zone, userLocationService, settings);
     }
 
@@ -167,7 +169,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
                         right: this.mapBounds.getEast(),
                         top: this.mapBounds.getNorth(),
                     };
-                    return this.apiService.getVehicleLocations(bounds);
+                    return this.vehicleSerivce.obs;
                 }),
                 catchError((err: Error) =>
                     from([{}])))
@@ -216,7 +218,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     public addVehicleMarker(vehicle: IVehicleLocation): L.Marker {
         if (vehicle.latitude === undefined || vehicle.longitude === undefined) {
             // tslint:disable-next-line:no-console
-            console.log('Vehicle has no known location:', vehicle);
+            // console.log('Vehicle has no known location:', vehicle);
             return;
         }
         const vehicleIcon: L.DivIcon = createVehicleIcon(vehicle.heading, vehicle.name.split(' ')[0], 40);
