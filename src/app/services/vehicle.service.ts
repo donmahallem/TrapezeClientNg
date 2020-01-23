@@ -14,9 +14,6 @@ import {
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
 import { Observable, BehaviorSubject, timer, interval, concat, from, of } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { TripPassagesLocation } from '../models';
-import { IMapBounds } from '../modules/common/leaflet-map.component';
 import { ApiService } from './api.service';
 import { map, flatMap, tap, debounce, debounceTime, shareReplay, catchError } from 'rxjs/operators';
 
@@ -42,11 +39,13 @@ export class VehicleService {
             lastUpdate: 0,
             vehicles: []
         };
-        concat(from([startValue]), this.state.pipe(debounceTime(2000)))
+        concat(from([startValue]), this.state.pipe(debounceTime(10000)))
             .pipe(flatMap((previousData: Data) => {
-                console.log(previousData.lastUpdate);
                 return this.api.getVehicleLocations(previousData.lastUpdate)
-                    .pipe(map((value): Data => {
+                    .pipe(map((value): Data => {/*
+                        if(previousData.lastUpdate!==value.lastUpdate){
+                            console.log("New location data acquired",value.lastUpdate)
+                        }*/
                         const timestampedNewLocations: TimestampedVehicles[] =
                             value.vehicles
                                 .map((veh: IVehicleLocation): TimestampedVehicles => {

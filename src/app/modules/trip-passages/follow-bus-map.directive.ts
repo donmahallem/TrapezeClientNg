@@ -9,21 +9,21 @@ import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
-import { VehicleService } from 'src/app/services/vehicle.service';
+import { VehicleService, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 
 @Directive({
     selector: 'map[appTripPassages]',
 })
 export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     @Input('location')
-    public set location(loc: ITimestampVehicleLocation) {
+    public set location(loc: TimestampedVehicleLocation) {
         this.vehicleLocationSubject.next(loc);
     }
 
-    public get location(): ITimestampVehicleLocation {
+    public get location(): TimestampedVehicleLocation {
         return this.vehicleLocationSubject.getValue();
     }
-    private vehicleLocationSubject: BehaviorSubject<ITimestampVehicleLocation> = new BehaviorSubject(undefined);
+    private vehicleLocationSubject: BehaviorSubject<TimestampedVehicleLocation> = new BehaviorSubject(undefined);
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
@@ -53,12 +53,12 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     }
     public addMarker(): void {
         this.updateObservable = this.vehicleLocationSubject
-            .pipe(filter((loc: ITimestampVehicleLocation) => {
-                if (loc && loc.vehicle) {
+            .pipe(filter((loc: TimestampedVehicleLocation) => {
+                if (loc ) {
                     return true;
                 }
                 return false;
-            }), map((loc: ITimestampVehicleLocation) => loc.vehicle))
+            }), map((loc: TimestampedVehicleLocation) => loc))
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -87,14 +87,14 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                 }
             });
         this.vehicleLocationSubject
-            .pipe(filter((loc: ITimestampVehicleLocation) => {
-                if (loc && loc.vehicle) {
+            .pipe(filter((loc: TimestampedVehicleLocation) => {
+                if (loc) {
                     return true;
                 }
                 return false;
             }), distinctUntilChanged(),
                 mergeMap((boundsa) =>
-                    this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
+                    this.apiService.getRouteByTripId(boundsa.tripId)))
             .subscribe(new Subscriber<IVehiclePathInfo>((routes: IVehiclePathInfo) => {
                 this.routeDisplayHandler.setRoutePaths(routes.paths);
             }));

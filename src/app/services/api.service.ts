@@ -15,7 +15,6 @@ import {
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { TripPassagesLocation } from '../models';
 import { IMapBounds } from '../modules/common/leaflet-map.component';
 @Injectable({
     providedIn: 'root',
@@ -29,7 +28,7 @@ export class ApiService {
     }
 
     public getTripPassages(tripId: TripId): Observable<ITripPassages> {
-        return this.http.get<TripPassagesLocation>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
+        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
     }
     public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {
         return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'vehicle/' + vehicleId + '/route');

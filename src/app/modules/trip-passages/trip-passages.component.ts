@@ -1,13 +1,12 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IActualTripPassage, TripId, ITripPassages } from '@donmahallem/trapeze-api-types';
-import { from, BehaviorSubject, Observable, Subscriber, Subscription, combineLatest } from 'rxjs';
+import { from, BehaviorSubject, Observable, Subscriber, Subscription, combineLatest,merge } from 'rxjs';
 import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
-import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
 import { VehicleService, Data, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 
-enum UpdateStatus {
+export enum UpdateStatus {
     LOADING = 1,
     LOADED = 2,
     ERROR = 3,
@@ -19,9 +18,11 @@ enum UpdateStatus {
 
 export interface IPassageStatus {
     status: UpdateStatus;
-    passages: TripPassagesLocation;
+    passages?: ITripPassages;
     timestamp: number;
+    location?:TimestampedVehicleLocation;
     failures?: number;
+    tripId:TripId;
 }
 /**
  * Component displaying the TripPassages for a Trip
@@ -37,9 +38,16 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * Returns the TripPassages
      * @returns undefined or {@link TripPassagesLocation}
      */
-    public get tripData(): TripPassagesLocation {
-        if (this.status.value) {
-            return this.status.value.passages;
+    public get tripPassage(): ITripPassages {
+        if (this.statusSubject.value) {
+            return this.statusSubject.value.passages;
+        }
+        return undefined;
+    }
+
+    public get tripLocation():TimestampedVehicleLocation{
+        if (this.statusSubject.value) {
+            return this.statusSubject.value.location;
         }
         return undefined;
     }
@@ -49,8 +57,8 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * @returns number or 0 if no timestamp is set
      */
     public get lastTimestamp(): number {
-        if (this.status.value) {
-            return this.status.value.timestamp;
+        if (this.statusSubject.value) {
+            return this.statusSubject.value.timestamp;
         }
         return 0;
     }
@@ -60,48 +68,55 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * @returns the {@link UpdateStatus}
      */
     public get statusCode(): UpdateStatus {
-        if (this.status.value) {
-            return this.status.value.status;
+        if (this.statusSubject.value) {
+            return this.statusSubject.value.status;
         }
         return UpdateStatus.LOADING;
+    }
+
+    public get status():IPassageStatus{
+        if(this.statusSubject.value){
+            return this.statusSubject.value;
+        }
+        return undefined;
     }
 
     /**
      * returns the current tripID
      */
     public get tripId(): TripId {
-        return this.route.snapshot.params.tripId;
+        return this.route.snapshot.params.tripId as TripId;
     }
 
     /**
      * short hand to retrieve route name
      */
     public get routeName(): string {
-        return (this.tripData) ? this.tripData.routeName : '';
+        return (this.tripPassage) ? this.tripPassage.routeName : '';
     }
 
     /**
      * List of passages
      */
     public get tripPassages(): IActualTripPassage[] {
-        return (this.tripData !== undefined) ? this.tripData.actual : [];
+        return (this.tripPassage !== undefined) ? this.tripPassage.actual : [];
+    }
+
+    public get hasLocation():boolean{
+        if(this.status&&this.status.location){
+            return true;
+        }
+        return false;
     }
     public readonly DEBOUNCE_TIME: number = 5000;
     public readonly STATUS_OPS: typeof UpdateStatus = UpdateStatus;
-    private status: BehaviorSubject<IPassageStatus> = new BehaviorSubject(undefined);
+    private statusSubject: BehaviorSubject<IPassageStatus> = new BehaviorSubject(undefined);
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
         private apiService: ApiService,
         private router: Router,
         private vehicleService: VehicleService) {
-        this.snapshotDataSubscription = this.route.data.subscribe((data) => {
-            this.status.next({
-                passages: data.tripPassages,
-                status: UpdateStatus.LOADED,
-                timestamp: Date.now(),
-            });
-        });
     }
 
     /**
@@ -109,53 +124,42 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * @returns true if an error occured
      */
     public hasError(): boolean {
-        return this.statusCode >= UpdateStatus.ERROR;
+        return this.statusCode === UpdateStatus.ERROR;
     }
 
     /**
      * Initializes the update observable
      */
     public ngAfterViewInit(): void {
-        const poll1: Observable<ITripPassages> = this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
-            map(() =>
-                this.route.snapshot.params.tripId),
-            flatMap((tripId: TripId): Observable<ITripPassages> => {
-                return this.apiService.getTripPassages(tripId)
-                    .pipe(map((value) => {
-                        return Object.assign({
-                            tripId: tripId
-                        }, value)
-                    }))
-            }));
-        const poll2: Observable<TimestampedVehicleLocation> = this.vehicleService.getVehicles
-            .pipe(map((value: Data) => {
-                const filtered: TimestampedVehicleLocation[] = value.vehicles
-                    .filter((v1) => {
-                        return v1.tripId === this.route.snapshot.params.tripId;
-                    });
-                return filtered.length > 0 ? filtered[0] : undefined;
+        const poll0=this.statusSubject.pipe(debounceTime(this.DEBOUNCE_TIME),
+            flatMap((status:IPassageStatus):Observable<IPassageStatus>=>{
+                return this.apiService
+                    .getTripPassages(status.tripId)
+                    .pipe(map((resp)=>{
+                        return this.convertResponse(status.tripId,resp);
+                    }),
+                    catchError(this.handleError.bind(this)))
             }))
+        const poll1=merge(this.route.data.pipe(map((data)=>data.tripPassages)),poll0);
+        const poll2=this.vehicleService.getVehicles;
         this.pollSubscription = combineLatest(poll1, poll2)
-            .pipe(map((trip: [ITripPassages, any]): any => {
+            .pipe(map((trip: [IPassageStatus, Data]): any => {
+                const matchedVehicles:any[]=trip[1].vehicles
+                    .filter((val)=>{
+                        return val.tripId===trip[0].tripId;
+                    });
                 let a = Object.assign({
-                    location: trip[1]
-                }, trip[0])
+                    location: matchedVehicles.length>0?matchedVehicles[0]:undefined
+                }, trip[0]);
                 return a;
             }),
-                map((passages: TripPassagesLocation): IPassageStatus =>
-                    ({
-                        passages,
-                        status: UpdateStatus.LOADED,
-                        timestamp: Date.now(),
-                    })),
                 catchError(this.handleError.bind(this)))
             .subscribe(new Subscriber((val: IPassageStatus) => {
-                console.log(val, this.tripId);
-                if (val.passages.tripId === this.tripId) {
-                    this.status.next(val);
+                if (val.tripId === this.tripId) {
+                    this.statusSubject.next(val);
                 } else {
                     // trigger so a reload can execute
-                    this.status.next(this.status.value);
+                    this.statusSubject.next(this.statusSubject.value);
                 }
             }));
     }
@@ -171,7 +175,16 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private handleError(err?: any): Observable<any> {
+    public convertResponse(tripId:TripId,tripPassages: ITripPassages): IPassageStatus {
+        return {
+        passages:tripPassages,
+        status:UpdateStatus.LOADED,
+        timestamp:Date.now(),
+        tripId:tripId,
+        failures:0
+    }
+}
+    public handleError(err?: any): Observable<any> {
         let status: UpdateStatus = UpdateStatus.ERROR;
         if (err.status) {
             // Http Error
@@ -187,7 +200,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 status = UpdateStatus.SERVER_ERROR;
             }
         }
-        const returnValue: IPassageStatus = Object.assign({}, this.status.value);
+        const returnValue: IPassageStatus = Object.assign({}, this.statusSubject.value);
         returnValue.status = status;
         if (returnValue.failures) {
             returnValue.failures += 1;

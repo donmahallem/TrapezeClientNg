@@ -93,6 +93,11 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                     type: MapMoveEventType.END,
                 });
             });
+            this.map.on('zoomend',(event:L.LeafletEvent)=>{
+                console.log("zzz",event.target);
+                const a:L.Map=event.target;
+                console.log("zzz",a.getZoom());
+            });
         });
         this.mUserLocationSubscription = this.userLocationService
             .locationObservable.subscribe(new UserLocationSubscriber(this));
