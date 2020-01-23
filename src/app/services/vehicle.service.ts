@@ -13,55 +13,86 @@ import {
     VehicleId,
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
-import { Observable, BehaviorSubject, timer, interval, concat, from } from 'rxjs';
+import { Observable, BehaviorSubject, timer, interval, concat, from, of } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { TripPassagesLocation } from '../models';
 import { IMapBounds } from '../modules/common/leaflet-map.component';
 import { ApiService } from './api.service';
-import { map, flatMap, tap, debounce, debounceTime, shareReplay } from 'rxjs/operators';
+import { map, flatMap, tap, debounce, debounceTime, shareReplay, catchError } from 'rxjs/operators';
 
 export type TimestampedVehicleLocation = IVehicleLocation & {
     lastUpdate: number,
 }
+export type TimestampedVehicles = VehicleLocations & {
+    lastUpdate: number,
+}
 export interface Data {
+    error?: any,
     lastUpdate: number,
     vehicles: TimestampedVehicleLocation[],
 }
+type VehicleMap = Map<string, TimestampedVehicles>;
 @Injectable({
     providedIn: 'root',
 })
 export class VehicleService {
     private state: BehaviorSubject<Data> = new BehaviorSubject({ lastUpdate: 0, vehicles: [] });
     constructor(private api: ApiService) {
-        concat(from([0]),
-            this.state.pipe(debounceTime(2000), map((value) => value.lastUpdate)))
-            .pipe(flatMap((time: number) => {
-                console.log(time);
-                return this.api.getVehicleLocations(time);
-            }), map((value): Data => {
-                return {
-                    lastUpdate: value.lastUpdate,
-                    vehicles: value.vehicles
-                        .filter((veh: any): boolean => {
-                            if (veh.isDeleted === true)
-                                return false;
-                            if (veh.latitude && veh.longitude)
-                                return true;
-                            return false;
-                        })
-                        .map((veh: IVehicleLocation): TimestampedVehicleLocation => {
-                            return Object.assign({
-                                lastUpdate: value.lastUpdate
-                            }, veh);
-                        })
-                };
+        const startValue: Data = {
+            lastUpdate: 0,
+            vehicles: []
+        };
+        concat(from([startValue]), this.state.pipe(debounceTime(2000)))
+            .pipe(flatMap((previousData: Data) => {
+                console.log(previousData.lastUpdate);
+                return this.api.getVehicleLocations(previousData.lastUpdate)
+                    .pipe(map((value): Data => {
+                        const timestampedNewLocations: TimestampedVehicles[] =
+                            value.vehicles
+                                .map((veh: IVehicleLocation): TimestampedVehicles => {
+                                    return Object.assign({
+                                        lastUpdate: value.lastUpdate
+                                    }, veh);
+                                });
+                        const reducedVehicles: VehicleMap =
+                            timestampedNewLocations.concat(previousData.vehicles)
+                                .reduce((prev: VehicleMap, cur: TimestampedVehicles): VehicleMap => {
+                                    if (prev.has(cur.id) && prev.get(cur.id).lastUpdate >= cur.lastUpdate) {
+                                        return prev;
+                                    }
+                                    prev.set(cur.id, cur);
+                                    return prev;
+                                }, new Map());
+                        const filterInvalid: TimestampedVehicleLocation[] =
+                            Array.from(reducedVehicles.values())
+                                .filter((value: any): boolean => {
+                                    if (value) {
+                                        if (value.isDeleted === true) {
+                                            return false;
+                                        }
+                                        if (value.latitude && value.longitude) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }) as any;
+                        return {
+                            lastUpdate: value.lastUpdate,
+                            vehicles: filterInvalid,
+                        };
+                    }), catchError((err) => {
+                        return of(Object.assign({
+                            error: err,
+                        }, previousData));
+                    }))
             }))
             .subscribe((data) => {
                 this.state.next(data);
             });
     }
 
-    public get obs(): Observable<Data> {
+    public get getVehicles(): Observable<Data> {
         return this.state;
     }
+
 }

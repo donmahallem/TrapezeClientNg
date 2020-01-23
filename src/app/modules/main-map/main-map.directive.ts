@@ -152,27 +152,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      */
     public startVehicleUpdater(): void {
         // as mapMove doesn't emit on init this needs to be provided to load atleast once
-        const primedMoveObservable: Observable<MapMoveEvent> = this.mapMove.pipe(
-            startWith({
-                type: MapMoveEventType.END,
-            } as MapMoveEvent));
-        this.vehicleUpdateSubscription = combineLatest([timer(0, 5000), primedMoveObservable])
-            .pipe(
-                map((value: [number, MapMoveEvent]): MapMoveEvent =>
-                    value[1]),
-                filter((event: MapMoveEvent): boolean =>
-                    (event.type === MapMoveEventType.END)),
-                flatMap((moveEvent: MapMoveEvent) => {
-                    const bounds: IMapBounds = {
-                        bottom: this.mapBounds.getSouth(),
-                        left: this.mapBounds.getWest(),
-                        right: this.mapBounds.getEast(),
-                        top: this.mapBounds.getNorth(),
-                    };
-                    return this.vehicleSerivce.obs;
-                }),
-                catchError((err: Error) =>
-                    from([{}])))
+        this.vehicleSerivce.getVehicles
             .subscribe(new VehicleLoadSubscriber(this));
     }
 

@@ -11,6 +11,7 @@ import {
     StopId,
     TripId,
     VehicleId,
+    ITripPassages
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
@@ -27,7 +28,7 @@ export class ApiService {
         return environment.apiEndpoint.endsWith('\/') ? environment.apiEndpoint : (environment.apiEndpoint + '\/');
     }
 
-    public getTripPassages(tripId: TripId): Observable<TripPassagesLocation> {
+    public getTripPassages(tripId: TripId): Observable<ITripPassages> {
         return this.http.get<TripPassagesLocation>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
     }
     public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {

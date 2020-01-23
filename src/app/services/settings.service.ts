@@ -42,13 +42,13 @@ export class SettingsService {
             this.settings.INITIAL_LON) {
             return new L.LatLng(this.settings.INITIAL_LAT / 3600000, this.settings.INITIAL_LON / 3600000);
         }
-        return new L.LatLng(0, 0);
+        return new L.LatLng(54.3291104, 10.1497462);
     }
     public getInitialMapZoom(): number {
         if (this.settings && this.settings.INITIAL_ZOOM) {
             return this.settings.INITIAL_ZOOM;
         }
-        return 20;
+        return 13;
     }
 
     public load(): Promise<void> {

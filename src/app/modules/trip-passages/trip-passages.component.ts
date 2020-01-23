@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IActualTripPassage, TripId } from '@donmahallem/trapeze-api-types';
-import { from, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { IActualTripPassage, TripId, ITripPassages } from '@donmahallem/trapeze-api-types';
+import { from, BehaviorSubject, Observable, Subscriber, Subscription, combineLatest } from 'rxjs';
 import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
 import { TripPassagesLocation } from 'src/app/models';
 import { ApiService } from '../../services';
+import { VehicleService, Data, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 
 enum UpdateStatus {
     LOADING = 1,
@@ -91,8 +92,9 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     private snapshotDataSubscription: Subscription;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
-                private apiService: ApiService,
-                private router: Router) {
+        private apiService: ApiService,
+        private router: Router,
+        private vehicleService: VehicleService) {
         this.snapshotDataSubscription = this.route.data.subscribe((data) => {
             this.status.next({
                 passages: data.tripPassages,
@@ -114,19 +116,41 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      * Initializes the update observable
      */
     public ngAfterViewInit(): void {
-        this.pollSubscription = this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
+        const poll1: Observable<ITripPassages> = this.status.pipe(debounceTime(this.DEBOUNCE_TIME),
             map(() =>
                 this.route.snapshot.params.tripId),
-            flatMap((tripId: TripId) =>
-                this.apiService.getTripPassages(tripId)),
-            map((passages: TripPassagesLocation): IPassageStatus =>
-                ({
-                    passages,
-                    status: UpdateStatus.LOADED,
-                    timestamp: Date.now(),
-                })),
-            catchError(this.handleError.bind(this)))
+            flatMap((tripId: TripId): Observable<ITripPassages> => {
+                return this.apiService.getTripPassages(tripId)
+                    .pipe(map((value) => {
+                        return Object.assign({
+                            tripId: tripId
+                        }, value)
+                    }))
+            }));
+        const poll2: Observable<TimestampedVehicleLocation> = this.vehicleService.getVehicles
+            .pipe(map((value: Data) => {
+                const filtered: TimestampedVehicleLocation[] = value.vehicles
+                    .filter((v1) => {
+                        return v1.tripId === this.route.snapshot.params.tripId;
+                    });
+                return filtered.length > 0 ? filtered[0] : undefined;
+            }))
+        this.pollSubscription = combineLatest(poll1, poll2)
+            .pipe(map((trip: [ITripPassages, any]): any => {
+                let a = Object.assign({
+                    location: trip[1]
+                }, trip[0])
+                return a;
+            }),
+                map((passages: TripPassagesLocation): IPassageStatus =>
+                    ({
+                        passages,
+                        status: UpdateStatus.LOADED,
+                        timestamp: Date.now(),
+                    })),
+                catchError(this.handleError.bind(this)))
             .subscribe(new Subscriber((val: IPassageStatus) => {
+                console.log(val, this.tripId);
                 if (val.passages.tripId === this.tripId) {
                     this.status.next(val);
                 } else {
