@@ -57,7 +57,7 @@ export class ApiService {
         });
     }
 
-    public getStations(bounds?: IMapBounds): Observable<IStopLocations> {
+    public getStopLocations(bounds?: IMapBounds): Observable<IStopLocations> {
         if (bounds) {
             return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
                 params: {
@@ -70,6 +70,20 @@ export class ApiService {
         }
         return this.http.get<IStopLocations>(this.baseUrl() +
             'geo/stops?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
+    }
+    public getStopPointLocations(bounds?: IMapBounds): Observable<IStopLocations> {
+        if (bounds) {
+            return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
+                params: {
+                    bottom: '' + Math.round(bounds.bottom * 3600000),
+                    left: '' + Math.round(bounds.left * 3600000),
+                    right: '' + Math.round(bounds.right * 3600000),
+                    top: '' + Math.round(bounds.top * 3600000),
+                },
+            });
+        }
+        return this.http.get<IStopLocations>(this.baseUrl() +
+            'geo/stopPoints?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
     }
 
     public getSettings(): Observable<ISettings> {

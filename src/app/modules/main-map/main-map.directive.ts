@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { IStopLocation, ITripPassages, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, from, timer, Observable, Subscriber, Subscription } from 'rxjs';
-import { catchError, filter, flatMap, map, startWith } from 'rxjs/operators';
+import { catchError, filter, flatMap, map, startWith, debounceTime } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { createStopIcon, createVehicleIcon } from '../../leaflet';
 import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
@@ -216,6 +216,9 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Does add all stop location markers to the map
      */
     public addMarker() {
+        combineLatest(this.leafletZoomLevel, this.leafletBounds)
+            .pipe(debounceTime(200))
+            .subscribe(console.log);
         this.stopService.stopLocationsObservable
             .subscribe((stops: IStopLocation[]) => {
                 const stopList: L.Marker[] = [];

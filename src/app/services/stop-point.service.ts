@@ -41,7 +41,7 @@ export class StopPointService {
                 // tslint:disable-next-line:deprecation
                 startWith<void>(undefined),
                 flatMap((): Observable<IStopLocation[]> =>
-                    this.api.getStations()
+                    this.api.getStopLocations()
                         .pipe(
                             map((value): IStopLocation[] =>
                                 value.stops),

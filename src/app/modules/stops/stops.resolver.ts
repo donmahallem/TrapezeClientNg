@@ -20,8 +20,8 @@ export class StopsResolver implements Resolve<IStopLocations> {
      * @param api the {@ApiService}
      */
     public constructor(private api: ApiService,
-                       private router: Router,
-                       private dialog: MatDialog) { }
+        private router: Router,
+        private dialog: MatDialog) { }
 
     /**
      * Resolves the station response
@@ -31,7 +31,7 @@ export class StopsResolver implements Resolve<IStopLocations> {
      */
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IStopLocations> {
         return this.api
-            .getStations()
+            .getStopLocations()
             .pipe(catchError((err: any | HttpErrorResponse): Observable<IStopLocations> => {
                 if (err.status === 404) {
                     this.router.navigate(['error', 'not-found']);

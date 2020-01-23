@@ -84,7 +84,7 @@ describe('src/app/services/api.service', () => {
         });
         describe('getStations()', () => {
             it('should construct the request correctly', (done) => {
-                apiService.getStations().subscribe((res: IStopLocations) => {
+                apiService.getStopLocations().subscribe((res: IStopLocations) => {
                     expect(res)
                         .toEqual([testEndpoint + 'api/geo/stops'] as any);
                 }, done, done);

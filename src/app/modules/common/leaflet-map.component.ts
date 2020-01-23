@@ -1,10 +1,11 @@
 
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
-import { Subject, Subscriber, Subscription } from 'rxjs';
+import { Subject, Subscriber, Subscription, Observable } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
+import { filter, shareReplay, map, startWith } from 'rxjs/operators';
 
 /**
  * Map Move Event Type
@@ -62,14 +63,43 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
         return this.map.getBounds();
     }
     @ViewChild('mapcontainer', { static: false }) mapContainer;
-    public readonly mapMove: Subject<MapMoveEvent> = new Subject();
+    private readonly leafletEventSubject: Subject<L.LeafletEvent> = new Subject();
+    public get leafletEvent(): Observable<L.LeafletEvent> {
+        return this.leafletEventSubject.asObservable();
+    }
+    public readonly leafletZoomLevel: Observable<number> = this.leafletEventSubject
+        .pipe(filter((evt: L.LeafletEvent): boolean => {
+            switch (evt.type) {
+                case "zoom":
+                case "zoomstart":
+                case "zoomend":
+                    return true;
+                default:
+                    return false;
+            }
+        }), map((evt: L.LeafletEvent): number => {
+            return evt.target.getZoom();
+        }), startWith(this.settings.getInitialMapZoom()), shareReplay(1));
+    public readonly leafletBounds: Observable<L.Bounds> = this.leafletEventSubject
+        .pipe(filter((evt: L.LeafletEvent): boolean => {
+            switch (evt.type) {
+                case "move":
+                case "movestart":
+                case "moveend":
+                    return true;
+                default:
+                    return false;
+            }
+        }), map((evt: L.LeafletEvent): L.Bounds => {
+            return evt.target.getBounds();
+        }), shareReplay(1));
     private map: L.Map;
     private mUserLocationSubscription: Subscription = undefined;
     private userLocationLayer: L.FeatureGroup;
     constructor(private elRef: ElementRef,
-                protected zone: NgZone,
-                protected userLocationService: UserLocationService,
-                protected settings: SettingsService) {
+        protected zone: NgZone,
+        protected userLocationService: UserLocationService,
+        protected settings: SettingsService) {
     }
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
@@ -83,21 +113,13 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                 maxZoom: 18,
                 subdomains: ['a', 'b', 'c'],
             }).addTo(this.map);
-            this.map.on('movestart', () => {
-                this.mapMove.next({
-                    type: MapMoveEventType.START,
+            // Attach event listeners
+            ["movestart", "moveend", "zoom", "move", "zoomstart", "zoomend"]
+                .forEach((eventType: string) => {
+                    this.map.on(eventType, (evt: L.LeafletEvent) => {
+                        this.leafletEventSubject.next(evt);
+                    });
                 });
-            });
-            this.map.on('moveend', (...args: any[]) => {
-                this.mapMove.next({
-                    type: MapMoveEventType.END,
-                });
-            });
-            this.map.on('zoomend',(event:L.LeafletEvent)=>{
-                console.log("zzz",event.target);
-                const a:L.Map=event.target;
-                console.log("zzz",a.getZoom());
-            });
         });
         this.mUserLocationSubscription = this.userLocationService
             .locationObservable.subscribe(new UserLocationSubscriber(this));
