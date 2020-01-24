@@ -2,13 +2,21 @@ import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { IStopLocation, ITripPassages, IVehicleLocation, IVehicleLocationList } from '@donmahallem/trapeze-api-types';
+import {
+    IStopLocation,
+    ITripPassages,
+    IVehicleLocation,
+    IVehicleLocationList,
+    IStopLocations,
+    IStopPointLocation,
+    IStopPointLocations
+} from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, from, timer, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, filter, flatMap, map, startWith, debounceTime } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { createStopIcon, createVehicleIcon } from '../../leaflet';
-import { IMapBounds, LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
+import { LeafletMapComponent, MapMoveEvent, MapMoveEventType } from '../../modules/common/leaflet-map.component';
 import { StopPointService } from '../../services/stop-point.service';
 import { UserLocationService } from '../../services/user-location.service';
 import { ApiService } from './../../services';
@@ -25,6 +33,10 @@ export class VehicleLoadSubscriber extends Subscriber<IVehicleLocationList> {
     }
 }
 
+type StopMarkers = L.Marker & {
+    stopPoint?: IStopPointLocation;
+    stop?: IStopLocation;
+}
 @Directive({
     selector: 'map[appMainMap]',
 })
@@ -36,7 +48,7 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
     /**
      * Layer for the stop markers to be displayed on the map
      */
-    private stopMarkerLayer: L.FeatureGroup = undefined;
+    private stopMarkerLayer: L.FeatureGroup<L.Marker> = undefined;
     /**
      * Layer for the vehicle markers to be displayed on the map
      */
@@ -216,35 +228,77 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Does add all stop location markers to the map
      */
     public addMarker() {
+        if (this.stopMarkerLayer !== undefined) {
+            this.stopMarkerLayer.clearLayers();
+        } else {
+            this.stopMarkerLayer = L.featureGroup();
+            this.stopMarkerLayer.addTo(this.getMap());
+            this.stopMarkerLayer.on('click', this.stopMarkerOnClick.bind(this));
+        }
         combineLatest(this.leafletZoomLevel, this.leafletBounds)
-            .pipe(debounceTime(200))
-            .subscribe(console.log);
-        this.stopService.stopLocationsObservable
-            .subscribe((stops: IStopLocation[]) => {
-                const stopList: L.Marker[] = [];
-                for (const stop of stops) {
-                    if (stop === null) {
-                        continue;
+            .pipe(debounceTime(200),
+                startWith([]),
+                flatMap((data: [number, L.LatLngBounds]): Observable<StopMarkers[]> => {
+                    if (data[0] > 14) {
+                        return this.stopService.stopPointObservable
+                            .pipe(map((stops: IStopPointLocation[]): IStopPointLocation[] => {
+                                return stops.filter((stop: IStopPointLocation): boolean => {
+                                    if (data[1])
+                                        return data[1].contains([stop.latitude / 3600000, stop.longitude / 3600000]);
+                                    return true;
+                                })
+                            }), map((stops: IStopPointLocation[]): StopMarkers[] => {
+                                const markers: StopMarkers[] = [];
+                                for (let stop of stops) {
+                                    const greenIcon = createStopIcon(this.location);
+                                    const markerT: StopMarkers = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
+                                        {
+                                            icon: greenIcon,
+                                            interactive: true,
+                                            riseOffset: 10,
+                                            riseOnHover: true,
+                                            title: stop.name,
+                                            zIndexOffset: 10,
+                                        });
+                                    markerT.stopPoint = stop;
+                                    markers.push(markerT);
+                                }
+                                return markers;
+                            }));
+                    } else {
+                        return this.stopService.stopObservable
+                            .pipe(map((stops: IStopLocation[]): IStopLocation[] => {
+                                return stops.filter((stop) => {
+                                    if (data[1])
+                                        return data[1].contains([stop.latitude / 3600000, stop.longitude / 3600000]);
+                                    return true;
+                                })
+                            }), map((stops: IStopLocation[]): StopMarkers[] => {
+                                const markers: L.Marker[] = [];
+                                for (let stop of stops) {
+                                    const greenIcon = createStopIcon(this.location);
+                                    const markerT: StopMarkers = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
+                                        {
+                                            icon: greenIcon,
+                                            interactive: true,
+                                            riseOffset: 10,
+                                            riseOnHover: true,
+                                            title: stop.name,
+                                            zIndexOffset: 10,
+                                        });
+                                    markerT.stop = stop;
+                                    markers.push(markerT);
+                                }
+                                return markers;
+                            }));
                     }
-                    const greenIcon = createStopIcon(this.location);
-                    const markerT: L.Marker = L.marker([stop.latitude / 3600000, stop.longitude / 3600000],
-                        {
-                            icon: greenIcon,
-                            interactive: true,
-                            riseOffset: 10,
-                            riseOnHover: true,
-                            title: stop.name,
-                            zIndexOffset: 10,
-                        });
-                    (markerT as any).data = stop;
-                    stopList.push(markerT);
+                }))
+            .subscribe((markers: StopMarkers[]) => {
+                console.log("Markers", markers.length);
+                this.stopMarkerLayer.clearLayers();
+                for (let marker of markers) {
+                    marker.addTo(this.stopMarkerLayer);
                 }
-                if (this.stopMarkerLayer !== undefined) {
-                    this.stopMarkerLayer.remove();
-                }
-                const featureGroup: L.FeatureGroup = L.featureGroup(stopList);
-                this.stopMarkerLayer = featureGroup.addTo(this.getMap());
-                featureGroup.on('click', this.stopMarkerOnClick.bind(this));
             });
     }
 
@@ -252,10 +306,14 @@ export class MainMapDirective extends LeafletMapComponent implements AfterViewIn
      * Triggered by stop marker clicks
      * @param event click event
      */
-    public stopMarkerOnClick(event: { sourceTarget: { data: IStopLocation } }) {
+    public stopMarkerOnClick(event: { sourceTarget: StopMarkers }) {
         // needs to be taken back into the ng zone
         this.zone.run(() => {
-            this.router.navigate(['stop', event.sourceTarget.data.shortName]);
+            if (event.sourceTarget.stopPoint) {
+                this.router.navigate(['stopPoint', event.sourceTarget.stopPoint.shortName]);
+            } else if (event.sourceTarget.stop) {
+                this.router.navigate(['stop', event.sourceTarget.stop.shortName]);
+            }
         });
     }
 

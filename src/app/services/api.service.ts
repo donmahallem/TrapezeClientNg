@@ -11,11 +11,11 @@ import {
     StopId,
     TripId,
     VehicleId,
-    ITripPassages
+    ITripPassages,
+    IStopPointLocations
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { IMapBounds } from '../modules/common/leaflet-map.component';
 @Injectable({
     providedIn: 'root',
 })
@@ -57,32 +57,32 @@ export class ApiService {
         });
     }
 
-    public getStopLocations(bounds?: IMapBounds): Observable<IStopLocations> {
+    public getStopLocations(bounds?: L.LatLngBounds): Observable<IStopLocations> {
         if (bounds) {
             return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
                 params: {
-                    bottom: '' + Math.round(bounds.bottom * 3600000),
-                    left: '' + Math.round(bounds.left * 3600000),
-                    right: '' + Math.round(bounds.right * 3600000),
-                    top: '' + Math.round(bounds.top * 3600000),
+                    bottom: '' + Math.round(bounds.getSouth() * 3600000),
+                    left: '' + Math.round(bounds.getWest() * 3600000),
+                    right: '' + Math.round(bounds.getEast() * 3600000),
+                    top: '' + Math.round(bounds.getNorth() * 3600000),
                 },
             });
         }
         return this.http.get<IStopLocations>(this.baseUrl() +
             'geo/stops?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
     }
-    public getStopPointLocations(bounds?: IMapBounds): Observable<IStopLocations> {
+    public getStopPointLocations(bounds?: L.LatLngBounds): Observable<IStopPointLocations> {
         if (bounds) {
-            return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
+            return this.http.get<IStopPointLocations>(this.baseUrl() + 'geo/stopPoints', {
                 params: {
-                    bottom: '' + Math.round(bounds.bottom * 3600000),
-                    left: '' + Math.round(bounds.left * 3600000),
-                    right: '' + Math.round(bounds.right * 3600000),
-                    top: '' + Math.round(bounds.top * 3600000),
+                    bottom: '' + Math.round(bounds.getSouth() * 3600000),
+                    left: '' + Math.round(bounds.getWest() * 3600000),
+                    right: '' + Math.round(bounds.getEast() * 3600000),
+                    top: '' + Math.round(bounds.getNorth() * 3600000),
                 },
             });
         }
-        return this.http.get<IStopLocations>(this.baseUrl() +
+        return this.http.get<IStopPointLocations>(this.baseUrl() +
             'geo/stopPoints?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
     }
 

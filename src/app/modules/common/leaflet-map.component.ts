@@ -5,7 +5,7 @@ import { Subject, Subscriber, Subscription, Observable } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
-import { filter, shareReplay, map, startWith } from 'rxjs/operators';
+import { filter, shareReplay, map, startWith, tap } from 'rxjs/operators';
 
 /**
  * Map Move Event Type
@@ -33,16 +33,6 @@ export interface IMapMoveEndEvent {
  * Move Event
  */
 export type MapMoveEvent = IMapMoveStartEvent | IMapMoveEndEvent;
-
-/**
- * Current viewing map bounds
- */
-export interface IMapBounds {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-}
 
 export class UserLocationSubscriber extends Subscriber<Position> {
     public constructor(private cmp: LeafletMapComponent) {
@@ -79,18 +69,22 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             }
         }), map((evt: L.LeafletEvent): number => {
             return evt.target.getZoom();
-        }), startWith(this.settings.getInitialMapZoom()), shareReplay(1));
-    public readonly leafletBounds: Observable<L.Bounds> = this.leafletEventSubject
+        }), startWith(this.settings.getInitialMapZoom()),
+            shareReplay(1));
+    public readonly leafletBounds: Observable<L.LatLngBounds> = this.leafletEventSubject
         .pipe(filter((evt: L.LeafletEvent): boolean => {
             switch (evt.type) {
                 case "move":
                 case "movestart":
                 case "moveend":
+                case "load":
+                case "loading":
+                case "update":
                     return true;
                 default:
                     return false;
             }
-        }), map((evt: L.LeafletEvent): L.Bounds => {
+        }), map((evt: L.LeafletEvent): L.LatLngBounds => {
             return evt.target.getBounds();
         }), shareReplay(1));
     private map: L.Map;
@@ -114,7 +108,9 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                 subdomains: ['a', 'b', 'c'],
             }).addTo(this.map);
             // Attach event listeners
-            ["movestart", "moveend", "zoom", "move", "zoomstart", "zoomend"]
+            ["movestart", "moveend", "zoom",
+                "move", "zoomstart", "zoomend",
+                "load", "loading", "update"]
                 .forEach((eventType: string) => {
                     this.map.on(eventType, (evt: L.LeafletEvent) => {
                         this.leafletEventSubject.next(evt);
