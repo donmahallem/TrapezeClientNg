@@ -1,40 +1,33 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
-import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
+import { StopInfoService } from './stop-info.service';
 
 /**
  * Directive displaying a map with the StopLocation
  */
 @Directive({
-    selector: 'map[appStopLocation]',
+    selector: 'map[appStopLocation]'
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
-    @Input('location')
-    public set location(loc: IStopLocation) {
-        this.stopLocationSubject.next(loc);
-    }
-    private updateSubscription: Subscription;
-
     private stopMarkerLayer: L.FeatureGroup = undefined;
-
-    private stopLocationSubject: BehaviorSubject<IStopLocation> = new BehaviorSubject(undefined);
+    private locationSubscription: Subscription;
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
-                zone: NgZone,
-                settingsService: SettingsService,
-                private locationService: Location) {
+        userLocationService: UserLocationService,
+        zone: NgZone,
+        settingsService: SettingsService,
+        public stopService: StopInfoService,
+        public locationService: Location) {
         super(elRef, zone, userLocationService, settingsService);
     }
 
     public ngAfterViewInit() {
         super.ngAfterViewInit();
-        this.startUpdater();
         this.getMap().dragging.disable();
         this.getMap().touchZoom.disable();
         this.getMap().doubleClickZoom.disable();
@@ -45,16 +38,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                 layer.redraw();
             }
         });
-    }
-
-    /**
-     * Creates the Update Observable
-     */
-    public startUpdater(): void {
-        if (this.updateSubscription) {
-            return;
-        }
-        this.updateSubscription = this.stopLocationSubject
+        this.locationSubscription = this.stopService.locationObservable
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -84,8 +68,8 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
     public ngOnDestroy(): void {
         super.ngOnDestroy();
-        if (this.updateSubscription) {
-            this.updateSubscription.unsubscribe();
+        if (this.locationSubscription) {
+            this.locationSubscription.unsubscribe();
         }
     }
 
