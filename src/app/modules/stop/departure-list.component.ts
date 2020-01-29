@@ -1,7 +1,7 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     Input,
-    ChangeDetectionStrategy,
 } from '@angular/core';
 import { IDeparture } from '@donmahallem/trapeze-api-types';
 
@@ -12,7 +12,7 @@ import { IDeparture } from '@donmahallem/trapeze-api-types';
     selector: 'app-departure-list',
     styleUrls: ['./departure-list.component.scss'],
     templateUrl: './departure-list.component.pug',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DepartureListComponent {
 

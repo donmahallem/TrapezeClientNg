@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
@@ -12,17 +12,17 @@ import { StopInfoService } from './stop-info.service';
  * Directive displaying a map with the StopLocation
  */
 @Directive({
-    selector: 'map[appStopLocation]'
+    selector: 'map[appStopLocation]',
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     private stopMarkerLayer: L.FeatureGroup = undefined;
     private locationSubscription: Subscription;
     constructor(elRef: ElementRef,
-        userLocationService: UserLocationService,
-        zone: NgZone,
-        settingsService: SettingsService,
-        public stopService: StopInfoService,
-        public locationService: Location) {
+                userLocationService: UserLocationService,
+                zone: NgZone,
+                settingsService: SettingsService,
+                public stopService: StopInfoService,
+                public locationService: Location) {
         super(elRef, zone, userLocationService, settingsService);
     }
 

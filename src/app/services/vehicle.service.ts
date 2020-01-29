@@ -1,32 +1,22 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-    ISettings,
-    IStopInfo,
-    IStopLocations,
-    IStopPassage,
     IVehicleLocation,
-    IVehicleLocationList,
-    IVehiclePathInfo,
-    StopId,
-    TripId,
-    VehicleId,
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
-import { Observable, BehaviorSubject, timer, interval, concat, from, of } from 'rxjs';
+import { concat, from, of, BehaviorSubject, Observable } from 'rxjs';
+import { catchError, debounceTime, flatMap, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { map, flatMap, tap, debounce, debounceTime, shareReplay, catchError } from 'rxjs/operators';
 
 export type TimestampedVehicleLocation = IVehicleLocation & {
     lastUpdate: number,
-}
+};
 export type TimestampedVehicles = VehicleLocations & {
     lastUpdate: number,
-}
+};
 export interface Data {
-    error?: any,
-    lastUpdate: number,
-    vehicles: TimestampedVehicleLocation[],
+    error?: any;
+    lastUpdate: number;
+    vehicles: TimestampedVehicleLocation[];
 }
 type VehicleMap = Map<string, TimestampedVehicles>;
 @Injectable({
@@ -37,22 +27,21 @@ export class VehicleService {
     constructor(private api: ApiService) {
         const startValue: Data = {
             lastUpdate: 0,
-            vehicles: []
+            vehicles: [],
         };
         concat(from([startValue]), this.state.pipe(debounceTime(10000)))
-            .pipe(flatMap((previousData: Data) => {
-                return this.api.getVehicleLocations(previousData.lastUpdate)
+            .pipe(flatMap((previousData: Data) =>
+                this.api.getVehicleLocations(previousData.lastUpdate)
                     .pipe(map((value): Data => {/*
                         if(previousData.lastUpdate!==value.lastUpdate){
                             console.log("New location data acquired",value.lastUpdate)
                         }*/
                         const timestampedNewLocations: TimestampedVehicles[] =
                             value.vehicles
-                                .map((veh: IVehicleLocation): TimestampedVehicles => {
-                                    return Object.assign({
-                                        lastUpdate: value.lastUpdate
-                                    }, veh);
-                                });
+                                .map((veh: IVehicleLocation): TimestampedVehicles =>
+                                    Object.assign({
+                                        lastUpdate: value.lastUpdate,
+                                    }, veh));
                         const reducedVehicles: VehicleMap =
                             timestampedNewLocations.concat(previousData.vehicles)
                                 .reduce((prev: VehicleMap, cur: TimestampedVehicles): VehicleMap => {
@@ -79,12 +68,10 @@ export class VehicleService {
                             lastUpdate: value.lastUpdate,
                             vehicles: filterInvalid,
                         };
-                    }), catchError((err) => {
-                        return of(Object.assign({
+                    }), catchError((err) =>
+                        of(Object.assign({
                             error: err,
-                        }, previousData));
-                    }))
-            }))
+                        }, previousData))))))
             .subscribe((data) => {
                 this.state.next(data);
             });

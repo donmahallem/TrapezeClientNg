@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IStopLocation, IStopPointLocation, IStopLocations, IStopPointLocations } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, IStopLocations, IStopPointLocation, IStopPointLocations } from '@donmahallem/trapeze-api-types';
 import { from, Observable, Subject, Subscriber } from 'rxjs';
-import { catchError, delay, filter, flatMap, map, shareReplay, startWith, tap, retryWhen, debounceTime } from 'rxjs/operators';
+import { catchError, debounceTime, delay, filter, flatMap, map, retryWhen, shareReplay, startWith, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
 
@@ -37,25 +37,20 @@ export class StopPointService {
     private mStopObservable: Observable<IStopLocation[]>;
     constructor(private api: ApiService, private notificationService: AppNotificationService) {
         this.mStopObservable = this.api.getStopLocations()
-            .pipe(map((stops: IStopLocations): IStopLocation[] => {
-                return stops.stops;
-            }), shareReplay(1),
-                retryWhen(errors => {
-                    return errors
+            .pipe(map((stops: IStopLocations): IStopLocation[] =>
+                stops.stops), shareReplay(1),
+                retryWhen((errors) =>
+                    errors
                         .pipe(tap((err) => this.notificationService.report(err)),
-                            debounceTime(5000))
-                }));
+                            debounceTime(5000))));
         this.mStopPointObservable = this.api.getStopPointLocations()
-            .pipe(map((stops: IStopPointLocations): IStopPointLocation[] => {
-                return stops.stopPoints;
-            }), shareReplay(1),
-                retryWhen(errors => {
-                    return errors
+            .pipe(map((stops: IStopPointLocations): IStopPointLocation[] =>
+                stops.stopPoints), shareReplay(1),
+                retryWhen((errors) =>
+                    errors
                         .pipe(tap((err) => this.notificationService.report(err)),
-                            debounceTime(5000))
-                }));
+                            debounceTime(5000))));
     }
-
 
     public get stopObservable(): Observable<IStopLocation[]> {
         return this.mStopObservable;

@@ -1,11 +1,11 @@
 
 import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
-import { Subject, Subscriber, Subscription, Observable } from 'rxjs';
+import { Observable, Subject, Subscriber, Subscription } from 'rxjs';
+import { filter, map, shareReplay, startWith } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { UserLocationService } from 'src/app/services/user-location.service';
 import './rotating-marker.patch';
-import { filter, shareReplay, map, startWith, tap } from 'rxjs/operators';
 
 /**
  * Map Move Event Type
@@ -52,48 +52,46 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     public get mapBounds(): L.LatLngBounds {
         return this.map.getBounds();
     }
-    @ViewChild('mapcontainer', { static: false }) mapContainer;
-    private readonly leafletEventSubject: Subject<L.LeafletEvent> = new Subject();
     public get leafletEvent(): Observable<L.LeafletEvent> {
         return this.leafletEventSubject.asObservable();
     }
+    @ViewChild('mapcontainer', { static: false }) mapContainer;
     public readonly leafletZoomLevel: Observable<number> = this.leafletEventSubject
         .pipe(filter((evt: L.LeafletEvent): boolean => {
             switch (evt.type) {
-                case "zoom":
-                case "zoomstart":
-                case "zoomend":
+                case 'zoom':
+                case 'zoomstart':
+                case 'zoomend':
                     return true;
                 default:
                     return false;
             }
-        }), map((evt: L.LeafletEvent): number => {
-            return evt.target.getZoom();
-        }), startWith(this.settings.getInitialMapZoom()),
+        }), map((evt: L.LeafletEvent): number =>
+            evt.target.getZoom()), startWith(this.settings.getInitialMapZoom()),
             shareReplay(1));
     public readonly leafletBounds: Observable<L.LatLngBounds> = this.leafletEventSubject
         .pipe(filter((evt: L.LeafletEvent): boolean => {
             switch (evt.type) {
-                case "move":
-                case "movestart":
-                case "moveend":
-                case "load":
-                case "loading":
-                case "update":
+                case 'move':
+                case 'movestart':
+                case 'moveend':
+                case 'load':
+                case 'loading':
+                case 'update':
                     return true;
                 default:
                     return false;
             }
-        }), map((evt: L.LeafletEvent): L.LatLngBounds => {
-            return evt.target.getBounds();
-        }), shareReplay(1));
+        }), map((evt: L.LeafletEvent): L.LatLngBounds =>
+            evt.target.getBounds()), shareReplay(1));
+    private readonly leafletEventSubject: Subject<L.LeafletEvent> = new Subject();
     private map: L.Map;
     private mUserLocationSubscription: Subscription = undefined;
     private userLocationLayer: L.FeatureGroup;
     constructor(private elRef: ElementRef,
-        protected zone: NgZone,
-        protected userLocationService: UserLocationService,
-        protected settings: SettingsService) {
+                protected zone: NgZone,
+                protected userLocationService: UserLocationService,
+                protected settings: SettingsService) {
     }
     ngAfterViewInit() {
         this.zone.runOutsideAngular(() => {
@@ -108,9 +106,9 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                 subdomains: ['a', 'b', 'c'],
             }).addTo(this.map);
             // Attach event listeners
-            ["movestart", "moveend", "zoom",
-                "move", "zoomstart", "zoomend",
-                "load", "loading", "update"]
+            ['movestart', 'moveend', 'zoom',
+                'move', 'zoomstart', 'zoomend',
+                'load', 'loading', 'update']
                 .forEach((eventType: string) => {
                     this.map.on(eventType, (evt: L.LeafletEvent) => {
                         this.leafletEventSubject.next(evt);

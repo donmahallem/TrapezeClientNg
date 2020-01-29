@@ -1,15 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IStopLocation, IStopPassage, StopId, IStopInfo } from '@donmahallem/trapeze-api-types';
-import { combineLatest, from, merge, timer, Observable, Subscription, BehaviorSubject, interval, of } from 'rxjs';
-import { catchError, filter, flatMap, map, debounceTime, debounce } from 'rxjs/operators';
-import { StopPointService } from 'src/app/services/stop-point.service';
-import { ApiService } from '../../services';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
 import { StopInfoService } from './stop-info.service';
 
 export interface IData {
-    location?: IStopLocation,
-    passages: IStopPassage
+    location?: IStopLocation;
+    passages: IStopPassage;
 }
 @Component({
     selector: 'app-stop-info',
@@ -20,7 +15,6 @@ export interface IData {
 
 })
 export class StopInfoComponent {
-
 
     constructor(public stopInfoService: StopInfoService) { }
     /**

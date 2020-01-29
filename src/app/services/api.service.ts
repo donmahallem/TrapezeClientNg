@@ -5,14 +5,14 @@ import {
     IStopInfo,
     IStopLocations,
     IStopPassage,
+    IStopPointLocations,
+    ITripPassages,
     IVehicleLocation,
     IVehicleLocationList,
     IVehiclePathInfo,
     StopId,
     TripId,
     VehicleId,
-    ITripPassages,
-    IStopPointLocations
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
@@ -45,15 +45,15 @@ export class ApiService {
     public getVehicleLocations(lastUpdate: number = 0): Observable<IVehicleLocationList> {
         return this.http.get<IVehicleLocationList>(this.baseUrl() + 'geo/vehicles', {
             params: {
-                lastUpdate: "" + lastUpdate
+                lastUpdate: '' + lastUpdate,
             },
         });
     }
     public getVehicleLocation(vehicleId: VehicleId, lastUpdate: number = 0): Observable<IVehicleLocation> {
         return this.http.get<IVehicleLocation>(this.baseUrl() + 'geo/vehicle/' + vehicleId, {
             params: {
-                "lastUpdate": "" + lastUpdate
-            }
+                lastUpdate: '' + lastUpdate,
+            },
         });
     }
 

@@ -1,7 +1,7 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     Input,
-    ChangeDetectionStrategy,
 } from '@angular/core';
 import { IDeparture } from '@donmahallem/trapeze-api-types';
 import { VEHICLE_STATUS } from '@donmahallem/trapeze-api-types/dist/vehicle-status';

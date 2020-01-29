@@ -1,4 +1,4 @@
-import { ITripPassages, IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
 
 export interface ITimestampVehicleLocation {
     /**

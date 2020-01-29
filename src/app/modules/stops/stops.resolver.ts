@@ -20,8 +20,8 @@ export class StopsResolver implements Resolve<IStopLocations> {
      * @param api the {@ApiService}
      */
     public constructor(private api: ApiService,
-        private router: Router,
-        private dialog: MatDialog) { }
+                       private router: Router,
+                       private dialog: MatDialog) { }
 
     /**
      * Resolves the station response
