@@ -1,10 +1,10 @@
-import { Location } from '@angular/common';
+import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
-import { debounceTime, filter, map, share, startWith, take } from 'rxjs/operators';
-import { createStopIcon } from 'src/app/leaflet';
-import { StopPointService } from 'src/app/services';
+import { filter, map, share, startWith, take } from 'rxjs/operators';
+import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
+import { MainMapDirective } from './main-map.directive';
 export type StopMarkers = L.Marker & {
     stopPoint?: IStopPointLocation;
     stop?: IStopLocation;
@@ -14,26 +14,27 @@ export class MarkerHandler {
     /**
      * Layer for the stop markers to be displayed on the map
      */
-    private stopMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
+    private readonly stopMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
     /**
      * Layer for the stop markers to be displayed on the map
      */
-    private stopPointMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
+    private readonly stopPointMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
 
-    private isSetup = false;
     private loadSubscription: Subscription;
     private zoomSubscription: Subscription;
+    private clickSubscription: Subscription;
     private clickObservable: Observable<StopMarkers>;
-    public constructor(private stopService: StopPointService,
-                       private location: Location,
+    public constructor(private mainMap: MainMapDirective,
                        private readonly zoomBorder: number) {
         this.stopMarkerLayer = L.featureGroup();
         this.stopPointMarkerLayer = L.featureGroup();
+
         this.clickObservable = merge(fromEvent(this.stopMarkerLayer, 'click'),
             fromEvent(this.stopPointMarkerLayer, 'click'))
             .pipe(filter((evt: L.LeafletEvent): boolean =>
-                (evt && evt.sourceTarget && (evt.sourceTarget.stop || evt.sourceTarget.stopPoint))), map((evt: L.LeafletEvent): StopMarkers =>
-                evt.sourceTarget), share());
+                (evt && evt.sourceTarget && (evt.sourceTarget.stop || evt.sourceTarget.stopPoint))),
+                map((evt: L.LeafletEvent): StopMarkers =>
+                    evt.sourceTarget), share());
     }
 
     public getClickObservable(): Observable<StopMarkers> {
@@ -41,64 +42,66 @@ export class MarkerHandler {
     }
 
     public getStopLocations(): Observable<IStopLocation[]> {
-        return this.stopService.stopObservable
+        return this.mainMap.stopService.stopObservable
             .pipe(take(1), startWith([]));
     }
 
     public getStopPointLocations(): Observable<IStopPointLocation[]> {
-        return this.stopService.stopPointObservable
+        return this.mainMap.stopService.stopPointObservable
             .pipe(take(1), startWith([]));
     }
 
     public start(leafletMap: L.Map): void {
-        if (this.isSetup) {
-            throw new Error('Already setup');
-        }
-        this.isSetup = true;
-        if (leafletMap.getZoom() > this.zoomBorder) {
-            this.stopPointMarkerLayer.addTo(leafletMap);
-        } else {
-            this.stopMarkerLayer.addTo(leafletMap);
-        }
-        this.zoomSubscription = fromEvent(leafletMap, 'zoom')
-            .pipe(map((evt: L.LeafletEvent): number =>
-                evt.sourceTarget.getZoom()))
+        this.zoomSubscription = this.mainMap
+            .leafletZoomEvent
+            .pipe(startWith(leafletMap.getZoom()))
             .subscribe((zoomLevel: number) => {
-                if (zoomLevel > 14) {
-                    if (leafletMap.hasLayer(this.stopMarkerLayer)) {
-                        leafletMap.removeLayer(this.stopMarkerLayer);
-                    }
-                    if (!leafletMap.hasLayer(this.stopPointMarkerLayer)) {
-                        this.stopPointMarkerLayer.addTo(leafletMap);
-                    }
-                } else {
-                    if (leafletMap.hasLayer(this.stopPointMarkerLayer)) {
-                        leafletMap.removeLayer(this.stopPointMarkerLayer);
-                    }
-                    if (!leafletMap.hasLayer(this.stopMarkerLayer)) {
-                        this.stopMarkerLayer.addTo(leafletMap);
-                    }
+                const showLayer: L.FeatureGroup = (zoomLevel > this.zoomBorder) ?
+                    this.stopPointMarkerLayer : this.stopMarkerLayer;
+                const hideLayer: L.FeatureGroup = (zoomLevel > this.zoomBorder) ?
+                    this.stopMarkerLayer : this.stopPointMarkerLayer;
+                if (leafletMap.hasLayer(hideLayer)) {
+                    leafletMap.removeLayer(hideLayer);
+                }
+                if (!leafletMap.hasLayer(showLayer)) {
+                    showLayer.addTo(leafletMap);
                 }
             });
-        combineLatest(this.getStopLocations(), this.getStopPointLocations())
-            .pipe(debounceTime(200))
-            .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
-                this.setStopPoints(result[1]);
-                this.setStops(result[0]);
+        this.loadSubscription =
+            combineLatest(this.getStopLocations(), this.getStopPointLocations())
+                .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
+                    this.setStopPoints(result[1]);
+                    this.setStops(result[0]);
+                });
+        this.clickSubscription = this.clickObservable
+            .subscribe((marker: StopMarkers): void => {
+                const method: () => void = (): void => {
+                    if (marker.stopPoint) {
+                        this.mainMap.router.navigate(['stopPoint', marker.stopPoint.shortName]);
+                    } else if (marker.stop) {
+                        this.mainMap.router.navigate(['stop', marker.stop.shortName]);
+                    }
+                };
+                if (NgZone.isInAngularZone()) {
+                    method();
+                } else {
+                    this.mainMap.zone.run(method);
+                }
             });
     }
 
     public setStopPoints(stopPoints: IStopPointLocation[]): void {
         this.stopPointMarkerLayer.clearLayers();
         stopPoints.forEach((value: IStopPointLocation): void => {
-            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.location);
-            const markerT: StopMarkers = L.marker([value.latitude / 3600000, value.longitude / 3600000],
+            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
+            const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
+            const markerT: StopMarkers = L.marker(coord,
                 {
                     icon: greenIcon,
                     interactive: true,
                     riseOffset: 10,
                     riseOnHover: true,
-                    title: stop.name,
+                    title: value.name,
                     zIndexOffset: 10,
                 });
             markerT.stopPoint = value;
@@ -109,14 +112,15 @@ export class MarkerHandler {
     public setStops(stops: IStopLocation[]): void {
         this.stopMarkerLayer.clearLayers();
         stops.forEach((value: IStopLocation): void => {
-            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.location);
-            const markerT: StopMarkers = L.marker([value.latitude / 3600000, value.longitude / 3600000],
+            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
+            const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
+            const markerT: StopMarkers = L.marker(coord,
                 {
                     icon: greenIcon,
                     interactive: true,
                     riseOffset: 10,
                     riseOnHover: true,
-                    title: stop.name,
+                    title: value.name,
                     zIndexOffset: 10,
                 });
             markerT.stop = value;
@@ -131,6 +135,10 @@ export class MarkerHandler {
         if (this.zoomSubscription) {
             this.zoomSubscription.unsubscribe();
             this.zoomSubscription = undefined;
+        }
+        if (this.clickSubscription) {
+            this.clickSubscription.unsubscribe();
+            this.clickSubscription = undefined;
         }
     }
 }

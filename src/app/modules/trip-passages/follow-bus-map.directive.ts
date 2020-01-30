@@ -6,7 +6,6 @@ import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { createVehicleIcon, RouteDisplayHandler } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UserLocationService } from 'src/app/services/user-location.service';
 import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
@@ -29,11 +28,10 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     private updateObservable: Subscription;
     private routeDisplayHandler: RouteDisplayHandler;
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
                 zone: NgZone,
                 private apiService: ApiService,
-                settingsService: SettingsService ) {
-        super(elRef, zone, userLocationService, settingsService);
+                settingsService: SettingsService) {
+        super(elRef, zone, settingsService);
     }
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -53,7 +51,7 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     public addMarker(): void {
         this.updateObservable = this.vehicleLocationSubject
             .pipe(filter((loc: TimestampedVehicleLocation) => {
-                if (loc ) {
+                if (loc) {
                     return true;
                 }
                 return false;

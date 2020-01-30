@@ -4,7 +4,6 @@ import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
 import { createStopIcon } from 'src/app/leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UserLocationService } from 'src/app/services/user-location.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 import { StopInfoService } from './stop-info.service';
 
@@ -18,12 +17,11 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
     private stopMarkerLayer: L.FeatureGroup = undefined;
     private locationSubscription: Subscription;
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
                 zone: NgZone,
                 settingsService: SettingsService,
                 public stopService: StopInfoService,
                 public locationService: Location) {
-        super(elRef, zone, userLocationService, settingsService);
+        super(elRef, zone, settingsService);
     }
 
     public ngAfterViewInit() {
