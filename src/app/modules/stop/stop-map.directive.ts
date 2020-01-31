@@ -15,7 +15,7 @@ import { StopInfoService } from './stop-info.service';
 })
 export class StopLocationMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     private stopMarkerLayer: L.FeatureGroup = undefined;
-    private locationSubscription: Subscription;
+    private stopLocationSubscription: Subscription;
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService,
@@ -36,7 +36,7 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
                 layer.redraw();
             }
         });
-        this.locationSubscription = this.stopService.locationObservable
+        this.stopLocationSubscription = this.stopService.locationObservable
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -66,8 +66,8 @@ export class StopLocationMapDirective extends LeafletMapComponent implements Aft
 
     public ngOnDestroy(): void {
         super.ngOnDestroy();
-        if (this.locationSubscription) {
-            this.locationSubscription.unsubscribe();
+        if (this.stopLocationSubscription) {
+            this.stopLocationSubscription.unsubscribe();
         }
     }
 

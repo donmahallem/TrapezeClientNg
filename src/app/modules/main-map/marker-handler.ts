@@ -77,7 +77,7 @@ export class MarkerHandler {
             .subscribe((marker: StopMarkers): void => {
                 const method: () => void = (): void => {
                     if (marker.stopPoint) {
-                        this.mainMap.router.navigate(['stopPoint', marker.stopPoint.shortName]);
+                        this.mainMap.router.navigate(['stopPoint', marker.stopPoint.stopPoint]);
                     } else if (marker.stop) {
                         this.mainMap.router.navigate(['stop', marker.stop.shortName]);
                     }

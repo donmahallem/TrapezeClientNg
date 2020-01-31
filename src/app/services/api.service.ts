@@ -11,6 +11,7 @@ import {
     IVehicleLocationList,
     IVehiclePathInfo,
     StopId,
+    StopPointId,
     TripId,
     VehicleId,
 } from '@donmahallem/trapeze-api-types';
@@ -41,6 +42,9 @@ export class ApiService {
     }
     public getStopPassages(stopId: StopId): Observable<IStopPassage> {
         return this.http.get<IStopPassage>(this.baseUrl() + 'stop/' + stopId + '/passages');
+    }
+    public getStopPointPassages(stopPointId: StopPointId): Observable<IStopPassage> {
+        return this.http.get<IStopPassage>(this.baseUrl() + 'stopPoint/' + stopPointId + '/passages');
     }
     public getVehicleLocations(lastUpdate: number = 0): Observable<IVehicleLocationList> {
         return this.http.get<IVehicleLocationList>(this.baseUrl() + 'geo/vehicles', {
