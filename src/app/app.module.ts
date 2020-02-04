@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { MatIconModule, MatInputModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -17,6 +17,7 @@ import { AppNotificationService } from './services/app-notification.service';
 import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
+import { ApiRequestAwaitStable } from './services/stable-app.interceptor';
 
 export const SETTINGS_INITIALIZER = (appInitService: SettingsService) =>
     (): Promise<any> =>
@@ -48,6 +49,7 @@ const moduleImports: any[] = [
         UserLocationService,
         SettingsService,
         AppNotificationService,
+        { provide: HTTP_INTERCEPTORS, useClass: ApiRequestAwaitStable, multi: true },
         {
             deps: [SettingsService],
             multi: true,
