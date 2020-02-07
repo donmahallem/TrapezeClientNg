@@ -1,7 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { from, throwError, Observable } from 'rxjs';
-import { ApiService } from 'src/app/services';
 import { TripPassagesResolver } from './trip-passages.resolver';
 // import * as sinon from "sinon";
 describe('src/app/modules/stop/trip-passages.resolver', () => {

@@ -3,7 +3,7 @@ import { IEnvironmentBase } from './environment.base';
 
 export const environment: IEnvironmentBase = {
     apiEndpoint: '/',
-    backendType:"trapeze",
+    backendType: 'trapeze',
     production: true,
     pwa: false,
     version: getAppVersion(),

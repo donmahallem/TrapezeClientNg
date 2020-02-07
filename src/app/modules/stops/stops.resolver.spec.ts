@@ -3,7 +3,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { from, throwError } from 'rxjs';
-import { ApiService } from 'src/app/services';
 import { StopsResolver } from './stops.resolver';
 
 // import * as sinon from "sinon";

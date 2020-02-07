@@ -1,2 +1,2 @@
-export {BackendType,IEnvironmentBase} from "./environment.base";
-export {environment}from "./environment";
+export {BackendType, IEnvironmentBase} from './environment.base';
+export {environment}from './environment';

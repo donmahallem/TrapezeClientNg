@@ -1,7 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { LatLng } from 'leaflet';
 import { from, throwError } from 'rxjs';
-import { ApiService } from './api.service';
 import { SettingsService } from './settings.service';
 // import * as sinon from "sinon";
 

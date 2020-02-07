@@ -1,7 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { from, throwError, Observable } from 'rxjs';
-import { ApiService } from 'src/app/services';
 import { StopPointInfoResolver } from './stop-point-info.resolver';
 // import * as sinon from "sinon";
 
