@@ -18,10 +18,11 @@ import {
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments';
 import { ApiService } from './api.service';
+
 @Injectable()
 export class NginxApiService implements ApiService {
 
-    public constructor( public http: HttpClient) { }
+    public constructor(public http: HttpClient) { }
 
     public baseUrl(): string {
         return environment.apiEndpoint.endsWith('\/') ? environment.apiEndpoint : (environment.apiEndpoint + '\/');

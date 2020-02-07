@@ -17,6 +17,8 @@ import { AppNotificationService } from './services/app-notification.service';
 import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
+import { ApiService } from './services';
+import { NginxApiService } from './services/nginx-api.service';
 
 export const SETTINGS_INITIALIZER = (appInitService: SettingsService) =>
     (): Promise<any> =>
@@ -57,6 +59,10 @@ const moduleImports: any[] = [
         {
             provide: ErrorHandler,
             useClass: AppErrorHandler,
+        },
+        {
+            provide: ApiService,
+            useClass: NginxApiService,
         },
     ],
 })
