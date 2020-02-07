@@ -16,7 +16,7 @@ import {
     VehicleId,
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments';
 @Injectable({
     providedIn: 'root',
 })
