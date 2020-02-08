@@ -12,7 +12,7 @@ export interface IStatus {
 @Injectable()
 export class StopInfoService {
     public readonly statusObservable: Observable<IStatus>;
-    private mStatusSubject: Subject<true> = new Subject();
+    private mRefreshSubject: Subject<true> = new Subject();
     constructor(private route: ActivatedRoute,
         private apiService: ApiService,
         private stopService: StopPointService) {
@@ -45,7 +45,7 @@ export class StopInfoService {
     }
 
     public createStopPassageRefreshObservable(stopPassage: IStopPassage): Observable<IStopPassage> {
-        return this.mStatusSubject
+        return this.mRefreshSubject
             .pipe(delay(5000),
                 flatMap((): Observable<IStopPassage> =>
                     this.apiService
