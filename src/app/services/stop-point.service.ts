@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { ApplicationRef, Injectable } from '@angular/core';
 import { IStopLocation, IStopLocations, IStopPointLocation, IStopPointLocations } from '@donmahallem/trapeze-api-types';
-import { from, Observable, Subject, Subscriber } from 'rxjs';
-import { catchError, debounceTime, delay, filter, flatMap, map, retryWhen, shareReplay, startWith, tap } from 'rxjs/operators';
+import { from, Observable, Subject, Subscriber, of } from 'rxjs';
+import { debounceTime, filter, flatMap, map, retryWhen, shareReplay, tap, first, timeoutWith } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
 
@@ -35,18 +35,27 @@ export class StopPointService {
     private retrySubject: Subject<void> = new Subject();
     private mStopPointObservable: Observable<IStopPointLocation[]>;
     private mStopObservable: Observable<IStopLocation[]>;
-    constructor(private api: ApiService, private notificationService: AppNotificationService) {
-        this.mStopObservable = this.api.getStopLocations()
+    constructor(private api: ApiService,
+        private notificationService: AppNotificationService,
+        private appRef: ApplicationRef) {
+        /*
+    const stableObservable: Observable<true> = this.appRef
+        .isStable
+        .pipe(first(stable => stable),
+            timeoutWith(5000, of(true)),
+            shareReplay(1));*/
+        this.mStopObservable = this.setupLocationsPoll(this.api.getStopLocations()
             .pipe(map((stops: IStopLocations): IStopLocation[] =>
-                stops.stops), shareReplay(1),
-                retryWhen((errors) =>
-                    errors
-                        .pipe(tap((err) => this.notificationService.report(err)),
-                            debounceTime(5000))));
-        this.mStopPointObservable = this.api.getStopPointLocations()
+                stops.stops)));
+        this.mStopPointObservable = this.setupLocationsPoll(this.api.getStopPointLocations()
             .pipe(map((stops: IStopPointLocations): IStopPointLocation[] =>
-                stops.stopPoints), shareReplay(1),
-                retryWhen((errors) =>
+                stops.stopPoints)));
+    }
+
+    public setupLocationsPoll<T extends IStopLocation | IStopPointLocation>(pollObservable: Observable<T[]>): Observable<T[]> {
+        return pollObservable
+            .pipe(shareReplay(1),
+                retryWhen((errors: Observable<any>): Observable<any> =>
                     errors
                         .pipe(tap((err) => this.notificationService.report(err)),
                             debounceTime(5000))));
@@ -58,28 +67,6 @@ export class StopPointService {
 
     public get stopPointObservable(): Observable<IStopPointLocation[]> {
         return this.mStopPointObservable;
-    }
-    public createStopLoadObservable(): Observable<IStopLocation[]> {
-        return this.retrySubject.pipe(delay(10 * 1000))
-            .pipe(
-                // tslint:disable-next-line:deprecation
-                startWith<void>(undefined),
-                flatMap((): Observable<IStopLocation[]> =>
-                    this.api.getStopLocations()
-                        .pipe(
-                            map((value): IStopLocation[] =>
-                                value.stops),
-                            catchError((err: any, caught: Observable<IStopLocation[]>): Observable<IStopLocation[]> => {
-                                this.notificationService.report(err);
-                                this.retrySubject.next();
-                                return from([[]]);
-                            }))),
-                tap((value: IStopLocation[]) => {
-                    this.mStopLocations = value;
-                }),
-                catchError((err) =>
-                    from([[]])),
-                shareReplay(1));
     }
 
     public get stopLocations(): IStopLocation[] {
@@ -104,7 +91,7 @@ export class StopPointService {
      * @param stopShortName the stop shortName
      */
     public searchStop(stopShortName: string): Observable<IStopLocation> {
-        return this.stopLocationsObservable
+        return this.stopObservable
             .pipe(
                 flatMap((stops: IStopLocation[]): Observable<IStopLocation> =>
                     from(stops)),
@@ -114,16 +101,6 @@ export class StopPointService {
                     }
                     return false;
                 }));
-    }
-
-    /**
-     * Gets the shared stop location observable
-     */
-    public get stopLocationsObservable(): Observable<IStopLocation[]> {
-        if (this.sharedReplay === undefined) {
-            this.sharedReplay = this.createStopLoadObservable();
-        }
-        return this.sharedReplay;
     }
 
 }
