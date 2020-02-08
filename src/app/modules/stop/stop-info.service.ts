@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
-import { combineLatest, from, Observable, Subject } from 'rxjs';
-import { delay, first, flatMap, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, from, interval, Observable } from 'rxjs';
+import { first, flatMap, map, startWith, switchMap } from 'rxjs/operators';
 import { ApiService, StopPointService } from 'src/app/services';
 
 export interface IStatus {
+    lastUpdate: Date;
     location?: IStopLocation;
     stop: IStopPassage;
 }
 @Injectable()
 export class StopInfoService {
     public readonly statusObservable: Observable<IStatus>;
-    private mRefreshSubject: Subject<true> = new Subject();
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService,
                 private stopService: StopPointService) {
@@ -21,17 +21,15 @@ export class StopInfoService {
                 data.stopInfo));
         this.statusObservable = stopFromResolver
             .pipe(switchMap((stopPassage: IStopPassage): Observable<IStatus> => {
-                const passageRefreshObservable: Observable<IStopPassage> = this
+                const passageRefreshObservable: Observable<IStatus> = this
                     .createStopPassageRefreshObservable(stopPassage);
                 const locationObservable: Observable<IStopLocation> = this
                     .createStopLocationObservable(stopPassage);
 
                 return combineLatest(passageRefreshObservable, locationObservable)
-                    .pipe(map((mapValue: [IStopPassage, IStopLocation]): IStatus =>
-                        ({
-                            stop: mapValue[0],
-                            location: mapValue[1],
-                        })));
+                    .pipe(map((mapValue: [IStatus, IStopLocation]): IStatus => Object.assign(mapValue[0], {
+                        location: mapValue[1],
+                    })));
             }));
     }
 
@@ -44,13 +42,17 @@ export class StopInfoService {
                         (stopLocation && stopLocation.shortName === stopPassage.stopShortName), undefined))));
     }
 
-    public createStopPassageRefreshObservable(stopPassage: IStopPassage): Observable<IStopPassage> {
-        return this.mRefreshSubject
-            .pipe(delay(5000),
-                flatMap((): Observable<IStopPassage> =>
-                    this.apiService
-                        .getStopPassages(stopPassage.stopShortName as any)),
+    public createStopPassageRefreshObservable(stopPassage: IStopPassage): Observable<IStatus> {
+        return interval(5000)
+            .pipe(switchMap((): Observable<IStopPassage> =>
+                this.apiService
+                    .getStopPassages(stopPassage.stopShortName as any)),
                 startWith(stopPassage),
-                tap(() => this.mRefreshSubject.next(true)));
+                map((stopPassage: IStopPassage): IStatus =>
+                    ({
+                        lastUpdate: new Date(),
+                        stop: stopPassage,
+                    })),
+            );
     }
 }
