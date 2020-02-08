@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IStopLocation, IStopPassage, StopShortName } from '@donmahallem/trapeze-api-types';
-import { Observable, Subject } from 'rxjs';
-import { delay, distinctUntilChanged, flatMap, map, startWith, switchMap } from 'rxjs/operators';
+import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
+import { combineLatest, from, Observable, Subject } from 'rxjs';
+import { delay, first, flatMap, map, startWith, switchMap } from 'rxjs/operators';
 import { ApiService, StopPointService } from 'src/app/services';
 
-export interface IData {
+export interface IStatus {
     location?: IStopLocation;
-    passages: IStopPassage;
+    stop: IStopPassage;
 }
 @Injectable()
 export class StopInfoService {
-    public readonly stopObservable: Observable<IStopPassage>;
-    public readonly locationObservable: Observable<IStopLocation>;
+    public readonly statusObservable: Observable<IStatus>;
     private mStatusSubject: Subject<true> = new Subject();
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService,
@@ -20,15 +19,27 @@ export class StopInfoService {
         const stopFromResolver: Observable<IStopPassage> = this.route.data
             .pipe(map((data: any): IStopPassage =>
                 data.stopInfo));
-        this.stopObservable = stopFromResolver
-            .pipe(switchMap((passage: IStopPassage): Observable<IStopPassage> =>
-                this.mStatusSubject
-                    .pipe(delay(5000), flatMap((): Observable<IStopPassage> =>
-                        this.apiService
-                            .getStopPassages(passage.stopShortName as any)), startWith(passage))));
+        this.statusObservable = stopFromResolver
+            .pipe(switchMap((stopPassage: IStopPassage): Observable<IStatus> => {
+                const passageRefreshObservable: Observable<IStopPassage> = this.mStatusSubject
+                    .pipe(delay(5000),
+                        flatMap((): Observable<IStopPassage> =>
+                            this.apiService
+                                .getStopPassages(stopPassage.stopShortName as any)),
+                        startWith(stopPassage));
+                const locationObservable: Observable<IStopLocation> = this.stopService
+                    .stopObservable
+                    .pipe(flatMap((stopLocations: IStopLocation[]): Observable<IStopLocation> =>
+                        from(stopLocations)
+                            .pipe(first((stopLocation: IStopLocation): boolean =>
+                                (stopLocation && stopLocation.shortName === stopPassage.stopShortName), undefined))));
 
-        this.locationObservable = this.stopService.filterStop(stopFromResolver
-            .pipe(map((passage: IStopPassage): StopShortName => passage.stopShortName),
-                distinctUntilChanged()));
+                return combineLatest(passageRefreshObservable, locationObservable)
+                    .pipe(map((mapValue: [IStopPassage, IStopLocation]): IStatus =>
+                        ({
+                            stop: mapValue[0],
+                            location: mapValue[1],
+                        })));
+            }));
     }
 }
