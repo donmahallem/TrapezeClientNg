@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IStopLocation, IStopPassage } from '@donmahallem/trapeze-api-types';
 import { combineLatest, from, Observable, Subject } from 'rxjs';
-import { delay, first, flatMap, map, startWith, switchMap } from 'rxjs/operators';
+import { delay, first, flatMap, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { ApiService, StopPointService } from 'src/app/services';
 
 export interface IStatus {
@@ -14,8 +14,8 @@ export class StopInfoService {
     public readonly statusObservable: Observable<IStatus>;
     private mRefreshSubject: Subject<true> = new Subject();
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService,
-        private stopService: StopPointService) {
+                private apiService: ApiService,
+                private stopService: StopPointService) {
         const stopFromResolver: Observable<IStopPassage> = this.route.data
             .pipe(map((data: any): IStopPassage =>
                 data.stopInfo));
@@ -50,6 +50,7 @@ export class StopInfoService {
                 flatMap((): Observable<IStopPassage> =>
                     this.apiService
                         .getStopPassages(stopPassage.stopShortName as any)),
-                startWith(stopPassage));
+                startWith(stopPassage),
+                tap(() => this.mRefreshSubject.next(true)));
     }
 }
