@@ -4,9 +4,9 @@ import { MonoTypeOperatorFunction, Observable, Subscriber, Subscription } from '
 export const runInZone: <T>(zone: NgZone) => MonoTypeOperatorFunction<T> =
 <T>(zone: NgZone): MonoTypeOperatorFunction<T> =>
     (source: Observable<T>): Observable<T> =>
-        new Observable<T>((observer: Subscriber<T>):Subscription =>
+        new Observable<T>((observer: Subscriber<T>): Subscription =>
     source.subscribe({
-      next(x: T):void {
+      next(x: T): void {
           if (NgZone.isInAngularZone()) {
               observer.next(x);
           } else {
@@ -15,6 +15,6 @@ export const runInZone: <T>(zone: NgZone) => MonoTypeOperatorFunction<T> =
               });
           }
       },
-      error(err:any):void { observer.error(err); },
-      complete():void { observer.complete(); },
+      error(err: any): void { observer.error(err); },
+      complete(): void { observer.complete(); },
     }));

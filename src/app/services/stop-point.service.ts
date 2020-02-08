@@ -1,7 +1,7 @@
-import { ApplicationRef, Injectable } from '@angular/core';
-import { IStopLocation, IStopLocations, IStopPointLocation, IStopPointLocations } from '@donmahallem/trapeze-api-types';
-import { from, Observable, Subject, Subscriber, of } from 'rxjs';
-import { debounceTime, filter, flatMap, map, retryWhen, shareReplay, tap, first, timeoutWith } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { IStopLocation, IStopLocations, IStopPointLocation, IStopPointLocations, StopShortName } from '@donmahallem/trapeze-api-types';
+import { Observable, Subject, Subscriber } from 'rxjs';
+import { debounceTime, map, retryWhen, shareReplay, tap, withLatestFrom } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
 
@@ -36,14 +36,7 @@ export class StopPointService {
     private mStopPointObservable: Observable<IStopPointLocation[]>;
     private mStopObservable: Observable<IStopLocation[]>;
     constructor(private api: ApiService,
-        private notificationService: AppNotificationService,
-        private appRef: ApplicationRef) {
-        /*
-    const stableObservable: Observable<true> = this.appRef
-        .isStable
-        .pipe(first(stable => stable),
-            timeoutWith(5000, of(true)),
-            shareReplay(1));*/
+                private notificationService: AppNotificationService) {
         this.mStopObservable = this.setupLocationsPoll(this.api.getStopLocations()
             .pipe(map((stops: IStopLocations): IStopLocation[] =>
                 stops.stops)));
@@ -54,11 +47,25 @@ export class StopPointService {
 
     public setupLocationsPoll<T extends IStopLocation | IStopPointLocation>(pollObservable: Observable<T[]>): Observable<T[]> {
         return pollObservable
-            .pipe(shareReplay(1),
-                retryWhen((errors: Observable<any>): Observable<any> =>
-                    errors
-                        .pipe(tap((err) => this.notificationService.report(err)),
-                            debounceTime(5000))));
+            .pipe(retryWhen((errors: Observable<any>): Observable<any> =>
+                errors
+                    .pipe(tap((err) => this.notificationService.report(err)),
+                        debounceTime(5000))), shareReplay(1));
+    }
+
+    public filterStop(filter: Observable<StopShortName>): Observable<IStopLocation> {
+        return this.stopObservable
+            .pipe(withLatestFrom(filter),
+                map((value: [IStopLocation[], StopShortName]): IStopLocation => {
+                    if (value[0] && value[1]) {
+                        const idx: number = value[0].findIndex((stop: IStopLocation) =>
+                            stop.shortName === value[1]);
+                        if (idx >= 0) {
+                            return value[0][idx];
+                        }
+                    }
+                    return undefined;
+                }));
     }
 
     public get stopObservable(): Observable<IStopLocation[]> {
@@ -67,40 +74,6 @@ export class StopPointService {
 
     public get stopPointObservable(): Observable<IStopPointLocation[]> {
         return this.mStopPointObservable;
-    }
-
-    public get stopLocations(): IStopLocation[] {
-        return this.mStopLocations ? this.mStopLocations : [];
-    }
-
-    /**
-     * retrieves the stop or undefined if not loaded yet or undefined
-     * @param stopShortName short name
-     */
-    public getStopLocation(stopShortName: string): IStopLocation {
-        for (const stop of this.stopLocations) {
-            if (stop.shortName === stopShortName) {
-                return stop;
-            }
-        }
-        return undefined;
-    }
-
-    /**
-     * Searches the stops for a given stopShortName
-     * @param stopShortName the stop shortName
-     */
-    public searchStop(stopShortName: string): Observable<IStopLocation> {
-        return this.stopObservable
-            .pipe(
-                flatMap((stops: IStopLocation[]): Observable<IStopLocation> =>
-                    from(stops)),
-                filter((stop: IStopLocation) => {
-                    if (stop) {
-                        return stop.shortName === stopShortName;
-                    }
-                    return false;
-                }));
     }
 
 }

@@ -1,9 +1,9 @@
-import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { filter, map, share, startWith, take } from 'rxjs/operators';
 import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
+import { runInZone } from 'src/app/rxjs-util';
 import { MainMapDirective } from './main-map.directive';
 export type StopMarkers = L.Marker & {
     stopPoint?: IStopPointLocation;
@@ -74,18 +74,12 @@ export class MarkerHandler {
                     this.setStops(result[0]);
                 });
         this.clickSubscription = this.clickObservable
+            .pipe(runInZone(this.mainMap.zone))
             .subscribe((marker: StopMarkers): void => {
-                const method: () => void = (): void => {
-                    if (marker.stopPoint) {
-                        this.mainMap.router.navigate(['stopPoint', marker.stopPoint.stopPoint]);
-                    } else if (marker.stop) {
-                        this.mainMap.router.navigate(['stop', marker.stop.shortName]);
-                    }
-                };
-                if (NgZone.isInAngularZone()) {
-                    method();
-                } else {
-                    this.mainMap.zone.run(method);
+                if (marker.stopPoint) {
+                    this.mainMap.router.navigate(['stopPoint', marker.stopPoint.stopPoint]);
+                } else if (marker.stop) {
+                    this.mainMap.router.navigate(['stop', marker.stop.shortName]);
                 }
             });
     }

@@ -12,12 +12,6 @@ import { StopPointInfoService } from './stop-point-info.service';
 export class StopPointInfoComponent {
 
     constructor(public stopInfoService: StopPointInfoService) {
-        this.stopInfoService.passagesObservable.subscribe((val) => {
-            console.log('pass', val);
-        });
-        this.stopInfoService.locationObservable.subscribe((val) => {
-            console.log('loc', val);
-        });
     }
     /**
      * Converts the time to a human readable format

@@ -7,11 +7,11 @@ export interface IData {
     passages: IStopPassage;
 }
 @Component({
+    changeDetection: ChangeDetectionStrategy.Default,
     selector: 'app-stop-info',
     styleUrls: ['./stop-info.component.scss'],
     templateUrl: './stop-info.component.pug',
     providers: [StopInfoService],
-    changeDetection: ChangeDetectionStrategy.Default,
 
 })
 export class StopInfoComponent {
