@@ -1,11 +1,11 @@
-ng-container(*ngIf="stopInfoService.stopObservable | async as status")
-    app-map-header-box([blur]="(stopInfoService.locationObservable | async) == undefined",title="{{status?.stopName}}")
-        map(appStopLocation,role="none")
+ng-container(*ngIf="stopInfoService.statusObservable | async as status")
+    app-map-header-box([blur]="status.location == undefined",title="{{status?.stop.stopName}}")
+        map(appStopLocation,role="none",[stopLocation]="status.location")
     mat-tab-group(mat-stretch-tabs,dynamicHeight)
         mat-tab(i18n-label="tab header departures|Departures@@departures",label="Departures")
-            app-departure-list([departures]="status?.actual")
+            app-departure-list([departures]="status?.stop.actual")
         mat-tab(i18n-label="tab header routes|Routes@@Routes",label="Routes")
-            app-route-list([routes]="status?.routes")
+            app-route-list([routes]="status?.stop.routes")
     ng-template(*ngIf="false")
         div.error-box
             h3 Error occured
