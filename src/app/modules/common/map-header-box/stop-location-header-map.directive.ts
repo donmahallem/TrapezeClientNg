@@ -10,18 +10,18 @@ import { LeafletMapComponent } from '../leaflet-map.component';
  * Directive displaying a map with the StopLocation
  */
 @Directive({
-    selector: 'map[appStopLocation]',
+    selector: 'map[appStopLocationHeader]',
 })
-export class StopLocationMapDirective extends LeafletMapComponent implements OnChanges {
+export class StopLocationHeaderMapDirective extends LeafletMapComponent implements OnChanges {
     @Input()
     public stopLocation: IStopLocation;
-    private readonly stopMarkerLayer: L.FeatureGroup = undefined;
+    private readonly stopMarkerLayer: L.LayerGroup = undefined;
     constructor(elRef: ElementRef,
-                zone: NgZone,
-                settingsService: SettingsService,
-                public locationService: Location) {
+        zone: NgZone,
+        settingsService: SettingsService,
+        public locationService: Location) {
         super(elRef, zone, settingsService);
-        this.stopMarkerLayer = new L.FeatureGroup(undefined, {
+        this.stopMarkerLayer = new L.LayerGroup(undefined, {
             attribution: '',
         });
     }

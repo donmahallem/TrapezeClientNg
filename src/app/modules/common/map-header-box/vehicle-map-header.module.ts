@@ -3,19 +3,18 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule,
 } from '@angular/material';
-import { MapHeaderBoxComponent } from './map-header-box.component';
-import { StopLocationMapDirective } from './stop-location-map.directive';
+import { VehicleMapHeaderBoxComponent } from './vehicle-map-header.component';
+import { VehicleLocationHeaderMapDirective } from './vehicle-location-header-map.directive';
 
 @NgModule({
     declarations: [
-        MapHeaderBoxComponent,
-        StopLocationMapDirective,
+        VehicleMapHeaderBoxComponent,
+        VehicleLocationHeaderMapDirective,
     ],
     exports: [
         CommonModule,
         MatIconModule,
-        MapHeaderBoxComponent,
-        StopLocationMapDirective,
+        VehicleMapHeaderBoxComponent,
     ],
     imports: [
         CommonModule,
@@ -24,4 +23,4 @@ import { StopLocationMapDirective } from './stop-location-map.directive';
     providers: [
     ],
 })
-export class MapHeaderBoxModule { }
+export class VehicleMapHeaderBoxModule { }
