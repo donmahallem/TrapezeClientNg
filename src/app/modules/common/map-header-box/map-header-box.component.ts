@@ -14,4 +14,6 @@ export class MapHeaderBoxComponent {
     @Input()
     @HostBinding('class.no-location')
     public blur = false;
+    @Input()
+    public stopLocation: any;
 }
