@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule,
 } from '@angular/material';
+import { StopLocationHeaderMapDirective } from './stop-location-map.directive';
 import { StopMapHeaderComponent } from './stop-map-header.component';
-import { StopLocationHeaderMapDirective } from './stop-location-header-map.directive';
 
 @NgModule({
     declarations: [
