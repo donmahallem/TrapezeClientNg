@@ -1,5 +1,6 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-map-header-box',
     styleUrls: ['./map-header-box.component.scss'],
     templateUrl: './map-header-box.component.pug',
