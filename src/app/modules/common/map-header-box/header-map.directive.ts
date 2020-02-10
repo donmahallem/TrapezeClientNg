@@ -1,4 +1,5 @@
-import { ElementRef, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { ElementRef, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { IStopLocation, IStopPointLocation, IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from '../leaflet-map.component';
@@ -6,7 +7,10 @@ import { LeafletMapComponent } from '../leaflet-map.component';
 /**
  * Directive displaying a map with the StopLocation
  */
-export abstract class HeaderMapDirective extends LeafletMapComponent implements OnChanges {
+export abstract class HeaderMapDirective<T extends IStopLocation | IStopPointLocation | IVehicleLocation>
+    extends LeafletMapComponent implements OnChanges {
+    @Input()
+    public marker: T;
     protected readonly markerLayer: L.LayerGroup = undefined;
     constructor(elRef: ElementRef,
                 zone: NgZone,
@@ -15,6 +19,12 @@ export abstract class HeaderMapDirective extends LeafletMapComponent implements 
         this.markerLayer = new L.LayerGroup(undefined, {
             attribution: '',
         });
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('marker' in changes) {
+            this.updateLocation(changes.marker.currentValue);
+        }
     }
 
     public onBeforeSetView(map: L.Map): void {
@@ -34,11 +44,9 @@ export abstract class HeaderMapDirective extends LeafletMapComponent implements 
     public onAfterSetView(map: L.Map): void {
         super.onBeforeSetView(map);
         this.markerLayer.addTo(this.getMap());
-        this.updateLocation();
+        this.updateLocation(undefined);
     }
 
-    public abstract updateLocation(): void;
-
-    public abstract ngOnChanges(changes: SimpleChanges): void;
+    public abstract updateLocation(marker: T): void;
 
 }
