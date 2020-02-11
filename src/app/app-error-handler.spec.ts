@@ -35,13 +35,19 @@ describe('src/app/app-error-handler.ts', () => {
         });
         describe('handleError()', () => {
             let handleHttpErrorResponseSpy: jasmine.Spy<jasmine.Func>;
+            let consoleErrorSpy: jasmine.Spy<jasmine.Func>;
+            beforeAll(() => {
+                consoleErrorSpy = spyOn(console, 'error');
+            });
             beforeEach(() => {
+                consoleErrorSpy.and.callFake(() => { });
                 handleHttpErrorResponseSpy = spyOn(handler, 'handleHttpErrorResponse');
                 handleHttpErrorResponseSpy.and.callFake(() =>
                     false);
             });
             afterEach(() => {
                 handleHttpErrorResponseSpy.calls.reset();
+                consoleErrorSpy.calls.reset();
             });
             describe('an HttpErrorResponse is reported', () => {
                 [new HttpErrorResponse({
@@ -53,6 +59,7 @@ describe('src/app/app-error-handler.ts', () => {
                         expect(handleHttpErrorResponseSpy).toHaveBeenCalledTimes(1);
                         expect(handleHttpErrorResponseSpy).toHaveBeenCalledWith(testError, notificationService);
                         expect(notifySpy).toHaveBeenCalledTimes(0);
+                        expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
                     });
                 });
             });
@@ -69,6 +76,8 @@ describe('src/app/app-error-handler.ts', () => {
                             title: 'Uncaught error occured',
                             type: AppNotificationType.ERROR,
                         });
+                        expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+                        expect(consoleErrorSpy).toHaveBeenCalledWith('It happens: ', testError);
                     });
                 });
             });
