@@ -137,7 +137,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                     .getTripPassages(status.tripId)
                     .pipe(map((resp) =>
                         this.convertResponse(status.tripId, resp)),
-                    catchError(this.handleError.bind(this)))));
+                        catchError(this.handleError.bind(this)))));
         const poll1 = merge(this.route.data.pipe(map((data) => data.tripPassages)), poll0);
         const poll2 = this.vehicleService.getVehicles;
         this.pollSubscription = combineLatest(poll1, poll2)
@@ -174,13 +174,13 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
 
     public convertResponse(tripId: TripId, tripPassages: ITripPassages): IPassageStatus {
         return {
-        passages: tripPassages,
-        status: UpdateStatus.LOADED,
-        timestamp: Date.now(),
-        tripId,
-        failures: 0,
-    };
-}
+            passages: tripPassages,
+            status: UpdateStatus.LOADED,
+            timestamp: Date.now(),
+            tripId,
+            failures: 0,
+        };
+    }
     public handleError(err?: any): Observable<any> {
         let status: UpdateStatus = UpdateStatus.ERROR;
         if (err.status) {

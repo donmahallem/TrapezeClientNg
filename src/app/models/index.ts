@@ -1,4 +1,8 @@
-import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import {
+    IStopLocation,
+    IStopPointLocation,
+    IVehicleLocation,
+} from '@donmahallem/trapeze-api-types';
 
 export interface ITimestampVehicleLocation {
     /**
@@ -10,3 +14,5 @@ export interface ITimestampVehicleLocation {
      */
     vehicle: IVehicleLocation;
 }
+
+export type LocationObject = IVehicleLocation | IStopLocation | IStopPointLocation;

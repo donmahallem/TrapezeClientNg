@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     IVehicleLocation,
+    TripId,
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
 import { concat, from, of, BehaviorSubject, Observable } from 'rxjs';
@@ -53,12 +54,12 @@ export class VehicleService {
                                 }, new Map());
                         const filterInvalid: TimestampedVehicleLocation[] =
                             Array.from(reducedVehicles.values())
-                                .filter((value: any): boolean => {
-                                    if (value) {
-                                        if (value.isDeleted === true) {
+                                .filter((vehState: any): boolean => {
+                                    if (vehState) {
+                                        if (vehState.isDeleted === true) {
                                             return false;
                                         }
-                                        if (value.latitude && value.longitude) {
+                                        if (vehState.latitude && vehState.longitude) {
                                             return true;
                                         }
                                     }
@@ -79,6 +80,16 @@ export class VehicleService {
 
     public get getVehicles(): Observable<Data> {
         return this.state;
+    }
+
+    public getVehicleByTripId(tripId: TripId): Observable<TimestampedVehicleLocation> {
+        return this.state
+            .pipe(map((status: Data): TimestampedVehicleLocation => {
+                const idx: number = status.vehicles
+                    .findIndex((veh: TimestampedVehicleLocation): boolean =>
+                        veh.tripId === tripId);
+                return idx >= 0 ? status.vehicles[idx] : undefined;
+            }));
     }
 
 }

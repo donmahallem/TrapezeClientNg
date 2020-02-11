@@ -1,5 +1,4 @@
-import { ElementRef, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
-import { IStopLocation, IStopPointLocation, IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { ElementRef, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from '../leaflet-map.component';
@@ -7,11 +6,10 @@ import { LeafletMapComponent } from '../leaflet-map.component';
 /**
  * Directive displaying a map with the StopLocation
  */
-export abstract class HeaderMapDirective<T extends IStopLocation | IStopPointLocation | IVehicleLocation>
-    extends LeafletMapComponent implements OnChanges {
-    @Input()
-    public marker: T;
+export abstract class HeaderMapDirective extends LeafletMapComponent implements OnChanges {
+
     protected readonly markerLayer: L.LayerGroup = undefined;
+
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService) {
@@ -19,12 +17,6 @@ export abstract class HeaderMapDirective<T extends IStopLocation | IStopPointLoc
         this.markerLayer = new L.LayerGroup(undefined, {
             attribution: '',
         });
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if ('marker' in changes) {
-            this.updateLocation(changes.marker.currentValue);
-        }
     }
 
     public onBeforeSetView(map: L.Map): void {
@@ -42,11 +34,26 @@ export abstract class HeaderMapDirective<T extends IStopLocation | IStopPointLoc
     }
 
     public onAfterSetView(map: L.Map): void {
-        super.onBeforeSetView(map);
+        super.onAfterSetView(map);
         this.markerLayer.addTo(this.getMap());
-        this.updateLocation(undefined);
     }
 
-    public abstract updateLocation(marker: T): void;
+    public abstract ngOnChanges(changes: SimpleChanges): void;
 
+    /**
+     * If the marker is attached it will be removed
+     * @param m marker to be removed
+     */
+    public removeMarker(m: L.Marker): void {
+        if (m && this.markerLayer.hasLayer(m)) {
+            this.markerLayer.removeLayer(m);
+        }
+    }
+
+    public panMapTo(panTo: L.LatLng): void {
+        if (this.getMap()) {
+            this.getMap().panTo(panTo,
+                { animate: true });
+        }
+    }
 }

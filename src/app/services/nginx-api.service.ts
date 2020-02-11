@@ -16,6 +16,7 @@ import {
     VehicleId,
 } from '@donmahallem/trapeze-api-types';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments';
 import { ApiService } from './api.service';
 
@@ -29,7 +30,11 @@ export class NginxApiService implements ApiService {
     }
 
     public getTripPassages(tripId: TripId): Observable<ITripPassages> {
-        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
+        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure')
+            .pipe(map((veh: ITripPassages): ITripPassages => {
+                veh.tripId = tripId;
+                return veh;
+            }));
     }
     public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {
         return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'vehicle/' + vehicleId + '/route');
@@ -91,6 +96,14 @@ export class NginxApiService implements ApiService {
     }
 
     public getSettings(): Observable<ISettings> {
-        return this.http.get<ISettings>(this.baseUrl() + 'settings');
+        return this.http.get(this.baseUrl() + 'settings', {
+            responseType: 'text',
+        })
+            .pipe(map((body: string): ISettings => {
+                const firstBracket: number = body.indexOf('{');
+                const lastBracket: number = body.lastIndexOf('}');
+                const parsedBody: string = body.substr(firstBracket, lastBracket - firstBracket + 1);
+                return JSON.parse(parsedBody);
+            }));
     }
 }

@@ -53,7 +53,7 @@ export class StopPointService {
                         debounceTime(5000))), shareReplay(1));
     }
 
-    public filterStop(filter: Observable<StopShortName>): Observable<IStopLocation> {
+    public filterByObservable(filter: Observable<StopShortName>): Observable<IStopLocation> {
         return this.stopObservable
             .pipe(withLatestFrom(filter),
                 map((value: [IStopLocation[], StopShortName]): IStopLocation => {
@@ -66,6 +66,19 @@ export class StopPointService {
                     }
                     return undefined;
                 }));
+    }
+    public filterStop(stopShortName: StopShortName): Observable<IStopLocation> {
+        return this.stopObservable
+            .pipe(map((stopLocations: IStopLocation[]): IStopLocation => {
+                if (stopLocations) {
+                    const idx: number = stopLocations.findIndex((stop: IStopLocation) =>
+                        stop.shortName === stopShortName);
+                    if (idx >= 0) {
+                        return stopLocations[idx];
+                    }
+                }
+                return undefined;
+            }));
     }
 
     public get stopObservable(): Observable<IStopLocation[]> {

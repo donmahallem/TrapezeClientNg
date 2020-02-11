@@ -5,7 +5,6 @@ import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, share } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from './leaflet-map.component';
-import './rotating-marker.patch';
 
 export abstract class InteractiveLeafletMapComponent extends LeafletMapComponent {
     public readonly leafletEvent: Observable<L.LeafletEvent>;
@@ -39,11 +38,11 @@ export abstract class InteractiveLeafletMapComponent extends LeafletMapComponent
                 }
             }), map((evt: L.LeafletEvent): L.LatLngBounds =>
                 evt.target.getBounds()), distinctUntilChanged((x: L.LatLngBounds, y: L.LatLngBounds): boolean => {
-                if (x && y) {
-                    return x.equals(y);
-                }
-                return false;
-            }), share());
+                    if (x && y) {
+                        return x.equals(y);
+                    }
+                    return false;
+                }), share());
         this.leafletZoomEvent = this.leafletEvent
             .pipe(filter((evt: L.LeafletEvent): boolean => {
                 switch (evt.type) {
