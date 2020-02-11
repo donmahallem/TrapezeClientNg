@@ -1,4 +1,5 @@
 import { fakeAsync, tick } from '@angular/core/testing';
+import { TripId } from '@donmahallem/trapeze-api-types';
 import { of, NEVER, Observable, Subject, Subscription } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 import { TripPassagesService } from './trip-passages.service';
@@ -97,21 +98,22 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(0);
                 statusSubject.next({
                     status: UpdateStatus.LOADED,
+                    tripId: '1' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(1);
                 expect(nextSpy).toHaveBeenCalledTimes(0);
                 tick(1100);
                 expect(nextSpy).toHaveBeenCalledTimes(1);
-                expect(nextSpy.calls.allArgs()).toEqual([[1]]);
                 statusSubject.next({
                     status: UpdateStatus.LOADED,
+                    tripId: '2' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(2);
                 tick(500);
                 expect(nextSpy).toHaveBeenCalledTimes(1);
-                expect(nextSpy.calls.allArgs()).toEqual([[1]]);
                 statusSubject.next({
-                    status: UpdateStatus.LOADED,
+                    status: UpdateStatus.ERROR,
+                    tripId: '3' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(3);
                 expect(nextSpy).toHaveBeenCalledTimes(1);
@@ -119,6 +121,8 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 tick(1100);
                 expect(nextSpy).toHaveBeenCalledTimes(2);
                 expect(nextSpy.calls.allArgs()).toEqual([[1], [3]]);
+                expect(createDelayedPassageRequestSpy.calls.allArgs())
+                    .toEqual([['1', 10000], ['2', 10000], ['3', 20000]]);
                 subscription.unsubscribe();
             }));
         });
