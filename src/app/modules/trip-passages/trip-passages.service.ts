@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ITripPassages } from '@donmahallem/trapeze-api-types';
-import { merge, of, BehaviorSubject, Observable } from 'rxjs';
-import { delay, flatMap, map, scan, switchMap, tap } from 'rxjs/operators';
+import { ITripPassages, TripId } from '@donmahallem/trapeze-api-types';
+import { merge, timer, BehaviorSubject, Observable, Subject } from 'rxjs';
+import { flatMap, map, scan, switchMap, take, tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services';
 import { IPassageStatus, TripPassagesUtil, UpdateStatus } from './trip-util';
 
@@ -17,7 +17,7 @@ export class TripPassagesService {
     }
 
     public createStatusObservable(): Observable<IPassageStatus> {
-        const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable();
+        const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable(this.statusSubject);
         return merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
             .pipe(scan((acc: IPassageStatus, val: IPassageStatus, idx: number): IPassageStatus => {
                 if (acc) {
@@ -28,18 +28,22 @@ export class TripPassagesService {
                 tap((newStatus: IPassageStatus): void => this.statusSubject.next(newStatus)));
     }
 
-    public createRefreshPollObservable(): Observable<IPassageStatus> {
-        return this.statusSubject.pipe(
+    public createRefreshPollObservable(statusSubject: Subject<IPassageStatus>): Observable<IPassageStatus> {
+        return statusSubject.pipe(
             switchMap((status: IPassageStatus): Observable<IPassageStatus> => {
                 const refreshDelay: number = (status.status === UpdateStatus.LOADED) ?
                     10000 :
                     20000;
-                return of(undefined)
-                    .pipe(delay(refreshDelay),
-                        flatMap((): Observable<ITripPassages> => this.apiService.getTripPassages(status.tripId)),
-                        TripPassagesUtil.convertResponse(status.tripId),
-                        TripPassagesUtil.handleError(status.tripId));
+                return this.createDelayedPassageRequest(status.tripId, refreshDelay);
             }));
+    }
+
+    public createDelayedPassageRequest(tripId: TripId, refreshDelay: number): Observable<IPassageStatus> {
+        return timer(refreshDelay)
+            .pipe(take(1),
+                flatMap((): Observable<ITripPassages> => this.apiService.getTripPassages(tripId)),
+                TripPassagesUtil.convertResponse(tripId),
+                TripPassagesUtil.handleError(tripId));
     }
 
 }
