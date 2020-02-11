@@ -13,8 +13,12 @@ export class TripPassagesService {
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService) {
         this.statusSubject = new BehaviorSubject(route.snapshot.data.tripPassages);
+        this.statusObservable = this.createStatusObservable();
+    }
+
+    public createStatusObservable(): Observable<IPassageStatus> {
         const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable();
-        this.statusObservable = merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
+        return merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
             .pipe(scan((acc: IPassageStatus, val: IPassageStatus, idx: number): IPassageStatus => {
                 if (acc) {
                     val.failures = val.failures > 0 ? acc.failures + val.failures : 0;
