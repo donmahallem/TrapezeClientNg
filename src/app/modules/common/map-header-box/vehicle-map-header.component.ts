@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ITripPassages, IVehicleLocation } from '@donmahallem/trapeze-api-types';
-import { of, BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map, pairwise, switchMap, tap } from 'rxjs/operators';
+import { ITripPassages, IVehicleLocation, ITripRoute } from '@donmahallem/trapeze-api-types';
+import { of, BehaviorSubject, Observable, EMPTY } from 'rxjs';
+import { distinctUntilChanged, map, pairwise, switchMap, tap, startWith, catchError } from 'rxjs/operators';
 import { LeafletUtil } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
 import { MapHeaderComponent } from './map-header.component';
+
+export interface IVehicleInfo {
+    speed: number;
+    location: L.LatLng;
+    route?: ITripRoute;
+}
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-vehicle-map-header',
@@ -30,10 +36,10 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
         return undefined;
     }
     public readonly tripObservable: Observable<ITripPassages>;
-    public readonly vehicleLocationObservable: Observable<IVehicleLocation>;
+    public readonly vehicleLocationObservable: Observable<IVehicleInfo>;
     private readonly tripSubject: BehaviorSubject<ITripPassages>;
     public constructor(public vehicleService: VehicleService,
-                       public apiService: ApiService) {
+        public apiService: ApiService) {
         super();
         this.tripSubject = new BehaviorSubject(undefined);
         this.tripObservable = this.tripSubject.asObservable()
@@ -49,21 +55,33 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
             }), switchMap((trip: ITripPassages): Observable<any> => {
                 if (trip) {
                     return this.vehicleService
-                        .getVehicleByTripId(trip.tripId);
+                        .getVehicleByTripId(trip.tripId)
+                        .pipe(catchError((err: any): Observable<void> => {
+                            return EMPTY;
+                        }))
                 } else {
                     return of(undefined);
                 }
-            }), pairwise(),
-                map((val: [TimestampedVehicleLocation, TimestampedVehicleLocation]): IVehicleLocation => {
+            }),
+                // needed for pairwise not delaying the display
+                startWith(undefined),
+                pairwise(),
+                map((val: [TimestampedVehicleLocation, TimestampedVehicleLocation]): IVehicleInfo => {
                     if (val[0] && val[1]) {
                         const loc1: L.LatLng = LeafletUtil.convertCoordToLatLng(val[1]);
                         const loc2: L.LatLng = LeafletUtil.convertCoordToLatLng(val[0]);
                         const dst: number = loc1.distanceTo(loc2) / 1000;
                         const tDst: number = val[1].lastUpdate - val[0].lastUpdate;
-                        const vehicleSpeed = tDst > 0 ? (dst / tDst / 3600) : 0;
-                        console.log(vehicleSpeed);
+                        const vehicleSpeed: number = tDst > 0 ? (dst / tDst / 3600) : -1;
+                        return {
+                            speed: vehicleSpeed,
+                            location: LeafletUtil.convertCoordToLatLng(val[1])
+                        };
                     }
-                    return val[1];
+                    return {
+                        speed: -1,
+                        location: LeafletUtil.convertCoordToLatLng(val[1])
+                    };
                 }));
     }
 

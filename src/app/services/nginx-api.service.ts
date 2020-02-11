@@ -30,11 +30,7 @@ export class NginxApiService implements ApiService {
     }
 
     public getTripPassages(tripId: TripId): Observable<ITripPassages> {
-        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure')
-            .pipe(map((veh: ITripPassages): ITripPassages => {
-                veh.tripId = tripId;
-                return veh;
-            }));
+        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
     }
     public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {
         return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'vehicle/' + vehicleId + '/route');
