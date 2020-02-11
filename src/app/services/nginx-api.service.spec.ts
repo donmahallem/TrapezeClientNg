@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { async, TestBed } from '@angular/core/testing';
-import { IStopInfo, IStopLocations, IStopPointLocations, ITripPassages, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
-import { from, Observable, Observer } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { NginxApiService } from './nginx-api.service';
-import { tap } from 'rxjs/operators';
 
 const handleResult: <T>(obs: Observable<T>, doneCb: DoneFn, expectedResponse: any) => void
     = <T>(obs: Observable<T>, doneCb: DoneFn, expectedResponse: any): void => {
-        let resultSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy("resultSpy");
+        const resultSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('resultSpy');
         obs.subscribe({
             next: resultSpy,
             error: doneCb,
@@ -17,7 +15,7 @@ const handleResult: <T>(obs: Observable<T>, doneCb: DoneFn, expectedResponse: an
                 doneCb();
             },
         });
-    }
+    };
 
 describe('src/app/services/nginx-api.service', () => {
     describe('NginxApiService', () => {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ITripPassages, IVehicleLocation, ITripRoute } from '@donmahallem/trapeze-api-types';
-import { of, BehaviorSubject, Observable, EMPTY } from 'rxjs';
-import { distinctUntilChanged, map, pairwise, switchMap, tap, startWith, catchError } from 'rxjs/operators';
+import { ITripPassages, ITripRoute } from '@donmahallem/trapeze-api-types';
+import { of, BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { catchError, distinctUntilChanged, map, pairwise, startWith, switchMap, tap } from 'rxjs/operators';
 import { LeafletUtil } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
 import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
@@ -39,7 +39,7 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
     public readonly vehicleLocationObservable: Observable<IVehicleInfo>;
     private readonly tripSubject: BehaviorSubject<ITripPassages>;
     public constructor(public vehicleService: VehicleService,
-        public apiService: ApiService) {
+                       public apiService: ApiService) {
         super();
         this.tripSubject = new BehaviorSubject(undefined);
         this.tripObservable = this.tripSubject.asObservable()
@@ -56,9 +56,8 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                 if (trip) {
                     return this.vehicleService
                         .getVehicleByTripId(trip.tripId)
-                        .pipe(catchError((err: any): Observable<void> => {
-                            return EMPTY;
-                        }))
+                        .pipe(catchError((err: any): Observable<void> =>
+                            EMPTY));
                 } else {
                     return of(undefined);
                 }
@@ -75,12 +74,12 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                         const vehicleSpeed: number = tDst > 0 ? (dst / tDst / 3600) : -1;
                         return {
                             speed: vehicleSpeed,
-                            location: LeafletUtil.convertCoordToLatLng(val[1])
+                            location: LeafletUtil.convertCoordToLatLng(val[1]),
                         };
                     }
                     return {
                         speed: -1,
-                        location: LeafletUtil.convertCoordToLatLng(val[1])
+                        location: LeafletUtil.convertCoordToLatLng(val[1]),
                     };
                 }));
     }

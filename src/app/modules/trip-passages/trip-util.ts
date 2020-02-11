@@ -1,6 +1,6 @@
-import { TripId, ITripPassages, IPathSegment } from "@donmahallem/trapeze-api-types";
-import { Observable, from, of, MonoTypeOperatorFunction, OperatorFunction } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { ITripPassages, TripId } from '@donmahallem/trapeze-api-types';
+import { of, Observable, OperatorFunction } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export enum UpdateStatus {
     LOADING = 1,
@@ -22,15 +22,14 @@ export interface IPassageStatus {
 
 export class TripPassagesUtil {
     public static convertResponse(tripId: TripId): OperatorFunction<ITripPassages, IPassageStatus> {
-        return map((tripPassages: ITripPassages): IPassageStatus => {
-            return {
+        return map((tripPassages: ITripPassages): IPassageStatus =>
+            ({
                 passages: tripPassages,
                 status: UpdateStatus.LOADED,
                 timestamp: Date.now(),
                 tripId,
                 failures: 0,
-            };
-        });
+            }));
     }
     public static handleError(tripId: TripId): OperatorFunction<any, IPassageStatus> {
         return catchError((err: any): Observable<IPassageStatus> => {
@@ -39,16 +38,16 @@ export class TripPassagesUtil {
                     passages: undefined,
                     status: err.status,
                     timestamp: Date.now(),
-                    tripId: tripId,
-                    failures: 1
+                    tripId,
+                    failures: 1,
                 });
             } else {
                 return of({
                     passages: undefined,
                     status: UpdateStatus.ERROR,
                     timestamp: Date.now(),
-                    tripId: tripId,
-                    failures: 1
+                    tripId,
+                    failures: 1,
                 });
             }
         });

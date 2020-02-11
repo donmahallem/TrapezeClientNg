@@ -1,14 +1,13 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IActualTripPassage, ITripPassages, TripId } from '@donmahallem/trapeze-api-types';
-import { combineLatest, from, merge, BehaviorSubject, Observable, Subscriber, Subscription, pipe, of } from 'rxjs';
-import { catchError, debounceTime, flatMap, map, switchMap, tap, delay, scan } from 'rxjs/operators';
-import { Data, TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
+import { ActivatedRoute } from '@angular/router';
+import { ITripPassages } from '@donmahallem/trapeze-api-types';
+import { merge, of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { delay, flatMap, map, scan, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../services';
 import {
-    UpdateStatus,
     IPassageStatus,
-    TripPassagesUtil
+    TripPassagesUtil,
+    UpdateStatus,
 } from './trip-util';
 
 /**
@@ -44,11 +43,11 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     }
 
     public readonly STATUS_OPS: typeof UpdateStatus = UpdateStatus;
-    private readonly statusSubject: BehaviorSubject<IPassageStatus>;
     public readonly statusObservable: Observable<IPassageStatus>;
+    private readonly statusSubject: BehaviorSubject<IPassageStatus>;
     private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService) {
+                private apiService: ApiService) {
         this.statusSubject = new BehaviorSubject(route.snapshot.data.tripPassages);
         const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable();
         this.statusObservable = merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
@@ -58,9 +57,8 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                 }
                 return val;
             }),
-                tap((newStatus: IPassageStatus): void => this.statusSubject.next(newStatus)));;
+                tap((newStatus: IPassageStatus): void => this.statusSubject.next(newStatus)));
     }
-
 
     public createRefreshPollObservable(): Observable<IPassageStatus> {
         return this.statusSubject.pipe(
@@ -72,7 +70,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                     .pipe(delay(refreshDelay),
                         flatMap((): Observable<ITripPassages> => this.apiService.getTripPassages(status.tripId)),
                         TripPassagesUtil.convertResponse(status.tripId),
-                        TripPassagesUtil.handleError(status.tripId))
+                        TripPassagesUtil.handleError(status.tripId));
             }));
     }
     /**
@@ -80,7 +78,7 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
      */
     public ngAfterViewInit(): void {
         this.statusObservable.subscribe(new Subscriber((val: IPassageStatus) => {
-            console.log("RES", val);
+            console.log('RES', val);
         }));
     }
     /**

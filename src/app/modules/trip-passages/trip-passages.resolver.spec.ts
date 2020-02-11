@@ -1,11 +1,10 @@
 import { async, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { from, throwError, Observable, Observer, of, EMPTY } from 'rxjs';
+import { TripId } from '@donmahallem/trapeze-api-types';
+import { of, throwError, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { ApiService } from 'src/app/services';
 import { TripPassagesResolver } from './trip-passages.resolver';
-import { TripPassagesUtil } from "./trip-util";
-import { tap, map, catchError } from 'rxjs/operators';
-import { TripId } from '@donmahallem/trapeze-api-types';
+import { TripPassagesUtil } from './trip-util';
 
 describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
     describe('TripPassagesResolver', () => {
@@ -18,12 +17,12 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
         let getTripPassagesSpy: jasmine.Spy<jasmine.Func>;
         let nextSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
-            convertResponseStub = spyOn(TripPassagesUtil, "convertResponse");
-            handleErrorStub = spyOn(TripPassagesUtil, "handleError");
-            convertResponseOperatorStub = jasmine.createSpy("convertResponseOperator");
-            handleErrorOperatorStub = jasmine.createSpy("handleErrorOperator");
-            getTripPassagesSpy = jasmine.createSpy("getTripPassages");
-            nextSpy = jasmine.createSpy("onNext");
+            convertResponseStub = spyOn(TripPassagesUtil, 'convertResponse');
+            handleErrorStub = spyOn(TripPassagesUtil, 'handleError');
+            convertResponseOperatorStub = jasmine.createSpy('convertResponseOperator');
+            handleErrorOperatorStub = jasmine.createSpy('handleErrorOperator');
+            getTripPassagesSpy = jasmine.createSpy('getTripPassages');
+            nextSpy = jasmine.createSpy('onNext');
         });
         beforeEach(async(() => {
             convertResponseStub.and.callFake(() => convertResponseOperatorStub);
@@ -52,12 +51,12 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
         describe('resolve(route, state)', () => {
             const convertedResponse: any = {
                 converted: true,
-                type: "response"
-            }
+                type: 'response',
+            };
             const errorResponse: any = {
                 converted: false,
-                type: "error"
-            }
+                type: 'error',
+            };
 
             afterEach(() => {
                 expect(convertResponseStub).toHaveBeenCalledTimes(1);
@@ -78,7 +77,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(getTripPassagesSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(getTripPassagesSpy.calls.argsFor(0))
-                                    .toEqual([testId], "getTripPassages should be called with the provided tripId");
+                                    .toEqual([testId], 'getTripPassages should be called with the provided tripId');
                                 expect(nextSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(nextSpy.calls.first().args[0]).toEqual(convertedResponse);
@@ -87,7 +86,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(convertResponseOperatorStub).toHaveBeenCalledBefore(handleErrorOperatorStub);
                                 done();
                             },
-                            next: nextSpy
+                            next: nextSpy,
                         });
                 });
             });
@@ -106,7 +105,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(getTripPassagesSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(getTripPassagesSpy.calls.argsFor(0))
-                                    .toEqual([testId], "getTripPassages should be called with the provided tripId");
+                                    .toEqual([testId], 'getTripPassages should be called with the provided tripId');
                                 expect(nextSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(nextSpy.calls.first().args).toEqual([errorResponse]);
@@ -115,7 +114,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(convertResponseOperatorStub).toHaveBeenCalledBefore(handleErrorOperatorStub);
                                 done();
                             },
-                            next: nextSpy
+                            next: nextSpy,
                         });
                 });
             });
