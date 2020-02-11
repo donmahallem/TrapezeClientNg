@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../../services';
 import { IPassageStatus, TripPassagesUtil } from './trip-util';
 
+/**
+ * Resolver used to retrieve TripPassage Information in {@link TripPassagesRoutingModule}
+ */
 @Injectable()
 export class TripPassagesResolver implements Resolve<IPassageStatus> {
 

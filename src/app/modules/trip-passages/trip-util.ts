@@ -36,7 +36,7 @@ export class TripPassagesUtil {
             if (err && err.status) {
                 return of({
                     passages: undefined,
-                    status: err.status,
+                    status: (err.status >= 500 && err.status < 600) ? UpdateStatus.SERVER_ERROR : err.status,
                     timestamp: Date.now(),
                     tripId,
                     failures: 1,
