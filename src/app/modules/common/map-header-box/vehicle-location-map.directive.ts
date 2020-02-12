@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Directive, ElementRef, Input, NgZone, SimpleChange, SimpleChanges } from '@angular/core';
-import { ITripPassages, ITripRoute, IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { Directive, ElementRef, Input, NgZone, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { ITripRoute, IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
 import { ApiService } from 'src/app/services';
@@ -9,18 +9,13 @@ import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { RotatingMarker, RotatingMarkerOptions } from '../rotating-marker.patch';
 import { HeaderMapDirective } from './header-map.directive';
 
-interface VehicleRoute {
-    vehicle?: IVehicleLocation;
-    passages?: ITripPassages;
-}
-
 /**
  * Directive displaying a map with the StopLocation
  */
 @Directive({
     selector: 'map[appVehicleLocationHeader]',
 })
-export class VehicleLocationHeaderMapDirective extends HeaderMapDirective {
+export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implements OnChanges {
 
     @Input()
     public vehicle?: IVehicleLocation;
@@ -56,9 +51,9 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective {
         const vehicleIcon: L.DivIcon = createVehicleIcon(heading, name, 40);
         const markerT: RotatingMarker = L.marker(coord, {
             icon: vehicleIcon,
+            interactive: false,
             rotationAngle: heading - 90,
             title: name,
-            interactive: false,
             zIndexOffset: 100,
         } as RotatingMarkerOptions) as RotatingMarker;
         return markerT;

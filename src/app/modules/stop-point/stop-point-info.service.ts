@@ -38,7 +38,7 @@ export class StopPointInfoService {
     private readonly mStatusSubject: Subject<StopShortName> = new Subject();
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService,
-                private stopService: StopPointService) {
+                stopService: StopPointService) {
         const stopPointIdObservable: Observable<string> = this.route.params
             .pipe(map((params: any): string =>
                 params.stopPointId));
@@ -54,7 +54,7 @@ export class StopPointInfoService {
             .pipe(tap((stop: IStopPassage) => {
                 this.mStatusSubject.next(stop.stopShortName);
             }), shareReplay(1));
-        this.locationObservable = combineLatest(stopPointIdObservable, stopService.stopPointObservable)
+        this.locationObservable = combineLatest([stopPointIdObservable, stopService.stopPointObservable])
             .pipe(map((data: [string, IStopPointLocation[]]) => {
                 const idx: number = data[1].findIndex((stp: IStopPointLocation) =>
                     stp.stopPoint === data[0]);
@@ -65,7 +65,7 @@ export class StopPointInfoService {
                 }
                 return false;
             }), shareReplay(1));
-        this.statusObservable = combineLatest(this.passagesObservable, this.locationObservable)
+        this.statusObservable = combineLatest([this.passagesObservable, this.locationObservable])
             .pipe(map((val: [IStopPassage, IStopPointLocation]): IStatus =>
                 ({
                     location: val[1],

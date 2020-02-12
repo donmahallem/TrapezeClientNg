@@ -86,7 +86,7 @@ export class VehicleHandler {
                 }), map((dat: IData): TimestampedVehicleLocation[] =>
                     dat.vehicles));
         const filteredVehicles: Observable<TimestampedVehicleLocation[]> =
-            combineLatest(mapMoveEvent, vehicleObservable)
+            combineLatest([mapMoveEvent, vehicleObservable])
                 .pipe(
                     map((result: [L.LatLngBounds, TimestampedVehicleLocation[]]): TimestampedVehicleLocation[] =>
                         result[1]

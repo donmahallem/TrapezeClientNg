@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ITripPassages } from '@donmahallem/trapeze-api-types';
-import { merge, of, BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { merge, of, BehaviorSubject, Observable } from 'rxjs';
 import { delay, flatMap, map, scan, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../services';
 import {
@@ -18,7 +18,7 @@ import {
     styleUrls: ['./trip-passages.component.scss'],
     templateUrl: './trip-passages.component.pug',
 })
-export class TripPassagesComponent implements AfterViewInit, OnDestroy {
+export class TripPassagesComponent {
 
     /**
      * Returns the TripPassages
@@ -45,7 +45,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
     public readonly STATUS_OPS: typeof UpdateStatus = UpdateStatus;
     public readonly statusObservable: Observable<IPassageStatus>;
     private readonly statusSubject: BehaviorSubject<IPassageStatus>;
-    private pollSubscription: Subscription;
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService) {
         this.statusSubject = new BehaviorSubject(route.snapshot.data.tripPassages);
@@ -72,22 +71,6 @@ export class TripPassagesComponent implements AfterViewInit, OnDestroy {
                         TripPassagesUtil.convertResponse(status.tripId),
                         TripPassagesUtil.handleError(status.tripId));
             }));
-    }
-    /**
-     * Initializes the update observable
-     */
-    public ngAfterViewInit(): void {
-        this.statusObservable.subscribe(new Subscriber((val: IPassageStatus) => {
-            console.log('RES', val);
-        }));
-    }
-    /**
-     * destroys created update observables
-     */
-    public ngOnDestroy(): void {
-        if (this.pollSubscription) {
-            this.pollSubscription.unsubscribe();
-        }
     }
 
 }

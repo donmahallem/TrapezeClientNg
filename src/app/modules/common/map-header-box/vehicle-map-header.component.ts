@@ -73,13 +73,13 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                         const tDst: number = val[1].lastUpdate - val[0].lastUpdate;
                         const vehicleSpeed: number = tDst > 0 ? (dst / tDst / 3600) : -1;
                         return {
-                            speed: vehicleSpeed,
                             location: LeafletUtil.convertCoordToLatLng(val[1]),
+                            speed: vehicleSpeed,
                         };
                     }
                     return {
-                        speed: -1,
                         location: LeafletUtil.convertCoordToLatLng(val[1]),
+                        speed: -1,
                     };
                 }));
     }

@@ -26,7 +26,7 @@ export class StopInfoService {
                 const locationObservable: Observable<IStopLocation> = this
                     .createStopLocationObservable(stopPassage);
 
-                return combineLatest(passageRefreshObservable, locationObservable)
+                return combineLatest([passageRefreshObservable, locationObservable])
                     .pipe(map((mapValue: [IStatus, IStopLocation]): IStatus => Object.assign(mapValue[0], {
                         location: mapValue[1],
                     })));
@@ -42,12 +42,12 @@ export class StopInfoService {
                         (stopLocation && stopLocation.shortName === stopPassage.stopShortName), undefined))));
     }
 
-    public createStopPassageRefreshObservable(stopPassage: IStopPassage): Observable<IStatus> {
+    public createStopPassageRefreshObservable(initStopPassage: IStopPassage): Observable<IStatus> {
         return interval(5000)
             .pipe(switchMap((): Observable<IStopPassage> =>
                 this.apiService
-                    .getStopPassages(stopPassage.stopShortName as any)),
-                startWith(stopPassage),
+                    .getStopPassages(initStopPassage.stopShortName)),
+                startWith(initStopPassage),
                 map((stopPassage: IStopPassage): IStatus =>
                     ({
                         lastUpdate: new Date(),

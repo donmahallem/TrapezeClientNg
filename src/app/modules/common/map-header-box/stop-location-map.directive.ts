@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Directive, ElementRef, Input, NgZone, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
@@ -13,7 +13,7 @@ type StopTypes = IStopPointLocation | IStopLocation;
 @Directive({
     selector: 'map[appStopLocationHeader]',
 })
-export class StopLocationHeaderMapDirective extends HeaderMapDirective {
+export class StopLocationHeaderMapDirective extends HeaderMapDirective implements OnChanges {
     @Input()
     public stop?: StopTypes;
     private stopMarker: L.Marker;

@@ -7,10 +7,10 @@ import { IDeparture } from '@donmahallem/trapeze-api-types';
 import { VEHICLE_STATUS } from '@donmahallem/trapeze-api-types/dist/vehicle-status';
 import * as moment from 'moment';
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-departure-list-item',
     styleUrls: ['./departure-list-item.component.scss'],
     templateUrl: './departure-list-item.component.pug',
-    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DepartureListItemComponent {
 
