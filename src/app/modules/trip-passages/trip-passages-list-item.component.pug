@@ -1,4 +1,4 @@
-a(*ngFor="let passage of tripPassages",[routerLink]="['/stop', passage?.stop?.shortName]",role="listitem")
+a([routerLink]="['/stop', passage?.stop?.shortName]",role="listitem")
     mat-list-item
         mat-icon(matListIcon,role="figure",i18n-aria-label="@@busStopIcon",aria-label="Bus stop icon") trip_origin
         h3(matLine,aria-label="Stop name",i18n-aria-label="@@stopName") {{passage?.stop?.name}}

@@ -1,44 +1,122 @@
-import { Component, Input } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
-import { IDeparture } from '@donmahallem/trapeze-api-types';
+import { ChangeDetectionStrategy, Component, Directive, Input } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { ITripPassage, StopId, StopShortName } from '@donmahallem/trapeze-api-types';
+import { VEHICLE_STATUS } from '@donmahallem/trapeze-api-types/dist/vehicle-status';
 import { TripPassagesListItemComponent } from './trip-passages-list-item.component';
 // tslint:disable:component-selector
 // tslint:disable:directive-selector
 @Component({
-  selector: 'mat-nav-list',
+  selector: 'mat-icon',
   template: '<div></div>',
 })
-export class TestMatNavListComponent {
+export class TestMatIconComponent {
 }
 @Component({
-  selector: 'app-departure-list-item',
+  selector: 'mat-list-item',
   template: '<div></div>',
 })
-export class TestDepartureListItemComponent {
+export class TestMatListItemComponent {
+}
+
+@Directive({
+  selector: 'a[routerLink]',
+})
+export class TestRouterLinkDirective {
   @Input()
-  public departure: IDeparture;
+  public routerLink: any[];
+}
+@Component({
+  template: '<app-trip-passages-list-item [passage]="testPassage"></app-trip-passages-list-item>',
+})
+export class TestParentComponent {
+  public testPassage: ITripPassage;
 }
 
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
+
+const testPassages: ITripPassage[] = [{
+  actualTime: '12:20',
+  status: VEHICLE_STATUS.DEPARTED,
+  stop: {
+    id: 'anyid1' as StopId,
+    name: 'anystop1',
+    shortName: 'anyStopName1' as StopShortName,
+  },
+  stop_seq_num: '1',
+}, {
+  actualTime: '15:30',
+  status: VEHICLE_STATUS.PLANNED,
+  stop: {
+    id: 'anyid2' as StopId,
+    name: 'anystop2',
+    shortName: 'anyStopName2' as StopShortName,
+  },
+  stop_seq_num: '2',
+}, {
+  actualTime: '09:30',
+  status: VEHICLE_STATUS.STOPPING,
+  stop: {
+    id: 'anyid3' as StopId,
+    name: 'anystop3',
+    shortName: 'anyStopName3' as StopShortName,
+  },
+  stop_seq_num: '3',
+}];
 describe('src/app/modules/trip-passages/trip-passages-list-item.component', () => {
   describe('TripPassagesListItemComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [
           TripPassagesListItemComponent,
-          TestMatNavListComponent,
-          TestDepartureListItemComponent,
+          TestRouterLinkDirective,
+          TestMatListItemComponent,
+          TestMatIconComponent,
+          TestParentComponent,
         ],
+      }).overrideComponent(TripPassagesListItemComponent, {
+        set: {
+          changeDetection: ChangeDetectionStrategy.Default,
+        },
       }).compileComponents();
     }));
-    it('should create the app', async(() => {
-      const fixture = TestBed.createComponent(TripPassagesListItemComponent);
-      const app = fixture.debugElement.componentInstance;
-      expect(app).toBeTruthy();
-    }));
-    describe('layout', () => {
-      it('needs to be implemented');
+    describe('without parent element', () => {
+      let cmpFixture: ComponentFixture<TripPassagesListItemComponent>;
+      let cmp: TripPassagesListItemComponent;
+      let routerLinkCmp: TestRouterLinkDirective;
+      beforeEach(() => {
+        cmpFixture = TestBed.createComponent(TripPassagesListItemComponent);
+        cmp = cmpFixture.componentInstance;
+        routerLinkCmp = cmpFixture.debugElement.query(By.directive(TestRouterLinkDirective)).componentInstance;
+      });
+      testPassages.forEach((testPassage: ITripPassage): void => {
+        it('layout should be updated with correct values with passage seq_num "' + testPassage.stop_seq_num + '"', async () => {
+          cmp.passage = testPassage;
+          cmpFixture.detectChanges();
+          await cmpFixture.whenStable();
+          const titleElement: HTMLElement = cmpFixture.debugElement.query(By.css('h3')).nativeElement;
+          expect(titleElement.innerText).toEqual(testPassage.stop.name);
+          expect(routerLinkCmp.routerLink).toEqual(['/stop', testPassage.stop.shortName]);
+        });
+      });
+    });
+    describe('with parent element', () => {
+      let parentFixture: ComponentFixture<TestParentComponent>;
+      let cmp: TripPassagesListItemComponent;
+      let parentCmp: TestParentComponent;
+      beforeEach(() => {
+        parentFixture = TestBed.createComponent(TestParentComponent);
+        parentCmp = parentFixture.componentInstance;
+        cmp = parentFixture.debugElement.query(By.directive(TripPassagesListItemComponent)).componentInstance;
+      });
+      testPassages.forEach((testPassage: ITripPassage): void => {
+        it('layout should be updated with correct values with passage seq_num "' + testPassage.stop_seq_num + '"', () => {
+          parentCmp.testPassage = testPassage;
+          parentFixture.detectChanges();
+          expect(cmp.passage).toEqual(testPassage);
+        });
+      });
     });
   });
 });

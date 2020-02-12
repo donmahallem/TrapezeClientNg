@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { IDeparture } from '@donmahallem/trapeze-api-types';
+import { ITripPassage } from '@donmahallem/trapeze-api-types';
 import { TripPassagesListComponent } from './trip-passages-list.component';
 
 // tslint:disable:component-selector
@@ -12,12 +12,12 @@ import { TripPassagesListComponent } from './trip-passages-list.component';
 export class TestMatNavListComponent {
 }
 @Component({
-  selector: 'app-departure-list-item',
+  selector: 'app-trip-passages-list-item',
   template: '<div></div>',
 })
-export class TestDepartureListItemComponent {
+export class TestTripPassagesListItemComponent {
   @Input()
-  public departure: IDeparture;
+  public passage: ITripPassage;
 }
 
 // tslint:enable:component-selector
@@ -29,7 +29,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
         declarations: [
           TripPassagesListComponent,
           TestMatNavListComponent,
-          TestDepartureListItemComponent,
+          TestTripPassagesListItemComponent,
         ],
       }).compileComponents();
     }));
