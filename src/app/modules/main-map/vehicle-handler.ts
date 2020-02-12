@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import { combineLatest, from, fromEvent, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, share, switchMap } from 'rxjs/operators';
 import { createVehicleIcon, LeafletUtil, RouteDisplayHandler } from 'src/app/leaflet';
-import { Data, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
+import { IData, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { MainMapDirective } from './main-map.directive';
 export type VehicleEvent = L.LeafletEvent & {
     sourceTarget: {
@@ -38,15 +38,15 @@ export class VehicleHandler {
             this.mouseActionObservable
                 .pipe(filter((evt: VehicleEvent): boolean =>
                     evt.type === 'click'), map((evt: VehicleEvent): VehicleMarker =>
-                    evt.sourceTarget));
+                        evt.sourceTarget));
         this.markerHoverObservable =
             this.mouseActionObservable
                 .pipe(filter((evt: VehicleEvent): boolean =>
                     evt.type === 'mouseover' || evt.type === 'mouseout'), map((evt: VehicleEvent): VehicleMarker => {
-                    const marker = evt.sourceTarget;
-                    marker.hovering = evt.type === 'mouseover';
-                    return marker;
-                }));
+                        const marker = evt.sourceTarget;
+                        marker.hovering = evt.type === 'mouseover';
+                        return marker;
+                    }));
     }
 
     /**
@@ -78,12 +78,12 @@ export class VehicleHandler {
         const vehicleObservable: Observable<TimestampedVehicleLocation[]> =
             this.mainMap.vehicleSerivce
                 .getVehicles
-                .pipe(distinctUntilChanged((x: Data, y: Data): boolean => {
+                .pipe(distinctUntilChanged((x: IData, y: IData): boolean => {
                     if (x && y) {
                         return x.lastUpdate === y.lastUpdate;
                     }
                     return false;
-                }), map((dat: Data): TimestampedVehicleLocation[] =>
+                }), map((dat: IData): TimestampedVehicleLocation[] =>
                     dat.vehicles));
         const filteredVehicles: Observable<TimestampedVehicleLocation[]> =
             combineLatest(mapMoveEvent, vehicleObservable)

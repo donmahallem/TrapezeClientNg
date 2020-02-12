@@ -24,30 +24,30 @@ export class TripPassagesUtil {
     public static convertResponse(tripId: TripId): OperatorFunction<ITripPassages, IPassageStatus> {
         return map((tripPassages: ITripPassages): IPassageStatus =>
             ({
+                failures: 0,
                 passages: tripPassages,
                 status: UpdateStatus.LOADED,
                 timestamp: Date.now(),
                 tripId,
-                failures: 0,
             }));
     }
     public static handleError(tripId: TripId): OperatorFunction<any, IPassageStatus> {
         return catchError((err: any): Observable<IPassageStatus> => {
             if (err && err.status) {
                 return of({
+                    failures: 1,
                     passages: undefined,
                     status: (err.status >= 500 && err.status < 600) ? UpdateStatus.SERVER_ERROR : err.status,
                     timestamp: Date.now(),
                     tripId,
-                    failures: 1,
                 });
             } else {
                 return of({
+                    failures: 1,
                     passages: undefined,
                     status: UpdateStatus.ERROR,
                     timestamp: Date.now(),
                     tripId,
-                    failures: 1,
                 });
             }
         });

@@ -7,13 +7,13 @@ const handleResult: <T>(obs: Observable<T>, doneCb: DoneFn, expectedResponse: an
     = <T>(obs: Observable<T>, doneCb: DoneFn, expectedResponse: any): void => {
         const resultSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('resultSpy');
         obs.subscribe({
-            next: resultSpy,
-            error: doneCb,
             complete: (): void => {
                 expect(resultSpy).toHaveBeenCalledTimes(1);
                 expect(resultSpy).toHaveBeenCalledWith(expectedResponse);
                 doneCb();
             },
+            error: doneCb,
+            next: resultSpy,
         });
     };
 

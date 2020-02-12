@@ -68,8 +68,8 @@ export class StopPointInfoService {
         this.statusObservable = combineLatest(this.passagesObservable, this.locationObservable)
             .pipe(map((val: [IStopPassage, IStopPointLocation]): IStatus =>
                 ({
-                    passages: val[0],
                     location: val[1],
+                    passages: val[0],
                 })), shareReplay(1));
     }
 }

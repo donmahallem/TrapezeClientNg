@@ -19,8 +19,8 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
             let createStatusObservableSpy: jasmine.Spy<jasmine.Func>;
             const refreshSubject: Subject<any> = new Subject();
             const testRoute: any = {
-                snapshot: { data: initialRouteData },
                 data: routeDataSubject.asObservable(),
+                snapshot: { data: initialRouteData },
             };
             beforeEach(() => {
                 createStatusObservableSpy = spyOn(TripPassagesService.prototype, 'createStatusObservable');
@@ -35,11 +35,12 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     (service as any).statusSubject
                         .pipe(take(1))
                         .subscribe({
+                            complete: doneFn,
+                            error: doneFn,
                             next: (val) => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
-                            }, error: doneFn,
-                            complete: doneFn,
+                            },
                         });
                 });
             });
@@ -49,17 +50,21 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     service.statusObservable
                         .pipe(take(1))
                         .subscribe({
+                            complete: doneFn,
+                            error: doneFn,
                             next: (val) => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
-                            }, error: doneFn,
-                            complete: doneFn,
+                            },
                         });
                     refreshSubject.next(initialTripData);
                 });
             });
         });
-        describe('createRefreshPollObservable', () => {
+        describe('createDelayedPassageRequest', () => {
+            it('needs to be implemented');
+        });
+        describe('createRefreshPollObservable()', () => {
             const networkResult: any = {
                 network: true,
                 result: 1,
