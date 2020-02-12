@@ -8,19 +8,19 @@ import { TripPassagesListItemComponent } from './trip-passages-list-item.compone
 // tslint:disable:directive-selector
 @Component({
   selector: 'mat-icon',
-  template: '<div></div>',
+  template: '<ng-content></ng-content>',
 })
 export class TestMatIconComponent {
 }
 @Component({
   selector: 'mat-list-item',
-  template: '<div></div>',
+  template: '<ng-content></ng-content>',
 })
 export class TestMatListItemComponent {
 }
 
 @Directive({
-  selector: 'a[routerLink]',
+  selector: 'a[role="listitem"]',
 })
 export class TestRouterLinkDirective {
   @Input()
@@ -76,9 +76,7 @@ describe('src/app/modules/trip-passages/trip-passages-list-item.component', () =
           TestParentComponent,
         ],
       }).overrideComponent(TripPassagesListItemComponent, {
-        set: {
-          changeDetection: ChangeDetectionStrategy.Default,
-        },
+        set: { changeDetection: ChangeDetectionStrategy.Default },
       }).compileComponents();
     }));
     describe('without parent element', () => {
@@ -88,13 +86,12 @@ describe('src/app/modules/trip-passages/trip-passages-list-item.component', () =
       beforeEach(() => {
         cmpFixture = TestBed.createComponent(TripPassagesListItemComponent);
         cmp = cmpFixture.componentInstance;
-        routerLinkCmp = cmpFixture.debugElement.query(By.directive(TestRouterLinkDirective)).componentInstance;
+        routerLinkCmp = cmpFixture.debugElement.query(By.directive(TestRouterLinkDirective)).injector.get(TestRouterLinkDirective);
       });
       testPassages.forEach((testPassage: ITripPassage): void => {
-        it('layout should be updated with correct values with passage seq_num "' + testPassage.stop_seq_num + '"', async () => {
+        it('layout should be updated with correct values with passage seq_num "' + testPassage.stop_seq_num + '"', () => {
           cmp.passage = testPassage;
           cmpFixture.detectChanges();
-          await cmpFixture.whenStable();
           const titleElement: HTMLElement = cmpFixture.debugElement.query(By.css('h3')).nativeElement;
           expect(titleElement.innerText).toEqual(testPassage.stop.name);
           expect(routerLinkCmp.routerLink).toEqual(['/stop', testPassage.stop.shortName]);
