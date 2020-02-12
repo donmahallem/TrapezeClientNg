@@ -16,29 +16,15 @@ import { ITripPassage } from '@donmahallem/trapeze-api-types';
 })
 export class TripPassagesListComponent {
 
-    private mPassages: ITripPassage[] = [];
-
-    /**
-     * set the passages
-     */
-    @Input('passages')
-    public set passages(passages: ITripPassage[]) {
-        this.mPassages = passages ? passages : [];
-    }
-
-    /**
-     * passages
-     */
-    public get passages(): ITripPassage[] {
-        return this.mPassages ? this.mPassages : [];
-    }
+    @Input()
+    public passages: ITripPassage[];
 
     /**
      * Returns if the atleast one passages was provided
      * @returns true if there is atleast one departure
      */
     public hasPassages(): boolean {
-        return this.mPassages !== undefined && this.mPassages.length > 0;
+        return Array.isArray(this.passages) && this.passages.length > 0;
     }
 
 }

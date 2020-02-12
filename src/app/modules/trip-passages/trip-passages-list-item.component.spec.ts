@@ -86,7 +86,9 @@ describe('src/app/modules/trip-passages/trip-passages-list-item.component', () =
       beforeEach(() => {
         cmpFixture = TestBed.createComponent(TripPassagesListItemComponent);
         cmp = cmpFixture.componentInstance;
-        routerLinkCmp = cmpFixture.debugElement.query(By.directive(TestRouterLinkDirective)).injector.get(TestRouterLinkDirective);
+        routerLinkCmp = cmpFixture.debugElement
+          .query(By.directive(TestRouterLinkDirective))
+          .injector.get(TestRouterLinkDirective);
       });
       testPassages.forEach((testPassage: ITripPassage): void => {
         it('layout should be updated with correct values with passage seq_num "' + testPassage.stop_seq_num + '"', () => {
