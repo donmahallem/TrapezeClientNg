@@ -14,6 +14,7 @@ export type VehicleMarker = L.Marker & {
     hovering?: boolean;
 };
 export class VehicleHandler {
+    public readonly markerClickObservable: Observable<VehicleMarker>;
 
     /**
      * Layer for the stop markers to be displayed on the map
@@ -22,7 +23,6 @@ export class VehicleHandler {
 
     private loadSubscription: Subscription;
     private mouseActionObservable: Observable<VehicleEvent>;
-    private markerClickObservable: Observable<VehicleMarker>;
     private markerHoverObservable: Observable<VehicleMarker>;
     private mouseHoverSubscription: Subscription;
     private routeDisplayHandler: RouteDisplayHandler;

@@ -63,7 +63,7 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                 }
             }),
                 // needed for pairwise not delaying the display
-                startWith(undefined),
+                startWith(undefined as TimestampedVehicleLocation),
                 pairwise(),
                 map((val: [TimestampedVehicleLocation, TimestampedVehicleLocation]): IVehicleInfo => {
                     if (val[0] && val[1]) {
