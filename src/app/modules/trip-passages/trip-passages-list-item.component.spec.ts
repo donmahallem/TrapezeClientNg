@@ -13,7 +13,7 @@ import { TripPassagesListItemComponent } from './trip-passages-list-item.compone
 export class TestMatIconComponent {
 }
 @Component({
-  selector: 'mat-list-item',
+  selector: 'a[mat-list-item]',
   template: '<ng-content></ng-content>',
 })
 export class TestMatListItemComponent {

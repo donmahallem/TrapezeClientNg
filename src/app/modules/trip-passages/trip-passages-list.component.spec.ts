@@ -22,6 +22,12 @@ export class TestTripPassagesListItemComponent {
   public passage: ITripPassage;
 }
 
+@Component({
+  template: '<app-trip-passages-list [passages]="testPassages"></app-trip-passages-list>',
+})
+export class TestParentComponent {
+  public testPassages: ITripPassage[];
+}
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
 const testPassages: ITripPassage[] = [{
@@ -60,6 +66,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
           TripPassagesListComponent,
           TestMatNavListComponent,
           TestTripPassagesListItemComponent,
+          TestParentComponent,
         ],
       }).overrideComponent(TripPassagesListComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },
@@ -135,8 +142,23 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
         });
       });
     });
-    describe('with passages set', () => {
-      it('needs to be implemented');
+    describe('with parent element', () => {
+      let parentFixture: ComponentFixture<TestParentComponent>;
+      let parentCmp: TestParentComponent;
+      let cmp: TripPassagesListComponent;
+      beforeEach(() => {
+        parentFixture = TestBed.createComponent(TestParentComponent);
+        parentCmp = parentFixture.componentInstance;
+        cmp = parentFixture.debugElement.query(By.directive(TripPassagesListComponent)).componentInstance;
+        parentCmp.testPassages = undefined;
+        parentFixture.detectChanges();
+      });
+      it('should set the elements via the Input tag', () => {
+        expect(cmp.passages).toBeUndefined();
+        parentCmp.testPassages = testPassages;
+        parentFixture.detectChanges();
+        expect(cmp.passages).toEqual(testPassages);
+      });
     });
   });
 });
