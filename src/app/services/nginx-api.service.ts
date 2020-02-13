@@ -18,7 +18,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments';
-import { ApiService } from './api.service';
+import { ApiService, TripInfoWithId } from './api.service';
 
 @Injectable()
 export class NginxApiService implements ApiService {
@@ -29,8 +29,12 @@ export class NginxApiService implements ApiService {
         return environment.apiEndpoint.endsWith('\/') ? environment.apiEndpoint : (environment.apiEndpoint + '\/');
     }
 
-    public getTripPassages(tripId: TripId): Observable<ITripPassages> {
-        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure');
+    public getTripPassages(tripId: TripId): Observable<TripInfoWithId> {
+        return this.http.get<ITripPassages>(this.baseUrl() + 'trip/' + tripId + '/passages?mode=departure')
+            .pipe(map((trip: ITripPassages): TripInfoWithId =>
+                Object.assign({
+                    tripId,
+                }, trip)));
     }
     public getRouteByVehicleId(vehicleId: VehicleId): Observable<IVehiclePathInfo> {
         return this.http.get<IVehiclePathInfo>(this.baseUrl() + 'vehicle/' + vehicleId + '/route');

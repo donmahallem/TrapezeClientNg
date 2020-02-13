@@ -103,7 +103,6 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(0);
                 statusSubject.next({
                     status: UpdateStatus.LOADED,
-                    tripId: '1' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(1);
                 expect(nextSpy).toHaveBeenCalledTimes(0);
@@ -111,14 +110,12 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 expect(nextSpy).toHaveBeenCalledTimes(1);
                 statusSubject.next({
                     status: UpdateStatus.LOADED,
-                    tripId: '2' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(2);
                 tick(500);
                 expect(nextSpy).toHaveBeenCalledTimes(1);
                 statusSubject.next({
                     status: UpdateStatus.ERROR,
-                    tripId: '3' as TripId,
                 });
                 expect(createDelayedPassageRequestSpy).toHaveBeenCalledTimes(3);
                 expect(nextSpy).toHaveBeenCalledTimes(1);

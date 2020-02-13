@@ -23,7 +23,7 @@ export class TestTripPassagesListItemComponent {
 }
 
 @Component({
-  template: '<app-trip-passages-list [passages]="testPassages"></app-trip-passages-list>',
+  template: '<app-trip-passages-list [tripInfo]="testPassages"></app-trip-passages-list>',
 })
 export class TestParentComponent {
   public testPassages: ITripPassage[];

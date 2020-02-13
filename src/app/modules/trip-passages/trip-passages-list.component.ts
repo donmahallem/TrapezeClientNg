@@ -3,7 +3,8 @@ import {
     Component,
     Input,
 } from '@angular/core';
-import { ITripPassage } from '@donmahallem/trapeze-api-types';
+import { ITripPassage, ITripPassages } from '@donmahallem/trapeze-api-types';
+import { TripInfoWithId } from 'src/app/services';
 
 /**
  * List of Departures Component
@@ -17,7 +18,14 @@ import { ITripPassage } from '@donmahallem/trapeze-api-types';
 export class TripPassagesListComponent {
 
     @Input()
-    public passages: ITripPassage[];
+    public set tripInfo(info: TripInfoWithId) {
+        const passages: ITripPassage[] = [...info.actual, ...info.old];
+        passages.sort((a: ITripPassage, b: ITripPassage): number =>
+            parseInt(b.stop_seq_num, 10) - parseInt(a.stop_seq_num, 10));
+        this.passages = passages;
+    }
+
+    public passages: ITripPassage[] = [];
 
     /**
      * Returns if the atleast one passages was provided
