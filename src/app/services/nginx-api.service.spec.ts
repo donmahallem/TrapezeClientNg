@@ -50,7 +50,7 @@ describe('src/app/services/nginx-api.service', () => {
             it('should construct the request correctly', (done: DoneFn) => {
                 handleResult(apiService.getTripPassages(testId),
                     done,
-                    [testEndpoint + 'trip/' + testId + '/passages?mode=departure']);
+                    { 0: testEndpoint + 'trip/' + testId + '/passages?mode=departure', tripId: testId });
             });
         });
         describe('getRouteByVehicleId(vehicleId)', () => {

@@ -11,7 +11,7 @@ export class TripPassagesService {
     public readonly statusObservable: Observable<IPassageStatus>;
     private readonly statusSubject: BehaviorSubject<IPassageStatus>;
     constructor(private route: ActivatedRoute,
-        private apiService: ApiService) {
+                private apiService: ApiService) {
         this.statusSubject = new BehaviorSubject(route.snapshot.data.tripPassages);
         this.statusObservable = this.createStatusObservable();
     }

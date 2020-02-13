@@ -1,4 +1,4 @@
-import { ITripPassages, TripId } from '@donmahallem/trapeze-api-types';
+import { TripId } from '@donmahallem/trapeze-api-types';
 import { of, Observable, OperatorFunction } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { TripInfoWithId } from 'src/app/services';
@@ -26,10 +26,10 @@ export class TripPassagesUtil {
         return map((tripPassages: TripInfoWithId): IPassageStatus =>
             ({
                 failures: 0,
-                tripInfo: tripPassages,
                 status: UpdateStatus.LOADED,
                 timestamp: Date.now(),
                 tripId: tripPassages.tripId,
+                tripInfo: tripPassages,
             }));
     }
     public static handleError(tripId: TripId): OperatorFunction<any, IPassageStatus> {

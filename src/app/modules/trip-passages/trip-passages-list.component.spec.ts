@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ITripPassage, StopId, StopShortName } from '@donmahallem/trapeze-api-types';
+import { IActualTripPassage, IDepartedTripPassage, ITripPassage, ITripPassages, StopId, StopShortName, TripId } from '@donmahallem/trapeze-api-types';
 import { VEHICLE_STATUS } from '@donmahallem/trapeze-api-types/dist/vehicle-status';
+import { TripInfoWithId } from 'src/app/services';
 import { TripPassagesListComponent } from './trip-passages-list.component';
 
 // tslint:disable:component-selector
@@ -23,16 +24,25 @@ export class TestTripPassagesListItemComponent {
 }
 
 @Component({
-  template: '<app-trip-passages-list [tripInfo]="testPassages"></app-trip-passages-list>',
+  template: '<app-trip-passages-list [tripInfo]="testPassage"></app-trip-passages-list>',
 })
 export class TestParentComponent {
-  public testPassages: ITripPassage[];
+  public testPassage: ITripPassages;
 }
 // tslint:enable:component-selector
 // tslint:enable:directive-selector
-const testPassages: ITripPassage[] = [{
+const testActualPassages: IActualTripPassage[] = [{
+  actualTime: '09:30',
+  status: VEHICLE_STATUS.STOPPING,
+  stop: {
+    id: 'anyid3' as StopId,
+    name: 'anystop3',
+    shortName: 'anyStopName3' as StopShortName,
+  },
+  stop_seq_num: '3',
+}, {
   actualTime: '12:20',
-  status: VEHICLE_STATUS.DEPARTED,
+  status: VEHICLE_STATUS.PREDICTED,
   stop: {
     id: 'anyid1' as StopId,
     name: 'anystop1',
@@ -48,15 +58,34 @@ const testPassages: ITripPassage[] = [{
     shortName: 'anyStopName2' as StopShortName,
   },
   stop_seq_num: '2',
+}];
+const testOldPassages: IDepartedTripPassage[] = [{
+  actualTime: '15:30',
+  status: VEHICLE_STATUS.DEPARTED,
+  stop: {
+    id: 'anyid11' as StopId,
+    name: 'anystop11',
+    shortName: 'anyStopName11' as StopShortName,
+  },
+  stop_seq_num: '11',
+}, {
+  actualTime: '12:20',
+  status: VEHICLE_STATUS.DEPARTED,
+  stop: {
+    id: 'anyid4' as StopId,
+    name: 'anystop4',
+    shortName: 'anyStopName4' as StopShortName,
+  },
+  stop_seq_num: '4',
 }, {
   actualTime: '09:30',
-  status: VEHICLE_STATUS.STOPPING,
+  status: VEHICLE_STATUS.DEPARTED,
   stop: {
-    id: 'anyid3' as StopId,
-    name: 'anystop3',
-    shortName: 'anyStopName3' as StopShortName,
+    id: 'anyid6' as StopId,
+    name: 'anystop6',
+    shortName: 'anyStopName6' as StopShortName,
   },
-  stop_seq_num: '3',
+  stop_seq_num: '6',
 }];
 describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
   describe('TripPassagesListComponent', () => {
@@ -72,6 +101,68 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
         set: { changeDetection: ChangeDetectionStrategy.Default },
       }).compileComponents();
     }));
+    describe('properties', () => {
+      let cmpFixture: ComponentFixture<TripPassagesListComponent>;
+      let cmp: TripPassagesListComponent;
+      beforeEach(() => {
+        cmpFixture = TestBed.createComponent(TripPassagesListComponent);
+        cmp = cmpFixture.componentInstance;
+      });
+      describe('set - tripInfo', () => {
+        it('should set passages to an empty array for null', () => {
+          // tslint:disable-next-line:no-null-keyword
+          cmp.tripInfo = null;
+          expect(cmp.passages).toEqual([]);
+        });
+        it('should set passages to an empty array for undefined', () => {
+          cmp.tripInfo = undefined;
+          expect(cmp.passages).toEqual([]);
+        });
+        it('should set passages to an empty array with no actual and old provided', () => {
+          cmp.tripInfo = {} as TripInfoWithId;
+          expect(cmp.passages).toEqual([]);
+        });
+        it('should set passages ordered correctly for actual and old provided', () => {
+          cmp.tripInfo = {
+            actual: testActualPassages,
+            directionText: 'direction1',
+            old: testOldPassages,
+            routeName: 'routeName1',
+            tripId: 'testId' as TripId,
+          };
+          expect(cmp.passages).toEqual([testActualPassages[1],
+          testActualPassages[2],
+          testActualPassages[0],
+          testOldPassages[1],
+          testOldPassages[2],
+          testOldPassages[0]]);
+        });
+        it('should set passages ordered correctly with only old provided', () => {
+          cmp.tripInfo = {
+            actual: undefined,
+            directionText: 'direction1',
+            old: testOldPassages,
+            routeName: 'routeName1',
+            tripId: 'testId' as TripId,
+          };
+          expect(cmp.passages).toEqual([testOldPassages[1],
+          testOldPassages[2],
+          testOldPassages[0]]);
+        });
+        it('should set passages ordered correctly with only actual provided', () => {
+          cmp.tripInfo = {
+            actual: testActualPassages,
+            directionText: 'direction1',
+            old: undefined,
+            routeName: 'routeName1',
+            tripId: 'testId' as TripId,
+          };
+          expect(cmp.passages).toEqual([testActualPassages[1],
+          testActualPassages[2],
+          testActualPassages[0]]);
+        });
+      });
+    });
     describe('methods', () => {
       let cmpFixture: ComponentFixture<TripPassagesListComponent>;
       let cmp: TripPassagesListComponent;
@@ -108,7 +199,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
         [1, 2, 3].forEach((testNum: number): void => {
 
           it('should display ' + testNum + ' all relavent items', () => {
-            cmp.passages = testPassages.slice(0, testNum);
+            cmp.passages = testActualPassages.slice(0, testNum);
             cmpFixture.detectChanges();
             listItems = cmpFixture.debugElement
               .queryAll(By.directive(TestTripPassagesListItemComponent))
@@ -119,7 +210,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
             const mappedValues: ITripPassage[] = listItems
               .map((itemCmp: TestTripPassagesListItemComponent): ITripPassage =>
                 itemCmp.passage);
-            expect(mappedValues).toEqual(testPassages.slice(0, testNum));
+            expect(mappedValues).toEqual(testActualPassages.slice(0, testNum));
 
           });
         });
@@ -146,18 +237,27 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
       let parentFixture: ComponentFixture<TestParentComponent>;
       let parentCmp: TestParentComponent;
       let cmp: TripPassagesListComponent;
+      let tripInfoSpy: jasmine.Spy<jasmine.Func>;
       beforeEach(() => {
         parentFixture = TestBed.createComponent(TestParentComponent);
         parentCmp = parentFixture.componentInstance;
         cmp = parentFixture.debugElement.query(By.directive(TripPassagesListComponent)).componentInstance;
-        parentCmp.testPassages = undefined;
+        tripInfoSpy = spyOnProperty(cmp, 'tripInfo', 'set');
+        tripInfoSpy.and.callFake(() => {
+        });
+        parentCmp.testPassage = undefined;
         parentFixture.detectChanges();
       });
       it('should set the elements via the Input tag', () => {
-        expect(cmp.passages).toBeUndefined();
-        parentCmp.testPassages = testPassages;
+        expect(tripInfoSpy).toHaveBeenCalledTimes(1);
+        expect(tripInfoSpy).toHaveBeenCalledWith(undefined);
+        parentCmp.testPassage = testActualPassages as any;
         parentFixture.detectChanges();
-        expect(cmp.passages).toEqual(testPassages);
+        expect(tripInfoSpy).toHaveBeenCalledTimes(2);
+        expect(tripInfoSpy).toHaveBeenCalledWith(testActualPassages);
+      });
+      afterEach(() => {
+        tripInfoSpy.calls.reset();
       });
     });
   });
