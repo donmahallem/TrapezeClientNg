@@ -12,6 +12,10 @@ const appRoutes: Routes = [
         path: 'stop',
     },
     {
+        loadChildren: () => import('./modules/stop-point/stop-point.module').then((m) => m.StopPointModule),
+        path: 'stopPoint',
+    },
+    {
         loadChildren: () => import('./modules/stops/stops.module').then((m) => m.StopsModule),
         path: 'stops',
     },

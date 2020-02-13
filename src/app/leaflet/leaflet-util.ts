@@ -1,6 +1,6 @@
 import { IWayPoint } from '@donmahallem/trapeze-api-types';
-import { LatLng } from 'leaflet';
-
+import { latLng, LatLng } from 'leaflet';
+export type Coord = { lat: number, lon: number } | { latitude: number, longitude: number };
 export class LeafletUtil {
 
     /**
@@ -17,5 +17,16 @@ export class LeafletUtil {
     public static convertWayPointsToLatLng(wayPoints: IWayPoint[]): LatLng[] {
         return wayPoints
             .map((value: IWayPoint) => LeafletUtil.convertWayPointToLatLng(value));
+    }
+
+    public static convertCoordToLatLng(coord: Coord): LatLng {
+        const tmpCoord: any = coord;
+        if (tmpCoord.lat && tmpCoord.lon) {
+            return latLng(tmpCoord.lat / 3600000, tmpCoord.lon / 3600000);
+        } else if (tmpCoord.latitude && tmpCoord.longitude) {
+            return latLng(tmpCoord.latitude / 3600000, tmpCoord.longitude / 3600000);
+        } else {
+            throw new Error('Invalid coordinates');
+        }
     }
 }

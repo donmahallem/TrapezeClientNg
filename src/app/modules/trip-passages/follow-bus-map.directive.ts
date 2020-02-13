@@ -4,10 +4,9 @@ import * as L from 'leaflet';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { createVehicleIcon, RouteDisplayHandler } from 'src/app/leaflet';
-import { ITimestampVehicleLocation } from 'src/app/models';
 import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
-import { UserLocationService } from 'src/app/services/user-location.service';
+import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { LeafletMapComponent } from '../common/leaflet-map.component';
 
 @Directive({
@@ -15,25 +14,24 @@ import { LeafletMapComponent } from '../common/leaflet-map.component';
 })
 export class FollowBusMapDirective extends LeafletMapComponent implements AfterViewInit, OnDestroy {
     @Input('location')
-    public set location(loc: ITimestampVehicleLocation) {
+    public set location(loc: TimestampedVehicleLocation) {
         this.vehicleLocationSubject.next(loc);
     }
 
-    public get location(): ITimestampVehicleLocation {
+    public get location(): TimestampedVehicleLocation {
         return this.vehicleLocationSubject.getValue();
     }
-    private vehicleLocationSubject: BehaviorSubject<ITimestampVehicleLocation> = new BehaviorSubject(undefined);
+    private vehicleLocationSubject: BehaviorSubject<TimestampedVehicleLocation> = new BehaviorSubject(undefined);
 
     private stopMarkerLayer: L.FeatureGroup = undefined;
 
     private updateObservable: Subscription;
     private routeDisplayHandler: RouteDisplayHandler;
     constructor(elRef: ElementRef,
-                userLocationService: UserLocationService,
                 zone: NgZone,
                 private apiService: ApiService,
                 settingsService: SettingsService) {
-        super(elRef, zone, userLocationService, settingsService);
+        super(elRef, zone, settingsService);
     }
     public ngAfterViewInit() {
         super.ngAfterViewInit();
@@ -52,7 +50,12 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
     }
     public addMarker(): void {
         this.updateObservable = this.vehicleLocationSubject
-            .pipe(map((loc: ITimestampVehicleLocation) => loc.vehicle))
+            .pipe(filter((loc: TimestampedVehicleLocation) => {
+                if (loc) {
+                    return true;
+                }
+                return false;
+            }), map((loc: TimestampedVehicleLocation) => loc))
             .subscribe((location) => {
                 if (this.stopMarkerLayer) {
                     this.stopMarkerLayer.clearLayers();
@@ -81,11 +84,14 @@ export class FollowBusMapDirective extends LeafletMapComponent implements AfterV
                 }
             });
         this.vehicleLocationSubject
-            .pipe(
-                filter((num) => num !== null),
-                distinctUntilChanged(),
+            .pipe(filter((loc: TimestampedVehicleLocation) => {
+                if (loc) {
+                    return true;
+                }
+                return false;
+            }), distinctUntilChanged(),
                 mergeMap((boundsa) =>
-                    this.apiService.getRouteByTripId(boundsa.vehicle.tripId)))
+                    this.apiService.getRouteByTripId(boundsa.tripId)))
             .subscribe(new Subscriber<IVehiclePathInfo>((routes: IVehiclePathInfo) => {
                 this.routeDisplayHandler.setRoutePaths(routes.paths);
             }));

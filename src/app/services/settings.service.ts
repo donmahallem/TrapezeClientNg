@@ -48,7 +48,7 @@ export class SettingsService {
         if (this.settings && this.settings.INITIAL_ZOOM) {
             return this.settings.INITIAL_ZOOM;
         }
-        return 20;
+        return 13;
     }
 
     public load(): Promise<void> {

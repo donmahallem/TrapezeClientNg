@@ -1,8 +1,8 @@
-import { ITripPassages, IVehicleLocation } from '@donmahallem/trapeze-api-types';
-
-export type TripPassagesLocation = ITripPassages & {
-    location: ITimestampVehicleLocation,
-};
+import {
+    IStopLocation,
+    IStopPointLocation,
+    IVehicleLocation,
+} from '@donmahallem/trapeze-api-types';
 
 export interface ITimestampVehicleLocation {
     /**
@@ -14,3 +14,5 @@ export interface ITimestampVehicleLocation {
      */
     vehicle: IVehicleLocation;
 }
+
+export type LocationObject = IVehicleLocation | IStopLocation | IStopPointLocation;
