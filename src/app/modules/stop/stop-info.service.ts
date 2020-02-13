@@ -46,7 +46,7 @@ export class StopInfoService {
         return interval(5000)
             .pipe(switchMap((): Observable<IStopPassage> =>
                 this.apiService
-                    .getStopPassages(initStopPassage.stopShortName)),
+                    .getStopPassages(initStopPassage.stopShortName as any)),
                 startWith(initStopPassage),
                 map((stopPassage: IStopPassage): IStatus =>
                     ({
