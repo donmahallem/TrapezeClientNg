@@ -73,24 +73,70 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                         },
                     });
             });
-            it('should convert errors and not fail', (doneFn: DoneFn) => {
-                const testTripId: TripId = 'testTripId' as TripId;
-                throwError(testError)
-                    .pipe(TripPassagesUtil.handleError(testTripId),
-                        toArray())
-                    .subscribe({
-                        complete: doneFn,
-                        error: doneFn.fail,
-                        next: (testResult) => {
-                            expect(testResult as any).toEqual([{
-                                failures: 1,
-                                passages: undefined,
-                                status: UpdateStatus.ERROR,
-                                timestamp: testTimestamp,
-                                tripId: testTripId,
-                            }]);
-                        },
+            describe('errors without status', () => {
+                it('should convert errors and not fail without status', (doneFn: DoneFn) => {
+                    const testTripId: TripId = 'testTripId' as TripId;
+                    throwError(testError)
+                        .pipe(TripPassagesUtil.handleError(testTripId),
+                            toArray())
+                        .subscribe({
+                            complete: doneFn,
+                            error: doneFn.fail,
+                            next: (testResult) => {
+                                expect(testResult as any).toEqual([{
+                                    failures: 1,
+                                    passages: undefined,
+                                    status: UpdateStatus.ERROR,
+                                    timestamp: testTimestamp,
+                                    tripId: testTripId,
+                                }]);
+                            },
+                        });
+                });
+            });
+            describe('errors with status', () => {
+                [300, 400, 401, 404].forEach((testStatus: number): void => {
+                    it('should convert error without 5xx error status "' + testStatus + '"', (doneFn: DoneFn) => {
+                        const testTripId: TripId = 'testTripId' + testStatus as TripId;
+                        throwError({ status: testStatus })
+                            .pipe(TripPassagesUtil.handleError(testTripId),
+                                toArray())
+                            .subscribe({
+                                complete: doneFn,
+                                error: doneFn.fail,
+                                next: (testResult) => {
+                                    expect(testResult as any).toEqual([{
+                                        failures: 1,
+                                        passages: undefined,
+                                        status: testStatus,
+                                        timestamp: testTimestamp,
+                                        tripId: testTripId,
+                                    }]);
+                                },
+                            });
                     });
+                });
+                [500, 521, 599].forEach((testStatus: number): void => {
+                    it('should convert error with 5xx error status "' + testStatus + '" to 500', (doneFn: DoneFn) => {
+                        const testTripId: TripId = 'testTripId' + testStatus as TripId;
+                        throwError({ status: testStatus })
+                            .pipe(TripPassagesUtil.handleError(testTripId),
+                                toArray())
+                            .subscribe({
+                                complete: doneFn,
+                                error: doneFn.fail,
+                                next: (testResult) => {
+                                    expect(testResult as any).toEqual([{
+                                        failures: 1,
+                                        passages: undefined,
+                                        status: 500,
+                                        timestamp: testTimestamp,
+                                        tripId: testTripId,
+                                    }]);
+                                },
+                            });
+                    });
+                });
             });
         });
     });
