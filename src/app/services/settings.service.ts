@@ -42,7 +42,7 @@ export class SettingsService {
             this.settings.INITIAL_LON) {
             return new L.LatLng(this.settings.INITIAL_LAT / 3600000, this.settings.INITIAL_LON / 3600000);
         }
-        return new L.LatLng(54.3291104, 10.1497462);
+        return new L.LatLng(0, 0);
     }
     public getInitialMapZoom(): number {
         if (this.settings && this.settings.INITIAL_ZOOM) {

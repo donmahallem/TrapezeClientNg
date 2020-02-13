@@ -7,7 +7,7 @@ import {
     MatTabsModule,
     MatToolbarModule,
 } from '@angular/material';
-import { MapHeaderBoxModule } from '../common';
+import { StopMapHeaderBoxModule } from '../common';
 import { DepartureListItemComponent } from './departure-list-item.component';
 import { DepartureListComponent } from './departure-list.component';
 import { RouteListComponent } from './route-list.component';
@@ -29,7 +29,7 @@ import { StopRoutingModule } from './stop-routing.module';
         MatProgressSpinnerModule,
         StopRoutingModule,
         MatTabsModule,
-        MapHeaderBoxModule,
+        StopMapHeaderBoxModule,
     ],
     providers: [
         StopInfoResolver,

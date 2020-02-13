@@ -1,0 +1,6 @@
+{
+    "tslint.configFile": "./src/tslint.json",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
+    }
+}

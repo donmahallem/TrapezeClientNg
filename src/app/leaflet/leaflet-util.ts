@@ -20,11 +20,11 @@ export class LeafletUtil {
     }
 
     public static convertCoordToLatLng(coord: Coord): LatLng {
-        const _tmp: any = coord;
-        if (_tmp.lat && _tmp.lon) {
-            return latLng(_tmp.lat / 3600000, _tmp.lon / 3600000);
-        } else if (_tmp.latitude && _tmp.longitude) {
-            return latLng(_tmp.latitude / 3600000, _tmp.longitude / 3600000);
+        const tmpCoord: any = coord;
+        if (tmpCoord.lat && tmpCoord.lon) {
+            return latLng(tmpCoord.lat / 3600000, tmpCoord.lon / 3600000);
+        } else if (tmpCoord.latitude && tmpCoord.longitude) {
+            return latLng(tmpCoord.latitude / 3600000, tmpCoord.longitude / 3600000);
         } else {
             throw new Error('Invalid coordinates');
         }

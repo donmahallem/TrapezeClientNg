@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule,
 } from '@angular/material';
+import { VehicleLocationHeaderMapDirective } from './vehicle-location-map.directive';
 import { VehicleMapHeaderBoxComponent } from './vehicle-map-header.component';
-import { VehicleLocationHeaderMapDirective } from './vehicle-location-header-map.directive';
 
 @NgModule({
     declarations: [

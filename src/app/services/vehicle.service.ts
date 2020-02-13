@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     IVehicleLocation,
+    TripId,
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
 import { concat, from, of, BehaviorSubject, Observable } from 'rxjs';
@@ -13,7 +14,7 @@ export type TimestampedVehicleLocation = IVehicleLocation & {
 export type TimestampedVehicles = VehicleLocations & {
     lastUpdate: number,
 };
-export interface Data {
+export interface IData {
     error?: any;
     lastUpdate: number;
     vehicles: TimestampedVehicleLocation[];
@@ -23,16 +24,16 @@ type VehicleMap = Map<string, TimestampedVehicles>;
     providedIn: 'root',
 })
 export class VehicleService {
-    private state: BehaviorSubject<Data> = new BehaviorSubject({ lastUpdate: 0, vehicles: [] });
+    private state: BehaviorSubject<IData> = new BehaviorSubject({ lastUpdate: 0, vehicles: [] });
     constructor(private api: ApiService) {
-        const startValue: Data = {
+        const startValue: IData = {
             lastUpdate: 0,
             vehicles: [],
         };
         concat(from([startValue]), this.state.pipe(debounceTime(10000)))
-            .pipe(flatMap((previousData: Data) =>
+            .pipe(flatMap((previousData: IData) =>
                 this.api.getVehicleLocations(previousData.lastUpdate)
-                    .pipe(map((value): Data => {/*
+                    .pipe(map((value): IData => {/*
                         if(previousData.lastUpdate!==value.lastUpdate){
                             console.log("New location data acquired",value.lastUpdate)
                         }*/
@@ -53,12 +54,12 @@ export class VehicleService {
                                 }, new Map());
                         const filterInvalid: TimestampedVehicleLocation[] =
                             Array.from(reducedVehicles.values())
-                                .filter((value: any): boolean => {
-                                    if (value) {
-                                        if (value.isDeleted === true) {
+                                .filter((vehState: any): boolean => {
+                                    if (vehState) {
+                                        if (vehState.isDeleted === true) {
                                             return false;
                                         }
-                                        if (value.latitude && value.longitude) {
+                                        if (vehState.latitude && vehState.longitude) {
                                             return true;
                                         }
                                     }
@@ -77,8 +78,18 @@ export class VehicleService {
             });
     }
 
-    public get getVehicles(): Observable<Data> {
+    public get getVehicles(): Observable<IData> {
         return this.state;
+    }
+
+    public getVehicleByTripId(tripId: TripId): Observable<TimestampedVehicleLocation> {
+        return this.state
+            .pipe(map((status: IData): TimestampedVehicleLocation => {
+                const idx: number = status.vehicles
+                    .findIndex((veh: TimestampedVehicleLocation): boolean =>
+                        veh.tripId === tripId);
+                return idx >= 0 ? status.vehicles[idx] : undefined;
+            }));
     }
 
 }

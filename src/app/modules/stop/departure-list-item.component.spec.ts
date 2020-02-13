@@ -6,13 +6,13 @@ import { DepartureListItemComponent } from './departure-list-item.component';
 // tslint:disable:directive-selector
 @Component({
   selector: 'mat-icon',
-  template: '<div></div>',
+  template: '<ng-content></ng-content>',
 })
 export class TestMatIconComponent {
 }
 @Component({
-  selector: 'mat-list-item',
-  template: '<div></div>',
+  selector: 'a[mat-list-item]',
+  template: '<ng-content></ng-content>',
 })
 export class TestMatListItemComponent {
 }

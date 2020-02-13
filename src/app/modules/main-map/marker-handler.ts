@@ -68,7 +68,7 @@ export class MarkerHandler {
                 }
             });
         this.loadSubscription =
-            combineLatest(this.getStopLocations(), this.getStopPointLocations())
+            combineLatest([this.getStopLocations(), this.getStopPointLocations()])
                 .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
                     this.setStopPoints(result[1]);
                     this.setStops(result[0]);

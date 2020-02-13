@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IStopLocation, IStopLocations, IStopPointLocation, IStopPointLocations, StopShortName } from '@donmahallem/trapeze-api-types';
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { debounceTime, map, retryWhen, shareReplay, tap, withLatestFrom } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { AppNotificationService } from './app-notification.service';
@@ -30,9 +30,6 @@ export class StopPointLoadSubscriber extends Subscriber<IStopLocation[]> {
 })
 export class StopPointService {
 
-    private mStopLocations: IStopLocation[];
-    private sharedReplay: Observable<IStopLocation[]> = undefined;
-    private retrySubject: Subject<void> = new Subject();
     private mStopPointObservable: Observable<IStopPointLocation[]>;
     private mStopObservable: Observable<IStopLocation[]>;
     constructor(private api: ApiService,
@@ -53,7 +50,7 @@ export class StopPointService {
                         debounceTime(5000))), shareReplay(1));
     }
 
-    public filterStop(filter: Observable<StopShortName>): Observable<IStopLocation> {
+    public filterByObservable(filter: Observable<StopShortName>): Observable<IStopLocation> {
         return this.stopObservable
             .pipe(withLatestFrom(filter),
                 map((value: [IStopLocation[], StopShortName]): IStopLocation => {
@@ -66,6 +63,19 @@ export class StopPointService {
                     }
                     return undefined;
                 }));
+    }
+    public filterStop(stopShortName: StopShortName): Observable<IStopLocation> {
+        return this.stopObservable
+            .pipe(map((stopLocations: IStopLocation[]): IStopLocation => {
+                if (stopLocations) {
+                    const idx: number = stopLocations.findIndex((stop: IStopLocation) =>
+                        stop.shortName === stopShortName);
+                    if (idx >= 0) {
+                        return stopLocations[idx];
+                    }
+                }
+                return undefined;
+            }));
     }
 
     public get stopObservable(): Observable<IStopLocation[]> {

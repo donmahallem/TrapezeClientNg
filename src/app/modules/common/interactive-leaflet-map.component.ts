@@ -5,7 +5,6 @@ import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, share } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from './leaflet-map.component';
-import './rotating-marker.patch';
 
 export abstract class InteractiveLeafletMapComponent extends LeafletMapComponent {
     public readonly leafletEvent: Observable<L.LeafletEvent>;
@@ -39,11 +38,11 @@ export abstract class InteractiveLeafletMapComponent extends LeafletMapComponent
                 }
             }), map((evt: L.LeafletEvent): L.LatLngBounds =>
                 evt.target.getBounds()), distinctUntilChanged((x: L.LatLngBounds, y: L.LatLngBounds): boolean => {
-                if (x && y) {
-                    return x.equals(y);
-                }
-                return false;
-            }), share());
+                    if (x && y) {
+                        return x.equals(y);
+                    }
+                    return false;
+                }), share());
         this.leafletZoomEvent = this.leafletEvent
             .pipe(filter((evt: L.LeafletEvent): boolean => {
                 switch (evt.type) {
@@ -55,15 +54,15 @@ export abstract class InteractiveLeafletMapComponent extends LeafletMapComponent
                     default: return false;
                 }
             }), map((evt: L.LeafletEvent): number => {
-                const map: L.Map = evt.target;
-                return map.getZoom();
+                const evtMap: L.Map = evt.target;
+                return evtMap.getZoom();
             }), distinctUntilChanged((x: number, y: number): boolean =>
                 x === y), share());
     }
-    public onBeforeSetView(map: L.Map): void {
-        super.onBeforeSetView(map);
+    public onBeforeSetView(leafletMap: L.Map): void {
+        super.onBeforeSetView(leafletMap);
         this.eventNames.forEach((eventName: string): void => {
-            map.on(eventName, (evt: L.LeafletEvent): void => {
+            leafletMap.on(eventName, (evt: L.LeafletEvent): void => {
                 this.leafletEventSubject.next(evt);
             });
         });

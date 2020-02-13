@@ -1,3 +1,3 @@
-extends map-header-box.component.pug
+extends map-header.component.pug
 block map
-    map(appVehicleLocationHeader,role="none",[vehicleLocation]="stopLocation")
+    map(appVehicleLocationHeader,role="none",[vehicle]="vehicleLocationObservable | async")

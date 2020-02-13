@@ -8,10 +8,10 @@ export interface IData {
 }
 @Component({
     changeDetection: ChangeDetectionStrategy.Default,
+    providers: [StopInfoService],
     selector: 'app-stop-info',
     styleUrls: ['./stop-info.component.scss'],
     templateUrl: './stop-info.component.pug',
-    providers: [StopInfoService],
 
 })
 export class StopInfoComponent {
