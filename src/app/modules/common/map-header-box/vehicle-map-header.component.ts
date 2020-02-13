@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ITripPassages, ITripRoute } from '@donmahallem/trapeze-api-types';
-import { of, BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { catchError, distinctUntilChanged, map, pairwise, startWith, switchMap, tap } from 'rxjs/operators';
-import { LeafletUtil } from 'src/app/leaflet';
-import { ApiService } from 'src/app/services';
-import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
+import * as L from 'leaflet';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ApiService, TripInfoWithId } from 'src/app/services';
+import { VehicleService } from 'src/app/services/vehicle.service';
 import { MapHeaderComponent } from './map-header.component';
 
 export interface IVehicleInfo {
@@ -21,17 +20,17 @@ export interface IVehicleInfo {
 export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
 
     @Input()
-    public set tripPassages(trip: ITripPassages) {
-        this.tripSubject.next(trip);
+    public set tripInfo(trip: TripInfoWithId) {
+        // this.tripSubject.next(trip);
     }
 
-    public get tripPassages(): ITripPassages {
+    public get tripInfo(): TripInfoWithId {
         return this.tripSubject.getValue();
     }
 
     public get title(): string {
-        if (this.tripPassages) {
-            return this.tripPassages.routeName + ' - ' + this.tripPassages.directionText;
+        if (this.tripInfo) {
+            return this.tripInfo.routeName + ' - ' + this.tripInfo.directionText;
         }
         return undefined;
     }
@@ -42,6 +41,7 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                        public apiService: ApiService) {
         super();
         this.tripSubject = new BehaviorSubject(undefined);
+        /*
         this.tripObservable = this.tripSubject.asObservable()
             .pipe(distinctUntilChanged((x: ITripPassages, y: ITripPassages): boolean => {
                 if (x && y) {
@@ -78,10 +78,10 @@ export class VehicleMapHeaderBoxComponent extends MapHeaderComponent {
                         };
                     }
                     return {
-                        location: LeafletUtil.convertCoordToLatLng(val[1]),
+                        location: val[1] ? LeafletUtil.convertCoordToLatLng(val[1]) : L.latLng(0, 0),
                         speed: -1,
                     };
-                }));
+                }));*/
     }
 
 }
