@@ -24,7 +24,7 @@ export class StopPointInfoService {
                     if (prev.length !== curr.length) {
                         return false;
                     }
-                    for (let i = 0; i < prev.length; i++) {
+                    for (let i: number = 0; i < prev.length; i++) {
                         if (prev[i].id !== curr[i].id) {
                             return false;
                         }
@@ -45,11 +45,11 @@ export class StopPointInfoService {
         const resolverData: Observable<IStopPassage> = this.route.data
             .pipe(map((data: any): IStopPassage =>
                 data.stopPoint));
-        const d = this.mStatusSubject
+        const d: Observable<IStopPassage> = this.mStatusSubject
             .pipe(switchMap((name: any) =>
                 timer(5000).pipe(flatMap(() =>
                     this.apiService
-                        .getStopPointPassages(name)))));
+                        .getStopPointPassages(name))))) as Observable<IStopPassage>;
         this.passagesObservable = merge(resolverData, d)
             .pipe(tap((stop: IStopPassage) => {
                 this.mStatusSubject.next(stop.stopShortName);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ISettings } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { from, Observable, Subscriber } from 'rxjs';
+import { from, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -52,7 +52,7 @@ export class SettingsService {
     }
 
     public load(): Promise<void> {
-        return new Promise((resolve: (arg: void) => void, reject: (err: any) => void) =>
+        return new Promise((resolve: (arg: void) => void, reject: (err: any) => void): Subscription =>
             this.apiService.getSettings()
                 .pipe(tap((value: ISettings): void => {
                     this.mSettings = value;

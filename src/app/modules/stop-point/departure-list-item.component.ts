@@ -27,7 +27,7 @@ export class DepartureListItemComponent {
     /**
      * The time of arrival
      */
-    private mTime = '';
+    private mTime: string = '';
 
     /**
      * Sets the departure
@@ -74,7 +74,7 @@ export class DepartureListItemComponent {
         return this.mDeparture.status;
     }
 
-    public convertTime(data: IDeparture) {
+    public convertTime(data: IDeparture): string {
         const time: number = data.actualRelativeTime;
         if (time > 300) {
             return data.actualTime;

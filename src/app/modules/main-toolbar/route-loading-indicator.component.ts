@@ -35,7 +35,7 @@ export class RouteLoadingSubscriber extends Subscriber<Event> {
 })
 export class RouteLoadingIndicatorComponent implements OnInit, OnDestroy {
 
-    public loading = false;
+    public loading: boolean = false;
     private subscription: Subscription;
     constructor(private router: Router) {
 

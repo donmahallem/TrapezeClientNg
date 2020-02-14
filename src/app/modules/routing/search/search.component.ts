@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, Data, Params } from '@angular/router';
 import { IStopLocation } from '@donmahallem/trapeze-api-types';
 import { NEVER, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     public get results(): Observable<IStopLocation[]> {
         return this.resultObservable;
     }
-    public data = '';
+    public data: string = '';
     private searchParamSubscription: Subscription;
     private resultObservable: Observable<IStopLocation[]> = NEVER;
     public constructor(private activatedRoute: ActivatedRoute, private titleService: Title) {
@@ -23,7 +23,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.searchParamSubscription = this.activatedRoute
-            .queryParams.subscribe((value) => {
+            .queryParams.subscribe((value: Params) => {
                 this.data = value.q ? value.q : '';
                 this.titleService.setTitle('Search - \"' + this.data + '\"');
             });

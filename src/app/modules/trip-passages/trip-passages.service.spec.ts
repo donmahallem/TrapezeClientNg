@@ -37,7 +37,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                         .subscribe({
                             complete: doneFn,
                             error: doneFn.fail,
-                            next: (val) => {
+                            next: (val: any): void => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
                             },
@@ -52,7 +52,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                         .subscribe({
                             complete: doneFn,
                             error: doneFn.fail,
-                            next: (val) => {
+                            next: (val: any): void => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
                             },
@@ -93,8 +93,8 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
             [2, 5, 20].forEach((testDelay: number): void => {
                 it('should call getTripPassages after ' + testDelay + ' seconds', fakeAsync(() => {
                     const testTripId: TripId = 'any test id' as TripId;
-                    convertResponseSpy.and.returnValue(map((a) => Object.assign({ c: 2 }, a)));
-                    handleErrorSpy.and.returnValue(map((a) => Object.assign({ d: 3 }, a)));
+                    convertResponseSpy.and.returnValue(map((a: any) => Object.assign({ c: 2 }, a)));
+                    handleErrorSpy.and.returnValue(map((a: any) => Object.assign({ d: 3 }, a)));
                     getTripPassagesSpy.and.returnValue(of(networkResult));
                     const nextSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('nextSpy');
                     const subscription: Subscription = testService
@@ -156,7 +156,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (val: IPassageStatus[]) => {
+                        next: (val: IPassageStatus[]): void => {
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
                             expect(val).toEqual([testValue]);
@@ -176,13 +176,13 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     tripInfo: undefined,
                 };
                 createRefreshPollObservableSpy.and
-                    .callFake((inp) => inp.pipe(take(1)));
+                    .callFake((inp: Observable<any>): Observable<any> => inp.pipe(take(1)));
                 testService.createStatusObservable(statusSubject)
                     .pipe(toArray())
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (val: IPassageStatus[]) => {
+                        next: (val: IPassageStatus[]): void => {
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
                             expect(val).toEqual([testValue]);
@@ -209,13 +209,13 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     tripInfo: undefined,
                 };
                 createRefreshPollObservableSpy.and
-                    .callFake((inp) => inp.pipe(skip(1), take(1)));
+                    .callFake((inp: Observable<any>): Observable<any> => inp.pipe(skip(1), take(1)));
                 testService.createStatusObservable(statusSubject)
                     .pipe(toArray())
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (val: IPassageStatus[]) => {
+                        next: (val: IPassageStatus[]): void => {
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
                             expect(val).toEqual([testValue, testValue2]);
@@ -247,13 +247,13 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     tripInfo: undefined,
                 };
                 createRefreshPollObservableSpy.and
-                    .callFake((inp) => inp.pipe(skip(1), take(1)));
+                    .callFake((inp: Observable<any>): Observable<any> => inp.pipe(skip(1), take(1)));
                 testService.createStatusObservable(statusSubject)
                     .pipe(toArray())
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (val: IPassageStatus[]) => {
+                        next: (val: IPassageStatus[]): void => {
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
                             expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
                             expect(val).toEqual([testValue, {
@@ -305,7 +305,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
             afterEach(() => {
                 createStatusObservableSpy.calls.reset();
             });
-            it('should delay querying 10s if previous status is LOADED', fakeAsync((done) => {
+            it('should delay querying 10s if previous status is LOADED', fakeAsync(() => {
                 const nextSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('nextSpy');
                 createDelayedPassageRequestSpy.and.callFake(() =>
                     of(createDelayedPassageRequestSpy.calls.count()).pipe(delay(1000)));

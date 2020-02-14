@@ -29,7 +29,7 @@ export class RouteDisplayHandler {
         if (paths) {
             for (const path of paths) {
                 const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
-                const firstpolyline = L.polyline(pointList, {
+                const firstpolyline: L.Polyline = L.polyline(pointList, {
                     color: '#FF0000',
                     opacity: 0.8,
                     smoothFactor: 1,

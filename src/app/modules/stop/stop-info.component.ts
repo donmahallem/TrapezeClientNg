@@ -17,17 +17,5 @@ export interface IData {
 export class StopInfoComponent {
 
     constructor(public stopInfoService: StopInfoService) { }
-    /**
-     * Converts the time to a human readable format
-     * @param time time
-     * @param data data
-     */
-    public convertTime(time, data) {
-        if (time > 300) {
-            return data.actualTime;
-        } else {
-            return Math.ceil(time / 60) + 'min';
-        }
-    }
 
 }

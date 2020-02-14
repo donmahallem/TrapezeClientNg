@@ -21,7 +21,7 @@ describe('src/app/services/nginx-api.service', () => {
     describe('NginxApiService', () => {
         let apiService: NginxApiService;
         let getSpy: jasmine.Spy<jasmine.Func>;
-        const testEndpoint = 'https://test.com/';
+        const testEndpoint: string = 'https://test.com/';
         const testId: any = 'testId1234';
         beforeAll(() => {
             getSpy = jasmine.createSpy();

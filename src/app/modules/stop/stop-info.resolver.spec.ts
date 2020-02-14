@@ -11,7 +11,7 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
         let getSpy: jasmine.Spy<jasmine.Func>;
         let nextSpy: jasmine.Spy<jasmine.Func>;
         let navigateSpy: jasmine.Spy<jasmine.Func>;
-        const testId = '239jmcntest';
+        const testId: string = '239jmcntest';
         beforeAll(() => {
             getSpy = jasmine.createSpy();
             navigateSpy = jasmine.createSpy();
@@ -47,8 +47,8 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
                     getSpy.and.callFake((...args: any[]): Observable<any> =>
                         from([args]));
                 });
-                it('should construct the request correctly', (done) => {
-                    resolver.resolve({ params: { stopId: testId } } as any, undefined).subscribe(nextSpy, done, done);
+                it('should construct the request correctly', (done: DoneFn) => {
+                    resolver.resolve({ params: { stopId: testId } } as any, undefined).subscribe(nextSpy, done.fail, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(1);
@@ -63,8 +63,8 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
                     getSpy.and.callFake((...args: any[]): Observable<any> =>
                         throwError(testError));
                 });
-                it('should construct the request correctly', (done) => {
-                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done, done);
+                it('should construct the request correctly', (done: DoneFn) => {
+                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done.fail, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(0);
@@ -79,8 +79,8 @@ describe('src/app/modules/stop/stop-info.resolver', () => {
                     getSpy.and.callFake((...args: any[]): Observable<any> =>
                         throwError(testError));
                 });
-                it('should construct the request correctly', (done) => {
-                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done, done);
+                it('should construct the request correctly', (done: DoneFn) => {
+                    resolver.resolve({ params: { tripId: testId } } as any, undefined).subscribe(nextSpy, done.fail, done);
                 });
                 afterEach(() => {
                     expect(nextSpy.calls.count()).toEqual(0);

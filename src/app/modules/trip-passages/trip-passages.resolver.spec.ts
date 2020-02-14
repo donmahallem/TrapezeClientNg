@@ -69,10 +69,10 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                     handleErrorOperatorStub.and.callFake(catchError(() => of(errorResponse)));
                     convertResponseOperatorStub.and.callFake(map(() => convertedResponse));
                 });
-                it('should construct the request correctly', (done) => {
+                it('should construct the request correctly', (done: DoneFn) => {
                     resolver.resolve({ params: { tripId: testId } } as any, undefined)
                         .subscribe({
-                            complete: () => {
+                            complete: (): void => {
                                 expect(getTripPassagesSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(getTripPassagesSpy.calls.argsFor(0))
@@ -85,7 +85,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(convertResponseOperatorStub).toHaveBeenCalledBefore(handleErrorOperatorStub);
                                 done();
                             },
-                            error: done,
+                            error: done.fail,
                             next: nextSpy,
                         });
                 });
@@ -97,10 +97,10 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                     handleErrorOperatorStub.and.callFake(catchError(() => of(errorResponse)));
                     convertResponseOperatorStub.and.callFake(map(() => convertedResponse));
                 });
-                it('should construct the request correctly', (done) => {
+                it('should construct the request correctly', (done: DoneFn) => {
                     resolver.resolve({ params: { tripId: testId } } as any, undefined)
                         .subscribe({
-                            complete: () => {
+                            complete: (): void => {
                                 expect(getTripPassagesSpy)
                                     .toHaveBeenCalledTimes(1);
                                 expect(getTripPassagesSpy.calls.argsFor(0))
@@ -113,7 +113,7 @@ describe('src/app/modules/trip-passages/trip-passages.resolver', () => {
                                 expect(convertResponseOperatorStub).toHaveBeenCalledBefore(handleErrorOperatorStub);
                                 done();
                             },
-                            error: done,
+                            error: done.fail,
                             next: nextSpy,
                         });
                 });

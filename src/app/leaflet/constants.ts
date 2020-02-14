@@ -12,9 +12,9 @@ export const STOP_ICON_URL_BASE64: string = 'data:image/svg+xml;charset=utf-8;ba
     'cmwoI2EpIiBzdHJva2U9IiMwMDAiLz4NCjx0ZXh0IGNsYXNzPSJoZWF2eSIgeD0iMzQiIHk9' +
     'IjQ2IiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iLjUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13' +
     'aWR0aD0iMS41IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IPC90ZXh0Pg0KPC9zdmc+';
-export const STOP_ICON_URL = 'assets/stop-icon-24.svg';
+export const STOP_ICON_URL: string = 'assets/stop-icon-24.svg';
 
-export const STOP_ICON_SHADOW_URL = 'assets/stop-icon-shadow-64.svg';
+export const STOP_ICON_SHADOW_URL: string = 'assets/stop-icon-shadow-64.svg';
 export const STOP_ICON_SHADOW_URL_BASE64: string = 'data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0i' +
     'MS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjwhRE9DVFlQRSBzdmcgIFBVQkxJ' +
     'QyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5v' +
