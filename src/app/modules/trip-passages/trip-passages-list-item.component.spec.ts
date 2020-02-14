@@ -79,6 +79,9 @@ describe('src/app/modules/trip-passages/trip-passages-list-item.component', () =
         set: { changeDetection: ChangeDetectionStrategy.Default },
       }).compileComponents();
     }));
+    describe('properties', () => {
+      it('needs to be implemented');
+    });
     describe('without parent element', () => {
       let cmpFixture: ComponentFixture<TripPassagesListItemComponent>;
       let cmp: TripPassagesListItemComponent;
