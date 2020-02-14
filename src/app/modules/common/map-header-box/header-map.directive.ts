@@ -1,4 +1,4 @@
-import { ElementRef, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { ElementRef, NgZone } from '@angular/core';
 import * as L from 'leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from '../leaflet-map.component';
@@ -6,7 +6,7 @@ import { LeafletMapComponent } from '../leaflet-map.component';
 /**
  * Directive displaying a map with the StopLocation
  */
-export abstract class HeaderMapDirective extends LeafletMapComponent implements OnChanges {
+export abstract class HeaderMapDirective extends LeafletMapComponent {
 
     protected readonly markerLayer: L.LayerGroup = undefined;
 
@@ -37,8 +37,6 @@ export abstract class HeaderMapDirective extends LeafletMapComponent implements 
         super.onAfterSetView(map);
         this.markerLayer.addTo(this.getMap());
     }
-
-    public abstract ngOnChanges(changes: SimpleChanges): void;
 
     /**
      * If the marker is attached it will be removed

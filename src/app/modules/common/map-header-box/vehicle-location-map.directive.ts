@@ -1,13 +1,12 @@
-import { Location } from '@angular/common';
-import { Directive, ElementRef, Input, NgZone, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { ITripRoute, IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
+import { Subscription } from 'rxjs';
 import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
-import { ApiService } from 'src/app/services';
 import { SettingsService } from 'src/app/services/settings.service';
-import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { RotatingMarker, RotatingMarkerOptions } from '../rotating-marker.patch';
 import { HeaderMapDirective } from './header-map.directive';
+import { VehicleMapHeaderService } from './vehicle-map-header.service';
 
 /**
  * Directive displaying a map with the StopLocation
@@ -15,36 +14,15 @@ import { HeaderMapDirective } from './header-map.directive';
 @Directive({
     selector: 'map[appVehicleLocationHeader]',
 })
-export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implements OnChanges {
-
-    @Input()
-    public vehicle?: IVehicleLocation;
-    @Input()
-    public route?: ITripRoute;
+export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implements OnDestroy {
 
     public vehicleMarker?: RotatingMarker;
+    private updateSubscription: Subscription;
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService,
-                public apiService: ApiService,
-                public locationService: Location) {
+                headerService: VehicleMapHeaderService) {
         super(elRef, zone, settingsService);
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if ('vehicle' in changes) {
-            const change: SimpleChange = changes.vehicle;
-            const curVehicle: TimestampedVehicleLocation = change.currentValue;
-            const preVehicle: TimestampedVehicleLocation = change.previousValue;
-            if (curVehicle && preVehicle && curVehicle.id === preVehicle.id) {
-                this.updateVehicle(curVehicle);
-            } else if (curVehicle) {
-                this.removeMarker(this.vehicleMarker);
-                this.updateVehicle(curVehicle);
-            } else {
-                this.removeMarker(this.vehicleMarker);
-            }
-        }
     }
 
     public createVehicleMarker(name: string, heading: number, coord: L.LatLng): RotatingMarker {
@@ -70,4 +48,14 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implem
         this.panMapTo(vehicleCoords);
     }
 
+    public onAfterSetView(map: L.Map): void {
+        super.onAfterSetView(map);
+
+    }
+    public ngOnDestroy(): void {
+        if (this.updateSubscription) {
+            this.updateSubscription.unsubscribe();
+        }
+        super.ngOnDestroy();
+    }
 }
