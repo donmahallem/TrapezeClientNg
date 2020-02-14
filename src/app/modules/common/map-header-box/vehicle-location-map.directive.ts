@@ -1,9 +1,12 @@
 import { Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
-import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { IVehicleLocation, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
+import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { SettingsService } from 'src/app/services/settings.service';
+import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { RotatingMarker, RotatingMarkerOptions } from '../rotating-marker.patch';
 import { HeaderMapDirective } from './header-map.directive';
 import { VehicleMapHeaderService } from './vehicle-map-header.service';
@@ -17,11 +20,13 @@ import { VehicleMapHeaderService } from './vehicle-map-header.service';
 export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implements OnDestroy {
 
     public vehicleMarker?: RotatingMarker;
-    private updateSubscription: Subscription;
+    private updateVehicleSubscription: Subscription;
+    private updateRouteSubscription: Subscription;
+    private routePolyline: L.Polyline;
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService,
-                headerService: VehicleMapHeaderService) {
+                public headerService: VehicleMapHeaderService) {
         super(elRef, zone, settingsService);
     }
 
@@ -48,13 +53,46 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implem
         this.panMapTo(vehicleCoords);
     }
 
+    public updateRoute(route: IVehiclePathInfo): void {
+        if (this.routePolyline && this.markerLayer.hasLayer(this.routePolyline)) {
+            this.markerLayer.removeLayer(this.routePolyline);
+        }
+        if (route) {
+            for (const path of route.paths) {
+                const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
+                this.routePolyline = L.polyline(pointList, {
+                    color: '#FF0000',
+                    opacity: 0.8,
+                    smoothFactor: 1,
+                    weight: 3,
+                });
+                this.routePolyline.addTo(this.markerLayer);
+            }
+        }
+    }
+
     public onAfterSetView(map: L.Map): void {
         super.onAfterSetView(map);
+        this.updateVehicleSubscription = this.headerService
+            .createVehicleLocationObservable()
+            .pipe(throttleTime(100), runOutsideZone(this.zone))
+            .subscribe((loc: TimestampedVehicleLocation): void => {
+                this.updateVehicle(loc);
+            });
+        this.updateRouteSubscription = this.headerService
+            .createVehicleRouteObservable()
+            .pipe(throttleTime(100), runOutsideZone(this.zone))
+            .subscribe((loc: IVehiclePathInfo): void => {
+                this.updateRoute(loc);
+            });
 
     }
     public ngOnDestroy(): void {
-        if (this.updateSubscription) {
-            this.updateSubscription.unsubscribe();
+        if (this.updateVehicleSubscription) {
+            this.updateVehicleSubscription.unsubscribe();
+        }
+        if (this.updateRouteSubscription) {
+            this.updateRouteSubscription.unsubscribe();
         }
         super.ngOnDestroy();
     }

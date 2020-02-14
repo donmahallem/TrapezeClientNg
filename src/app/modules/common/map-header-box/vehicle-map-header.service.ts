@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IStopLocation, IStopPassage, IVehicleLocation, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
+import { IStopLocation, IStopPassage, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
 import { of, BehaviorSubject, Observable } from 'rxjs';
-import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { LeafletUtil } from 'src/app/leaflet';
+import { catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ApiService, TripInfoWithId } from 'src/app/services';
 import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
 
@@ -19,7 +18,13 @@ export class VehicleMapHeaderService {
                 public apiService: ApiService) {
     }
 
-    public pollVehicleLocation(source: Observable<TripInfoWithId>): Observable<L.LatLng> {
+    public createVehicleLocationObservable(): Observable<TimestampedVehicleLocation> {
+        return this.pollVehicleLocation(this.tripInfoSubject);
+    }
+    public createVehicleRouteObservable(): Observable<IVehiclePathInfo> {
+        return this.pollVehicleRoute(this.tripInfoSubject);
+    }
+    public pollVehicleLocation(source: Observable<TripInfoWithId>): Observable<TimestampedVehicleLocation> {
         return source.pipe(switchMap((trip: TripInfoWithId): Observable<TimestampedVehicleLocation> => {
             if (trip) {
                 return this.vehicleService
@@ -32,8 +37,7 @@ export class VehicleMapHeaderService {
                 return x.lastUpdate === y.lastUpdate;
             }
             return false;
-        }), map((loc: IVehicleLocation): L.LatLng =>
-            loc ? LeafletUtil.convertCoordToLatLng(loc) : undefined));
+        }));
     }
 
     public pollVehicleRoute(source: Observable<TripInfoWithId>): Observable<IVehiclePathInfo> {
