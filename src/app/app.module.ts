@@ -9,7 +9,6 @@ import { environment } from '../environments';
 import { AppErrorHandler } from './app-error-handler';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DrawableDirective } from './drawable.directive';
 import { MainMapModule } from './modules/main-map';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
@@ -42,7 +41,6 @@ const moduleImports: any[] = [
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        DrawableDirective,
     ],
     imports: moduleImports,
     providers: [
