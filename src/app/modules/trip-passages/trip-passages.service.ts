@@ -13,19 +13,21 @@ export class TripPassagesService {
     constructor(private route: ActivatedRoute,
                 private apiService: ApiService) {
         this.statusSubject = new BehaviorSubject(route.snapshot.data.tripPassages);
-        this.statusObservable = this.createStatusObservable();
+        this.statusObservable = this.createStatusObservable(this.statusSubject);
     }
 
-    public createStatusObservable(): Observable<IPassageStatus> {
-        const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable(this.statusSubject);
+    public createStatusObservable(statusSubject: Subject<IPassageStatus>): Observable<IPassageStatus> {
+        const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable(statusSubject);
         return merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
             .pipe(scan((acc: IPassageStatus, val: IPassageStatus, idx: number): IPassageStatus => {
-                if (acc) {
-                    val.failures = val.failures > 0 ? acc.failures + val.failures : 0;
+                if (val.failures > 0) {
+                    const newVal: IPassageStatus = Object.assign({}, val);
+                    newVal.failures = val.failures + acc.failures;
+                    return newVal;
                 }
                 return val;
             }),
-                tap((newStatus: IPassageStatus): void => this.statusSubject.next(newStatus)));
+                tap((newStatus: IPassageStatus): void => statusSubject.next(newStatus)));
     }
 
     public createRefreshPollObservable(statusSubject: Subject<IPassageStatus>): Observable<IPassageStatus> {

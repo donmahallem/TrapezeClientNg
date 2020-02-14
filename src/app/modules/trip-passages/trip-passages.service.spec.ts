@@ -1,7 +1,7 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 import { TripId } from '@donmahallem/trapeze-api-types';
-import { of, NEVER, Observable, Subject, Subscription } from 'rxjs';
-import { delay, map, take } from 'rxjs/operators';
+import { of, EMPTY, NEVER, Observable, Subject, Subscription } from 'rxjs';
+import { delay, map, skip, take, toArray } from 'rxjs/operators';
 import { TripPassagesService } from './trip-passages.service';
 import { IPassageStatus, TripPassagesUtil, UpdateStatus } from './trip-util';
 
@@ -88,9 +88,10 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 getTripPassagesSpy.calls.reset();
                 handleErrorSpy.calls.reset();
                 convertResponseSpy.calls.reset();
+                createStatusObservableSpy.calls.reset();
             });
             [2, 5, 20].forEach((testDelay: number): void => {
-                it('should call getTripPassages after ' + testDelay + ' seconds', fakeAsync((done) => {
+                it('should call getTripPassages after ' + testDelay + ' seconds', fakeAsync(() => {
                     const testTripId: TripId = 'any test id' as TripId;
                     convertResponseSpy.and.returnValue(map((a) => Object.assign({ c: 2 }, a)));
                     handleErrorSpy.and.returnValue(map((a) => Object.assign({ d: 3 }, a)));
@@ -112,6 +113,173 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     expect(nextSpy).toHaveBeenCalledWith({ d: 3, c: 2, network: true, result: 1 });
                     subscription.unsubscribe();
                 }));
+            });
+        });
+        describe('createStatusObservable()', () => {
+            let testService: TripPassagesService;
+            let createRefreshPollObservableSpy: jasmine.Spy<jasmine.Func>;
+            let createStatusObservableSpy: jasmine.Spy<jasmine.Func>;
+            let routeDataSubject: Subject<any> = new Subject();
+            let statusSubject: Subject<IPassageStatus> = new Subject();
+            let statusSubjectNextSpy: jasmine.Spy<jasmine.Func>;
+            beforeEach(() => {
+                routeDataSubject = new Subject();
+                statusSubject = new Subject();
+                statusSubjectNextSpy = spyOn(statusSubject, 'next').and.callThrough();
+                createStatusObservableSpy = spyOn(TripPassagesService.prototype, 'createStatusObservable');
+                createStatusObservableSpy.and.callFake(() => { });
+                const testRoute: any = {
+                    data: routeDataSubject,
+                    snapshot: { data: initialRouteData },
+                };
+                testService = new TripPassagesService(testRoute, undefined);
+                createStatusObservableSpy.and.callThrough();
+                createRefreshPollObservableSpy = spyOn(testService, 'createRefreshPollObservable');
+            });
+            afterEach(() => {
+                createRefreshPollObservableSpy.calls.reset();
+                createStatusObservableSpy.calls.reset();
+                statusSubjectNextSpy.calls.reset();
+            });
+            it('should only pass on routeData', (doneFn: DoneFn) => {
+                const testValue: IPassageStatus = {
+                    failures: 0,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 292992,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                createRefreshPollObservableSpy.and
+                    .callFake(() => EMPTY);
+                testService.createStatusObservable(statusSubject)
+                    .pipe(toArray())
+                    .subscribe({
+                        complete: doneFn,
+                        error: doneFn.fail,
+                        next: (val: IPassageStatus[]) => {
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
+                            expect(val).toEqual([testValue]);
+                            expect(statusSubjectNextSpy).toHaveBeenCalledTimes(1);
+                        },
+                    });
+                routeDataSubject.next({ tripPassages: testValue });
+                statusSubject.complete();
+                routeDataSubject.complete();
+            });
+            it('should only pass on statusData', (doneFn: DoneFn) => {
+                const testValue: IPassageStatus = {
+                    failures: 0,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 292992,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                createRefreshPollObservableSpy.and
+                    .callFake((inp) => inp.pipe(take(1)));
+                testService.createStatusObservable(statusSubject)
+                    .pipe(toArray())
+                    .subscribe({
+                        complete: doneFn,
+                        error: doneFn.fail,
+                        next: (val: IPassageStatus[]) => {
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
+                            expect(val).toEqual([testValue]);
+                            expect(statusSubjectNextSpy).toHaveBeenCalledTimes(2);
+                        },
+                    });
+                statusSubject.next(testValue);
+                statusSubject.complete();
+                routeDataSubject.complete();
+            });
+            it('should pass on both data sources', (doneFn: DoneFn) => {
+                const testValue: IPassageStatus = {
+                    failures: 0,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 292992,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                const testValue2: IPassageStatus = {
+                    failures: 0,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 29232,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                createRefreshPollObservableSpy.and
+                    .callFake((inp) => inp.pipe(skip(1), take(1)));
+                testService.createStatusObservable(statusSubject)
+                    .pipe(toArray())
+                    .subscribe({
+                        complete: doneFn,
+                        error: doneFn.fail,
+                        next: (val: IPassageStatus[]) => {
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
+                            expect(val).toEqual([testValue, testValue2]);
+                            expect(statusSubjectNextSpy).toHaveBeenCalledTimes(3);
+                            expect(statusSubjectNextSpy.calls.allArgs()).toEqual([
+                                [testValue],
+                                [testValue2],
+                                [testValue2]]);
+                        },
+                    });
+                routeDataSubject.next({ tripPassages: testValue });
+                statusSubject.next(testValue2);
+                statusSubject.complete();
+                routeDataSubject.complete();
+            });
+            it('should should accumulate failure numbers from both sources', (doneFn: DoneFn) => {
+                const testValue: IPassageStatus = {
+                    failures: 1,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 292992,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                const testValue2: IPassageStatus = {
+                    failures: 3,
+                    status: UpdateStatus.ERROR,
+                    timestamp: 29232,
+                    tripId: 'tripId' as TripId,
+                    tripInfo: undefined,
+                };
+                createRefreshPollObservableSpy.and
+                    .callFake((inp) => inp.pipe(skip(1), take(1)));
+                testService.createStatusObservable(statusSubject)
+                    .pipe(toArray())
+                    .subscribe({
+                        complete: doneFn,
+                        error: doneFn.fail,
+                        next: (val: IPassageStatus[]) => {
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledTimes(1);
+                            expect(createRefreshPollObservableSpy).toHaveBeenCalledWith(statusSubject);
+                            expect(val).toEqual([testValue, {
+                                failures: 4,
+                                status: UpdateStatus.ERROR,
+                                timestamp: 29232,
+                                tripId: 'tripId' as TripId,
+                                tripInfo: undefined,
+                            }]);
+                            expect(statusSubjectNextSpy).toHaveBeenCalledTimes(3);
+                            expect(statusSubjectNextSpy.calls.allArgs()).toEqual([
+                                [testValue],
+                                [testValue2],
+                                [{
+                                    failures: 4,
+                                    status: UpdateStatus.ERROR,
+                                    timestamp: 29232,
+                                    tripId: 'tripId' as TripId,
+                                    tripInfo: undefined,
+                                }]]);
+                        },
+                    });
+                routeDataSubject.next({ tripPassages: testValue });
+                statusSubject.next(testValue2);
+                statusSubject.complete();
+                routeDataSubject.complete();
             });
         });
         describe('createRefreshPollObservable()', () => {
