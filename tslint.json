@@ -85,11 +85,7 @@
     "no-empty-interface": true,
     "no-eval": true,
     "no-host-metadata-property": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params",
-      "ignore-properties"
-    ],
+    "no-inferrable-types": false,
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
     "no-misused-new": true,
@@ -153,7 +149,12 @@
     "typedef": [
       true,
       "call-signature",
+      "arrow-call-signature",
       "parameter",
+      "arrow-parameter",
+      "property-declaration",
+      "variable-declaration",
+      "variable-declaration-ignore-function",
       "member-variable-declaration"
     ],
     "typedef-whitespace": [
