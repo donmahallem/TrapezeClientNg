@@ -1,9 +1,9 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 import { TripId } from '@donmahallem/trapeze-api-types';
 import { of, NEVER, Observable, Subject, Subscription } from 'rxjs';
-import { delay, take } from 'rxjs/operators';
+import { delay, map, take } from 'rxjs/operators';
 import { TripPassagesService } from './trip-passages.service';
-import { IPassageStatus, UpdateStatus } from './trip-util';
+import { IPassageStatus, TripPassagesUtil, UpdateStatus } from './trip-util';
 
 type PartialPassageStatus = Partial<IPassageStatus>;
 describe('src/app/modules/trip-passages/trip-passages.service', () => {
@@ -36,7 +36,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                         .pipe(take(1))
                         .subscribe({
                             complete: doneFn,
-                            error: doneFn,
+                            error: doneFn.fail,
                             next: (val) => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
@@ -51,7 +51,7 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                         .pipe(take(1))
                         .subscribe({
                             complete: doneFn,
-                            error: doneFn,
+                            error: doneFn.fail,
                             next: (val) => {
                                 expect(val).toEqual(initialTripData);
                                 doneFn();
@@ -62,16 +62,61 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
             });
         });
         describe('createDelayedPassageRequest', () => {
-            it('needs to be implemented');
-        });
-        describe('createRefreshPollObservable()', () => {
             const networkResult: any = {
                 network: true,
                 result: 1,
             };
+            const getTripPassagesSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('getTripPassages');
+            let testService: TripPassagesService;
+            let convertResponseSpy: jasmine.Spy<jasmine.Func>;
+            let handleErrorSpy: jasmine.Spy<jasmine.Func>;
+            let createStatusObservableSpy: jasmine.Spy<jasmine.Func>;
+            beforeAll(() => {
+                createStatusObservableSpy = spyOn(TripPassagesService.prototype, 'createStatusObservable');
+                convertResponseSpy = spyOn(TripPassagesUtil, 'convertResponse');
+                handleErrorSpy = spyOn(TripPassagesUtil, 'handleError');
+                createStatusObservableSpy.and.callFake(() => { });
+                const testRoute: any = {
+                    snapshot: { data: initialRouteData },
+                };
+                const testApiService: any = {
+                    getTripPassages: getTripPassagesSpy,
+                };
+                testService = new TripPassagesService(testRoute, testApiService);
+            });
+            afterEach(() => {
+                getTripPassagesSpy.calls.reset();
+                handleErrorSpy.calls.reset();
+                convertResponseSpy.calls.reset();
+            });
+            [2, 5, 20].forEach((testDelay: number): void => {
+                it('should call getTripPassages after ' + testDelay + ' seconds', fakeAsync((done) => {
+                    const testTripId: TripId = 'any test id' as TripId;
+                    convertResponseSpy.and.returnValue(map((a) => Object.assign({ c: 2 }, a)));
+                    handleErrorSpy.and.returnValue(map((a) => Object.assign({ d: 3 }, a)));
+                    getTripPassagesSpy.and.returnValue(of(networkResult));
+                    const nextSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('nextSpy');
+                    const subscription: Subscription = testService
+                        .createDelayedPassageRequest(testTripId, testDelay * 1000)
+                        .subscribe(nextSpy);
+                    expect(convertResponseSpy).toHaveBeenCalledTimes(1);
+                    expect(convertResponseSpy).toHaveBeenCalledWith(testTripId);
+                    expect(handleErrorSpy).toHaveBeenCalledTimes(1);
+                    expect(handleErrorSpy).toHaveBeenCalledWith(testTripId);
+                    tick((testDelay * 1000) - 500);
+                    expect(subscription.closed).toBeFalse();
+                    expect(nextSpy).toHaveBeenCalledTimes(0);
+                    tick(1000);
+                    expect(subscription.closed).toBeTrue();
+                    expect(nextSpy).toHaveBeenCalledTimes(1);
+                    expect(nextSpy).toHaveBeenCalledWith({ d: 3, c: 2, network: true, result: 1 });
+                    subscription.unsubscribe();
+                }));
+            });
+        });
+        describe('createRefreshPollObservable()', () => {
             let testObservable: Observable<IPassageStatus>;
             const statusSubject: Subject<PartialPassageStatus> = new Subject();
-            const getTripPassagesSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('getTripPassages');
             let createStatusObservableSpy: jasmine.Spy<jasmine.Func>;
             let testService: TripPassagesService;
             let createDelayedPassageRequestSpy: jasmine.Spy<jasmine.Func>;
@@ -82,7 +127,6 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                     snapshot: { data: initialRouteData },
                 };
                 const testApiService: any = {
-                    getTripPassages: getTripPassagesSpy,
                 };
                 testService = new TripPassagesService(testRoute, testApiService);
                 createDelayedPassageRequestSpy = spyOn(testService, 'createDelayedPassageRequest');
@@ -91,11 +135,9 @@ describe('src/app/modules/trip-passages/trip-passages.service', () => {
                 testObservable = testService.createRefreshPollObservable(statusSubject as Subject<IPassageStatus>);
             });
             afterEach(() => {
-                getTripPassagesSpy.calls.reset();
                 createStatusObservableSpy.calls.reset();
             });
             it('should delay querying 10s if previous status is LOADED', fakeAsync((done) => {
-                getTripPassagesSpy.and.returnValue(of(networkResult));
                 const nextSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('nextSpy');
                 createDelayedPassageRequestSpy.and.callFake(() =>
                     of(createDelayedPassageRequestSpy.calls.count()).pipe(delay(1000)));
