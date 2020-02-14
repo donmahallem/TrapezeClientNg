@@ -17,7 +17,10 @@
     ],
     "component-class-suffix": true,
     "contextual-lifecycle": true,
-    "curly": true,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
     "deprecation": {
       "severity": "warn"
     },
@@ -58,8 +61,10 @@
         ]
       }
     ],
+    "no-angle-bracket-type-assertion": true,
     "no-arg": true,
     "no-bitwise": true,
+    "no-boolean-literal-compare": true,
     "no-conflicting-lifecycle": true,
     "no-consecutive-blank-lines": [
       true,
@@ -82,17 +87,20 @@
     "no-host-metadata-property": true,
     "no-inferrable-types": [
       true,
-      "ignore-params"
+      "ignore-params",
+      "ignore-properties"
     ],
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
     "no-misused-new": true,
     "no-non-null-assertion": true,
+    "no-null-keyword": true,
     "no-output-native": true,
     "no-output-on-prefix": true,
     "no-output-rename": true,
     "no-outputs-metadata-property": true,
     "no-redundant-jsdoc": true,
+    "no-return-await": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -100,14 +108,23 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
-    "object-literal-sort-keys": false,
+    "object-literal-sort-keys": true,
     "one-line": [
       true,
       "check-open-brace",
       "check-catch",
       "check-else",
       "check-whitespace"
+    ],
+    "only-arrow-functions": true,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-first"
+      }
     ],
     "prefer-const": true,
     "quotemark": [
@@ -119,11 +136,25 @@
       true,
       "always"
     ],
+    "static-this": true,
     "template-banana-in-box": true,
     "template-no-negated-async": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
     "triple-equals": [
       true,
       "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "member-variable-declaration"
     ],
     "typedef-whitespace": [
       true,
