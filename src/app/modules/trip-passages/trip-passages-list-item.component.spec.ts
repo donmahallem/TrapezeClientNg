@@ -79,6 +79,42 @@ describe('src/app/modules/trip-passages/trip-passages-list-item.component', () =
         set: { changeDetection: ChangeDetectionStrategy.Default },
       }).compileComponents();
     }));
+    describe('properties', () => {
+      let cmpFixture: ComponentFixture<TripPassagesListItemComponent>;
+      let cmp: TripPassagesListItemComponent;
+      beforeEach(() => {
+        cmpFixture = TestBed.createComponent(TripPassagesListItemComponent);
+        cmp = cmpFixture.componentInstance;
+      });
+      describe('departed', () => {
+        // tslint:disable-next-line:no-null-keyword
+        [null, undefined, { status: VEHICLE_STATUS.STOPPING }]
+          .forEach((testValue: any) => {
+            it('should return false for :' + JSON.stringify(testValue), () => {
+              cmp.passage = testValue;
+              expect(cmp.departed).toBeFalse();
+            });
+          });
+        it('should return true for status being DEPARTED ', () => {
+          cmp.passage = { status: VEHICLE_STATUS.DEPARTED } as ITripPassage;
+          expect(cmp.departed).toBeTrue();
+        });
+      });
+      describe('stopping', () => {
+        // tslint:disable-next-line:no-null-keyword
+        [null, undefined, { status: VEHICLE_STATUS.DEPARTED }]
+          .forEach((testValue: any) => {
+            it('should return false for :' + JSON.stringify(testValue), () => {
+              cmp.passage = testValue;
+              expect(cmp.stopping).toBeFalse();
+            });
+          });
+        it('should return true for status being STOPPING', () => {
+          cmp.passage = { status: VEHICLE_STATUS.STOPPING } as ITripPassage;
+          expect(cmp.stopping).toBeTrue();
+        });
+      });
+    });
     describe('without parent element', () => {
       let cmpFixture: ComponentFixture<TripPassagesListItemComponent>;
       let cmp: TripPassagesListItemComponent;
