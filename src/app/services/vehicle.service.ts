@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     IVehicleLocation,
+    IVehicleLocationList,
     TripId,
     VehicleLocations,
 } from '@donmahallem/trapeze-api-types';
@@ -33,7 +34,7 @@ export class VehicleService {
         concat(from([startValue]), this.state.pipe(debounceTime(10000)))
             .pipe(flatMap((previousData: IData) =>
                 this.api.getVehicleLocations(previousData.lastUpdate)
-                    .pipe(map((value): IData => {/*
+                    .pipe(map((value: IVehicleLocationList): IData => {/*
                         if(previousData.lastUpdate!==value.lastUpdate){
                             console.log("New location data acquired",value.lastUpdate)
                         }*/
@@ -69,11 +70,11 @@ export class VehicleService {
                             lastUpdate: value.lastUpdate,
                             vehicles: filterInvalid,
                         };
-                    }), catchError((err) =>
+                    }), catchError((err: any) =>
                         of(Object.assign({
                             error: err,
                         }, previousData))))))
-            .subscribe((data) => {
+            .subscribe((data: IData) => {
                 this.state.next(data);
             });
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { ITripPassages, TripId } from '@donmahallem/trapeze-api-types';
 import { merge, timer, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { flatMap, map, scan, switchMap, take, tap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class TripPassagesService {
 
     public createStatusObservable(statusSubject: Subject<IPassageStatus>): Observable<IPassageStatus> {
         const refreshObservable: Observable<IPassageStatus> = this.createRefreshPollObservable(statusSubject);
-        return merge(this.route.data.pipe(map((data) => data.tripPassages)), refreshObservable)
+        return merge(this.route.data.pipe(map((data: Data) => data.tripPassages)), refreshObservable)
             .pipe(scan((acc: IPassageStatus, val: IPassageStatus, idx: number): IPassageStatus => {
                 if (val.failures > 0) {
                     const newVal: IPassageStatus = Object.assign({}, val);

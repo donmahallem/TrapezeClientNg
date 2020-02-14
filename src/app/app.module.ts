@@ -9,7 +9,6 @@ import { environment } from '../environments';
 import { AppErrorHandler } from './app-error-handler';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DrawableDirective } from './drawable.directive';
 import { MainMapModule } from './modules/main-map';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
@@ -20,7 +19,7 @@ import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
 
-export const SETTINGS_INITIALIZER = (appInitService: SettingsService) =>
+export const SETTINGS_INITIALIZER = (appInitService: SettingsService): () => Promise<void> =>
     (): Promise<any> =>
         appInitService.load();
 const moduleImports: any[] = [
@@ -42,7 +41,6 @@ const moduleImports: any[] = [
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        DrawableDirective,
     ],
     imports: moduleImports,
     providers: [

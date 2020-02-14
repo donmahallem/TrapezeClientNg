@@ -6,7 +6,7 @@ import { IPassageStatus, TripPassagesUtil, UpdateStatus } from './trip-util';
 
 describe('src/app/modules/trip-passages/trip-util', () => {
     describe('TripPassagesUtil', () => {
-        const testTimestamp = 38382992;
+        const testTimestamp: number = 38382992;
         const testError: Error = new Error('Should not have been called');
         beforeAll(() => {
             jasmine.clock().install();
@@ -26,7 +26,7 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (testResult) => {
+                        next: (testResult: IPassageStatus[]): void => {
                             const testTrips: Partial<TripInfoWithId>[] = [{
                                 tripId: '1' as TripId,
                             }, {
@@ -51,12 +51,12 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                 throwError(testError)
                     .pipe(TripPassagesUtil.convertResponse(undefined))
                     .subscribe({
-                        complete: () => doneFn.fail(testError),
-                        error: (err: any) => {
+                        complete: (): void => doneFn.fail(testError),
+                        error: (err: any): void => {
                             expect(err).toEqual(testError);
                             doneFn();
                         },
-                        next: () => doneFn.fail(testError),
+                        next: (): void => doneFn.fail(testError),
                     });
             });
         });
@@ -68,7 +68,7 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                     .subscribe({
                         complete: doneFn,
                         error: doneFn.fail,
-                        next: (testResult) => {
+                        next: (testResult: IPassageStatus[]): void => {
                             expect(testResult as any).toEqual([1, 2, 3]);
                         },
                     });
@@ -82,7 +82,7 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                         .subscribe({
                             complete: doneFn,
                             error: doneFn.fail,
-                            next: (testResult) => {
+                            next: (testResult: IPassageStatus[]): void => {
                                 expect(testResult as any).toEqual([{
                                     failures: 1,
                                     passages: undefined,
@@ -104,7 +104,7 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                             .subscribe({
                                 complete: doneFn,
                                 error: doneFn.fail,
-                                next: (testResult) => {
+                                next: (testResult: IPassageStatus[]): void => {
                                     expect(testResult as any).toEqual([{
                                         failures: 1,
                                         passages: undefined,
@@ -125,7 +125,7 @@ describe('src/app/modules/trip-passages/trip-util', () => {
                             .subscribe({
                                 complete: doneFn,
                                 error: doneFn.fail,
-                                next: (testResult) => {
+                                next: (testResult: IPassageStatus[]): void => {
                                     expect(testResult as any).toEqual([{
                                         failures: 1,
                                         passages: undefined,

@@ -23,12 +23,5 @@ export class RouteListComponent {
     public get hasRoutes(): boolean {
         return this.mDepartures && this.mDepartures.length > 0;
     }
-    public convertTime(time, data) {
-        if (time > 300) {
-            return data.actualTime;
-        } else {
-            return Math.ceil(time / 60) + 'min';
-        }
-    }
 
 }

@@ -24,7 +24,7 @@ export const createStopIcon: (location: Location, iconSize?: number) => L.Icon =
  * @param iconSize icon size in pixels
  */
 export const createVehicleIcon: (heading: number, name: string, iconSize?: number) => L.DivIcon =
-    (heading: number, name: string, iconSize: number = 40) =>
+    (heading: number, name: string, iconSize: number = 40): L.DivIcon =>
         L.divIcon({
             className: heading > 180 ? 'vehiclemarker-rotated' : 'vehiclemarker',
             html: '<span>' + name.split(' ')[0] + '</span>',

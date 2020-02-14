@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { IActualTripPassage, IDepartedTripPassage, ITripPassage, ITripPassages, StopId, StopShortName, TripId } from '@donmahallem/trapeze-api-types';
@@ -203,7 +203,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
             cmpFixture.detectChanges();
             listItems = cmpFixture.debugElement
               .queryAll(By.directive(TestTripPassagesListItemComponent))
-              .map((val) => val.componentInstance);
+              .map((val: DebugElement) => val.componentInstance);
             bodyText = cmpFixture.debugElement.nativeElement.innerText;
             expect(bodyText).not.toEqual('No Passages');
             expect(listItems.length).toEqual(testNum);
@@ -225,7 +225,7 @@ describe('src/app/modules/trip-passages/trip-passages-list.component', () => {
             cmpFixture.detectChanges();
             listItems = cmpFixture.debugElement
               .queryAll(By.directive(TestTripPassagesListItemComponent))
-              .map((val) => val.componentInstance);
+              .map((val: DebugElement) => val.componentInstance);
             bodyText = cmpFixture.debugElement.nativeElement.innerText;
             expect(bodyText).toEqual('No Passages');
             expect(listItems.length).toEqual(0);

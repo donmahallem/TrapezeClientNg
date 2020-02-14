@@ -43,7 +43,7 @@ export class VehicleHandler {
             this.mouseActionObservable
                 .pipe(filter((evt: VehicleEvent): boolean =>
                     evt.type === 'mouseover' || evt.type === 'mouseout'), map((evt: VehicleEvent): VehicleMarker => {
-                        const marker = evt.sourceTarget;
+                        const marker: VehicleMarker = evt.sourceTarget;
                         marker.hovering = evt.type === 'mouseover';
                         return marker;
                     }));
@@ -118,7 +118,7 @@ export class VehicleHandler {
                     return from([undefined]);
                 }
             }))
-            .subscribe(new Subscriber((value: any) => {
+            .subscribe(new Subscriber((value: any): void => {
                 if (value) {
                     if (value.paths && value.paths.length > 0) {
                         this.routeDisplayHandler.setRoutePaths(value.paths);

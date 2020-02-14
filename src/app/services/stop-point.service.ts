@@ -46,7 +46,7 @@ export class StopPointService {
         return pollObservable
             .pipe(retryWhen((errors: Observable<any>): Observable<any> =>
                 errors
-                    .pipe(tap((err) => this.notificationService.report(err)),
+                    .pipe(tap((err: any) => this.notificationService.report(err)),
                         debounceTime(5000))), shareReplay(1));
     }
 

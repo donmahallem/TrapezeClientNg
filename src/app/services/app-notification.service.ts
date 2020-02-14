@@ -57,7 +57,7 @@ export class AppNotificationService {
     private notificationClosedSubject: Subject<void> = new Subject();
     constructor(private matSnackBar: MatSnackBar) {
         this.createNotificationQueueObservable()
-            .subscribe((value): void => {
+            .subscribe((value: IAppNotificationDismiss): void => {
                 this.notificationClosedSubject.next();
             });
     }
@@ -98,7 +98,7 @@ export class AppNotificationService {
         return this.notificationSubject.asObservable();
     }
 
-    public report(err: any) {
+    public report(err: any): void {
 
     }
 

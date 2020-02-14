@@ -1,5 +1,5 @@
 import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { StopPointService } from './../../services/stop-point.service';
@@ -84,8 +84,8 @@ describe('src/modules/main-toolbar/search-box.component.ts', () => {
         }));
 
         it('should create the app', async(() => {
-            const fixture = TestBed.createComponent(ToolbarSearchBoxComponent);
-            const app = fixture.debugElement.componentInstance;
+            const fixture: ComponentFixture<ToolbarSearchBoxComponent> = TestBed.createComponent(ToolbarSearchBoxComponent);
+            const app: ToolbarSearchBoxComponent = fixture.debugElement.componentInstance;
             expect(app).toBeTruthy();
         }));
     });

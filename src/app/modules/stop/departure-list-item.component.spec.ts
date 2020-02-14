@@ -40,8 +40,8 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
       }).compileComponents();
     }));
     it('should create the app', async(() => {
-      const fixture = TestBed.createComponent(DepartureListItemComponent);
-      const app = fixture.debugElement.componentInstance;
+      const fixture: ComponentFixture<DepartureListItemComponent> = TestBed.createComponent(DepartureListItemComponent);
+      const app: DepartureListItemComponent = fixture.debugElement.componentInstance;
       expect(app).toBeTruthy();
     }));
     describe('layout', () => {
@@ -59,7 +59,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
       ];
       describe('departure', () => {
         describe('getter', () => {
-          testPassages.forEach((testPassage) => {
+          testPassages.forEach((testPassage: any) => {
             it('should get the correct value', () => {
               (cmp as any).mDeparture = testPassage;
               expect(cmp.departure).toEqual(testPassage);
@@ -77,7 +77,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
             convertTimeSpy.and.callFake((arg: any) =>
               ({ time: arg }));
           });
-          testPassages.forEach((testPassage) => {
+          testPassages.forEach((testPassage: any) => {
             it('should set the correct value', () => {
               cmp.departure = testPassage;
               expect((cmp as any).mDeparture).toEqual(testPassage);
@@ -97,7 +97,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
       });
       describe('time', () => {
         describe('getter', () => {
-          testPassages.forEach((value) => {
+          testPassages.forEach((value: any) => {
             it('should convert the object to "' + value + '\'', () => {
               (cmp as any).mTime = value;
               expect(cmp.time).toEqual(value);
@@ -107,7 +107,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
       });
       describe('delay', () => {
         describe('getter', () => {
-          testPassages.forEach((value) => {
+          testPassages.forEach((value: any) => {
             it('should convert the object to "' + value + '\'', () => {
               (cmp as any).mDelay = value;
               expect(cmp.delay).toEqual(value);
@@ -137,7 +137,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
               result: '1min',
             },
           ];
-        passages.forEach((value) => {
+        passages.forEach((value: any) => {
           it('should convert the object to "' + value.result + '\'', () => {
             const testValue: any = {
               actualRelativeTime: value.actualRelativeTime,
@@ -191,7 +191,7 @@ describe('src/app/modules/stop/departure-list-item.component', () => {
               },
             },
           ];
-        passages.forEach((value) => {
+        passages.forEach((value: any) => {
           it('should convert the "' + value.value + '" to "' + value.result + '\'', () => {
             expect(cmp.calculateDelay(value.value as any)).toEqual(value.result);
           });

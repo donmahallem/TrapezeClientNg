@@ -1,5 +1,5 @@
 
-import { AfterViewInit, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -8,7 +8,6 @@ import './rotating-marker.patch';
 
 export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
 
-    @ViewChild('mapcontainer', { static: false }) mapContainer;
     public readonly locationObservable: Observable<L.LocationEvent>;
     private map: L.Map;
     private tileLayer: L.TileLayer;
@@ -19,9 +18,9 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                 public readonly zone: NgZone,
                 public readonly settings: SettingsService) {
         this.locationObservable = this.locationSubject.asObservable()
-            .pipe(filter((val) => val !== undefined));
+            .pipe(filter((val: L.LocationEvent) => val !== undefined));
     }
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.locationSubscription = this.locationObservable
             .subscribe((evt: L.LocationEvent): void => {
                 this.userLocationLayer.clearLayers();
