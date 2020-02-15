@@ -2,7 +2,7 @@ import { TripId } from '@donmahallem/trapeze-api-types';
 import { of, throwError } from 'rxjs';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 import { RunHelpers } from 'rxjs/internal/testing/TestScheduler';
-import { delay } from 'rxjs/operators';
+import { delay, throttleTime } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { TripInfoWithId } from 'src/app/services';
 import { VehicleMapHeaderService } from './vehicle-map-header.service';
@@ -12,6 +12,79 @@ describe('src/app/modules/common/map-header-box/vehicle-map-header.service.ts', 
         beforeEach(() => {
             testScheduler = new TestScheduler((actual: any, expected: any): void => {
                 expect(actual).toEqual(expected);
+            });
+        });
+        describe('createVehicleDataObservable()', () => {
+
+            let pollVehicleLocationSpy: jasmine.Spy<jasmine.Func>;
+            let pollVehicleRouteSpy: jasmine.Spy<jasmine.Func>;
+            let testService: VehicleMapHeaderService;
+
+            beforeAll(() => {
+                testService = new VehicleMapHeaderService(undefined, undefined);
+                pollVehicleLocationSpy = spyOn(testService, 'pollVehicleLocation');
+                pollVehicleRouteSpy = spyOn(testService, 'pollVehicleRoute');
+            });
+            afterEach(() => {
+                pollVehicleLocationSpy.calls.reset();
+                pollVehicleRouteSpy.calls.reset();
+            });
+            it('should emit undefined if trip is not defined', () => {
+                testScheduler.run((helpers: RunHelpers): void => {
+                    const { cold, expectObservable } = helpers;
+                    const vehicleObservable: ColdObservable<number> = cold('a 50ms b 50ms c 50ms d|', {
+                        a: 1,
+                        b: 2,
+                        c: 3,
+                        d: 4,
+                    });
+
+                    const expected: string = 'a 80ms b 80ms c 80ms c |';
+                    expectObservable(vehicleObservable
+                        .pipe(throttleTime(80, testScheduler, { trailing: true, leading: true })))
+                        .toBe(expected, {
+                            a: 1,
+                            b: 2,
+                            c: 3,
+                        });
+                });
+            });
+            it('should emit undefined if trip is not defined', () => {
+                testScheduler.run((helpers: RunHelpers): void => {
+                    const { cold, expectObservable, expectSubscriptions } = helpers;
+                    const vehicleObservable: ColdObservable<TripInfoWithId> = cold('a-b 200ms c|', {
+                        a: undefined,
+                        b: 1 as any,
+                        c: 2 as any,
+                    });
+                    const routeObservable: ColdObservable<TripInfoWithId> = cold('a 120ms b 120ms c|', {
+                        a: undefined,
+                        b: 'a' as any,
+                        c: 'b' as any,
+                    });
+                    pollVehicleLocationSpy.and.returnValue(vehicleObservable);
+                    pollVehicleRouteSpy.and.returnValue(routeObservable);
+                    const vehicleSubs: string = '^ 254ms !';
+                    const routeSubs: string = '^ 259ms !';
+                    const expected: string = '100ms a 120ms b 120ms c |';
+                    /*
+                                        expectObservable(testService.createVehicleDataObservable()).toBe(expected, {
+                                            a: {
+                                                location: 1,
+                                                route: undefined,
+                                            },
+                                            b: {
+                                                location: 2,
+                                                route: 'a',
+                                            },
+                                            c: {
+                                                location: 2,
+                                                route: 'b',
+                                            },
+                                        });
+                                        expectSubscriptions(vehicleObservable.subscriptions).toBe(vehicleSubs);
+                                        expectSubscriptions(routeObservable.subscriptions).toBe(routeSubs);*/
+                });
             });
         });
         describe('pollVehicleLocation(source)', () => {

@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { IStopLocation, IStopPassage, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
-import { of, BehaviorSubject, Observable } from 'rxjs';
-import { catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
+import { combineLatest, of, BehaviorSubject, Observable } from 'rxjs';
+import { auditTime, catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { ApiService, TripInfoWithId } from 'src/app/services';
 import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
 
 export interface IStatus {
-    lastUpdate: Date;
-    location?: IStopLocation;
-    stop: IStopPassage;
+    location?: TimestampedVehicleLocation;
+    route?: IVehiclePathInfo;
 }
 @Injectable()
 export class VehicleMapHeaderService {
@@ -18,11 +17,15 @@ export class VehicleMapHeaderService {
                 public apiService: ApiService) {
     }
 
-    public createVehicleLocationObservable(): Observable<TimestampedVehicleLocation> {
-        return this.pollVehicleLocation(this.tripInfoSubject);
-    }
-    public createVehicleRouteObservable(): Observable<IVehiclePathInfo> {
-        return this.pollVehicleRoute(this.tripInfoSubject);
+    public createVehicleDataObservable(): Observable<IStatus> {
+        return combineLatest([this.pollVehicleLocation(this.tripInfoSubject), this.pollVehicleRoute(this.tripInfoSubject)])
+            .pipe(map((values: [TimestampedVehicleLocation, IVehiclePathInfo]): IStatus => {
+                return {
+                    location: values[0],
+                    route: values[1],
+                };
+                // tslint:disable-next-line:no-null-keyword
+            }), auditTime(100));
     }
     public pollVehicleLocation(source: Observable<TripInfoWithId>): Observable<TimestampedVehicleLocation> {
         return source.pipe(switchMap((trip: TripInfoWithId): Observable<TimestampedVehicleLocation> => {
