@@ -26,15 +26,21 @@ export class VehicleMapHeaderService {
     }
     public pollVehicleLocation(source: Observable<TripInfoWithId>): Observable<TimestampedVehicleLocation> {
         return source.pipe(switchMap((trip: TripInfoWithId): Observable<TimestampedVehicleLocation> => {
-            if (trip) {
+            // tslint:disable-next-line:triple-equals
+            if (trip != undefined) {
                 return this.vehicleService
                     .getVehicleByTripId(trip.tripId);
             } else {
                 return of(undefined);
             }
         }), distinctUntilChanged((x: TimestampedVehicleLocation, y: TimestampedVehicleLocation) => {
-            if (x && y) {
-                return x.lastUpdate === y.lastUpdate;
+            // console.log("C1",x, y);
+            // tslint:disable-next-line:triple-equals
+            if (x == undefined && y == undefined) {
+                return true;
+                // tslint:disable-next-line:triple-equals
+            } else if (x != undefined && y != undefined) {
+                return x.tripId === y.tripId && x.lastUpdate === y.lastUpdate;
             }
             return false;
         }));
@@ -42,7 +48,8 @@ export class VehicleMapHeaderService {
 
     public pollVehicleRoute(source: Observable<TripInfoWithId>): Observable<IVehiclePathInfo> {
         return source.pipe(switchMap((trip: TripInfoWithId): Observable<IVehiclePathInfo> => {
-            if (trip) {
+            // tslint:disable-next-line:triple-equals
+            if (trip != undefined) {
                 return this.apiService
                     .getRouteByTripId(trip.tripId)
                     .pipe(catchError((err: any): Observable<undefined> =>
