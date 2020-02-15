@@ -16,7 +16,7 @@ describe('src/app/modules/common/map-header-box/vehicle-map-header.service.ts', 
         });
         describe('pollVehicleLocation(source)', () => {
 
-            const getVehicleByTripIdSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('getRouteByTripId');
+            const getVehicleByTripIdSpy: jasmine.Spy<jasmine.Func> = jasmine.createSpy('getVehicleByTripId');
             let testService: VehicleMapHeaderService;
             beforeAll(() => {
                 testService = new VehicleMapHeaderService({

@@ -15,7 +15,7 @@ export class VehicleMapHeaderService {
     public readonly statusObservable: Observable<IStatus>;
     public readonly tripInfoSubject: BehaviorSubject<TripInfoWithId> = new BehaviorSubject(undefined);
     constructor(public vehicleService: VehicleService,
-        public apiService: ApiService) {
+                public apiService: ApiService) {
     }
 
     public createVehicleLocationObservable(): Observable<TimestampedVehicleLocation> {
