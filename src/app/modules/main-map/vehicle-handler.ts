@@ -1,7 +1,9 @@
+import { NgZone } from '@angular/core';
 import * as L from 'leaflet';
-import { combineLatest, from, fromEvent, Observable, Subscriber, Subscription } from 'rxjs';
+import { combineLatest, from, fromEvent, of, Observable, Subscriber, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, share, switchMap } from 'rxjs/operators';
 import { createVehicleIcon, LeafletUtil, RouteDisplayHandler } from 'src/app/leaflet';
+import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { IData, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { MainMapDirective } from './main-map.directive';
 export type VehicleEvent = L.LeafletEvent & {
@@ -87,7 +89,7 @@ export class VehicleHandler {
                     dat.vehicles));
         const filteredVehicles: Observable<TimestampedVehicleLocation[]> =
             combineLatest([mapMoveEvent, vehicleObservable])
-                .pipe(
+                .pipe(runOutsideZone(this.mainMap.zone),
                     map((result: [L.LatLngBounds, TimestampedVehicleLocation[]]): TimestampedVehicleLocation[] =>
                         result[1]
                             .filter((veh: TimestampedVehicleLocation): boolean => {
@@ -113,11 +115,11 @@ export class VehicleHandler {
             .pipe(switchMap((currentMaker: VehicleMarker): Observable<any> => {
                 if (currentMaker.hovering) {
                     return this.mainMap.apiService.getRouteByTripId(currentMaker.vehicle.tripId)
-                        .pipe(catchError(() => from([undefined])));
+                        .pipe(catchError(() => of(undefined)));
                 } else {
-                    return from([undefined]);
+                    return of(undefined);
                 }
-            }))
+            }), runOutsideZone(this.mainMap.zone))
             .subscribe(new Subscriber((value: any): void => {
                 if (value) {
                     if (value.paths && value.paths.length > 0) {
@@ -130,6 +132,7 @@ export class VehicleHandler {
     }
 
     public setVehicles(stops: TimestampedVehicleLocation[]): void {
+        NgZone.assertNotInAngularZone();
         this.vehicleMarkerLayer.clearLayers();
         stops.forEach((value: TimestampedVehicleLocation): void => {
             const vehicleMarker: VehicleMarker = this.createVehicleMarker(value);

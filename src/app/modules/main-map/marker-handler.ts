@@ -1,3 +1,4 @@
+import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
@@ -85,6 +86,7 @@ export class MarkerHandler {
     }
 
     public setStopPoints(stopPoints: IStopPointLocation[]): void {
+        NgZone.assertNotInAngularZone();
         this.stopPointMarkerLayer.clearLayers();
         stopPoints.forEach((value: IStopPointLocation): void => {
             const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
@@ -104,6 +106,7 @@ export class MarkerHandler {
     }
 
     public setStops(stops: IStopLocation[]): void {
+        NgZone.assertNotInAngularZone();
         this.stopMarkerLayer.clearLayers();
         stops.forEach((value: IStopLocation): void => {
             const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
