@@ -2,7 +2,7 @@ import { TripId } from '@donmahallem/trapeze-api-types';
 import { of, throwError } from 'rxjs';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 import { RunHelpers } from 'rxjs/internal/testing/TestScheduler';
-import { delay, throttleTime } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { TripInfoWithId } from 'src/app/services';
 import { VehicleMapHeaderService } from './vehicle-map-header.service';
@@ -31,26 +31,6 @@ describe('src/app/modules/common/map-header-box/vehicle-map-header.service.ts', 
             });
             it('should emit undefined if trip is not defined', () => {
                 testScheduler.run((helpers: RunHelpers): void => {
-                    const { cold, expectObservable } = helpers;
-                    const vehicleObservable: ColdObservable<number> = cold('a 50ms b 50ms c 50ms d|', {
-                        a: 1,
-                        b: 2,
-                        c: 3,
-                        d: 4,
-                    });
-
-                    const expected: string = 'a 80ms b 80ms c 80ms c |';
-                    expectObservable(vehicleObservable
-                        .pipe(throttleTime(80, testScheduler, { trailing: true, leading: true })))
-                        .toBe(expected, {
-                            a: 1,
-                            b: 2,
-                            c: 3,
-                        });
-                });
-            });
-            it('should emit undefined if trip is not defined', () => {
-                testScheduler.run((helpers: RunHelpers): void => {
                     const { cold, expectObservable, expectSubscriptions } = helpers;
                     const vehicleObservable: ColdObservable<TripInfoWithId> = cold('a-b 200ms c|', {
                         a: undefined,
@@ -64,26 +44,21 @@ describe('src/app/modules/common/map-header-box/vehicle-map-header.service.ts', 
                     });
                     pollVehicleLocationSpy.and.returnValue(vehicleObservable);
                     pollVehicleRouteSpy.and.returnValue(routeObservable);
-                    const vehicleSubs: string = '^ 254ms !';
-                    const routeSubs: string = '^ 259ms !';
-                    const expected: string = '100ms a 120ms b 120ms c |';
-                    /*
-                                        expectObservable(testService.createVehicleDataObservable()).toBe(expected, {
-                                            a: {
-                                                location: 1,
-                                                route: undefined,
-                                            },
-                                            b: {
-                                                location: 2,
-                                                route: 'a',
-                                            },
-                                            c: {
-                                                location: 2,
-                                                route: 'b',
-                                            },
-                                        });
-                                        expectSubscriptions(vehicleObservable.subscriptions).toBe(vehicleSubs);
-                                        expectSubscriptions(routeObservable.subscriptions).toBe(routeSubs);*/
+                    const vehicleSubs: string = '^ 203ms !';
+                    const routeSubs: string = '^ 242ms !';
+                    const expected: string = '100ms a 120ms b 21ms |';
+                    expectObservable(testService.createVehicleDataObservable()).toBe(expected, {
+                        a: {
+                            location: 1,
+                            route: undefined,
+                        },
+                        b: {
+                            location: 2,
+                            route: 'a',
+                        },
+                    });
+                    expectSubscriptions(vehicleObservable.subscriptions).toBe(vehicleSubs);
+                    expectSubscriptions(routeObservable.subscriptions).toBe(routeSubs);
                 });
             });
         });

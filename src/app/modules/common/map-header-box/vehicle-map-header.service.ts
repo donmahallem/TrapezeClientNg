@@ -19,13 +19,10 @@ export class VehicleMapHeaderService {
 
     public createVehicleDataObservable(): Observable<IStatus> {
         return combineLatest([this.pollVehicleLocation(this.tripInfoSubject), this.pollVehicleRoute(this.tripInfoSubject)])
-            .pipe(map((values: [TimestampedVehicleLocation, IVehiclePathInfo]): IStatus => {
-                return {
-                    location: values[0],
-                    route: values[1],
-                };
-                // tslint:disable-next-line:no-null-keyword
-            }), auditTime(100));
+            .pipe(map((values: [TimestampedVehicleLocation, IVehiclePathInfo]): IStatus => ({
+                location: values[0],
+                route: values[1],
+            })), auditTime(100));
     }
     public pollVehicleLocation(source: Observable<TripInfoWithId>): Observable<TimestampedVehicleLocation> {
         return source.pipe(switchMap((trip: TripInfoWithId): Observable<TimestampedVehicleLocation> => {
