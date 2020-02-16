@@ -1,14 +1,13 @@
 
 import { AfterViewInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { Map, View } from 'ol';
+import { defaults } from 'ol/interaction';
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { SettingsService } from 'src/app/services/settings.service';
-import './rotating-marker.patch';
 
-export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
+export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
 
     public readonly locationObservable: Observable<L.LocationEvent>;
     private map: Map;
@@ -16,30 +15,14 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
     private readonly locationSubject: BehaviorSubject<L.LocationEvent> = new BehaviorSubject(undefined);
     private locationSubscription: Subscription;
     constructor(private elRef: ElementRef,
-        public readonly zone: NgZone,
-        public readonly settings: SettingsService) {
-        this.locationObservable = this.locationSubject.asObservable()
-            .pipe(filter((val: L.LocationEvent) => val !== undefined));
+                public readonly zone: NgZone,
+                public readonly settings: SettingsService) {
     }
-    public ngAfterViewInit(): void {/*
-        this.locationSubscription = this.locationObservable
-            .subscribe((evt: L.LocationEvent): void => {
-                this.userLocationLayer.clearLayers();
-                const radius: number = evt.accuracy / 2;
-                L.circle(evt.latlng, radius, {
-                    interactive: false,
-                }).addTo(this.userLocationLayer);
-                L.circleMarker(evt.latlng, {
-                    color: '#0000FF',
-                    fillColor: '#0000FF',
-                    fillOpacity: 0.9,
-                    opacity: 0.1,
-                    radius: 5,
-                }).addTo(this.userLocationLayer);
-            });*/
+    public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
             this.map = new Map({
+                interactions: defaults({ mouseWheelZoom: false, dragPan: true }),
                 layers: [
                     new TileLayer({
                         source: new XYZ({
@@ -53,6 +36,8 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
                     zoom: 2,
                 }),
             });
+            this.map.updateSize();
+            console.log('Map set', this.map);
         });
     }
 
