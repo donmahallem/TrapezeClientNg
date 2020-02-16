@@ -61,6 +61,7 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implem
                 const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
                 this.routePolyline = L.polyline(pointList, {
                     color: '#FF0000',
+                    interactive: false,
                     opacity: 0.8,
                     smoothFactor: 1,
                     weight: 3,
