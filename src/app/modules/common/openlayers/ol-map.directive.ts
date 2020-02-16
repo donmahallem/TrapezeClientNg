@@ -1,5 +1,5 @@
 
-import { AfterViewInit, ElementRef, HostListener, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { Map, View } from 'ol';
 import { defaults } from 'ol/interaction';
 import TileLayer from 'ol/layer/Tile';
@@ -17,9 +17,6 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
     constructor(private elRef: ElementRef,
                 public readonly zone: NgZone,
                 public readonly settings: SettingsService) {
-    }
-    @HostListener('window:scroll') scrolling() {
-        console.log('scrolling');
     }
     public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
@@ -40,15 +37,16 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
                 }),
             });
             this.map.updateSize();
+            this.onAfterSetView(this.map);
             console.log('Map set', this.map);
         });
     }
 
-    public onBeforeSetView(map: L.Map): void {
+    public onBeforeSetView(map: Map): void {
 
     }
 
-    public onAfterSetView(map: L.Map): void {
+    public onAfterSetView(map: Map): void {
 
     }
 
