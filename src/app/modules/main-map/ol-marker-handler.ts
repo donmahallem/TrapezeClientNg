@@ -1,42 +1,50 @@
 import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
-import * as L from 'leaflet';
-import { asapScheduler, combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
-import { filter, map, observeOn, share, startWith, take } from 'rxjs/operators';
-import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
-import { runInZone } from 'src/app/rxjs-util';
-import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
-import { MainMapDirective } from './main-map.directive';
+import { Map as OlMap } from 'ol';
+import Point from 'ol/geom/Point';
+import VectorLayer from 'ol/layer/Vector';
+import { fromLonLat } from 'ol/proj';
+import VectorSource from 'ol/source/Vector';
+import Feature from 'ol/Feature';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { startWith, take } from 'rxjs/operators';
+import { LeafletUtil } from 'src/app/leaflet';
+import { OlUtil } from '../common/openlayers';
+import { OlMainMapDirective } from './ol-main-map.directive';
 export type StopMarkers = L.Marker & {
     stopPoint?: IStopPointLocation;
     stop?: IStopLocation;
 };
-export class MarkerHandler {
+export class OlMarkerHandler {
 
     /**
      * Layer for the stop markers to be displayed on the map
      */
-    private readonly stopMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
+    private readonly stopMarkerLayer: VectorLayer = undefined;
     /**
      * Layer for the stop markers to be displayed on the map
      */
-    private readonly stopPointMarkerLayer: L.FeatureGroup<StopMarkers> = undefined;
-
+    private readonly stopPointMarkerLayer: VectorLayer = undefined;
+    private readonly stopPointMarkerVectorSource: VectorSource = undefined;
+    private readonly stopMarkerVectorSource: VectorSource = undefined;
     private loadSubscription: Subscription;
     private zoomSubscription: Subscription;
     private clickSubscription: Subscription;
     private clickObservable: Observable<StopMarkers>;
-    public constructor(private mainMap: MainMapDirective,
+    public constructor(private mainMap: OlMainMapDirective,
                        private readonly zoomBorder: number) {
-        this.stopMarkerLayer = L.featureGroup();
-        this.stopPointMarkerLayer = L.featureGroup();
-
-        this.clickObservable = merge(fromEvent(this.stopMarkerLayer, 'click'),
-            fromEvent(this.stopPointMarkerLayer, 'click'))
-            .pipe(filter((evt: L.LeafletEvent): boolean =>
-                (evt && evt.sourceTarget && (evt.sourceTarget.stop || evt.sourceTarget.stopPoint))),
-                map((evt: L.LeafletEvent): StopMarkers =>
-                    evt.sourceTarget), share());
+        this.stopPointMarkerVectorSource = new VectorSource();
+        this.stopMarkerVectorSource = new VectorSource({
+            features: [],
+        });
+        this.stopMarkerLayer = new VectorLayer({
+            source: this.stopMarkerVectorSource,
+            style: OlUtil.createStyles,
+        });
+        this.stopPointMarkerLayer = new VectorLayer({
+            source: this.stopPointMarkerVectorSource,
+            style: OlUtil.createStyles,
+        });
     }
 
     public getClickObservable(): Observable<StopMarkers> {
@@ -53,30 +61,23 @@ export class MarkerHandler {
             .pipe(take(1), startWith([]));
     }
 
-    public start(leafletMap: L.Map): void {
+    public start(leafletMap: OlMap): void {
+        leafletMap.addLayer(this.stopMarkerLayer);
+        leafletMap.addLayer(this.stopPointMarkerLayer);
+        /*
         this.zoomSubscription = this.mainMap
             .leafletZoomEvent
-            .pipe(startWith(leafletMap.getZoom()),
+            .pipe(startWith(leafletMap.getView().getZoom()),
                 observeOn(asapScheduler),
                 runOutsideZone(this.mainMap.zone))
             .subscribe((zoomLevel: number) => {
-                const showLayer: L.FeatureGroup = (zoomLevel > this.zoomBorder) ?
+                const showLayer: VectorLayer = (zoomLevel > this.zoomBorder) ?
                     this.stopPointMarkerLayer : this.stopMarkerLayer;
-                const hideLayer: L.FeatureGroup = (zoomLevel > this.zoomBorder) ?
+                const hideLayer: VectorLayer = (zoomLevel > this.zoomBorder) ?
                     this.stopMarkerLayer : this.stopPointMarkerLayer;
-                if (leafletMap.hasLayer(hideLayer)) {
-                    leafletMap.removeLayer(hideLayer);
-                }
-                if (!leafletMap.hasLayer(showLayer)) {
-                    showLayer.addTo(leafletMap);
-                }
+                hideLayer.setVisible(false);
+                showLayer.setVisible(true);
             });
-        this.loadSubscription =
-            combineLatest([this.getStopLocations(), this.getStopPointLocations()])
-                .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
-                    this.setStopPoints(result[1]);
-                    this.setStops(result[0]);
-                });
         this.clickSubscription = this.clickObservable
             .pipe(runInZone(this.mainMap.zone))
             .subscribe((marker: StopMarkers): void => {
@@ -85,47 +86,46 @@ export class MarkerHandler {
                 } else if (marker.stop) {
                     this.mainMap.router.navigate(['stop', marker.stop.shortName]);
                 }
-            });
+            });*/
+        this.loadSubscription =
+            combineLatest([this.getStopLocations(), this.getStopPointLocations()])
+                .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
+                    this.setStopPoints(result[1]);
+                    this.setStops(result[0]);
+                });
     }
 
     public setStopPoints(stopPoints: IStopPointLocation[]): void {
         NgZone.assertNotInAngularZone();
-        this.stopPointMarkerLayer.clearLayers();
-        const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
+        // this.stopPointMarkerLayer.
+        console.log('stopPoints', stopPoints.length);
         stopPoints.forEach((value: IStopPointLocation): void => {
             const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
-            const markerT: StopMarkers = L.marker(coord,
-                {
-                    icon: greenIcon,
-                    interactive: true,
-                    riseOffset: 10,
-                    riseOnHover: true,
-                    title: value.name,
-                    zIndexOffset: 10,
-                });
-            markerT.stopPoint = value;
-            markerT.addTo(this.stopPointMarkerLayer);
+            const endMarker: Feature = new Feature({
+                geometry: new Point([coord.lng, coord.lat]),
+                type: 'icon',
+            });
+            // this.stopPointMarkerVectorSource.addFeature(endMarker);
         });
+        this.stopPointMarkerLayer.changed();
+        this.stopMarkerLayer.changed();
     }
 
     public setStops(stops: IStopLocation[]): void {
         NgZone.assertNotInAngularZone();
-        this.stopMarkerLayer.clearLayers();
-        const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
-        stops.forEach((value: IStopLocation): void => {
+        console.log('stops', stops.length);
+        const feats: Feature[] = stops.map((value: IStopLocation): Feature => {
             const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
-            const markerT: StopMarkers = L.marker(coord,
-                {
-                    icon: greenIcon,
-                    interactive: true,
-                    riseOffset: 10,
-                    riseOnHover: true,
-                    title: value.name,
-                    zIndexOffset: 10,
-                });
-            markerT.stop = value;
-            markerT.addTo(this.stopMarkerLayer);
+            const endMarker = new Feature({
+                type: 'icon',
+                geometry: new Point(fromLonLat([coord.lng, coord.lat])), // [value.longitude, value.latitude]),
+
+            });
+            return endMarker;
         });
+        this.stopMarkerVectorSource.addFeatures(feats);
+        this.stopPointMarkerLayer.changed();
+        this.stopMarkerLayer.changed();
     }
     public stop(): void {
         if (this.loadSubscription) {

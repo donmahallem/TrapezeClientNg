@@ -20,6 +20,7 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
     }
     public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
+            console.log('MAP', this.settings.getInitialMapZoom(), this.settings.getInitialMapCenter());
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
             this.map = new Map({
                 interactions: defaults({ mouseWheelZoom: true, dragPan: true }),
@@ -32,7 +33,8 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
                 ],
                 target: this.elRef.nativeElement,
                 view: new View({
-                    center: [0, 0],
+                    // projection: 'EPSG:3857', // 'EPSG:4326',
+                    center: this.settings.getInitialMapCenter(),
                     zoom: 2,
                 }),
             });
