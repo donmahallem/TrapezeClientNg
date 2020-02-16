@@ -2,14 +2,13 @@ import { Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { IVehicleLocation, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
 import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { SettingsService } from 'src/app/services/settings.service';
-import { TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { RotatingMarker, RotatingMarkerOptions } from '../rotating-marker.patch';
 import { HeaderMapDirective } from './header-map.directive';
-import { VehicleMapHeaderService } from './vehicle-map-header.service';
+import { IStatus, VehicleMapHeaderService } from './vehicle-map-header.service';
 
 /**
  * Directive displaying a map with the StopLocation
@@ -74,18 +73,18 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implem
     public onAfterSetView(map: L.Map): void {
         super.onAfterSetView(map);
         this.updateVehicleSubscription = this.headerService
-            .createVehicleLocationObservable()
-            .pipe(throttleTime(100), runOutsideZone(this.zone))
-            .subscribe((loc: TimestampedVehicleLocation): void => {
-                this.updateVehicle(loc);
+            .createVehicleDataObservable()
+            .pipe(tap((tapValue: IStatus) => {
+                /**
+                 * Required to set blur inside angular zone
+                 */
+                // tslint:disable-next-line:triple-equals
+                this.blur = (tapValue.location == undefined);
+            }), runOutsideZone(this.zone))
+            .subscribe((loc: IStatus): void => {
+                this.updateVehicle(loc.location);
+                this.updateRoute(loc.route);
             });
-        this.updateRouteSubscription = this.headerService
-            .createVehicleRouteObservable()
-            .pipe(throttleTime(100), runOutsideZone(this.zone))
-            .subscribe((loc: IVehiclePathInfo): void => {
-                this.updateRoute(loc);
-            });
-
     }
     public ngOnDestroy(): void {
         if (this.updateVehicleSubscription) {

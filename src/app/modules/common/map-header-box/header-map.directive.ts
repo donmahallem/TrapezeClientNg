@@ -1,4 +1,4 @@
-import { ElementRef, NgZone } from '@angular/core';
+import { ElementRef, HostBinding, NgZone } from '@angular/core';
 import * as L from 'leaflet';
 import { SettingsService } from 'src/app/services/settings.service';
 import { LeafletMapComponent } from '../leaflet-map.component';
@@ -8,6 +8,8 @@ import { LeafletMapComponent } from '../leaflet-map.component';
  */
 export abstract class HeaderMapDirective extends LeafletMapComponent {
 
+    @HostBinding('class.no-location')
+    public blur: boolean = false;
     protected readonly markerLayer: L.LayerGroup = undefined;
 
     constructor(elRef: ElementRef,
