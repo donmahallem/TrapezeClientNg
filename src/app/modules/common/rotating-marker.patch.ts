@@ -1,4 +1,3 @@
-import { DomUtil, Marker } from 'leaflet';
 export type RotatingMarker = L.Marker & {
     setRotationAngle(angle: number): void;
 };
@@ -6,6 +5,7 @@ export type RotatingMarker = L.Marker & {
 export type RotatingMarkerOptions = L.MarkerOptions & {
     rotationAngle: number;
 };
+/*
 ((): void => {
     // save these original methods before they are overwritten
     const protoInitIcon: any = (Marker.prototype as any)._initIcon;
@@ -73,3 +73,4 @@ export type RotatingMarkerOptions = L.MarkerOptions & {
         },
     });
 })();
+*/

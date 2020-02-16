@@ -1,10 +1,11 @@
 import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import * as L from 'leaflet';
-import { combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
-import { filter, map, share, startWith, take } from 'rxjs/operators';
+import { asapScheduler, combineLatest, fromEvent, merge, Observable, Subscription } from 'rxjs';
+import { filter, map, observeOn, share, startWith, take } from 'rxjs/operators';
 import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
 import { runInZone } from 'src/app/rxjs-util';
+import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { MainMapDirective } from './main-map.directive';
 export type StopMarkers = L.Marker & {
     stopPoint?: IStopPointLocation;
@@ -55,7 +56,9 @@ export class MarkerHandler {
     public start(leafletMap: L.Map): void {
         this.zoomSubscription = this.mainMap
             .leafletZoomEvent
-            .pipe(startWith(leafletMap.getZoom()))
+            .pipe(startWith(leafletMap.getZoom()),
+                observeOn(asapScheduler),
+                runOutsideZone(this.mainMap.zone))
             .subscribe((zoomLevel: number) => {
                 const showLayer: L.FeatureGroup = (zoomLevel > this.zoomBorder) ?
                     this.stopPointMarkerLayer : this.stopMarkerLayer;
@@ -88,8 +91,8 @@ export class MarkerHandler {
     public setStopPoints(stopPoints: IStopPointLocation[]): void {
         NgZone.assertNotInAngularZone();
         this.stopPointMarkerLayer.clearLayers();
+        const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
         stopPoints.forEach((value: IStopPointLocation): void => {
-            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
             const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
             const markerT: StopMarkers = L.marker(coord,
                 {
@@ -108,8 +111,8 @@ export class MarkerHandler {
     public setStops(stops: IStopLocation[]): void {
         NgZone.assertNotInAngularZone();
         this.stopMarkerLayer.clearLayers();
+        const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
         stops.forEach((value: IStopLocation): void => {
-            const greenIcon: L.Icon<L.IconOptions> = createStopIcon(this.mainMap.location);
             const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
             const markerT: StopMarkers = L.marker(coord,
                 {

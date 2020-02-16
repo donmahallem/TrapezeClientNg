@@ -38,7 +38,7 @@ export abstract class LeafletMapComponent implements AfterViewInit, OnDestroy {
             });
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
-            this.map = L.map(this.elRef.nativeElement, { zoomControl: false });
+            this.map = L.map(this.elRef.nativeElement, { preferCanvas: true, zoomControl: false });
             this.onBeforeSetView(this.map);
             this.map.setView(this.settings.getInitialMapCenter(), this.settings.getInitialMapZoom());
             this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

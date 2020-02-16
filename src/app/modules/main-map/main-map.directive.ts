@@ -65,7 +65,7 @@ export class MainMapDirective extends InteractiveLeafletMapComponent implements 
     public onBeforeSetView(map: L.Map): void {
         super.onBeforeSetView(map);
         this.markerHandler.start(map);
-        this.vehicleHandler.start(map);
+        // this.vehicleHandler.start(map);
     }
 
     public ngOnDestroy(): void {

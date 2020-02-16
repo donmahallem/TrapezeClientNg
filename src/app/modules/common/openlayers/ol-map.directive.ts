@@ -1,5 +1,5 @@
 
-import { AfterViewInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, ElementRef, HostListener, NgZone, OnDestroy } from '@angular/core';
 import { Map, View } from 'ol';
 import { defaults } from 'ol/interaction';
 import TileLayer from 'ol/layer/Tile';
@@ -18,11 +18,14 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
                 public readonly zone: NgZone,
                 public readonly settings: SettingsService) {
     }
+    @HostListener('window:scroll') scrolling() {
+        console.log('scrolling');
+    }
     public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
             this.map = new Map({
-                interactions: defaults({ mouseWheelZoom: false, dragPan: true }),
+                interactions: defaults({ mouseWheelZoom: true, dragPan: true }),
                 layers: [
                     new TileLayer({
                         source: new XYZ({
