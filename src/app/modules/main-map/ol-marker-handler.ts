@@ -1,23 +1,14 @@
 import { NgZone } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
 import { Map as OlMap } from 'ol';
-import * as olCondition from 'ol/events/condition';
 import Point from 'ol/geom/Point';
-import { Select } from 'ol/interaction';
-import { SelectEvent } from 'ol/interaction/Select';
 import VectorLayer from 'ol/layer/Vector';
-import { fromLonLat, getPointResolution } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { startWith, take } from 'rxjs/operators';
-import { LeafletUtil } from 'src/app/leaflet';
 import { OlUtil } from '../common/openlayers';
 import { OlMainMapDirective } from './ol-main-map.directive';
-export type StopMarkers = L.Marker & {
-    stopPoint?: IStopPointLocation;
-    stop?: IStopLocation;
-};
 export class OlMarkerHandler {
 
     /**
@@ -32,7 +23,7 @@ export class OlMarkerHandler {
     private stopMarkerVectorSource: VectorSource = undefined;
     private loadSubscription: Subscription;
     public constructor(private mainMap: OlMainMapDirective,
-        private readonly zoomBorder: number) {
+                       private readonly zoomBorder: number) {
     }
 
     public getStopLocations(): Observable<IStopLocation[]> {
@@ -62,54 +53,12 @@ export class OlMarkerHandler {
         });
         leafletMap.addLayer(this.stopMarkerLayer);
         leafletMap.addLayer(this.stopPointMarkerLayer);
-        const selectSingleClick: Select = new Select({
-            condition: olCondition.click,
-            layers: [
-                this.stopMarkerLayer,
-                this.stopPointMarkerLayer,
-            ],
-            multi: false,
-            style: OlUtil.createStyleByType('stop_selected'),
-            toggleCondition: olCondition.never,
-        });
-        /*
-        this.stopMarkerLayer.addEventListener('select', () => {
-            console.log(arguments);
-        });*/
         this.loadSubscription =
             combineLatest([this.getStopLocations(), this.getStopPointLocations()])
                 .subscribe((result: [IStopLocation[], IStopPointLocation[]]) => {
                     this.setStopPoints(result[1]);
                     this.setStops(result[0]);
                 });
-        // leafletMap.addInteraction(selectSingleClick);
-        selectSingleClick.on('select', (e: SelectEvent) => {
-            if (e.selected.length > 0) {
-                const selectedFeature: Feature = e.selected[0];
-                switch (selectedFeature.get('type')) {
-                    case 'stopPoint':
-                        this.onClickStopPoint(selectedFeature.get('stopPoint'));
-                        break;
-                    case 'stop':
-                        this.onClickStop(selectedFeature.get('stop'));
-                        break;
-                }
-            }
-        });
-    }
-
-    public onClickStopPoint(stopPoint: IStopPointLocation): void {
-        NgZone.assertNotInAngularZone();
-        this.mainMap.zone.run(() => {
-            this.mainMap.router.navigate(['stopPoint', stopPoint.stopPoint]);
-        });
-    }
-
-    public onClickStop(stop: IStopLocation): void {
-        NgZone.assertNotInAngularZone();
-        this.mainMap.zone.run(() => {
-            this.mainMap.router.navigate(['stop', stop.shortName]);
-        });
     }
 
     public setStopPoints(stopPoints: IStopPointLocation[]): void {
@@ -118,9 +67,8 @@ export class OlMarkerHandler {
             this.stopPointMarkerVectorSource.clear(true);
         }
         const feats: Feature[] = stopPoints.map((value: IStopPointLocation): Feature => {
-            const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
             const endMarker: Feature = new Feature({
-                geometry: new Point(fromLonLat([coord.lng, coord.lat])),
+                geometry: new Point(OlUtil.convertArcMSToCoordinate(value)),
                 stopPoint: value,
                 type: 'stopPoint',
             });
@@ -138,9 +86,8 @@ export class OlMarkerHandler {
             this.stopMarkerVectorSource.clear(true);
         }
         const feats: Feature[] = stops.map((value: IStopLocation): Feature => {
-            const coord: L.LatLng = LeafletUtil.convertCoordToLatLng(value);
             const endMarker: Feature = new Feature({
-                geometry: new Point(fromLonLat([coord.lng, coord.lat])),
+                geometry: new Point(OlUtil.convertArcMSToCoordinate(value)),
                 stop: value,
                 type: 'stop',
             });

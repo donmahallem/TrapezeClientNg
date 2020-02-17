@@ -1,12 +1,13 @@
 import { Location } from '@angular/common';
-import { Directive, ElementRef, NgZone } from '@angular/core';
+import { Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { StyleFunction } from 'leaflet';
+import { IStopLocation, IStopPointLocation, IVehicleLocation } from '@donmahallem/trapeze-api-types';
 import { Map as OLMap } from 'ol';
 import * as OlCondition from 'ol/events/condition';
 import { Select } from 'ol/interaction';
-import Style, { StyleLike } from 'ol/style/Style';
-import { FeatureLike } from 'ol/Feature';
+import { SelectEvent } from 'ol/interaction/Select';
+import Style from 'ol/style/Style';
+import Feature, { FeatureLike } from 'ol/Feature';
 import { Subscription } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
@@ -15,14 +16,14 @@ import { OlMapComponent, OlUtil } from '../common/openlayers';
 import { ApiService } from './../../services';
 import { OlMarkerHandler } from './ol-marker-handler';
 import { OlVehicleHandler } from './ol-vehicle-handler';
-import { VehicleHandler } from './vehicle-handler';
 @Directive({
     selector: 'map[appOlMainMap]',
 })
 /**
  * Directive for the main background map
  */
-export class OlMainMapDirective extends OlMapComponent {
+export class OlMainMapDirective extends OlMapComponent implements OnDestroy {
+    public readonly mapSelectInteraction: Select;
 
     /**
      * Subscription for the update cycle for the vehicles
@@ -30,7 +31,6 @@ export class OlMainMapDirective extends OlMapComponent {
     private vehicleUpdateSubscription: Subscription;
     private markerHandler: OlMarkerHandler;
     private vehicleHandler: OlVehicleHandler;
-    public readonly mapSelectInteraction: Select;
     /**
      * Constructor
      * @param elRef injected elementRef of the component root
@@ -44,13 +44,13 @@ export class OlMainMapDirective extends OlMapComponent {
      * @param zone ngZone Instance
      */
     constructor(elRef: ElementRef,
-        public apiService: ApiService,
-        public router: Router,
-        public stopService: StopPointService,
-        public location: Location,
-        settings: SettingsService,
-        public vehicleSerivce: VehicleService,
-        zone: NgZone) {
+                public apiService: ApiService,
+                public router: Router,
+                public stopService: StopPointService,
+                public location: Location,
+                settings: SettingsService,
+                public vehicleSerivce: VehicleService,
+                zone: NgZone) {
         super(elRef, zone, settings);
         this.markerHandler = new OlMarkerHandler(this, 15);
         this.vehicleHandler = new OlVehicleHandler(this);
@@ -64,12 +64,30 @@ export class OlMainMapDirective extends OlMapComponent {
                     case 'stop':
                     case 'stopPoint':
                         return OlUtil.createStopMarkerStyle(true);
-
                     default:
                         return undefined;
                 }
             },
             toggleCondition: OlCondition.never,
+        });
+    }
+    public onClickStopPoint(stopPoint: IStopPointLocation): void {
+        NgZone.assertNotInAngularZone();
+        this.zone.run(() => {
+            this.router.navigate(['stopPoint', stopPoint.stopPoint]);
+        });
+    }
+
+    public onClickStop(stop: IStopLocation): void {
+        NgZone.assertNotInAngularZone();
+        this.zone.run(() => {
+            this.router.navigate(['stop', stop.shortName]);
+        });
+    }
+    public onClickVehicle(vehicle: IVehicleLocation): void {
+        NgZone.assertNotInAngularZone();
+        this.zone.run(() => {
+            this.router.navigate(['passages', vehicle.tripId]);
         });
     }
 
@@ -78,12 +96,26 @@ export class OlMainMapDirective extends OlMapComponent {
         this.markerHandler.start(map);
         this.vehicleHandler.start(map);
         this.getMap().addInteraction(this.mapSelectInteraction);
-        // vectorLayer.addEventListener('click', () => { console.log(arguments); return true; });
-        // map.addLayer(vectorLayer);
-        // map.addInteraction(selectClick);
+        this.mapSelectInteraction.on('select', (e: SelectEvent): void => {
+            if (e.selected.length > 0) {
+                const selectedFeature: Feature = e.selected[0];
+                switch (selectedFeature.get('type')) {
+                    case 'stopPoint':
+                        this.onClickStopPoint(selectedFeature.get('stopPoint'));
+                        break;
+                    case 'stop':
+                        this.onClickStop(selectedFeature.get('stop'));
+                        break;
+                    case 'vehicle':
+                        this.onClickVehicle(selectedFeature.get('vehicle'));
+                        break;
+                }
+            }
+        });
     }
 
     public ngOnDestroy(): void {
+        super.ngOnDestroy();
         this.markerHandler.stop();
         this.vehicleHandler.stop();
         if (this.vehicleUpdateSubscription) {

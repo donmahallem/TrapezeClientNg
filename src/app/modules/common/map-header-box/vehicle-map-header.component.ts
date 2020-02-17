@@ -1,15 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ITripRoute } from '@donmahallem/trapeze-api-types';
-import * as L from 'leaflet';
 import { TripInfoWithId } from 'src/app/services';
 import { MapHeaderComponent } from './map-header.component';
 import { VehicleMapHeaderService } from './vehicle-map-header.service';
 
-export interface IVehicleInfo {
-    speed: number;
-    location: L.LatLng;
-    route?: ITripRoute;
-}
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

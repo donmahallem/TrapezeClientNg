@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
-import { MatIconModule, MatInputModule } from '@angular/material';
+import { MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +32,7 @@ const moduleImports: any[] = [
     MatInputModule,
     MainMapModule,
     MainToolbarModule,
+    MatSnackBarModule,
     SidebarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
         enabled: environment.production && environment.pwa,

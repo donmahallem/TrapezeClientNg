@@ -1,4 +1,6 @@
 import { IVehicleLocation } from '@donmahallem/trapeze-api-types';
+import { Coordinate } from 'ol/coordinate';
+import { fromLonLat } from 'ol/proj';
 import CircleStyle from 'ol/style/Circle';
 import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
@@ -10,16 +12,16 @@ import { FeatureLike } from 'ol/Feature';
 const DEFAULT_STYLES: { [key: string]: StyleLike; } = {
     route: new Style({
         stroke: new Stroke({
-            width: 6, color: [237, 212, 0, 0.8],
+            color: [237, 212, 0, 0.8], width: 6,
         }),
     }),
     icon: new Style({
         image: new Icon({
             anchor: [0.5, 0.5],
             // size: [32, 32],
-            src: 'assets/vehicle-icon-24.svg',
             imgSize: [64, 44],
             scale: 0.5,
+            src: 'assets/vehicle-icon-24.svg',
         }),
     }),
     vehicle: (p0: FeatureLike, p1: number): Style => {
@@ -114,6 +116,7 @@ const DEFAULT_STYLES: { [key: string]: StyleLike; } = {
         zIndex: 1000,
     }),
 };
+export type TrapezeCoord = { lat: number, lon: number } | { latitude: number, longitude: number };
 export class OlUtil {
 
     public static createVehicleMarkerStyle(selected: boolean = false): StyleFunction {
@@ -144,7 +147,7 @@ export class OlUtil {
         };
     }
     public static createStopMarkerStyle(selected: boolean = false): Style {
-        return selected ? DEFAULT_STYLES['stop_selected'] as Style : DEFAULT_STYLES['stop'] as Style;
+        return selected ? DEFAULT_STYLES.stop_selected as Style : DEFAULT_STYLES.stop as Style;
     }
     public static createStyleByFeature(feature: FeatureLike): StyleLike {
         // tslint:disable-next-line:triple-equals
@@ -157,15 +160,26 @@ export class OlUtil {
         switch (feature) {
             case 'stopPoint':
             case 'stop':
-                return DEFAULT_STYLES['stop'];
+                return DEFAULT_STYLES.stop;
             case 'stop_selected':
-                return DEFAULT_STYLES['stop_selected'];
+                return DEFAULT_STYLES.stop_selected;
             case 'vehicle':
-                return DEFAULT_STYLES['vehicle'];
+                return DEFAULT_STYLES.vehicle;
             case 'vehicle_selected':
-                return DEFAULT_STYLES['vehicle_selected'];
+                return DEFAULT_STYLES.vehicle_selected;
             default:
                 return DEFAULT_STYLES[feature];
+        }
+    }
+
+    public static convertArcMSToCoordinate(sourceCoordinate: TrapezeCoord): Coordinate {
+        const tmpCoord: any = sourceCoordinate;
+        if (tmpCoord.lat && tmpCoord.lon) {
+            return fromLonLat([tmpCoord.lon / 3600000, tmpCoord.lat / 3600000]);
+        } else if (tmpCoord.latitude && tmpCoord.longitude) {
+            return fromLonLat([tmpCoord.longitude / 3600000, tmpCoord.latitude / 3600000]);
+        } else {
+            throw new Error('Invalid coordinates');
         }
     }
 }

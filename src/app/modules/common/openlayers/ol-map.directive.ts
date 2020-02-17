@@ -1,27 +1,23 @@
 
-import { AfterViewInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
-import { Map, View } from 'ol';
-import { defaults } from 'ol/interaction';
+import { AfterViewInit, ElementRef, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Collection, Map, View } from 'ol';
+import { defaults, Interaction } from 'ol/interaction';
 import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { SettingsService } from 'src/app/services/settings.service';
 import { fromLonLat } from 'ol/proj';
+import XYZ from 'ol/source/XYZ';
+import { Subscription } from 'rxjs';
+import { SettingsService } from 'src/app/services/settings.service';
 
-export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
+export abstract class OlMapComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-    public readonly locationObservable: Observable<L.LocationEvent>;
     private map: Map;
-    private tileLayer: L.TileLayer;
-    private readonly locationSubject: BehaviorSubject<L.LocationEvent> = new BehaviorSubject(undefined);
     private locationSubscription: Subscription;
     constructor(private elRef: ElementRef,
-        public readonly zone: NgZone,
-        public readonly settings: SettingsService) {
+                public readonly zone: NgZone,
+                public readonly settings: SettingsService) {
     }
     public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
-            console.log('MAP', this.settings.getInitialMapZoom(), this.settings.getInitialMapCenter());
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
             this.map = new Map({
                 interactions: defaults(),
@@ -43,8 +39,17 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
             });
             this.map.updateSize();
             this.onAfterSetView(this.map);
-            console.log('Map set', this.map);
         });
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (this.map) {
+            this.map.updateSize();
+        }
+    }
+
+    public getInteractions(): Collection<Interaction> {
+        return defaults();
     }
 
     public onBeforeSetView(map: Map): void {

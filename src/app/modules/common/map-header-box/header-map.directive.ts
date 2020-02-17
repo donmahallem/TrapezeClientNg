@@ -1,59 +1,46 @@
 import { ElementRef, HostBinding, NgZone } from '@angular/core';
-import * as L from 'leaflet';
+import { Map as OlMap } from 'ol';
+import { Coordinate } from 'ol/coordinate';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 import { SettingsService } from 'src/app/services/settings.service';
-import { LeafletMapComponent } from '../leaflet-map.component';
+import { OlMapComponent } from '../openlayers';
 
 /**
  * Directive displaying a map with the StopLocation
  */
-export abstract class HeaderMapDirective extends LeafletMapComponent {
+export abstract class HeaderMapDirective extends OlMapComponent {
 
     @HostBinding('class.no-location')
     public blur: boolean = false;
-    protected readonly markerLayer: L.LayerGroup = undefined;
+    protected readonly markerVectorSource: VectorSource = undefined;
+    protected readonly markerLayer: VectorLayer = undefined;
 
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService) {
         super(elRef, zone, settingsService);
-        this.markerLayer = new L.LayerGroup(undefined, {
-            attribution: '',
+        this.markerVectorSource = new VectorSource();
+        this.markerLayer = new VectorLayer({
+            source: this.markerVectorSource,
         });
     }
-
-    public onBeforeSetView(map: L.Map): void {
-        super.onBeforeSetView(map);
-        this.getMap().dragging.disable();
-        this.getMap().touchZoom.disable();
-        this.getMap().doubleClickZoom.disable();
-        this.getMap().scrollWheelZoom.disable();
-        this.getMap().eachLayer((layer: L.Layer) => {
-            if (layer instanceof L.TileLayer) {
-                layer.options.attribution = '';
-                layer.redraw();
-            }
-        });
-    }
-
-    public onAfterSetView(map: L.Map): void {
+    public onAfterSetView(map: OlMap): void {
         super.onAfterSetView(map);
-        this.markerLayer.addTo(this.getMap());
+        map.getInteractions().clear();
+        map.getOverlays().clear();
+        map.getControls().clear();
+        map.addLayer(this.markerLayer);
     }
 
-    /**
-     * If the marker is attached it will be removed
-     * @param m marker to be removed
-     */
-    public removeMarker(m: L.Marker): void {
-        if (m && this.markerLayer.hasLayer(m)) {
-            this.markerLayer.removeLayer(m);
-        }
-    }
-
-    public panMapTo(panTo: L.LatLng): void {
+    public panMapTo(panTo: Coordinate): void {
         if (this.getMap()) {
-            this.getMap().panTo(panTo,
-                { animate: true });
+            this.getMap().updateSize();
+            this.getMap().getView().animate({
+                center: panTo,
+                duration: 200,
+                zoom: 16,
+            });
         }
     }
 }
