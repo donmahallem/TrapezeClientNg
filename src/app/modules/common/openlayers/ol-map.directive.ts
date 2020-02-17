@@ -6,6 +6,7 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
+import { fromLonLat } from 'ol/proj';
 
 export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
 
@@ -15,15 +16,15 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
     private readonly locationSubject: BehaviorSubject<L.LocationEvent> = new BehaviorSubject(undefined);
     private locationSubscription: Subscription;
     constructor(private elRef: ElementRef,
-                public readonly zone: NgZone,
-                public readonly settings: SettingsService) {
+        public readonly zone: NgZone,
+        public readonly settings: SettingsService) {
     }
     public ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
             console.log('MAP', this.settings.getInitialMapZoom(), this.settings.getInitialMapCenter());
             // Seems to be necessary to run ngZone updates EVERY SINGLE TIME!!!! the map is firing a drag event
             this.map = new Map({
-                interactions: defaults({ mouseWheelZoom: true, dragPan: true }),
+                interactions: defaults(),
                 layers: [
                     new TileLayer({
                         source: new XYZ({
@@ -34,8 +35,10 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
                 target: this.elRef.nativeElement,
                 view: new View({
                     // projection: 'EPSG:3857', // 'EPSG:4326',
-                    center: this.settings.getInitialMapCenter(),
-                    zoom: 2,
+                    center: fromLonLat(this.settings.getInitialMapCenter()),
+                    maxZoom: 19,
+                    minZoom: 1,
+                    zoom: this.settings.getInitialMapZoom(),
                 }),
             });
             this.map.updateSize();
@@ -57,6 +60,7 @@ export abstract class OlMapComponent implements AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.map.dispose();
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
         }

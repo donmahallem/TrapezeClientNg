@@ -39,7 +39,7 @@ export class SettingsService {
         if (this.settings &&
             this.settings.INITIAL_LAT &&
             this.settings.INITIAL_LON) {
-            return [this.settings.INITIAL_LAT / 3600000, this.settings.INITIAL_LON / 3600000];
+            return [this.settings.INITIAL_LON / 3600000, this.settings.INITIAL_LAT / 3600000];
         }
         return [0, 0];
     }

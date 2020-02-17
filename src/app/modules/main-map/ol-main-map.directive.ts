@@ -1,14 +1,20 @@
 import { Location } from '@angular/common';
 import { Directive, ElementRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { StyleFunction } from 'leaflet';
 import { Map as OLMap } from 'ol';
+import * as OlCondition from 'ol/events/condition';
+import { Select } from 'ol/interaction';
+import Style, { StyleLike } from 'ol/style/Style';
+import { FeatureLike } from 'ol/Feature';
 import { Subscription } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { StopPointService } from '../../services/stop-point.service';
-import { OlMapComponent } from '../common/openlayers';
+import { OlMapComponent, OlUtil } from '../common/openlayers';
 import { ApiService } from './../../services';
 import { OlMarkerHandler } from './ol-marker-handler';
+import { OlVehicleHandler } from './ol-vehicle-handler';
 import { VehicleHandler } from './vehicle-handler';
 @Directive({
     selector: 'map[appOlMainMap]',
@@ -23,7 +29,8 @@ export class OlMainMapDirective extends OlMapComponent {
      */
     private vehicleUpdateSubscription: Subscription;
     private markerHandler: OlMarkerHandler;
-    private vehicleHandler: VehicleHandler;
+    private vehicleHandler: OlVehicleHandler;
+    public readonly mapSelectInteraction: Select;
     /**
      * Constructor
      * @param elRef injected elementRef of the component root
@@ -37,25 +44,43 @@ export class OlMainMapDirective extends OlMapComponent {
      * @param zone ngZone Instance
      */
     constructor(elRef: ElementRef,
-                public apiService: ApiService,
-                public router: Router,
-                public stopService: StopPointService,
-                public location: Location,
-                settings: SettingsService,
-                public vehicleSerivce: VehicleService,
-                zone: NgZone) {
+        public apiService: ApiService,
+        public router: Router,
+        public stopService: StopPointService,
+        public location: Location,
+        settings: SettingsService,
+        public vehicleSerivce: VehicleService,
+        zone: NgZone) {
         super(elRef, zone, settings);
-        console.log('YIS');
-        this.markerHandler = new OlMarkerHandler(this, 14);
+        this.markerHandler = new OlMarkerHandler(this, 15);
+        this.vehicleHandler = new OlVehicleHandler(this);
+        this.mapSelectInteraction = new Select({
+            condition: OlCondition.click,
+            multi: false,
+            style: (p0: FeatureLike, p1: number): Style | Style[] => {
+                switch (p0.get('type')) {
+                    case 'vehicle':
+                        return OlUtil.createVehicleMarkerStyle(true)(p0, p1);
+                    case 'stop':
+                    case 'stopPoint':
+                        return OlUtil.createStopMarkerStyle(true);
+
+                    default:
+                        return undefined;
+                }
+            },
+            toggleCondition: OlCondition.never,
+        });
     }
 
     public onAfterSetView(map: OLMap): void {
 
         this.markerHandler.start(map);
+        this.vehicleHandler.start(map);
+        this.getMap().addInteraction(this.mapSelectInteraction);
         // vectorLayer.addEventListener('click', () => { console.log(arguments); return true; });
         // map.addLayer(vectorLayer);
         // map.addInteraction(selectClick);
-        console.log('la', map.getLayers());
     }
 
     public ngOnDestroy(): void {
