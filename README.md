@@ -14,3 +14,6 @@ The Documentation can be found [HERE](https://donmahallem.github.io/TrapezeClien
 
 ## Usage
 In order to build this client successfully you will need to copy the environment.example.ts file and modify the values as you need.
+### Build
+### Test
+### Lint
