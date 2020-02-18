@@ -5,7 +5,7 @@ import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
 import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { IData, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { OlUtil } from '../common/openlayers';
@@ -33,13 +33,13 @@ export class OlVehicleHandler {
         this.loadSubscription =
             this.mainMap.vehicleSerivce
                 .getVehicles
-                .pipe(distinctUntilChanged((x: IData, y: IData): boolean => {
-                    if (x && y) {
-                        return x.lastUpdate === y.lastUpdate;
-                    }
-                    return false;
-                }), map((dat: IData): TimestampedVehicleLocation[] =>
-                    dat.vehicles), runOutsideZone(this.mainMap.zone))
+                .pipe(runOutsideZone(this.mainMap.zone),
+                    distinctUntilChanged((x: IData, y: IData): boolean => {
+                        if (x && y) {
+                            return x.lastUpdate === y.lastUpdate;
+                        }
+                        return false;
+                    }), pluck('vehicles'))
                 .subscribe((result: TimestampedVehicleLocation[]) => {
                     this.setVehicles(result);
                 });
