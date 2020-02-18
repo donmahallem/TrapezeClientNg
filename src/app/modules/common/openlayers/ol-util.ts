@@ -10,11 +10,6 @@ import Text from 'ol/style/Text';
 import { FeatureLike } from 'ol/Feature';
 
 const DEFAULT_STYLES: { [key: string]: StyleLike; } = {
-    route: new Style({
-        stroke: new Stroke({
-            color: [237, 212, 0, 0.8], width: 6,
-        }),
-    }),
     icon: new Style({
         image: new Icon({
             anchor: [0.5, 0.5],
@@ -24,63 +19,9 @@ const DEFAULT_STYLES: { [key: string]: StyleLike; } = {
             src: 'assets/vehicle-icon-24.svg',
         }),
     }),
-    vehicle: (p0: FeatureLike, p1: number): Style => {
-        const vehicle: IVehicleLocation = p0.get('vehicle');
-        // tslint:disable-next-line:triple-equals
-        if (vehicle != undefined) {
-            const rot: number = Math.PI / 180 * ((vehicle.heading + 270) % 360);
-            return new Style({
-                image: new Icon({
-                    anchor: [24 / 68, 0.5],
-                    color: '#FF0000',
-                    imgSize: [64, 44],
-                    rotation: rot,
-                    scale: 0.6,
-                    src: 'assets/vehicle-icon-white-64.svg',
-                }),
-                text: new Text({
-                    fill: new Fill({ color: '#FFFFFF' }),
-                    font: 'bold 11px Arial, Verdana, Helvetica, sans-serif',
-                    // rotation: rot,
-                    text: vehicle.name.split(' ')[0],
-                }),
-                zIndex: 995,
-            });
-        }
-        return undefined;
-    },
-    vehicle_selected: (p0: FeatureLike, p1: number): Style => {
-        const vehicle: IVehicleLocation = p0.get('vehicle');
-        // tslint:disable-next-line:triple-equals
-        if (vehicle != undefined) {
-            const rot: number = Math.PI / 180 * ((vehicle.heading + 270) % 360);
-            return new Style({
-                image: new Icon({
-                    anchor: [24 / 68, 0.5],
-                    color: '#0000FF',
-                    imgSize: [64, 44],
-                    rotation: rot,
-                    scale: 0.6,
-                    src: 'assets/vehicle-icon-white-64.svg',
-                }),
-                text: new Text({
-                    fill: new Fill({ color: '#FFFFFF' }),
-                    font: 'bold 11px Arial, Verdana, Helvetica, sans-serif',
-                    // rotation: rot,
-                    text: vehicle.name.split(' ')[0],
-                }),
-                zIndex: 996,
-            });
-        }
-        return undefined;
-    },
-    vehicle2: new Style({
-        image: new Icon({
-            anchor: [0.5, 0.5],
-            imgSize: [64, 44],
-            rotation: Math.PI / Math.random(),
-            scale: 1,
-            src: 'assets/vehicle-icon-white-64.svg',
+    route: new Style({
+        stroke: new Stroke({
+            color: [237, 212, 0, 0.8], width: 6,
         }),
     }),
     stop: new Style({
@@ -115,6 +56,63 @@ const DEFAULT_STYLES: { [key: string]: StyleLike; } = {
         }),
         zIndex: 1000,
     }),
+    vehicle: (p0: FeatureLike, p1: number): Style => {
+        const vehicle: IVehicleLocation = p0.get('vehicle');
+        // tslint:disable-next-line:triple-equals
+        if (vehicle != undefined) {
+            const rot: number = Math.PI / 180 * ((vehicle.heading + 270) % 360);
+            return new Style({
+                image: new Icon({
+                    anchor: [24 / 68, 0.5],
+                    color: '#FF0000',
+                    imgSize: [64, 44],
+                    rotation: rot,
+                    scale: 0.6,
+                    src: 'assets/vehicle-icon-white-64.svg',
+                }),
+                text: new Text({
+                    fill: new Fill({ color: '#FFFFFF' }),
+                    font: 'bold 11px Arial, Verdana, Helvetica, sans-serif',
+                    // rotation: rot,
+                    text: vehicle.name.split(' ')[0],
+                }),
+                zIndex: 995,
+            });
+        }
+        return undefined;
+    },
+    vehicle_route: new Style({
+        stroke: new Stroke({
+            color: [255, 50, 50, 0.75],
+            width: 5,
+        }),
+        zIndex: 600,
+    }),
+    vehicle_selected: (p0: FeatureLike, p1: number): Style => {
+        const vehicle: IVehicleLocation = p0.get('vehicle');
+        // tslint:disable-next-line:triple-equals
+        if (vehicle != undefined) {
+            const rot: number = Math.PI / 180 * ((vehicle.heading + 270) % 360);
+            return new Style({
+                image: new Icon({
+                    anchor: [24 / 68, 0.5],
+                    color: '#0000FF',
+                    imgSize: [64, 44],
+                    rotation: rot,
+                    scale: 0.6,
+                    src: 'assets/vehicle-icon-white-64.svg',
+                }),
+                text: new Text({
+                    fill: new Fill({ color: '#FFFFFF' }),
+                    font: 'bold 11px Arial, Verdana, Helvetica, sans-serif',
+                    // rotation: rot,
+                    text: vehicle.name.split(' ')[0],
+                }),
+                zIndex: 996,
+            });
+        }
+        return undefined;
+    },
 };
 export type TrapezeCoord = { lat: number, lon: number } | { latitude: number, longitude: number };
 export class OlUtil {
