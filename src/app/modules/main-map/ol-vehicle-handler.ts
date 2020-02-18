@@ -5,7 +5,7 @@ import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
+import { distinctUntilChanged, pluck } from 'rxjs/operators';
 import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { IData, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
 import { OlUtil } from '../common/openlayers';
