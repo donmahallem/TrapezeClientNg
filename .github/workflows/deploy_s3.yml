@@ -1,0 +1,41 @@
+name: Upload Website
+
+on:
+  push:
+    branches:
+    - v3rework
+    - beta
+    - mapheads
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - run: npm ci
+    - run: npm run test:unit
+    - run: npm run build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.actor == github.event.repository.owner.login
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - run: npm ci
+    - run: npm run test:build
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --follow-symlinks --exclude '.git/*'
+      env:
+        AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
+        AWS_REGION: 'eu-central-1'
+        SOURCE_DIR: './dist'
+        DEST_DIR: '/beta'
