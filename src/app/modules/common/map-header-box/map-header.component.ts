@@ -1,9 +1,6 @@
-import { HostBinding, Input } from '@angular/core';
+import { Input } from '@angular/core';
 
 export abstract class MapHeaderComponent {
-
-    @HostBinding('class.no-location')
-    public blur: boolean = false;
 
     @Input()
     public lastUpdate: Date = undefined;

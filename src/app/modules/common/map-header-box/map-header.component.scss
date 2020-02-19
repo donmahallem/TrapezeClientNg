@@ -65,3 +65,13 @@ mat-icon {
         display: block;
     }
 }
+
+map.no-location {
+    map {
+        filter: blur(2px) grayscale(100%) brightness(0.5);
+        transition: all 1s ease-out;
+    }
+    mat-icon {
+        display: block;
+    }
+}
