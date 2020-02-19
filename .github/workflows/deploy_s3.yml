@@ -43,8 +43,17 @@ jobs:
     - run: npm run test:build
     - uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --follow-symlinks  --recursive --include "*.js" --exclude "ngsw-worker.js" --exclude "safety-worker.js" --exclude "worker-basic.min.js" --content-type "application/json" --cache-control "public, max-age=31536000, immutable"
         args: --acl private --follow-symlinks  --recursive --include "*" --exclude "*.js" --include "ngsw-worker.js" --include "safety-worker.js" --include "worker-basic.min.js" --content-type "application/json" --cache-control "public, max-age=31536000"
+      env:
+        AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
+        AWS_REGION: 'eu-central-1'
+        SOURCE_DIR: './dist/trapeze-client-ng'
+        DEST_DIR: 'beta'
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --follow-symlinks  --recursive --include "*.js" --exclude "ngsw-worker.js" --exclude "safety-worker.js" --exclude "worker-basic.min.js" --content-type "application/json" --cache-control "public, max-age=31536000, immutable"
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
