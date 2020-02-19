@@ -44,7 +44,7 @@ jobs:
     - name: Deploy HTML Files
       uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --recursive --follow-symlinks --exclude '*' --include '*.html' --cache-control 'public, max-age=3600'
+        args: --acl private --follow-symlinks --exclude '*' --include '*.html' --cache-control 'public, max-age=3600'
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
@@ -55,7 +55,7 @@ jobs:
     - name: Deploy Immutable JS Files
       uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --recursive --follow-symlinks --include '*.js' --exclude 'ngsw-worker.js' --exclude 'safety-worker.js' --exclude 'worker-basic.min.js' --content-type 'application/json' --cache-control 'public, max-age=31536000, immutable'
+        args: --acl private --follow-symlinks --include '*.js' --exclude 'ngsw-worker.js' --exclude 'safety-worker.js' --exclude 'worker-basic.min.js' --content-type 'application/json' --cache-control 'public, max-age=31536000, immutable'
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
@@ -66,7 +66,7 @@ jobs:
     - name: Deploy Remaining Files
       uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --recursive --follow-symlinks --include '*' --exclude '*.js' --exclude '*.html' --include 'ngsw-worker.js' --include 'safety-worker.js' --include 'worker-basic.min.js' --cache-control 'public, max-age=31536000'
+        args: --acl private --follow-symlinks --include '*' --exclude '*.js' --exclude '*.html' --include 'ngsw-worker.js' --include 'safety-worker.js' --include 'worker-basic.min.js' --cache-control 'public, max-age=31536000'
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
