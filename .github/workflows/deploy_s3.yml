@@ -17,6 +17,10 @@ jobs:
       with:
         node-version: '10.x'
     - run: npm ci
+    - run: |
+      cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+      cp ./src/environments/environment.example.ts ./src/environments/environment.ts
+      cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
     - run: npm run test:unit
     - run: npm run build
   deploy:
@@ -29,6 +33,9 @@ jobs:
       with:
         node-version: '10.x'
     - run: npm ci
+    - run: |
+      echo ${{ secrets.ng_config }} > ./src/environments/environment.ts
+      echo ${{ secrets.ng_config }} > ./src/environments/environment.prod.ts
     - run: npm run test:build
     - uses: jakejarvis/s3-sync-action@master
       with:
