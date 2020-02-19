@@ -17,14 +17,60 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - name: Deplay Non Ts files
+    - run: npm ci
+    - name: Copy Config
+      run: |
+        cp ./src/environments/environment.example.ts ./src/environments/environment.prod.ts
+        cp ./src/environments/environment.example.ts ./src/environments/environment.ts
+        cp ./src/environments/environment.example.ts ./src/environments/environment.dev.ts
+    - run: npm run test:unit
+    - run: npm run build
+  deploy:
+    name: Deploy Beta
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.actor == github.event.repository.owner.login
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - run: npm ci
+    - name: Setup Config
+      run: |
+        echo "${{secrets.ng_config}}" > ./src/environments/environment.ts
+        echo "${{secrets.ng_config}}" > ./src/environments/environment.prod.ts
+    - run: npm run test:build
+    - name: Deploy HTML Files
       uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --follow-symlinks --include "*" --exclude "*.ts" --include "ngsw-worker.js" --include "safety-worker.js" --include "worker-basic.min.js" --cache-control "public, max-age=31536000"
+        args: --acl private --recursive --follow-symlinks --exclude '*' --include '*.html' --cache-control 'public, max-age=3600'
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
         AWS_REGION: 'eu-central-1'
-        SOURCE_DIR: './src'
+        SOURCE_DIR: './dist/trapeze-client-ng'
+        DEST_DIR: 'beta'
+    - name: Deploy Immutable JS Files
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --recursive --follow-symlinks --include '*.js' --exclude 'ngsw-worker.js' --exclude 'safety-worker.js' --exclude 'worker-basic.min.js' --content-type 'application/json' --cache-control 'public, max-age=31536000, immutable'
+      env:
+        AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
+        AWS_REGION: 'eu-central-1'
+        SOURCE_DIR: './dist/trapeze-client-ng'
+        DEST_DIR: 'beta'
+    - name: Deploy Remaining Files
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --recursive --follow-symlinks --include '*' --exclude '*.js' --exclude '*.html' --include 'ngsw-worker.js' --include 'safety-worker.js' --include 'worker-basic.min.js' --cache-control 'public, max-age=31536000'
+      env:
+        AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
+        AWS_REGION: 'eu-central-1'
+        SOURCE_DIR: './dist/trapeze-client-ng'
         DEST_DIR: 'beta'
