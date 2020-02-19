@@ -36,8 +36,8 @@ jobs:
     - run: npm ci
     - name: Setup Config
       run: |
-        echo "$secrets.ng_config" > ./src/environments/environment.ts
-        echo "$secrets.ng_config" > ./src/environments/environment.prod.ts
+        echo $secrets.ng_config > ./src/environments/environment.ts
+        echo $secrets.ng_config > ./src/environments/environment.prod.ts
     - run: npm run test:build
     - uses: jakejarvis/s3-sync-action@master
       with:
