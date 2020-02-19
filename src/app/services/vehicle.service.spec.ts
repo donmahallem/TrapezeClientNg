@@ -17,9 +17,9 @@ describe('src/app/services/vehicle.service.ts', () => {
                     const result: IVehicleDiff = createVehicleDiff(testValue, newVehicles);
                     expect(result).toEqual({
                         added: newVehicles,
+                        changed: [],
                         removed: [],
                         unchanged: [],
-                        updated: [],
                     });
                 });
             });
