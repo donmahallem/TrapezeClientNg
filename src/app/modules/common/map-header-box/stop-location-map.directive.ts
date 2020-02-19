@@ -1,9 +1,11 @@
 import { Location } from '@angular/common';
 import { Directive, ElementRef, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { IStopLocation, IStopPointLocation } from '@donmahallem/trapeze-api-types';
-import * as L from 'leaflet';
-import { createStopIcon, LeafletUtil } from 'src/app/leaflet';
+import { Feature, Map as OlMap } from 'ol';
+import { Coordinate } from 'ol/coordinate';
+import Point from 'ol/geom/Point';
 import { SettingsService } from 'src/app/services/settings.service';
+import { OlUtil } from '../openlayers';
 import { HeaderMapDirective } from './header-map.directive';
 
 type StopTypes = IStopPointLocation | IStopLocation;
@@ -16,7 +18,7 @@ type StopTypes = IStopPointLocation | IStopLocation;
 export class StopLocationHeaderMapDirective extends HeaderMapDirective implements OnChanges {
     @Input()
     public stop?: StopTypes;
-    private stopMarker: L.Marker;
+    private stopMarker: Feature;
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService,
@@ -25,6 +27,7 @@ export class StopLocationHeaderMapDirective extends HeaderMapDirective implement
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
+        super.ngOnChanges(changes);
         if ('stop' in changes) {
             const curStop: StopTypes = changes.stop.currentValue;
             const preStop: StopTypes = changes.stop.previousValue;
@@ -38,28 +41,25 @@ export class StopLocationHeaderMapDirective extends HeaderMapDirective implement
         }
     }
 
-    public onAfterSetView(map: L.Map): void {
+    public onAfterSetView(map: OlMap): void {
         super.onAfterSetView(map);
         this.updateStop(this.stop);
     }
 
-    public createStopMarker(name: string, coord: L.LatLng): L.Marker {
-        const stopIcon: L.Icon = createStopIcon(this.locationService);
-        const mapMarker: L.Marker = L.marker(coord,
-            {
-                icon: stopIcon,
-                interactive: false,
-                title: name,
-                zIndexOffset: 100,
-            });
-        return mapMarker;
-    }
-
     public updateStop(change: StopTypes): void {
-        this.removeMarker(this.stopMarker);
-        const stopCoordinates: L.LatLng = LeafletUtil.convertCoordToLatLng(change);
-        this.stopMarker = this.createStopMarker(change.name, stopCoordinates);
-        this.stopMarker.addTo(this.markerLayer);
+        const stopCoordinates: Coordinate = OlUtil.convertArcMSToCoordinate(change);
+        // tslint:disable-next-line:triple-equals
+        if (this.stopMarker == undefined) {
+            this.stopMarker = new Feature({
+                geometry: new Point(stopCoordinates),
+                type: 'stop',
+            });
+            this.stopMarker.setStyle(OlUtil.createStyleByFeature(this.stopMarker));
+            this.markerLayer.getSource().addFeature(this.stopMarker);
+        } else {
+            const p: Point = this.stopMarker.getGeometry() as Point;
+            p.setCoordinates(stopCoordinates);
+        }
         this.panMapTo(stopCoordinates);
     }
 }

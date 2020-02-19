@@ -13,6 +13,7 @@ import {
     TripId,
     VehicleId,
 } from '@donmahallem/trapeze-api-types';
+import { Extent } from 'ol/extent';
 import { Observable } from 'rxjs';
 
 export type TripInfoWithId = ITripPassages & { tripId: TripId };
@@ -28,7 +29,7 @@ export abstract class ApiService {
     abstract getStopPointPassages(stopPointId: StopPointId): Observable<IStopPassage>;
     abstract getVehicleLocations(lastUpdate: number): Observable<IVehicleLocationList>;
     abstract getVehicleLocation(vehicleId: VehicleId, lastUpdate: number): Observable<IVehicleLocation>;
-    abstract getStopLocations(bounds?: L.LatLngBounds): Observable<IStopLocations>;
-    abstract getStopPointLocations(bounds?: L.LatLngBounds): Observable<IStopPointLocations>;
+    abstract getStopLocations(bounds?: Extent): Observable<IStopLocations>;
+    abstract getStopPointLocations(bounds?: Extent): Observable<IStopPointLocations>;
     abstract getSettings(): Observable<ISettings>;
 }

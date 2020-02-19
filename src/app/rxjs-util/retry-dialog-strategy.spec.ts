@@ -7,11 +7,9 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
         let createDialogSpy: jasmine.Spy<jasmine.Func>;
         let strategy: RetryDialogStrategyFuncResponse;
         let nextSpy: jasmine.Spy<jasmine.Func>;
-        let errorSpy: jasmine.Spy<jasmine.Func>;
         beforeAll(() => {
             createDialogSpy = jasmine.createSpy();
             nextSpy = jasmine.createSpy('nextSpy');
-            errorSpy = jasmine.createSpy('errorSpy');
         });
         beforeEach(() => {
             strategy = retryDialogStrategy(createDialogSpy);
@@ -19,14 +17,12 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
         afterEach(() => {
             createDialogSpy.calls.reset();
             nextSpy.calls.reset();
-            errorSpy.calls.reset();
         });
         describe('No error occures', () => {
             it('should pass', (done: DoneFn) => {
                 from([1, 2, 3])
                     .pipe(retryWhen(strategy))
-                    .subscribe(nextSpy, errorSpy, () => {
-                        expect(errorSpy).not.toHaveBeenCalled();
+                    .subscribe(nextSpy, done.fail, () => {
                         expect(nextSpy).toHaveBeenCalledTimes(3);
                         expect(nextSpy.calls.allArgs()).toEqual([[1], [2], [3]]); // , [2], [3]);
                         expect(createDialogSpy).not.toHaveBeenCalled();
@@ -58,8 +54,7 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
                                 }
                             }),
                             retryWhen(strategy))
-                        .subscribe(nextSpy, errorSpy, () => {
-                            expect(errorSpy).not.toHaveBeenCalled();
+                        .subscribe(nextSpy, done.fail, () => {
                             expect(nextSpy).toHaveBeenCalledTimes(1);
                             expect(nextSpy.calls.allArgs()).toEqual([[1]]);
                             expect(createDialogSpy).toHaveBeenCalledTimes(1);
@@ -80,8 +75,7 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
                                 }
                             }),
                             retryWhen(strategy))
-                        .subscribe(nextSpy, errorSpy, () => {
-                            expect(errorSpy).not.toHaveBeenCalled();
+                        .subscribe(nextSpy, done.fail, () => {
                             expect(nextSpy).toHaveBeenCalledTimes(1);
                             expect(nextSpy.calls.allArgs()).toEqual([[1]]);
                             expect(createDialogSpy).toHaveBeenCalledTimes(1);
@@ -105,7 +99,6 @@ describe('src/app/rxjs-util/retry-dialog-strategy.ts', () => {
                     throwError(testError)
                         .pipe(retryWhen(strategy))
                         .subscribe(nextSpy, () => {
-                            expect(errorSpy).not.toHaveBeenCalled();
                             expect(nextSpy).not.toHaveBeenCalled();
                             expect(createDialogSpy).toHaveBeenCalledTimes(2);
                             done();

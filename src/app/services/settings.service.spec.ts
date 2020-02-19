@@ -1,5 +1,4 @@
 import { async, TestBed } from '@angular/core/testing';
-import { LatLng } from 'leaflet';
 import { from, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { SettingsService } from './settings.service';
@@ -95,7 +94,7 @@ describe('src/app/services/settings.service', () => {
             testValues.forEach((testValue: ITestValue) => {
                 it('should return LatLon(' + testValue.out.lat + ',' + testValue.out.lon + ')', () => {
                     (settingsService as any).mSettings = testValue.settings;
-                    expect(settingsService.getInitialMapCenter()).toEqual(new LatLng(testValue.out.lat, testValue.out.lon));
+                    expect(settingsService.getInitialMapCenter()).toEqual([testValue.out.lon, testValue.out.lat]);
                 });
             });
         });

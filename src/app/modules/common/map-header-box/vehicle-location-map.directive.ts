@@ -1,12 +1,14 @@
 import { Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
-import { IVehicleLocation, IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
-import * as L from 'leaflet';
+import { IVehicleLocation, IVehiclePathInfo, IWayPoint } from '@donmahallem/trapeze-api-types';
+import { Feature, Map as OlMap } from 'ol';
+import { Coordinate } from 'ol/coordinate';
+import LineString from 'ol/geom/LineString';
+import Point from 'ol/geom/Point';
 import { Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { createVehicleIcon, LeafletUtil } from 'src/app/leaflet';
+import { debounceTime, tap } from 'rxjs/operators';
 import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
 import { SettingsService } from 'src/app/services/settings.service';
-import { RotatingMarker, RotatingMarkerOptions } from '../rotating-marker.patch';
+import { OlUtil } from '../openlayers';
 import { HeaderMapDirective } from './header-map.directive';
 import { IStatus, VehicleMapHeaderService } from './vehicle-map-header.service';
 
@@ -18,10 +20,10 @@ import { IStatus, VehicleMapHeaderService } from './vehicle-map-header.service';
 })
 export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implements OnDestroy {
 
-    public vehicleMarker?: RotatingMarker;
     private updateVehicleSubscription: Subscription;
     private updateRouteSubscription: Subscription;
-    private routePolyline: L.Polyline;
+    private vehicleMarker: Feature;
+    private routeMarker: Feature;
     constructor(elRef: ElementRef,
                 zone: NgZone,
                 settingsService: SettingsService,
@@ -29,59 +31,65 @@ export class VehicleLocationHeaderMapDirective extends HeaderMapDirective implem
         super(elRef, zone, settingsService);
     }
 
-    public createVehicleMarker(name: string, heading: number, coord: L.LatLng): RotatingMarker {
-        const vehicleIcon: L.DivIcon = createVehicleIcon(heading, name, 40);
-        const markerT: RotatingMarker = L.marker(coord, {
-            icon: vehicleIcon,
-            interactive: false,
-            rotationAngle: heading - 90,
-            title: name,
-            zIndexOffset: 100,
-        } as RotatingMarkerOptions) as RotatingMarker;
-        return markerT;
-    }
     public updateVehicle(vehicle: IVehicleLocation): void {
-        const vehicleCoords: L.LatLng = LeafletUtil.convertCoordToLatLng(vehicle);
-        if (this.vehicleMarker === undefined || !this.markerLayer.hasLayer(this.vehicleMarker)) {
-            this.vehicleMarker = this.createVehicleMarker(vehicle.name, vehicle.heading, vehicleCoords);
-            this.vehicleMarker.addTo(this.markerLayer);
+        const stopCoordinates: Coordinate = OlUtil.convertArcMSToCoordinate(vehicle);
+        // tslint:disable-next-line:triple-equals
+        if (this.vehicleMarker == undefined) {
+            this.vehicleMarker = new Feature({
+                geometry: new Point(stopCoordinates),
+                type: 'vehicle',
+                vehicle,
+            });
+            this.vehicleMarker.setStyle(OlUtil.createStyleByFeature(this.vehicleMarker));
+            this.markerLayer.getSource().addFeature(this.vehicleMarker);
         } else {
-            this.vehicleMarker.setRotationAngle(vehicle.heading - 90);
-            this.vehicleMarker.setLatLng(vehicleCoords);
+            const p: Point = this.vehicleMarker.getGeometry() as Point;
+            this.vehicleMarker.set('vehicle', vehicle);
+            p.setCoordinates(stopCoordinates);
         }
-        this.panMapTo(vehicleCoords);
+        this.panMapTo(stopCoordinates);
+        this.markerLayer.changed();
     }
 
     public updateRoute(route: IVehiclePathInfo): void {
-        if (this.routePolyline && this.markerLayer.hasLayer(this.routePolyline)) {
-            this.markerLayer.removeLayer(this.routePolyline);
+        let polyline: LineString;
+        // tslint:disable-next-line:triple-equals
+        if (this.routeMarker == undefined) {
+            polyline = new LineString([]);
+            // Coordinates need to be in the view's projection, which is
+            // 'EPSG:3857' if nothing else is configured for your ol.View instance
+
+            this.routeMarker = new Feature({
+                geometry: polyline,
+                type: 'vehicle_route',
+            });
+            this.markerLayer.getSource().addFeature(this.routeMarker);
+            this.markerLayer.setStyle(OlUtil.createStyleByFeature(this.routeMarker));
+        } else {
+            polyline = (this.routeMarker.getGeometry() as LineString);
         }
-        if (route) {
+        if (route.paths) {
             for (const path of route.paths) {
-                const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
-                this.routePolyline = L.polyline(pointList, {
-                    color: '#FF0000',
-                    interactive: false,
-                    opacity: 0.8,
-                    smoothFactor: 1,
-                    weight: 3,
-                });
-                this.routePolyline.addTo(this.markerLayer);
+                const pointList: Coordinate[] = path.wayPoints
+                    .map((wayPoint: IWayPoint): Coordinate => OlUtil.convertArcMSToCoordinate(wayPoint));
+                polyline.setCoordinates(pointList);
             }
         }
+        // polyline.transform('EPSG:4326', 'EPSG:3857');
     }
 
-    public onAfterSetView(map: L.Map): void {
+    public onAfterSetView(map: OlMap): void {
         super.onAfterSetView(map);
         this.updateVehicleSubscription = this.headerService
             .createVehicleDataObservable()
-            .pipe(tap((tapValue: IStatus) => {
-                /**
-                 * Required to set blur inside angular zone
-                 */
-                // tslint:disable-next-line:triple-equals
-                this.blur = (tapValue.location == undefined);
-            }), runOutsideZone(this.zone))
+            .pipe(debounceTime(100),
+                tap((tapValue: IStatus) => {
+                    /**
+                     * Required to set blur inside angular zone
+                     */
+                    // tslint:disable-next-line:triple-equals
+                    this.blur = (tapValue.location == undefined);
+                }), runOutsideZone(this.zone))
             .subscribe((loc: IStatus): void => {
                 this.updateVehicle(loc.location);
                 this.updateRoute(loc.route);

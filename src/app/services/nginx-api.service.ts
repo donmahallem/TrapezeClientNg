@@ -15,6 +15,7 @@ import {
     TripId,
     VehicleId,
 } from '@donmahallem/trapeze-api-types';
+import { Extent } from 'ol/extent';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments';
@@ -66,28 +67,28 @@ export class NginxApiService implements ApiService {
         });
     }
 
-    public getStopLocations(bounds?: L.LatLngBounds): Observable<IStopLocations> {
+    public getStopLocations(bounds?: Extent): Observable<IStopLocations> {
         if (bounds) {
             return this.http.get<IStopLocations>(this.baseUrl() + 'geo/stops', {
                 params: {
-                    bottom: '' + Math.round(bounds.getSouth() * 3600000),
-                    left: '' + Math.round(bounds.getWest() * 3600000),
-                    right: '' + Math.round(bounds.getEast() * 3600000),
-                    top: '' + Math.round(bounds.getNorth() * 3600000),
+                    bottom: '' + Math.round(bounds[0] * 3600000),
+                    left: '' + Math.round(bounds[0] * 3600000),
+                    right: '' + Math.round(bounds[0] * 3600000),
+                    top: '' + Math.round(bounds[0] * 3600000),
                 },
             });
         }
         return this.http.get<IStopLocations>(this.baseUrl() +
             'geo/stops?left=-648000000&bottom=-324000000&right=648000000&top=324000000');
     }
-    public getStopPointLocations(bounds?: L.LatLngBounds): Observable<IStopPointLocations> {
+    public getStopPointLocations(bounds?: Extent): Observable<IStopPointLocations> {
         if (bounds) {
             return this.http.get<IStopPointLocations>(this.baseUrl() + 'geo/stopPoints', {
                 params: {
-                    bottom: '' + Math.round(bounds.getSouth() * 3600000),
-                    left: '' + Math.round(bounds.getWest() * 3600000),
-                    right: '' + Math.round(bounds.getEast() * 3600000),
-                    top: '' + Math.round(bounds.getNorth() * 3600000),
+                    bottom: '' + Math.round(bounds[0] * 3600000),
+                    left: '' + Math.round(bounds[0] * 3600000),
+                    right: '' + Math.round(bounds[0] * 3600000),
+                    top: '' + Math.round(bounds[0] * 3600000),
                 },
             });
         }
