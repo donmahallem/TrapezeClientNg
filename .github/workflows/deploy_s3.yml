@@ -6,6 +6,7 @@ on:
     - v3rework
     - beta
     - mapheads
+    - deploys3
 
 jobs:
   test:
