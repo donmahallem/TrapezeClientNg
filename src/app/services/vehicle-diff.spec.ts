@@ -1,7 +1,6 @@
-import { TimestampedVehicleLocation } from '../services/vehicle.service';
-import { createVehicleDiff, IVehicleDiff } from './vehicle-diff';
+import { createVehicleDiff, IVehicleDiff, TimestampedVehicleLocation } from '../services/vehicle.service';
 
-describe('src/app/rxjs-util/vehicle-diff.ts', () => {
+describe('src/app/services/vehicle.service.ts', () => {
     describe('createVehicleDiff(oldVehicles, newVehicles)', () => {
         describe('oldVehicles is undefined', () => {
             // tslint:disable-next-line:no-null-keyword
