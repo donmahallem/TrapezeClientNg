@@ -3,7 +3,7 @@ import { IVehiclePathInfo } from '@donmahallem/trapeze-api-types';
 import { combineLatest, of, BehaviorSubject, Observable } from 'rxjs';
 import { auditTime, catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { ApiService, TripInfoWithId } from 'src/app/services';
-import { TimestampedVehicleLocation, VehicleService } from 'src/app/services/vehicle.service';
+import { TimestampedVehicleLocation, VehicleService } from 'src/app/services';
 
 export interface IStatus {
     location?: TimestampedVehicleLocation;

@@ -7,7 +7,7 @@ import VectorSource from 'ol/source/Vector';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, pluck } from 'rxjs/operators';
 import { runOutsideZone } from 'src/app/rxjs-util/run-outside-zone';
-import { IData, TimestampedVehicleLocation } from 'src/app/services/vehicle.service';
+import { IData, TimestampedVehicleLocation } from 'src/app/services';
 import { OlUtil } from '../common/openlayers';
 import { OlMainMapDirective } from './ol-main-map.directive';
 export class OlVehicleHandler {
