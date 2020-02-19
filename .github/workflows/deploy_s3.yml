@@ -18,7 +18,8 @@ jobs:
       with:
         node-version: '10.x'
     - run: npm ci
-    - uses: jakejarvis/s3-sync-action@master
+    - name: Deplay Non Ts files
+      uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl private --recursive --follow-symlinks --include "*" --exclude "*.ts" --include "ngsw-worker.js" --include "safety-worker.js" --include "worker-basic.min.js" --cache-control "public, max-age=31536000"
       env:
