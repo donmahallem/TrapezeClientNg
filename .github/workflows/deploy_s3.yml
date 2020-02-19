@@ -55,7 +55,7 @@ jobs:
     - name: Deploy Immutable JS Files
       uses: jakejarvis/s3-sync-action@master
       with:
-        args: --acl private --follow-symlinks --include '*\.js' --exclude '*/ngsw-worker\.js' --exclude '*/safety-worker\.js' --exclude 'worker-basic.min.js' --content-type 'application/json' --cache-control 'public, max-age=31536000, immutable'
+        args: --acl private --follow-symlinks --include './dist/trapeze-client-ng/*.js' --exclude './dist/trapeze-client-ng/ngsw-worker.js' --exclude './dist/trapeze-client-ng/safety-worker.js' --exclude './dist/trapeze-client-ng/worker-basic.min.js' --content-type 'application/json' --cache-control 'public, max-age=31536000, immutable'
       env:
         AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
