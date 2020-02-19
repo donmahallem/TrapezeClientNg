@@ -22,7 +22,7 @@ export interface IData {
 }
 import { VehicleId } from '@donmahallem/trapeze-api-types';
 
-enum DiffKey { 'unchanged', 'changed', 'added', 'removed' }
+enum DiffKey { UNCHANGED = 'unchanged', CHANGED = 'changed', ADDED = 'added', REMOVED = 'removed' }
 export interface IVehicleDiff {
     added: TimestampedVehicleLocation[];
     changed: TimestampedVehicleLocation[];
@@ -65,9 +65,9 @@ export const createVehicleDiff: <T extends TimestampedVehicleLocation[]>(previou
         } : previousState;
         for (const newVehicle of newVehicles) {
             const key: IInKeysResult = findInKeys(oldDiff, [
-                DiffKey.added,
-                DiffKey.unchanged,
-                DiffKey.changed,
+                DiffKey.ADDED,
+                DiffKey.UNCHANGED,
+                DiffKey.CHANGED,
             ], newVehicle.id);
             if (newVehicle.isDeleted === true) {
                 if (key.idx >= 0) {
