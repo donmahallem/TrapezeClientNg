@@ -9,9 +9,28 @@ on:
     - deploys3
 
 jobs:
+  test2:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --follow-symlinks --include "*" --exclude "*.ts" --include "ngsw-worker.js" --include "safety-worker.js" --include "worker-basic.min.js" --cache-control "public, max-age=31536000"
+      env:
+        AWS_S3_BUCKET: ${{ secrets.aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_key_secret }}
+        AWS_REGION: 'eu-central-1'
+        SOURCE_DIR: './src'
+        DEST_DIR: 'beta'
   test:
     name: Test
     runs-on: ubuntu-latest
+    if: github.actor == "kk"
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@v1
