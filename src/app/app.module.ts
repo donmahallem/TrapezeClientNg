@@ -5,20 +5,21 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { environment } from '../environments';
 import { AppErrorHandler } from './app-error-handler';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DrawableDirective } from './drawable.directive';
 import { MainMapModule } from './modules/main-map';
 import { MainToolbarModule } from './modules/main-toolbar/main-toolbar.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
+import { ApiService } from './services';
 import { AppNotificationService } from './services/app-notification.service';
+import { NginxApiService } from './services/nginx-api.service';
 import { SettingsService } from './services/settings.service';
 import { StopPointService } from './services/stop-point.service';
 import { UserLocationService } from './services/user-location.service';
 
-export const SETTINGS_INITIALIZER = (appInitService: SettingsService) =>
+export const SETTINGS_INITIALIZER = (appInitService: SettingsService): () => Promise<void> =>
     (): Promise<any> =>
         appInitService.load();
 const moduleImports: any[] = [
@@ -40,7 +41,6 @@ const moduleImports: any[] = [
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        DrawableDirective,
     ],
     imports: moduleImports,
     providers: [
@@ -57,6 +57,10 @@ const moduleImports: any[] = [
         {
             provide: ErrorHandler,
             useClass: AppErrorHandler,
+        },
+        {
+            provide: ApiService,
+            useClass: NginxApiService,
         },
     ],
 })

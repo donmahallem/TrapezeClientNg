@@ -43,16 +43,17 @@ describe('src/app/services/settings.service', () => {
             });
         });
         describe('getInitialMapZoom()', () => {
-            const testValues: {
+            interface ITestValue {
                 settings?: {
                     INITIAL_LAT?: number,
                     INITIAL_LON?: number,
-                },
+                };
                 out: {
                     lat: number,
                     lon: number,
-                },
-            }[] = [{
+                };
+            }
+            const testValues: ITestValue[] = [{
                 out: {
                     lat: 0,
                     lon: 0,
@@ -91,7 +92,7 @@ describe('src/app/services/settings.service', () => {
                     INITIAL_LON: 2039290,
                 },
             }];
-            testValues.forEach((testValue) => {
+            testValues.forEach((testValue: ITestValue) => {
                 it('should return LatLon(' + testValue.out.lat + ',' + testValue.out.lon + ')', () => {
                     (settingsService as any).mSettings = testValue.settings;
                     expect(settingsService.getInitialMapCenter()).toEqual(new LatLng(testValue.out.lat, testValue.out.lon));
@@ -103,7 +104,10 @@ describe('src/app/services/settings.service', () => {
                 settings: boolean,
                 value?: number,
             }[] = [];
-            testValues.forEach((testValue) => {
+            testValues.forEach((testValue: {
+                settings: boolean,
+                value?: number,
+            }) => {
                 it('should return zoom level ' + (testValue.value ? testValue.value : 20), () => {
                     if (testValue.settings) {
                         (settingsService as any).mSettings = {
@@ -122,15 +126,15 @@ describe('src/app/services/settings.service', () => {
                 beforeEach(() => {
                     getSettingsSpy.and.returnValue(throwError(false));
                 });
-                it('should resolve', (done) => {
+                it('should resolve', (done: DoneFn) => {
                     settingsService.load()
-                        .then((result) => {
+                        .then((result: any) => {
                             expect(getSettingsSpy.call.length).toEqual(1);
                             expect(result).toEqual(undefined);
                             expect((settingsService as any).mSettings).not.toBeDefined();
                             done();
                         })
-                        .catch(done);
+                        .catch(done.fail);
                 });
             });
 
@@ -142,15 +146,15 @@ describe('src/app/services/settings.service', () => {
                 beforeEach(() => {
                     getSettingsSpy.and.returnValue(from([testValue]));
                 });
-                it('should resolve', (done) => {
+                it('should resolve', (done: DoneFn) => {
                     settingsService.load()
-                        .then((result) => {
+                        .then((result: any) => {
                             expect(getSettingsSpy.call.length).toEqual(1);
                             expect(result).toEqual(undefined);
                             expect((settingsService as any).mSettings).toEqual(testValue);
                             done();
                         })
-                        .catch(done);
+                        .catch(done.fail);
                 });
             });
 

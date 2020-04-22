@@ -16,20 +16,22 @@ export class RouteDisplayHandler {
      */
     constructor(private map: L.Map) {
         this.routeLayer = L.featureGroup();
-        this.routeLayer.addTo(this.map);
     }
     /**
      * Adds the vehicle path to the map
      * @param paths Path to add
      */
     public setRoutePaths(paths: IVehiclePath[]): void {
+        if (this.map && !this.map.hasLayer(this.routeLayer)) {
+            this.routeLayer.addTo(this.map);
+        }
         this.routeLayer.clearLayers();
         if (paths) {
             for (const path of paths) {
                 const pointList: L.LatLng[] = LeafletUtil.convertWayPointsToLatLng(path.wayPoints);
-                const firstpolyline = L.polyline(pointList, {
-                    color: path.color,
-                    opacity: 0.5,
+                const firstpolyline: L.Polyline = L.polyline(pointList, {
+                    color: '#FF0000',
+                    opacity: 0.8,
                     smoothFactor: 1,
                     weight: 3,
                 });

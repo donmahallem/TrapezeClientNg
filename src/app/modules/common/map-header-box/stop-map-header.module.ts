@@ -3,16 +3,18 @@ import { NgModule } from '@angular/core';
 import {
     MatIconModule,
 } from '@angular/material';
-import { MapHeaderBoxComponent } from './map-header-box.component';
+import { StopLocationHeaderMapDirective } from './stop-location-map.directive';
+import { StopMapHeaderComponent } from './stop-map-header.component';
 
 @NgModule({
     declarations: [
-        MapHeaderBoxComponent,
+        StopMapHeaderComponent,
+        StopLocationHeaderMapDirective,
     ],
     exports: [
         CommonModule,
         MatIconModule,
-        MapHeaderBoxComponent,
+        StopMapHeaderComponent,
     ],
     imports: [
         CommonModule,
@@ -21,4 +23,4 @@ import { MapHeaderBoxComponent } from './map-header-box.component';
     providers: [
     ],
 })
-export class MapHeaderBoxModule { }
+export class StopMapHeaderBoxModule { }

@@ -15,10 +15,22 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "component-class-suffix": true,
+    "contextual-lifecycle": true,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
     "deprecation": {
       "severity": "warn"
     },
+    "directive-class-suffix": true,
+    "directive-selector": [
+      true,
+      "attribute",
+      "app",
+      "camelCase"
+    ],
     "eofline": true,
     "forin": true,
     "import-blacklist": [
@@ -32,6 +44,7 @@
     ],
     "interface-over-type-literal": true,
     "label-position": true,
+    "max-classes-per-file": false,
     "max-line-length": [
       true,
       140
@@ -48,8 +61,15 @@
         ]
       }
     ],
+    "no-angle-bracket-type-assertion": true,
     "no-arg": true,
     "no-bitwise": true,
+    "no-boolean-literal-compare": true,
+    "no-conflicting-lifecycle": true,
+    "no-consecutive-blank-lines": [
+      true,
+      1
+    ],
     "no-console": [
       true,
       "debug",
@@ -64,13 +84,19 @@
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    "no-host-metadata-property": true,
+    "no-inferrable-types": false,
+    "no-input-rename": true,
+    "no-inputs-metadata-property": true,
     "no-misused-new": true,
     "no-non-null-assertion": true,
+    "no-null-keyword": true,
+    "no-output-native": true,
+    "no-output-on-prefix": true,
+    "no-output-rename": true,
+    "no-outputs-metadata-property": true,
     "no-redundant-jsdoc": true,
+    "no-return-await": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -78,30 +104,23 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
-    "contextual-lifecycle": true,
-    "no-conflicting-lifecycle": true,
-    "no-consecutive-blank-lines": [
-      true,
-      1
-    ],
-    "no-output-native": true,
-    "template-banana-in-box": true,
-    "template-no-negated-async": true,
-    "use-lifecycle-interface": true,
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "object-literal-sort-keys": false,
+    "object-literal-sort-keys": true,
     "one-line": [
       true,
       "check-open-brace",
       "check-catch",
       "check-else",
       "check-whitespace"
+    ],
+    "only-arrow-functions": true,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-first"
+      }
     ],
     "prefer-const": true,
     "quotemark": [
@@ -113,9 +132,30 @@
       true,
       "always"
     ],
+    "static-this": true,
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
     "triple-equals": [
       true,
       "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "call-signature",
+      "arrow-call-signature",
+      "parameter",
+      "arrow-parameter",
+      "property-declaration",
+      "variable-declaration",
+      "variable-declaration-ignore-function",
+      "member-variable-declaration"
     ],
     "typedef-whitespace": [
       true,
@@ -128,8 +168,9 @@
       }
     ],
     "unified-signatures": true,
+    "use-lifecycle-interface": true,
+    "use-pipe-transform-interface": true,
     "variable-name": true,
-    "max-classes-per-file": false,
     "whitespace": [
       true,
       "check-branch",
@@ -137,15 +178,6 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ],
-    "no-output-on-prefix": true,
-    "no-inputs-metadata-property": true,
-    "no-outputs-metadata-property": true,
-    "no-host-metadata-property": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
-    "use-pipe-transform-interface": true,
-    "component-class-suffix": true,
-    "directive-class-suffix": true
+    ]
   }
 }
